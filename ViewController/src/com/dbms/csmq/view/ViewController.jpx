@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE JboProject SYSTEM "jbo_03_01.dtd">
+<!---->
+<JboProject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ViewController"
+  Version="11.1.2.64.36"
+  SeparateXMLFiles="true"
+  PackageName="com.dbms.csmq.view">
+  <DesignTime>
+    <Attr Name="_jprName" Value="../../../../../ViewController.jpr"/>
+    <Attr Name="_jbo.TypeMapEntries" Value="OracleApps"/>
+    <Attr Name="_NamedConnection" Value="TMS"/>
+    <Attr Name="_appModuleNames0" Value="com.dbms.csmq.model.product.ProductModule"/>
+    <Attr Name="_appModuleNames1" Value="com.dbms.csmq.model.NMQ.NMQModule"/>
+    <Attr Name="_appModuleNames2" Value="com.dbms.csmq.model.designee.DesigneeModule"/>
+  </DesignTime>
+  <Containee
+    Name="designee"
+    PackageName="com.dbms.csmq.model.designee"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_LocationURL" Value="../../Model/src/"/>
+      <Attr Name="_VO" Value="true"/>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="NMQ"
+    PackageName="com.dbms.csmq.model.NMQ"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_LocationURL" Value="../../Model/src/"/>
+      <Attr Name="_VO" Value="true"/>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="product"
+    PackageName="com.dbms.csmq.model.product"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_LocationURL" Value="../../Model/src/"/>
+      <Attr Name="_VO" Value="true"/>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+</JboProject>
