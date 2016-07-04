@@ -1,0 +1,374 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document id="d1">
+            <af:messages id="m2"/>
+            <af:form id="f1">
+            
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1" value="#{bindings.pt1}">
+                    <f:facet name="main">
+                        <af:group id="g1">
+                         <af:popup id="confirm">
+                                                <af:dialog title="Confirm"
+                                                           dialogListener="#{pageFlowScope.TermHierarchyBean.deleteSelected}" id="d3">
+                                                    <af:activeOutputText value="Delete all selected terms?" id="aot1"/>
+                                                </af:dialog>
+                                            </af:popup>
+                            <af:popup id="p2" binding="#{pageFlowScope.NMQSourceTermSearchBean.searchPopUp}"
+                                      popupCanceledListener="#{pageFlowScope.NMQSourceTermSearchBean.dialogClosed}" contentDelivery="lazyUncached">
+                                <af:dialog type="cancel" closeIconVisible="true" title="Hierarchy Search" id="dialog1" stretchChildren="none" modal="false" resize="off">
+                                    <!-- TREE SEARCH START-->
+                                    <af:panelGroupLayout id="pgl9">
+                                        <af:panelFormLayout id="pgl7" maxColumns="1" rows="2">
+                                            <af:selectOneChoice label="Dictionary" id="soc1" autoSubmit="true"
+                                                                binding="#{pageFlowScope.NMQSourceTermSearchBean.controlDictionaryType}"
+                                                                valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.dictionaryTypeChanged}">
+                                                <af:selectItem label="MedDRA" value="BASE" id="si1"/>
+                                                <af:selectItem label="Filter" value="FILTER" id="si13"/>
+                                            </af:selectOneChoice>
+                                            <af:selectOneChoice id="soc4" label="Level" partialTriggers="soc1" binding="#{pageFlowScope.NMQSourceTermSearchBean.controlLevel}">
+                                                <af:forEach items="#{bindings.LevelsByDictionaryVO1.iteratorBinding.allRowsInRange}" var="row2">
+                                                    <f:selectItem id="selectItem1" itemLabel="#{row2.name}" itemValue="#{row2.shortName}"/>
+                                                </af:forEach>
+                                            </af:selectOneChoice>
+                                            <af:inputText label="Term " id="it1" binding="#{pageFlowScope.NMQSourceTermSearchBean.controlTerm}"/>
+                                        </af:panelFormLayout>
+                                        <af:table value="#{bindings.HierarchySourceTermSearchVO1.collectionModel}" var="row" rows="#{bindings.SimpleSearch1.rangeSize}"
+                                                  emptyText="#{bindings.HierarchySourceTermSearchVO1.viewable ? 'No data to display.' : 'Access Denied.'}" rowBandingInterval="0"
+                                                  id="hResults" columnStretching="column:c20" width="400" rowSelection="single" columnSelection="none" inlineStyle="height:140px;"
+                                                  partialTriggers="cb2" contentDelivery="immediate" filterVisible="true"
+                                                  binding="#{pageFlowScope.NMQSourceTermSearchBean.controlResultsTable}"
+                                                  selectionListener="#{pageFlowScope.NMQSourceTermSearchBean.rowChanged}">
+                                            <af:column sortProperty="Mqterm" sortable="true" headerText="Term" id="c20" filterable="true">
+                                                <af:outputText value="#{row.Mqterm}" id="ot16" description="#{row.Prikey}"/>
+                                                <f:facet name="header">
+                                                    <af:group id="g5">
+                                                        <af:panelGroupLayout id="pgl19" layout="horizontal">
+                                                            <af:commandButton text="Search" id="cb2" partialSubmit="true"
+                                                                              actionListener="#{pageFlowScope.NMQSourceTermSearchBean.doSearch}" inlineStyle="height:auto;"/>
+                                                            <af:spacer width="10" height="10" id="s14"/>
+                                                        </af:panelGroupLayout>
+                                                    </af:group>
+                                                </f:facet>
+                                            </af:column>
+                                            <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.Mqcode.name}" sortable="false" headerText="MQ Code" id="c8"
+                                                       width="71">
+                                                <af:outputText value="#{row.Mqcode}" id="ot4"/>
+                                            </af:column>
+                                        </af:table>
+                                    </af:panelGroupLayout>
+                                    <af:panelGroupLayout id="pgl8" inlineStyle="height:320px;">
+                                        <af:spacer width="10" height="24" id="s3"/>
+                                        <af:treeTable value="#{pageFlowScope.TermHierarchySourceBean.treemodel}" var="node" rowSelection="multiple" id="tt1" width="400"
+                                                      binding="#{pageFlowScope.ImpactSearchBean.hierarchySourceTree}" columnStretching="column:c14" inlineStyle="height:303px;"
+                                                      initiallyExpanded="false" fetchSize="20">
+                                            <f:facet name="nodeStamp">
+                                                <af:column id="c14" headerText="#{node.term}" width="200">
+                                                    <af:outputText value="#{node.term}" id="ot11"/>
+                                                    <f:facet name="header"/>
+                                                </af:column>
+                                            </f:facet>
+                                            <f:facet name="pathStamp">
+                                                <af:group id="g4">
+                                                    <af:outputText value="#{node}" id="ot12"/>
+                                                </af:group>
+                                            </f:facet>
+                                            <af:column headerText="Hierarchy Details" id="c15" width="572">
+                                                <af:column id="c18" headerText="Level" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.levelName}" id="ot14"/>
+                                                </af:column>
+                                                <af:column id="c17" headerText="Scope" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.scopeName}" id="ot13"/>
+                                                </af:column>
+                                            </af:column>
+                                            <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                                        </af:treeTable>
+                                    </af:panelGroupLayout>
+                                    <!-- TREE SEARCH END -->
+
+                                </af:dialog>
+                            </af:popup>
+                            <af:panelGroupLayout id="pgl4" layout="vertical">
+                                <af:panelGroupLayout id="pgl1" layout="horizontal"
+                                                     inlineStyle="height:310px; width:1244px; padding:5px;"
+                                                     halign="left" valign="top">
+                                    <af:panelCollection id="pc2" inlineStyle="height:420px; width:554px; margin:5px;">
+                                        <f:facet name="menus"/>
+                                        <f:facet name="toolbar">
+                                            <af:toolbar id="t1">
+                                                <af:selectOneChoice label="Show" value="Y" id="soc8" binding="#{pageFlowScope.ImpactSearchBean.cntrlShowImpacted}" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactSearchBean.cntrlShowImpactedChanged}">
+                                                    <af:selectItem label="ALL" value="Y" id="si17"/>
+                                                    <af:selectItem label="Only Changes" value="N" id="si18"/>
+                                                </af:selectOneChoice>
+                                            </af:toolbar>
+                                        </f:facet>
+                                        <af:treeTable value="#{pageFlowScope.HistoricalImpactHierarchyBean.treemodel}" var="node" rowSelection="multiple" id="history" width="550" columnStretching="column:column1" inlineStyle="height:395px;"
+                                                      initiallyExpanded="false" fetchSize="20" binding="#{pageFlowScope.ImpactSearchBean.historicalTree}">
+                                            <f:facet name="nodeStamp">
+                                                <af:column id="column1" headerText="#{node.term}" width="200" inlineStyle="height:19px; white-space:nowrap" headerNoWrap="true"
+                                                           noWrap="true">
+                                                    <af:panelGroupLayout id="pgl2" halign="left">
+                                                    <af:image id="i2" rendered="#{node.icon gt 0}"
+                                                              shortDesc="#{node.description}" source="/image/impact/#{node.icon}.png"/>
+                                                        <af:spacer width="4" height="0" id="s1"/>
+                                                        <af:outputText value="#{node.term}" id="outputText1" styleClass="#{node.style}" rendered="#{node.rendered}"
+                                                                       description="#{node.path}"/>
+                                                    
+                                                    
+                                                    </af:panelGroupLayout>
+                                                    
+                                                    <f:facet name="header">
+                                                        <af:group id="g3">
+                                                            <af:panelGroupLayout id="pgl20" layout="horizontal">
+                                                                <af:selectOneChoice label="History" required="#{bindings.EntryTSListVO1.hints.mandatory}"
+                                                                                    shortDesc="#{bindings.EntryTSListVO1.hints.tooltip}" id="soc5"
+                                                                                    valueChangeListener="#{pageFlowScope.ImpactSearchBean.historicalDateChanged}"
+                                                                                    binding="#{pageFlowScope.ImpactSearchBean.ctrlEndTS}" autoSubmit="true" valuePassThru="true"
+                                                                                    value="#{pageFlowScope.ImpactSearchBean.asOfDate}">
+                                                                    <f:selectItem id="si16" itemLabel="Current" itemValue="15AUG3501"/>
+                                                                    <af:forEach items="#{bindings.EntryTSListVO1.iteratorBinding.allRowsInRange}" var="row">
+                                                                        <f:selectItem id="si12" itemLabel="#{row.dateRange}" itemValue="#{row.endTsString}"/>
+                                                                    </af:forEach>
+                                                                </af:selectOneChoice>
+                                                                <af:spacer width="20" height="10" id="s15"/>
+                                                                <af:commandButton text="Reactivate" id="cb5"
+                                                                                  partialTriggers="soc5" rendered="#{pageFlowScope.ImpactSearchBean.showReactivateButton}"/>
+                                                            </af:panelGroupLayout>
+                                                        </af:group>
+                                                    </f:facet>
+                                                </af:column>
+                                            </f:facet>
+                                            <f:facet name="pathStamp">
+                                                <af:outputText value="#{node}" id="outputText2"/>
+                                            </f:facet>
+                                            <af:column headerText="Hierarchy Details" id="column2" width="572">
+                                                <af:column id="column3" headerText="Level" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.levelName}" id="outputText3"/>
+                                                </af:column>
+                                                <af:column id="column4" headerText="Scope" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.scopeName}" id="outputText4"/>
+                                                </af:column>
+                                                <af:column id="c9" headerText="Status" width="50">
+                                                    <af:outputText value="#{node.status}" id="ot5"/>
+                                                </af:column>
+                                            </af:column>
+                                            <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                                        </af:treeTable>
+                                    </af:panelCollection>
+                                    <af:panelCollection id="pc1" inlineStyle="width:665px; height:420px; margin:5px;">
+                                        <f:facet name="toolbar">
+                                            <af:toolbar id="t2">
+                                                <af:commandToolbarButton text="Hierarchy Search" id="ctb3" icon="/image/tree.png">
+                                                    <af:showPopupBehavior popupId="::p2"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="New PTs" id="ctb4" icon="/image/PT.png">
+                                                    <af:showPopupBehavior popupId="::p5" align="startBefore"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="Delete selected" icon="/image/delete.jpg"
+                                                                         id="ctb2"
+                                                            >
+                                                    <af:showPopupBehavior popupId="::confirm" triggerType="action"
+                                                                          align="afterEnd"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="Export to Excel" icon="/image/excel.png" id="ctb1">
+                                                    <af:exportCollectionActionListener exportedId="current" type="excelHTML" title="#{NMQBean.currentTermName}"
+                                                                                       filename="#{NMQBean.currentTermName}.xls"/>
+                                                </af:commandToolbarButton>
+                                            </af:toolbar>
+                                           
+                                        </f:facet>
+                                        <af:treeTable value="#{pageFlowScope.CurrentImpactHierarchyBean.treemodel}" var="node"
+                                                      rowSelection="single" id="current" width="657"
+                                                      columnStretching="column:c1" inlineStyle="height:395px;"
+                                                      initiallyExpanded="false" fetchSize="20" binding="#{pageFlowScope.ImpactSearchBean.currentTree}">
+                                            <f:facet name="nodeStamp">
+                                                <af:column id="c1"
+                                                           headerText="#{bindings.Term.inputValue}#{pageFlowScope.NMQWizardBean.currentTermName}"
+                                                           width="200" sortable="true" filterable="true">
+                                                    <af:panelGroupLayout id="pgl3" halign="left">
+                                                    <af:outputText value="#{node.term}" id="ot1" rendered="#{node.rendered}"
+                                                                   description="#{node.path}"/>
+                                                    </af:panelGroupLayout>
+                                                    <f:facet name="header">
+                                                        <af:group id="g2">
+                                                            <af:outputText value="Current #{applicationScope.CSMQBean.customMQName}/SMQ" id="ot15" inlineStyle="font-size:12px;"/>
+                                                        </af:group>
+                                                    </f:facet>
+                                                </af:column>
+                                            </f:facet>
+                                            <f:facet name="pathStamp">
+                                                <af:outputText value="#{node}" id="ot2"/>
+                                            </f:facet>
+                                            <af:column headerText="Hierarchy Details" id="c6" width="572">
+                                                <af:column id="c2" headerText="Level" width="50" sortable="true"
+                                                           filterable="true">
+                                                    <!-- <af:selectOneChoice id="soc6" value="#{node.termLevel}" valuePassThru="true" shortDesc="#{node.termLevel}">
+                            <af:forEach items="#{bindings.AllLevelsVO1.iteratorBinding.allRowsInRange}" var="row">
+                              <f:selectItem id="dicts" itemLabel="#{row.name}" itemValue="#{row.defLevelId}" />
+                            </af:forEach>
+                          </af:selectOneChoice>-->
+                                                    <af:outputText value="#{node.levelName}" id="ot3"/>
+                                                </af:column>
+                                                <af:column id="c3" headerText="Scope" width="75" sortable="true"
+                                                           filterable="true">
+                                                    <af:selectOneChoice id="soc3" value="#{node.formattedScope}"
+                                                                        valuePassThru="true">
+                                                        <af:selectItem label="Child" value="0" id="si7"/>
+                                                        <af:selectItem label="Broad" value="1" id="si6"/>
+                                                        <af:selectItem label="Narrow" value="2" id="si5"/>
+                                                        <af:selectItem label="Child/Narrow" value="3" id="si4"/>
+                                                    </af:selectOneChoice>
+                                                </af:column>
+                                                <af:column id="c4" headerText="Category" width="45" sortable="true"
+                                                           filterable="true">
+                                                    <af:selectOneChoice id="soc2" value="#{node.termCategory}"
+                                                                        valuePassThru="true">
+                                                        <af:selectItem label="A" value="A" id="si3"/>
+                                                        <af:selectItem label="S" value="S" id="si2"/>
+                                                    </af:selectOneChoice>
+                                                </af:column>
+                                                <af:column id="c5" headerText="Weight" width="45" sortable="true"
+                                                           filterable="true">
+                                                    <af:inputNumberSpinbox value="#{node.termWeight}" id="ot6"
+                                                                           columns="2"/>
+                                                </af:column>
+                                                <af:column id="c7" width="16" rowHeader="true" align="left">
+                                                    <af:selectBooleanCheckbox id="sbc2" rendered="#{node.deletable}"
+                                                                              value="#{node.markedForDeletion}" immediate="true" autoSubmit="true"/>
+                                                    <f:facet name="header">
+                                                        <af:image source="/image/delete.jpg" id="i1" shortDesc="Delete"/>
+                                                    </f:facet>
+                                                </af:column>
+                                            </af:column>
+                                            <af:collectionDropTarget dropListener="#{pageFlowScope.ImpactSearchBean.onTreeDrop}"
+                                                                     modelName="rowmove" actions="MOVE"/>
+                                            <f:facet name="contextMenu">
+                                                <af:popup id="p1">
+                                                    <af:menu text="menu 1" id="m1">
+                                                        <af:commandMenuItem text="Remove term" id="cmi1"
+                                                                            actionListener="#{pageFlowScope.TermHierarchyBean.onTreeNodeDelete}"/>
+                                                    </af:menu>
+                                                </af:popup>
+                                            </f:facet>
+                                            <f:facet name="header"/>
+                                        </af:treeTable>
+                                        <f:facet name="statusbar">
+                                            <af:toolbar id="t3">
+                                                <af:commandButton text="Save" id="cb1" actionListener="#{pageFlowScope.ImpactAnalysisBean.updateRelations}" partialSubmit="true"
+                                                                  disabled="#{!pageFlowScope.CurrentImpactHierarchyBean.editable}"/>
+                                            </af:toolbar>
+                                        </f:facet>
+                                    </af:panelCollection>
+                                </af:panelGroupLayout>
+                                <af:panelGroupLayout id="pgl6">
+                                    <af:spacer width="12" height="10" id="s16"/>
+                                    <af:commandButton text="Legend" id="cb4" partialSubmit="true">
+                                        <af:showPopupBehavior popupId="p4" triggerType="click" align="afterStart"/>
+                                    </af:commandButton>
+                                    <af:spacer width="10" height="10" id="s2"/>
+                                    <af:commandButton text="Search" id="cb3" action="SEARCH" actionListener="#{pageFlowScope.BrowseAndSearchBean.cancel}"/>
+                                    <af:spacer width="10" height="10" id="s6"/>
+                                    <af:commandButton text="Close" id="cb6" action="CANCEL"
+                                                      actionListener="#{pageFlowScope.BrowseAndSearchBean.cancel}"/>
+                                </af:panelGroupLayout>
+                            </af:panelGroupLayout>
+                            <af:popup childCreation="deferred" autoCancel="enabled" id="p4">
+                                <af:dialog id="d4" type="ok" title="Impact Legend">
+                                    <f:facet name="buttonBar"/>
+                                    <af:panelGroupLayout id="pl1" inlineStyle="width:354px;" layout="vertical">
+                                        <af:panelGroupLayout id="pgl5">
+                                            <af:spacer width="18" height="10" id="s4"/>
+                                            <af:outputFormatted value="Non-impacted" id="of1" styleClass="Impact_NMQ_0"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl10">
+                                            <af:image source="/image/impact/1010.png" id="i4"/>
+                                            <af:spacer width="7" height="10" id="s10"/>
+                                            <af:outputFormatted value="Impacted" id="of3" styleClass="Impact_NMQ_1010"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl11">
+                                            <af:spacer width="18" height="10" id="s5"/>
+                                            <af:outputFormatted value="Renamed Term" id="of4" styleClass="Impact_NMQ_1080"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl12">
+                                            <af:image source="/image/impact/1040.png" id="i5"/>
+                                            <af:spacer width="7" height="10" id="s11"/>
+                                            <af:outputFormatted value="MedDRA Inserted/Added Term/Relation" id="of5" styleClass="Impact_NMQ_1040"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl13">
+                                            <af:image source="/image/impact/1070.png" id="i6"/>
+                                            <af:spacer width="7" height="10" id="s12"/>
+                                            <af:outputFormatted value="MQM Inserted/Added Term/Relation" id="of6" styleClass="Impact_NMQ_1070"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl14">
+                                            <af:image source="/image/impact/1110.png" id="i3"/>
+                                            <af:outputFormatted value="Other MQM Manual Additions" id="of7" styleClass="Impact_NMQ_1110"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl15">
+                                            <af:image source="/image/impact/1020.png" id="i7"/>
+                                            <af:spacer width="7" height="10" id="s13"/>
+                                            <af:outputFormatted value="Deleted/Merged/Moved Term/Relation" id="of8" styleClass="Impact_NMQ_1020"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl16">
+                                            <af:spacer width="18" height="10" id="s7"/>
+                                            <af:outputFormatted value="Promoted/Demoted Terms" id="of9" styleClass="Impact_NMQ_1040"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl17">
+                                            <af:spacer width="18" height="10" id="s8"/>
+                                            <af:outputFormatted value="Non-Current LLT" id="of10" styleClass="Impact_NMQ_1030"/>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl18">
+                                            <af:spacer width="18" height="10" id="s9"/>
+                                            <af:outputFormatted value="Change in TERMSCP" id="of11" styleClass="Impact_SMQ_1050"/>
+                                        </af:panelGroupLayout>
+                                    </af:panelGroupLayout>
+                                </af:dialog>
+                            </af:popup>
+                            <af:popup id="p5" contentDelivery="immediate">
+                                <af:dialog type="cancel" closeIconVisible="true" title="Preferred Term Search" id="d5" stretchChildren="none" modal="false" resize="off">
+                                    <!-- TREE SEARCH START-->
+                                    <af:panelGroupLayout id="pgl22" inlineStyle="height:320px;">
+                                        <af:selectOneChoice label="SOC" id="soc6" binding="#{pageFlowScope.ImpactSearchBean.cntlSOCList}"
+                                                            valueChangeListener="#{pageFlowScope.ImpactSearchBean.SOCChanged}" autoSubmit="true">
+                                            <af:forEach items="#{bindings.SOCsWithNewPTsVO1Iterator.allRowsInRange}" var="row">
+                                                <f:selectItem id="si8" itemLabel="#{row.term}" itemValue="#{row.dictContentId}"/>
+                                            </af:forEach>
+                                        </af:selectOneChoice>
+                                        <af:treeTable value="#{pageFlowScope.NewPTListBean.treemodel}" var="node" rowSelection="multiple" id="ptList" width="400"
+                                                      binding="#{pageFlowScope.ImpactSearchBean.preferedTermSourceTree}" columnStretching="column:c14" inlineStyle="height:303px;"
+                                                      initiallyExpanded="false" fetchSize="20" partialTriggers="::soc6">
+                                            <f:facet name="nodeStamp">
+                                                <af:column id="c21" headerText="#{node.term}" width="200">
+                                                    <af:outputText value="#{node.term}" id="ot21"/>
+                                                    <f:facet name="header"/>
+                                                </af:column>
+                                            </f:facet>
+                                            <f:facet name="pathStamp">
+                                                <af:group id="g7">
+                                                    <af:outputText value="#{node}" id="ot22"/>
+                                                </af:group>
+                                            </f:facet>
+                                            <af:column headerText="Hierarchy Details" id="c22" width="572">
+                                                <af:column id="c23" headerText="Level" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.levelName}" id="ot23"/>
+                                                </af:column>
+                                                <af:column id="c24" headerText="Scope" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.scopeName}" id="ot24"/>
+                                                </af:column>
+                                            </af:column>
+                                            <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                                        </af:treeTable>
+                                    </af:panelGroupLayout>
+                                    <!-- TREE SEARCH END -->
+                                </af:dialog>
+                            </af:popup>
+                        </af:group>
+                    </f:facet>
+                    <f:attribute name="currentPage" value="Historical #{applicationScope.CSMQBean.customMQName} Impact"/>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

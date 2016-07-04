@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <description>#{CSMQBean.getInitialize}</description>
+  <task-flow-call id="create-new-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/create-new-task-flow-definition.xml</document>
+      <id>create-new-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="copy-new-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/copy-new-task-flow-definition.xml</document>
+      <id>copy-new-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="update-existing-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/update-existing-task-flow-definition.xml</document>
+      <id>update-existing-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="update-SMQ-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/update-SMQ-task-flow-definition.xml</document>
+      <id>update-SMQ-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <view id="historicalImpactAssessment">
+    <page>/impact/historicalImpactAssessment.jspx</page>
+  </view>
+  <view id="impactSearch">
+    <page>/impact/impactSearch.jspx</page>
+  </view>
+  <view id="administration">
+    <page>/admin/config.jspx</page>
+    <redirect/>
+  </view>
+  <view id="home">
+    <page>/index.jspx</page>
+  </view>
+  <task-flow-call id="publish-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/publish-task-flow-definition.xml</document>
+      <id>publish-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="impact-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/impact-task-flow-definition.xml</document>
+      <id>impact-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="ia-publish-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/ia-publish-task-flow-definition.xml</document>
+      <id>ia-publish-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <view id="search">
+    <page>/create/wizardSearch.jspx</page>
+  </view>
+  <task-flow-call id="browse-search-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/browse-search-task-flow-definition.xml</document>
+      <id>browse-search-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <view id="diff">
+    <page>/diff/diff.jspx</page>
+  </view>
+  <task-flow-call id="report-task-flow-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/report-task-flow-definition.xml</document>
+      <id>report-task-flow-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <task-flow-call id="view-version-impact-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/view-version-impact-definition.xml</document>
+      <id>view-version-impact-definition</id>
+    </task-flow-reference>
+  </task-flow-call>
+  <control-flow-rule id="__2">
+    <control-flow-case id="__32">
+      <from-outcome id="__33">CREATE_NEW_NMQ</from-outcome>
+      <to-activity-id id="__25">create-new-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__70">
+      <from-outcome id="__86">UPDATE_NMQ</from-outcome>
+      <to-activity-id id="__71">update-existing-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__87">
+      <from-outcome id="__89">COPY_NMQ</from-outcome>
+      <to-activity-id id="__88">copy-new-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__90">
+      <from-outcome id="__92">UPDATE_SMQ</from-outcome>
+      <to-activity-id id="__91">update-SMQ-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__22">
+      <from-outcome>MEDDRA_IMPACT_ASSESSMENT</from-outcome>
+      <to-activity-id>impact-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__51">
+      <from-outcome>HISTORICAL_IMPACT_ASSESSMENT</from-outcome>
+      <to-activity-id>impactSearch</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__57">
+      <from-outcome>ADMIN</from-outcome>
+      <to-activity-id>administration</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__34">
+      <from-outcome>CANCEL</from-outcome>
+      <to-activity-id>home</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__36">
+      <from-outcome>NON_IMPACT_PUBLISH</from-outcome>
+      <to-activity-id>publish-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__40">
+      <from-outcome>REPORTS</from-outcome>
+      <to-activity-id>report-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__42">
+      <from-outcome>IMPACT_PUBLISH</from-outcome>
+      <to-activity-id>ia-publish-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__43">
+      <from-outcome>HOME</from-outcome>
+      <to-activity-id>search</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__1">
+      <from-outcome>BROWSE_SEARCH</from-outcome>
+      <to-activity-id>browse-search-task-flow-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__62">
+      <from-outcome>DIFF</from-outcome>
+      <to-activity-id>diff</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__5">
+      <from-outcome>VIEW_VERSION_IMPACT</from-outcome>
+      <to-activity-id>view-version-impact-definition</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__52">
+    <from-activity-id>impactSearch</from-activity-id>
+    <control-flow-case id="__53">
+      <from-outcome>SHOW_HISTORICAL_IMPACT</from-outcome>
+      <to-activity-id>historicalImpactAssessment</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <control-flow-rule id="__54">
+    <from-activity-id>historicalImpactAssessment</from-activity-id>
+    <control-flow-case id="__55">
+      <from-outcome>SEARCH</from-outcome>
+      <to-activity-id>impactSearch</to-activity-id>
+    </control-flow-case>
+  </control-flow-rule>
+  <managed-bean id="__49">
+    <managed-bean-name id="__48">UserBean</managed-bean-name>
+    <managed-bean-class id="__47">com.dbms.csmq.UserBean</managed-bean-class>
+    <managed-bean-scope id="__50">session</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__7">
+    <managed-bean-name>TermHierarchyBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.hierarchy.TermHierarchyBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__11">
+    <managed-bean-name>TermListBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.hierarchy.TermListBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__15">
+    <managed-bean-name id="__13">TermHierarchySourceBean</managed-bean-name>
+    <managed-bean-class id="__12">com.dbms.csmq.view.hierarchy.TermHierarchySourceBean</managed-bean-class>
+    <managed-bean-scope id="__14">pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__17">
+    <managed-bean-name id="__16">NMQSearchBean</managed-bean-name>
+    <managed-bean-class id="__10">com.dbms.csmq.view.backing.NMQ.NMQSearchBean</managed-bean-class>
+    <managed-bean-scope id="__18">pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__20">
+    <managed-bean-name id="__27">NMQWizardSearchBean</managed-bean-name>
+    <managed-bean-class id="__19">com.dbms.csmq.view.backing.NMQ.NMQWizardSearchBean</managed-bean-class>
+    <managed-bean-scope id="__26">pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__29">
+    <managed-bean-name id="__30">NMQWizardBean</managed-bean-name>
+    <managed-bean-class id="__31">com.dbms.csmq.view.backing.NMQ.NMQWizardBean</managed-bean-class>
+    <managed-bean-scope id="__28">pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__6">
+    <managed-bean-name id="__8">NMQSourceTermSearchBean</managed-bean-name>
+    <managed-bean-class id="__9">com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchBean</managed-bean-class>
+    <managed-bean-scope id="__4">pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__23">
+    <managed-bean-name>MedDRAImpactHierarchyBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__38">
+    <managed-bean-name>BrowseAndSearchBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.backing.search.BrowseAndSearchBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__39">
+    <managed-bean-name>BrowseAndSearchHierarchyBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.backing.search.BrowseAndSearchHierarchyBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__44">
+    <managed-bean-name>HistoricalImpactHierarchyBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.impact.HistoricalImpactHierarchyBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__45">
+    <managed-bean-name>CurrentImpactHierarchyBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.impact.CurrentImpactHierarchyBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__56">
+    <managed-bean-name>ImpactSearchBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.backing.impact.ImpactSearchBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__59">
+    <managed-bean-name>NewPTListBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.hierarchy.NewPTListBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__35">
+    <managed-bean-name>RenderingRulesBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.RenderingRulesBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__37">
+    <managed-bean-name>WorkflowBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.backing.publish.WorkflowBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__41">
+    <managed-bean-name>ReportBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.reports.ReportBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__58">
+    <managed-bean-name>CSMQBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.CSMQBean</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__60">
+    <managed-bean-name>NMQWizardUIBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property id="__63">
+      <property-name>nMQWizardBean</property-name>
+      <property-class>com.dbms.csmq.view.backing.NMQ.NMQWizardBean</property-class>
+      <value>#{pageFlowScope.NMQWizardBean}</value>
+    </managed-property>
+  </managed-bean>
+  <managed-bean id="__64">
+    <managed-bean-name>DiffBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.diff.DiffBean</managed-bean-class>
+    <managed-bean-scope>pageFlow</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__24">
+    <managed-bean-name>DiffUIBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.diff.DiffUIBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  <managed-bean id="__3">
+    <managed-bean-name>ReportDownloadBean</managed-bean-name>
+    <managed-bean-class>com.dbms.csmq.view.reports.ReportDownloadBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+</adfc-config>

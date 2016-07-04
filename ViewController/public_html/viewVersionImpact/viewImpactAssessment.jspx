@@ -1,0 +1,765 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="NMAT" id="d1">
+            <af:form id="f1">
+            <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
+            <f:facet name="header">
+                <af:group id="g2">
+                    <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
+                              binding="#{ImpactAnalysisUIBean.cntrlTrain}" rendered="true"/>
+                    <af:spacer width="10" height="10" id="s1"/>
+                </af:group>
+            </f:facet>
+            <f:facet name="main">
+                <af:group id="g1">
+                <af:popup autoCancel="enabled" id="p4">
+                <af:dialog id="d4" type="ok" title="Impact Legend">
+                    <f:facet name="buttonBar"/>
+                    <af:panelGroupLayout id="pl1" inlineStyle="width:354px;" layout="vertical">
+                        <af:panelGroupLayout id="pgl10">
+                            <af:image source="/image/impact/1010.png" id="i4"/>
+                            <af:spacer width="5" height="10" id="s5"/>
+                            <af:outputFormatted value="Impacted" id="of3" styleClass="Impact_NMQ_1010"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl11">
+                            <af:image source="/image/impact/1080.png" id="i9"/>
+                            <af:spacer width="5" height="10" id="s6"/>
+                            <af:outputFormatted value="Renamed Terms (Italic= BLACK ball)" id="of4" styleClass="Impact_NMQ_1080"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl12">
+                            <af:image id="i5" source="/image/impact/1040.png"/>
+                            <af:spacer width="5" height="10" id="s8"/>
+                            <af:outputFormatted value="MedDRA Inserted/Added Term/Relation" id="of5" styleClass="Impact_NMQ_1040"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl13">
+                            <af:image source="/image/impact/1070.png" id="i6"/>
+                            <af:spacer width="5" height="10" id="s10"/>
+                            <af:outputFormatted value="MQM Inserted/Added New PT" id="of6" styleClass="Impact_NMQ_1070"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl14">
+                            <af:image source="/image/impact/1110.png" id="i10"/>
+                            <af:spacer width="5" height="10" id="s11"/>
+                            <af:outputFormatted value="Other MQM Manual Additions (Bold= WHITE Ball)  " id="of7" styleClass="Impact_NMQ_1110"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl15">
+                            <af:image source="/image/impact/1020.png" id="i7"/>
+                            <af:spacer width="5" height="10" id="s12"/>
+                            <af:outputFormatted value="Deleted/Merged/Moved Term/Relation" id="of8" styleClass="Impact_NMQ_1020"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl17">
+                            <af:image source="/image/impact/1030.png" id="i8"/>
+                            <af:spacer width="5" height="10" id="s13"/>
+                            <af:outputFormatted value="Non-Current LLT (Future NMQs/SMQs)" id="of10" styleClass="Impact_NMQ_1030"/>
+                        </af:panelGroupLayout>
+                        <af:panelGroupLayout id="pgl18">
+                            <af:image source="/image/impact/1050.png" id="i11"/>
+                            <af:spacer width="5" height="10" id="s9"/>
+                            <af:outputFormatted value="Change in TERMSCP (SMQs)" id="of11" styleClass="Impact_SMQ_1050"/>
+                        </af:panelGroupLayout>
+                    </af:panelGroupLayout>
+                </af:dialog>
+            </af:popup>
+            
+            <!--  *** HIERARCHY SEARCH ********************************* -->
+            
+            <af:popup id="p2" binding="#{NMQSourceTermSearchUIBean.searchPopUp}" autoCancel="disabled" rendered="false"
+                      popupCanceledListener="#{pageFlowScope.NMQSourceTermSearchBean.dialogClosed}"
+                      popupFetchListener="#{pageFlowScope.ImpactAnalysisBean.hierarchyPopUpFetch}"
+                      contentDelivery="lazyUncached">
+                <af:dialog type="cancel" closeIconVisible="true" title="Hierarchy Search" id="dialog1" stretchChildren="none"
+                           modal="false" resize="off">
+                    <!-- TREE SEARCH START-->
+                    <af:panelGroupLayout id="pgl9">
+                        <af:panelFormLayout id="pgl7" maxColumns="1" rows="2">
+                            <af:selectOneChoice label="Dictionary" id="soc1" autoSubmit="true"
+                                                
+                                                valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.dictionaryTypeChanged}"
+                                                value="BASE"
+                                                binding="#{pageFlowScope.NMQSourceTermSearchBean.controlDictionaryType}">
+                                <af:selectItem label="MedDRA" value="BASE" id="si1"/>
+                                <af:selectItem label="Filter" value="FILTER" id="si13"/>
+                            </af:selectOneChoice>
+                            <af:selectOneChoice id="soc4" label="Level" partialTriggers="soc1"
+                                binding="#{pageFlowScope.NMQSourceTermSearchBean.controlLevel}"
+                                value="SOC">
+                                    <af:selectItem label="SMQ 1" value="MQ1" id="si2" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                    <af:selectItem label="SMQ 2" value="MQ2" id="si25" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                    <af:selectItem label="SMQ 3" value="MQ3" id="si26" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                    <af:selectItem label="SMQ 4" value="MQ4" id="si27" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                    <af:selectItem label="SMQ 5" value="MQ5" id="si28" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                    
+                                    <af:selectItem label="Custom 1" value="NMQ1" id="si29" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                    <af:selectItem label="Custom 2" value="NMQ2" id="si31" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                    <af:selectItem label="Custom 3" value="NMQ3" id="si32" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                    <af:selectItem label="Custom 4" value="NMQ4" id="si30" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems  or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                    <af:selectItem label="Custom 5" value="NMQ5" id="si34" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                    
+                                    <af:selectItem label="SOC" value="SOC" id="si35" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                    <af:selectItem label="HLGT" value="HLGT" id="si36" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                    <af:selectItem label="HLT" value="HLT" id="si37" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                    <af:selectItem label="PT" value="PT" id="si38" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                    <af:selectItem label="LLT" value="LLT" id="si39" rendered="false"/>
+                            </af:selectOneChoice>
+                            <af:inputText label="Term " id="it1" binding="#{NMQSourceTermSearchUIBean.controlTerm}"/>
+                            <af:commandButton text="Search" id="cb2" partialSubmit="true"
+                                              actionListener="#{pageFlowScope.NMQSourceTermSearchBean.doSearch}"
+                                              inlineStyle="height:auto;"/>
+                        </af:panelFormLayout>
+                        
+                        <af:spacer width="10" height="10" id="s3"/>
+                        <af:table value="#{bindings.HierarchySourceTermSearchVO1.collectionModel}" var="row" rows="#{bindings.HierarchySourceTermSearchVO1.rangeSize}"
+                                  emptyText="#{bindings.HierarchySourceTermSearchVO1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                  fetchSize="#{bindings.HierarchySourceTermSearchVO1.rangeSize}" rowBandingInterval="0"
+                                  
+                                  binding="#{NMQSourceTermSearchUIBean.controlResultsTable}"
+                                  selectionListener="#{pageFlowScope.NMQSourceTermSearchBean.rowChanged}" rowSelection="single" id="t7" width="491"
+                                  inlineStyle="height:133px;" columnStretching="column:c28">
+                            <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.name}" sortable="false"
+                                       headerText="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.label}" id="c8" width="1" minimumWidth="1" rendered="false">
+                                <af:inputText value="#{row.bindings.Rnum.inputValue}" label="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.label}"
+                                              required="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.mandatory}"
+                                              columns="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.displayWidth}"
+                                              maximumLength="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.precision}"
+                                              shortDesc="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.tooltip}" id="it4">
+                                    <f:validator binding="#{row.bindings.Rnum.validator}"/>
+                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.format}"/>
+                                </af:inputText>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.ContentId.name}" sortable="false"
+                                       headerText="Content ID" id="c20" width="55">
+                                <af:outputText value="#{row.ContentId}" shortDesc="#{bindings.HierarchySourceTermSearchVO1.hints.ContentId.tooltip}" id="ot16"/>
+                            </af:column>
+                            <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.Mqterm.name}" sortable="false"
+                                       headerText="Term" id="c28">
+                                <af:outputText value="#{row.Mqterm}" shortDesc="#{bindings.HierarchySourceTermSearchVO1.hints.Mqterm.tooltip}" id="ot29"/>
+                            </af:column>
+                        </af:table>
+                        <!-- SEARCH -->
+                        <af:panelCollection id="pc3">
+                            <f:facet name="menus">
+                               <af:menu text="Filter and Sort" id="m1" detachable="true" inlineStyle="padding:1px;">
+                                <af:toolbar id="t6">
+                                    <af:panelFormLayout id="pfl3a">
+                                        <af:selectOneChoice label="Sort" value="SCOPE" id="soc7"
+                                                            
+                                                            autoSubmit="true"
+                                                            valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.sortChanged}"
+                                                            binding="#{NMQSourceTermSearchUIBean.cntrlSortList}">
+                                            <af:selectItem label="Term Name" value="TERM" id="si14"/>
+                                            <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME" id="si15"/>
+                                            <af:selectItem label="Scope" value="SCOPE" id="si16"/>
+                                        </af:selectOneChoice>
+                                        <af:selectBooleanCheckbox label="Show Primary Only" id="sbc1" value="false" autoSubmit="true"
+                                                                  
+                                                                  valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.showSecondaryPathChanged}"
+                                                                  binding="#{NMQSourceTermSearchUIBean.ctrlReturnPrimLinkPath}"/>
+                                        
+                                        
+                                        <af:selectOneChoice label="Scope" id="soc5"
+                                                            
+                                                            labelStyle="white-space:nowrap" value="0" autoSubmit="true"
+                                                            valuePassThru="true"
+                                                            valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.scopeChanged}"
+                                                            binding="#{NMQSourceTermSearchUIBean.cntrlScope}">
+                                            <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ" value="0"
+                                                           id="si5"/>
+                                            <af:selectItem label="Child Narrow" value="3" id="si6"/>
+                                        </af:selectOneChoice>
+                                    </af:panelFormLayout>
+                                </af:toolbar>
+                            </af:menu>
+                            </f:facet>
+                            <f:facet name="toolbar"/>
+                            <f:facet name="statusbar"/>
+                            <af:treeTable value="#{pageFlowScope.TermHierarchySourceBean.treemodel}" var="node"
+                                          rowSelection="multiple" id="hierSrc"
+                                          binding="#{pageFlowScope.ImpactAnalysisBean.hierarchySourceTree}"
+                                          columnStretching="column:c14" inlineStyle="height:303px;" initiallyExpanded="false"
+                                          fetchSize="20">
+                                <f:facet name="nodeStamp">
+                                    <af:column id="c14" headerText="#{node.term}" width="200">
+                                        <af:outputText value="#{node.term}" id="ot11" styleClass="#{node.style}"/>
+                                       
+                                    </af:column>
+                                </f:facet>
+                                <f:facet name="pathStamp">
+                                    <af:group id="g4">
+                                        <af:outputText value="#{node}" id="ot12"/>
+                                    </af:group>
+                                </f:facet>
+                                <af:column headerText="Hierarchy Details" id="c15" width="572">
+                                    <af:column id="c26" headerText="Code" width="50" sortable="true" filterable="true">
+                                        <af:outputText value="#{node.dictContentCode}" id="ot26"/>
+                                    </af:column>
+                                    <af:column id="c18" headerText="Level" width="50" sortable="true" filterable="true">
+                                        <af:outputText value="#{node.levelName}" id="ot14"/>
+                                    </af:column>
+                                    <af:column id="c17" headerText="Scope" width="50" sortable="true" filterable="true">
+                                        <af:outputText value="#{node.scopeName}" id="ot13"/>
+                                    </af:column>
+                                </af:column>
+                                <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                            </af:treeTable>
+                        </af:panelCollection>
+                        <!-- TREE SEARCH END -->
+                    </af:panelGroupLayout>
+                </af:dialog>
+            </af:popup>
+            <!-- ***    IMPACT SEARCH RESULTS  ************************** -->
+            <af:popup id="p3" binding="#{ImpactAnalysisUIBean.impactSearchPopUp}"
+                      launcherVar="PUSR"
+                      popupFetchListener="#{pageFlowScope.ImpactAnalysisBean.impactSearchResultsPopUp}">
+                <af:dialog type="cancel" closeIconVisible="true" title="Impact Search" id="d8" stretchChildren="none" modal="true"
+                           resize="off">
+                    <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;">
+                        <af:showDetailItem text="Impacted CMQs" id="sdi5" styleClass="AFStretchWidth"
+                                           disclosed="true">
+                            <af:table value="#{bindings.ImpactSearchListVO_CMQ_Y.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_CMQ_Y.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_CMQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_CMQ_Y.rangeSize}"
+                                      rowSelection="single"
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      inlineStyle="height:335px;"
+                                      rowBandingInterval="0" id="T_CMQ_Y"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_CMQ_Y}"
+                                      columnStretching="column:c46" styleClass="AFStretchWidth">
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.Term.name}"
+                                           sortable="false"
+                                           headerText="Term"
+                                           id="c46" filterable="true">
+                                    <af:outputText value="#{row.Term}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.Term.tooltip}"
+                                                   id="ot48"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.DictContentCode.name}"
+                                           sortable="false"
+                                           headerText="MQ Code" width="50"
+                                           id="c47">
+                                    <af:outputText value="#{row.DictContentCode}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.DictContentCode.tooltip}"
+                                                   id="ot49"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.Status.name}"
+                                           sortable="false"
+                                           headerText="Status" width="45"
+                                           id="c48">
+                                    <af:outputText value="#{row.Status}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.Status.tooltip}"
+                                                   id="ot50"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.WorkflowState.name}"
+                                           sortable="false"
+                                           headerText="State" width="50"
+                                           id="c49">
+                                    <af:outputText value="#{row.WorkflowState}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.WorkflowState.tooltip}"
+                                                   id="ot51"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.ReleaseGroup.name}"
+                                           sortable="false" width="50"
+                                           headerText="Release Group"
+                                           id="c50">
+                                    <af:outputText value="#{row.ReleaseGroup}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.ReleaseGroup.tooltip}"
+                                                   id="ot52"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.DictContentId.name}"
+                                           sortable="false" rendered="false" width="50"
+                                           headerText="ID"
+                                           id="c51">
+                                    <af:outputText value="#{row.DictContentId}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_Y.hints.DictContentId.tooltip}"
+                                                   id="ot53">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.ImpactSearchListVO_CMQ_Y.hints.DictContentId.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                        <af:showDetailItem text="Impacted NMQs" styleClass="AFStretchWidth"
+                                           id="sdi4">
+                            <af:table value="#{bindings.ImpactSearchListVO_NMQ_Y.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_NMQ_Y.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_NMQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_NMQ_Y.rangeSize}"
+                                      rowBandingInterval="0"
+                                      
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      rowSelection="single" id="TBL_NMQ_Y" inlineStyle="height:335px;"
+                                      styleClass="AFStretchWidth" columnStretching="column:c40"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_Y}">
+                                <af:column headerText="Term" id="c40" filterable="true">
+                                    <af:outputText value="#{row.Term}" id="ot42"/>
+                                </af:column>
+                                <af:column headerText="MQ Code" id="c41" width="50" filterable="true">
+                                    <af:outputText value="#{row.DictContentCode}" id="ot43"/>
+                                </af:column>
+                                <af:column headerText="Status" id="c42" width="45" filterable="true">
+                                    <af:outputText value="#{row.Status}" id="ot44"/>
+                                </af:column>
+                                <af:column id="c43" headerText="State" width="50">
+                                    <af:outputText value="#{row.WorkflowState}" id="ot45"/>
+                                </af:column>
+                                <af:column sortable="true" headerText="Release Group" id="c44"
+                                           width="50">
+                                    <af:outputText value="#{row.ReleaseGroup}" id="ot46"/>
+                                </af:column>
+                                <af:column headerText="ID" id="c45" rendered="false">
+                                    <af:outputText value="#{row.DictContentId}" id="ot47">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                        <af:showDetailItem text="Impacted SMQs" id="sdi2" inlineStyle="height:335px;">
+                            <af:table value="#{bindings.ImpactSearchListVO_MQ_Y.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_MQ_Y.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_MQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_MQ_Y.rangeSize}"
+                                      rowBandingInterval="0" id="TBL_MQ_Y"
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      rowSelection="single" inlineStyle="height:335px;"
+                                      styleClass="AFStretchWidth" columnStretching="column:c22"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_Y}">
+                                <af:column headerText="Term" id="c22" filterable="true">
+                                    <af:outputText value="#{row.Term}" id="ot30"/>
+                                </af:column>
+                                <af:column headerText="MQ Code" id="c29" width="50" filterable="true">
+                                    <af:outputText value="#{row.DictContentCode}" id="ot31"/>
+                                </af:column>
+                                <af:column headerText="Status" id="c30" width="45" filterable="true">
+                                    <af:outputText value="#{row.Status}" id="ot32"/>
+                                </af:column>
+                                <af:column id="c31" headerText="State" width="50">
+                                    <af:outputText value="#{row.WorkflowState}" id="ot33"/>
+                                </af:column>
+                                <af:column sortable="true" headerText="Release Group" id="c32"
+                                           width="50">
+                                    <af:outputText value="#{row.ReleaseGroup}" id="ot34"/>
+                                </af:column>
+                                <af:column headerText="ID" id="c33" rendered="false">
+                                    <af:outputText value="#{row.DictContentId}" id="ot35">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                        <af:showDetailItem text="Non-impacted CMQs" id="sdi6" styleClass="AFStretchWidth">
+                            <af:table value="#{bindings.ImpactSearchListVO_CMQ_N.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_CMQ_N.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_CMQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_CMQ_N.rangeSize}"
+                                      rowBandingInterval="0"
+                                      selectedRowKeys="#{bindings.ImpactSearchListVO_CMQ_N.collectionModel.selectedRow}"
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      rowSelection="single" id="T_CMQ_N"
+                                      inlineStyle="height:335px;"
+                                      columnStretching="column:c52"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_CMQ_N}"
+                                      styleClass="AFStretchWidth">
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.Term.name}"
+                                           sortable="false"
+                                           headerText="Term"
+                                           id="c52" filterable="true">
+                                    <af:outputText value="#{row.Term}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.Term.tooltip}"
+                                                   id="ot54"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.DictContentCode.name}"
+                                           sortable="false"
+                                           headerText="MQ Code" width="50"
+                                           id="c53">
+                                    <af:outputText value="#{row.DictContentCode}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.DictContentCode.tooltip}"
+                                                   id="ot55"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.Status.name}"
+                                           sortable="false"
+                                           headerText="Status" width="45"
+                                           id="c54">
+                                    <af:outputText value="#{row.Status}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.Status.tooltip}"
+                                                   id="ot56"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.WorkflowState.name}"
+                                           sortable="false"
+                                           headerText="State" width="50"
+                                           id="c55">
+                                    <af:outputText value="#{row.WorkflowState}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.WorkflowState.tooltip}"
+                                                   id="ot57"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.ReleaseGroup.name}"
+                                           sortable="false"
+                                           headerText="Release Group" width="50"
+                                           id="c56">
+                                    <af:outputText value="#{row.ReleaseGroup}"
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.ReleaseGroup.tooltip}"
+                                                   id="ot58"/>
+                                </af:column>
+                                <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.DictContentId.name}"
+                                           sortable="false" rendered="false"
+                                           headerText="ID" width="50"
+                                           id="c57">
+                                    <af:outputText value="#{row.DictContentId}" 
+                                                   shortDesc="#{bindings.ImpactSearchListVO_CMQ_N.hints.DictContentId.tooltip}"
+                                                   id="ot59">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.ImpactSearchListVO_CMQ_N.hints.DictContentId.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                        <af:showDetailItem text="Non-impacted NMQs"
+                                           id="sdi3" styleClass="AFStretchWidth">
+                            <af:table value="#{bindings.ImpactSearchListVO_NMQ_N.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_NMQ_N.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_NMQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_NMQ_N.rangeSize}"
+                                      rowBandingInterval="0"
+                                      
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      rowSelection="single" id="TBL_NMQ_N" inlineStyle="height:335px;"
+                                      styleClass="AFStretchWidth" columnStretching="column:c34"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_N}">
+                                <af:column headerText="Term" id="c34" filterable="true">
+                                    <af:outputText value="#{row.Term}" id="ot36"/>
+                                </af:column>
+                                <af:column headerText="MQ Code" id="c35" width="50" filterable="true">
+                                    <af:outputText value="#{row.DictContentCode}" id="ot37"/>
+                                </af:column>
+                                <af:column headerText="Status" id="c36" width="45" filterable="true">
+                                    <af:outputText value="#{row.Status}" id="ot38"/>
+                                </af:column>
+                                <af:column id="c37" headerText="State" width="50">
+                                    <af:outputText value="#{row.WorkflowState}" id="ot39"/>
+                                </af:column>
+                                <af:column sortable="true" headerText="Release Group" id="c38"
+                                           width="50">
+                                    <af:outputText value="#{row.ReleaseGroup}" id="ot40"/>
+                                </af:column>
+                                <af:column headerText="ID" id="c39" rendered="false">
+                                    <af:outputText value="#{row.DictContentId}" id="ot41">
+                                        <af:convertNumber groupingUsed="false"
+                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                    </af:outputText>
+                                </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                        <af:showDetailItem text="Non-impacted SMQs" id="sdi1">
+                            <af:table value="#{bindings.ImpactSearchListVO_MQ_N.collectionModel}"
+                                      var="row" rows="#{bindings.ImpactSearchListVO_MQ_N.rangeSize}"
+                                      emptyText="#{bindings.ImpactSearchListVO_MQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      fetchSize="#{bindings.ImpactSearchListVO_MQ_N.rangeSize}"
+                                      rowBandingInterval="0"
+                                      
+                                      selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
+                                      rowSelection="single" id="TBL_MQ_N" inlineStyle="height:335px;"
+                                      styleClass="AFStretchWidth" columnStretching="column:c9"
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_N}">
+                            <af:column  headerText="Term" id="c9" filterable="true">
+                                <af:outputText value="#{row.Term}" id="ot5"/>
+                            </af:column>
+                            <af:column headerText="MQ Code" id="c10" width="50" filterable="true">
+                                <af:outputText value="#{row.DictContentCode}" id="ot7"/>
+                            </af:column>
+                            <af:column  headerText="Status" id="c11" width="45" filterable="true">
+                                <af:outputText value="#{row.Status}" id="ot8"/>
+                            </af:column>
+                            <af:column id="c16" headerText="State" width="50">
+                                <af:outputText value="#{row.WorkflowState}" id="ot19"/>
+                            </af:column>
+                            <af:column sortable="true" headerText="Release Group" id="c12" width="50" >
+                                <af:outputText value="#{row.ReleaseGroup}" id="ot9"/>
+                            </af:column>
+                            <af:column  headerText="ID" id="c13" rendered="false">
+                                <af:outputText value="#{row.DictContentId}" id="ot10">
+                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                </af:outputText>
+                            </af:column>
+                            </af:table>
+                        </af:showDetailItem>
+                    </af:panelTabbed>
+                    <f:facet name="buttonBar">
+                        <af:group id="g8">
+                            <af:panelLabelAndMessage label="Last Updated:" id="plam1">
+                                <af:outputText value="#{bindings.LastUpdate.inputValue}" id="ot27"/>
+                            </af:panelLabelAndMessage>
+                        </af:group>
+                    </f:facet>
+                </af:dialog>
+            </af:popup>
+            <af:panelBox text="View Version Impact" id="pb1" showDisclosure="false"
+                             inlineStyle="width:1250px; padding:5px; height:390px;">
+                    <af:panelGroupLayout id="pgl4" layout="horizontal" inlineStyle="height:355px; width:1230px; padding:5px;">
+                        <af:panelCollection id="pc2" inlineStyle="height:345px; width:515px; padding:0px;">
+                                <f:facet name="menus">
+                                <af:menu text="Filter and Sort" id="m2" detachable="true"
+                                         binding="#{ImpactAnalysisUIBean.cntrlExistingMenu}">
+                                    <af:panelFormLayout id="pfl2a" inlineStyle="height:97px;">
+                                            
+                                            <af:selectBooleanCheckbox label="Show Impacted Only" id="paramMedDRASIO" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
+                                                                      selected="false"
+                                                                      binding="#{ImpactAnalysisUIBean.cntrlShowImpactedFilterExisting}"/>
+                                            <af:selectBooleanCheckbox label="Show Primary Only" id="paramMedDRASPO" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
+                                                                      binding="#{ImpactAnalysisUIBean.cntrlShowPrimaryFilterExisting}"/>
+                                            <af:selectOneChoice label="Sort"  id="paramMedDRASort"
+                                                                    autoSubmit="true" readOnly="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
+                                                                    valuePassThru="true" value="SCOPE"
+                                                                binding="#{ImpactAnalysisUIBean.cntrlShowSortFilterExisting}">
+                                                    <af:selectItem label="Term Name" value="TERM" id="si18"/>
+                                                    <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME" id="si21"/>
+                                                    <af:selectItem label="Scope" value="SCOPE" id="si20"/>
+                                                </af:selectOneChoice>
+                                        <af:commandToolbarButton text="Refresh" id="ctb10"
+                                                                 actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshMedDRATree}"
+                                                                 icon="/image/hierarchy/REFRESH.png"/>
+                                    </af:panelFormLayout>
+                                </af:menu>
+                            </f:facet>
+                                <f:facet name="toolbar">
+                                    <af:toolbar id="t4" binding="#{ImpactAnalysisUIBean.cntrlImpactLeftToolbar}">
+                                    <af:commandToolbarButton text="Select MQ" id="cb5" partialSubmit="true" icon="/image/table_go.png">
+                                            <af:showPopupBehavior popupId="::p3" triggerType="click"/>
+                                        </af:commandToolbarButton>
+                                    <af:commandToolbarButton text="Export Displayed" icon="/image/EXCEL.png" id="ctb12"
+                                                             binding="#{ImpactAnalysisUIBean.cntrlExportDisplayedButtonLeft}" disabled="true" rendered="false">
+                                        <af:exportCollectionActionListener exportedId="hTable" type="excelHTML" title="#{pageFlowScope.ImpactAnalysisBean.currentTermName}" filename="#{pageFlowScope.ImpactAnalysisBean.currentTermName}.xls"
+                                                                           exportedRows="all"/>
+                                    </af:commandToolbarButton>
+                                </af:toolbar>
+                                </f:facet>
+                                <af:treeTable value="#{pageFlowScope.MedDRAImpactHierarchyBean.treemodel}" var="node"
+                                              rowSelection="multiple" id="hTable" width="504"
+                                              binding="#{pageFlowScope.ImpactAnalysisBean.medDRATree}" columnStretching="column:column1"
+                                              inlineStyle="height:400px;" initiallyExpanded="false" fetchSize="20">
+                                    <f:facet name="nodeStamp">
+                                        <af:column id="column1" headerText="#{node.term}" width="200"
+                                                   inlineStyle="height:18px; white-space:nowrap;" headerNoWrap="true" noWrap="true"
+                                                   rendered="#{pageFlowScope.MedDRAImpactHierarchyBean.hasData}">
+                                            <af:panelGroupLayout id="pgl2" halign="left">
+                                                <af:image id="i2" rendered="#{node.icon gt 0}" shortDesc="#{node.description}"
+                                                          source="/image/impact/#{node.icon}.png"/>
+                                                <af:spacer width="4" height="0" id="s17"/>
+                                                <af:outputText value="#{node.term}" id="ot18" styleClass="#{node.style}"
+                                                               rendered="#{node.rendered and !node.showHasChildrenButton}"
+                                                               shortDesc="#{node.path}"/>
+                                                <af:commandLink text="#{node.term}" id="cl1" styleClass="#{node.style}"
+                                                                shortDesc="#{node.path}"
+                                                                actionListener="#{pageFlowScope.MedDRAImpactHierarchyBean.expandChildren}"
+                                                                rendered="#{node.rendered and node.showHasChildrenButton}"
+                                                                partialSubmit="true"/>
+                                            </af:panelGroupLayout>
+                                            <f:facet name="header">
+                                                <af:group id="g3">
+                                                    <af:outputText value="Existing #{applicationScope.CSMQBean.customMQName}/SMQ"
+                                                                   id="ot17" inlineStyle="font-size:12px; vertical-align:middle;"/>
+                                                </af:group>
+                                            </f:facet>
+                                        </af:column>
+                                    </f:facet>
+                                    <f:facet name="pathStamp">
+                                        <af:outputText value="#{node}" id="outputText2"/>
+                                    </f:facet>
+                                    <af:column headerText="Hierarchy Details" id="column2" width="572"
+                                               rendered="#{pageFlowScope.MedDRAImpactHierarchyBean.hasData}">
+                                    <af:column id="c19" headerText="Code" width="50" sortable="true" filterable="true">
+                                        <af:outputText value="#{node.dictContentCode}" id="ot20"/>
+                                    </af:column>
+                                    <af:column id="column3" headerText="Level" width="50" sortable="true" filterable="true">
+                                            <af:outputText value="#{node.levelName}" id="outputText3"/>
+                                        </af:column>
+                                        <af:column id="column4" headerText="Scope" width="50" sortable="true" filterable="true">
+                                            <af:outputText value="#{node.scopeName}" id="outputText4"/>
+                                        </af:column>
+                                    </af:column>
+                                </af:treeTable>
+                            </af:panelCollection>
+                            <af:panelCollection id="pc1" inlineStyle="width:679px; height:345px; padding:0px;">
+                            <f:facet name="toolbar">
+                                <af:toolbar id="t2" partialTriggers="fTable" binding="#{ImpactAnalysisUIBean.cntrlImpactRightToolbar}">
+                                    <af:commandToolbarButton text="Refresh" id="ctb4" rendered="false"
+                                                             actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshFutureTree}"
+                                                             icon="/image/hierarchy/REFRESH.png" disabled="true" binding="#{ImpactAnalysisUIBean.cntrlRefreshButton}"/>
+                                    <af:commandToolbarButton text="Export Displayed" icon="/image/EXCEL.png" id="ctb1" disabled="true"
+                                                             binding="#{ImpactAnalysisUIBean.cntrlExportDisplayedButtonRight}" rendered="false">
+                                        <af:exportCollectionActionListener exportedId="fTable" type="excelHTML"
+                                                                           title="#{pageFlowScope.ImpactAnalysisBean.currentTermName}"
+                                                                           filename="#{pageFlowScope.ImpactAnalysisBean.currentTermName}.xls" exportedRows="all"/>
+                                    </af:commandToolbarButton>
+                                </af:toolbar>
+                            </f:facet>
+                                <af:treeTable value="#{pageFlowScope.FutureImpactHierarchyBean.treemodel}" var="node"
+                                              rowSelection="single" id="fTable" width="664"
+                                              binding="#{pageFlowScope.ImpactAnalysisBean.futureTree}" columnStretching="column:c1"
+                                              inlineStyle="height:400px;" initiallyExpanded="false" fetchSize="20">
+                                <f:facet name="nodeStamp">
+                                        <af:column id="c1"
+                                                   headerText="#{bindings.Term.inputValue}#{pageFlowScope.NMQWizardBean.currentTermName}"
+                                                   width="200" sortable="true" filterable="true" inlineStyle="height:18px;">
+                                            <af:panelGroupLayout id="pgl3" halign="left">
+                                                <af:image id="i3" rendered="#{node.icon gt 0}" shortDesc="#{node.description}"
+                                                          source="/image/impact/#{node.icon}.png"/>
+                                                <af:spacer width="4" height="0" id="s2"/>
+                                                <af:outputText value="#{node.term}" id="ot1" styleClass="#{node.style}"
+                                                               rendered="#{node.rendered and !node.showHasChildrenButton}"
+                                                               shortDesc="#{node.path}"/>
+                                                <af:commandLink text="#{node.term}" id="cl2" styleClass="#{node.style}"
+                                                                shortDesc="#{node.path}"
+                                                                actionListener="#{pageFlowScope.FutureImpactHierarchyBean.expandChildren}"
+                                                                rendered="#{node.rendered and node.showHasChildrenButton}"
+                                                                partialSubmit="true"/>
+                                            </af:panelGroupLayout>
+                                            <f:facet name="header">
+                                                <af:group id="g6">
+                                                    <af:outputText value="Future #{applicationScope.CSMQBean.customMQName}/SMQ" id="ot15"
+                                                                   inlineStyle="font-size:12px;"/>
+                                                </af:group>
+                                            </f:facet>
+                                        </af:column>
+                                    </f:facet>
+                                <f:facet name="pathStamp">
+                                        <af:outputText value="#{node}" id="ot2"/>
+                                    </f:facet>
+                                <af:column headerText="Hierarchy Details" id="c6" width="572">
+                                    <af:column id="c25" headerText="Code" width="50" sortable="true" filterable="true">
+                                        <af:outputText value="#{node.dictContentCode}" id="ot25"/>
+                                    </af:column>
+                                    <af:column id="c2" headerText="Level" width="50" sortable="true" filterable="true"
+                                                   attributeChangeListener="#{pageFlowScope.FutureImpactHierarchyBean.sortByLevel}">
+                                            <af:outputText value="#{node.levelName}" id="ot3"/>
+                                        </af:column>
+                                        <af:column id="c3" headerText="Scope" width="75" sortable="true" filterable="true">
+                                            <af:selectOneChoice id="soc3" value="#{node.formattedScope}" valuePassThru="true" readOnly="true">
+                                                <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ" value="0" id="si7"/>
+                                            <af:selectItem label="Broad" value="1" id="si13s"/>
+                                            <af:selectItem label="Narrow" value="2" id="si13d"/>
+                                            <af:selectItem label="Child Narrow" value="3" id="si4"/>
+                                            </af:selectOneChoice>
+                                        </af:column>
+                                        <af:column id="c4" headerText="Category" width="45" sortable="true" filterable="true">
+                                            <af:selectOneChoice id="soc2" value="#{node.termCategory}" valuePassThru="true" readOnly="true"
+                                                     autoSubmit="true" valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.nodeChanged}" immediate="false">
+                                                <af:selectItem label="A" value="A" id="si3"/>
+                                                <af:selectItem label="S" value="S" id="si9"/>
+                                                <af:selectItem label="B" value="B" id="si23"/>
+                                                <af:selectItem label="C" value="C" id="si10"/>
+                                                <af:selectItem label="D" value="D" id="si11"/>
+                                                <af:selectItem label="E" value="E" id="si33"/>
+                                                <af:selectItem label="F" value="F" id="si19"/>
+                                                <af:selectItem label="G" value="G" id="si12"/>
+                                                <af:selectItem label="H" value="H" id="si17"/>
+                                                <af:selectItem label="I" value="I" id="si24"/>
+                                            </af:selectOneChoice>
+                                        </af:column>
+                                        <af:column id="c5" headerText="Weight" width="45" sortable="true" filterable="true">
+                                            <af:outputText value="#{node.termWeight}" id="ot6"/>
+                                        </af:column>
+                                        <af:column id="c27" width="0" rowHeader="true" align="left" minimumWidth="0" visible="false">
+                                        <af:outputText value="#{node.description}" id="ot28"/>
+                                    </af:column>
+                                </af:column>
+                                    <!--
+                                    ????? STILL USED?
+                                    
+                                    <f:facet name="contextMenu">
+                                        <af:popup id="p1">
+                                            <af:menu text="menu 1" id="m4">
+                                                <af:commandMenuItem text="Remove term" id="cmi1"
+                                                                    actionListener="#{pageFlowScope.FutureImpactHierarchyBean.onTreeNodeDelete}"/>
+                                            </af:menu>
+                                        </af:popup>
+                                    </f:facet>-->
+                                    <f:facet name="header"/>
+                                </af:treeTable>
+                                <f:facet name="menus">
+                                    <af:menu text="Filter and Sort" id="m5" detachable="true"
+                                             binding="#{ImpactAnalysisUIBean.cntrlFutureMenu}">
+                                        <af:toolbar id="t10">
+                                        <af:panelFormLayout id="pfl2">
+                                            
+                                            <af:selectBooleanCheckbox label="Show Impacted Only" id="paramFutureSIO" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
+                                                                      selected="false"
+                                                                      value="#{pageFlowScope.ImpactAnalysisBean.futureShowImpacted}"/>
+                                            <af:selectBooleanCheckbox label="Show Primary Only" id="paramFutureSPO" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"/>
+                                            <af:selectOneChoice label="Sort"  id="paramFutureSort"
+                                                                    autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
+                                                                    valuePassThru="true" value="SCOPE">
+                                                    <af:selectItem label="Term Name" value="TERM"
+                                                                   id="si40"/>
+                                                    <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME"
+                                                                   id="si41"/>
+                                                    <af:selectItem label="Scope" value="SCOPE" id="si22"/>
+                                                </af:selectOneChoice>
+                                                
+                                                <af:commandToolbarButton text="Refresh" id="ctb11"
+                                                                 actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshFutureTree}"
+                                                                 icon="/image/hierarchy/REFRESH.png"/>
+                                            </af:panelFormLayout>
+                                        </af:toolbar>
+                                    </af:menu>
+                                </f:facet>
+                        </af:panelCollection>
+                    </af:panelGroupLayout>
+                    <f:facet name="toolbar">
+                        <af:group id="g5">
+                            <af:toolbar id="t3"
+                                        binding="#{ImpactAnalysisUIBean.promotionToolBar}">
+                                <af:commandToolbarButton text="Export" id="ctb11a" icon="/image/hierarchy/EXCEL.png" binding="#{ImpactAnalysisUIBean.cntrlExportButton}">
+                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactExport}" contentType="application/x-download"
+                                                                   filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
+                                </af:commandToolbarButton>
+                                <af:commandToolbarButton text="Legend" id="cb3" icon="/image/color_swatch.png">
+                                    <af:showPopupBehavior popupId="p4" align="afterStart"/>
+                                </af:commandToolbarButton>
+                                <af:menuBar id="mb1">
+                                    <af:menu text="Options" id="m34" icon="/image/bullet_wrench_red.png">
+                                        <af:selectBooleanCheckbox text="Include LLTs in Export" id="sbc3" valueChangeListener="#{pageFlowScope.NMQWizardBean.includeLLTsInExportChanged}"
+                                                          autoSubmit="true" selected="false"/>
+                                        <af:selectBooleanCheckbox text="Export Displayed Only" id="sbc3t" valueChangeListener="#{pageFlowScope.NMQWizardBean.exportDisplayedOnlyChanged}"
+                                                                  autoSubmit="true" rendered="false"
+                                                                  binding="#{NMQWizardUIBean.cntrlExportDisplayedOnly}"/>
+                                    </af:menu>
+                                </af:menuBar>
+                                
+                            </af:toolbar>
+                        </af:group>
+                    </f:facet>
+                </af:panelBox>
+                </af:group>
+            </f:facet>
+            <f:attribute name="currentPage" value="View Version Impact"/>
+            <f:facet name="pageBottom">
+                <af:panelGroupLayout id="pgl26" layout="horizontal" inlineStyle="padding:3px;">
+                    <af:spacer width="10" height="10" id="s21"/>
+                    <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"
+                                       binding="#{NMQWizardUIBean.cntrlTrainButtons}"/>
+                    <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL" immediate="true"
+                                      shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
+                    <af:spacer width="20" height="10" id="s19"/>
+                    <af:inputText label="Dictionary" id="it1aw" value="#{bindings.Description.inputValue} v#{bindings.Version.inputValue}"
+                                  readOnly="true" disabled="true" columns="200"/>
+                    <af:spacer width="10" height="10" id="s20"/>
+                    <af:inputText label="#{RenderingRulesBean.wizardDetailsTermName}" id="it3"
+                                  value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true" disabled="true"
+                                  binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"
+                                  partialTriggers="TBL_MQ_N TBL_MQ_Y TBL_NMQ_N TBL_NMQ_Y T_CMQ_N T_CMQ_Y"/>
+                </af:panelGroupLayout>
+            </f:facet>
+            </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

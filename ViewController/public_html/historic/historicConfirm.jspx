@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1">
+        <af:popup id="confirmDelete">
+            <af:dialog title="Confirm Delete" dialogListener="#{pageFlowScope.NMQWizardBean.delete}" id="d2">
+                <af:activeOutputText value="Are you sure you want to delete this #{applicationScope.CSMQBean.customMQName}?" id="aot1"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="confirmRetire">
+            <af:dialog title="Confirm Retire" dialogListener="#{pageFlowScope.NMQWizardBean.retire}" id="d3">
+                <af:activeOutputText value="Are you sure you want to retire this #{applicationScope.CSMQBean.customMQName}?" id="aot2"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="confirmReactivate">
+            <af:dialog title="Confirm Reactivate" dialogListener="#{pageFlowScope.NMQWizardBean.reactivate}" id="d4">
+                <af:activeOutputText value="Are you sure you want to reactivate this #{applicationScope.CSMQBean.customMQName}?" id="aot3"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="confirmDemoteToDraft">
+            <af:dialog title="Confirm Demote to Draft" dialogListener="#{pageFlowScope.NMQWizardBean.demoteToDraft}" id="d5">
+                <af:activeOutputText value="Are you sure you want to demote this #{applicationScope.CSMQBean.customMQName} to draft?" id="aot4"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="confirmReviewed">
+            <af:dialog title="Confirm Reviewed" dialogListener="#{pageFlowScope.NMQWizardBean.confirmReviewed}" id="d6">
+                <af:activeOutputText value="Are you sure you want to confirm this #{applicationScope.CSMQBean.customMQName} as reviewed?" id="aot5"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="confirmApproved">
+            <af:dialog title="Confirm Approve" dialogListener="#{pageFlowScope.NMQWizardBean.approve}" id="d7">
+                <af:activeOutputText value="Are you sure you want to approve this #{applicationScope.CSMQBean.customMQName}?" id="aot6"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup id="submitToMQM">
+            <af:dialog title="Submit To MQM" dialogListener="#{pageFlowScope.NMQWizardBean.promoteToRequested}" id="d8">
+                <af:activeOutputText value="Are you sure you want to submit this #{applicationScope.CSMQBean.customMQName} to the MQM?" id="aot7"/>
+            </af:dialog>
+        </af:popup>
+      <af:form id="f1">
+        <af:pageTemplate viewId="/CSMQ.jspx"
+                         value="#{bindings.pageTemplateBinding}" id="pt1">
+          <f:facet name="header">
+            <af:group id="g2">
+                <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+                <af:spacer width="10" height="10" id="s1"/>
+            </af:group>
+          </f:facet>
+          <f:facet name="main">
+    
+              <af:panelGroupLayout id="pgl1" layout="vertical" inlineStyle="width:1020px;">
+              <af:panelBox text="Details" id="ph1" inlineStyle="width:1195px; padding:5px; height:105px;" showDisclosure="false">
+                <f:facet name="toolbar"/>
+                <af:panelFormLayout id="pfl1" maxColumns="5" rows="3" inlineStyle="width:1190px;"
+                                    binding="#{pageFlowScope.NMQWizardBean.cntrlConfirmDetailsPanel}">
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentFilterDictionaryShortName}" id="ot1" label="Dictionary" readOnly="true"
+                                labelStyle="white-space:nowrap"/>
+                  <af:inputText id="ot2" label="Date Requested"
+                                value="#{pageFlowScope.NMQWizardBean.currentDateRequested}" readOnly="true" labelStyle="white-space:nowrap">
+                    <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                  </af:inputText>
+                  <af:inputText id="ot3" label="Release Groups" value="#{pageFlowScope.NMQWizardBean.currentPredictGroups}" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText id="ot4" label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Name" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText id="ot5" label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Product" value="#{pageFlowScope.NMQWizardBean.currentProduct}" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText id="ot6" label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Level" value="#{pageFlowScope.NMQWizardBean.currentTermLevel}" readOnly="true" labelStyle="white-space:nowrap"/>
+                                    <af:inputText id="it5"
+                                                  label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Code"
+                                                  value="#{pageFlowScope.NMQWizardBean.currentContentCode}"
+                                                  readOnly="true" labelStyle="white-space:nowrap"/>
+                                    <af:inputText id="ot7"
+                                                  label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Algorithm" value="#{pageFlowScope.NMQWizardBean.currentMQALGO}" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentMQCRTEV}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Critical event" id="ot8" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentMQGROUP}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Group" id="ot9" readOnly="true" labelStyle="white-space:nowrap"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentMQStatus}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Status " id="ot10" readOnly="true"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentStatus}" label="Release Status " id="it2"
+                                readOnly="true"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentState}"
+                                  label="State" id="it4" readOnly="true"
+                                  partialTriggers="::submitToMQM"
+                                  binding="#{pageFlowScope.NMQWizardBean.controlMQState}"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentRequestor}" label="Requestor"
+                                  id="it6" readOnly="true" partialTriggers="::submitToMQM"/>
+                <af:inputText value="#{pageFlowScope.NMQWizardBean.currentCreateDate}"
+                                  label="Create Date" id="it9" readOnly="true"
+                                  
+                                  binding="#{pageFlowScope.NMQWizardBean.controlMQState}">
+                                        <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                                    </af:inputText>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentUntilDate}" label="Until Date"
+                                  id="it10" readOnly="true" >
+                                        <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                                    </af:inputText>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentVersion}"
+                                  label="Version" id="it11" readOnly="true"
+                                   labelStyle="white-space:nowrap"/>
+                
+                
+                
+                </af:panelFormLayout>
+              </af:panelBox>
+              <af:panelBox text="  Informative Notes" id="ph2" inlineStyle="width:1195px; padding:5px; height:238px;" showDisclosure="false">
+                <f:facet name="toolbar"/>
+                <af:panelFormLayout id="pfl2">
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentInfNoteDescription}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Description" id="ot11"
+                                columns="195" rows="5" readOnly="true"
+                                labelStyle="white-space:nowrap"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentInfNoteSource}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Source " id="ot12"
+                                columns="195" rows="5" readOnly="true"
+                                labelStyle="white-space:nowrap"/>
+                  <af:inputText value="#{pageFlowScope.NMQWizardBean.currentInfNoteNotes}"
+                                label="#{RenderingRulesBean.wizardConfirmLabelPrefix} Notes " id="ot13"
+                                columns="195" rows="5" readOnly="true"
+                                labelStyle="white-space:nowrap"/>
+                </af:panelFormLayout>
+              </af:panelBox>
+                            <af:panelBox text="Workflow" id="pb1" inlineStyle="width:1195px; padding:5px;"
+                                         showDisclosure="false" rendered="false">
+                                <f:facet name="toolbar">
+                                    <af:toolbar id="t3" binding="#{pageFlowScope.NMQWizardBean.cntrlConfirmToolbar}">
+                                        <af:commandButton text="Submit to MQM" id="cb8"
+                                                         disabled="#{!securityContext.userInRole['Requestor'] or pageFlowScope.NMQWizardBean.currentState ne 'Proposed'}">
+                                            <af:showPopupBehavior popupId="::submitToMQM" triggerType="action"
+                                                                  align="afterEnd"/>
+                                            </af:commandButton>
+                                        <af:commandButton text="Reactivate" id="cb9"
+                                                          disabled="#{pageFlowScope.NMQWizardBean.currentMQStatus ne 'I'}"
+                                                          rendered="#{RenderingRulesBean.wizardConfirmRenderReactivate}">
+                                            <af:showPopupBehavior popupId="::confirmReactivate" triggerType="action"
+                                                                  align="afterEnd"/>
+                                        </af:commandButton>
+                                        <af:commandButton text="Retire" id="cb10"
+                                                          disabled="#{RenderingRulesBean.wizardConfirmDisableRetire}"
+                                                          rendered="#{RenderingRulesBean.wizardConfirmRenderRetire}">
+                                            <af:showPopupBehavior popupId="::confirmRetire" triggerType="action"
+                                                                  align="afterEnd"/>
+                                        </af:commandButton>
+                                        <af:commandButton text="Demote To Draft" id="cb11"
+                                                          disabled="#{pageFlowScope.NMQWizardBean.currentState eq 'Draft' or  pageFlowScope.NMQWizardBean.currentState eq 'Requested' or pageFlowScope.NMQWizardBean.currentState eq 'Proposed' or RenderingRulesBean.wizardConfirmDisableDemoteToDraft}">
+                                            <af:showPopupBehavior popupId="::confirmDemoteToDraft" triggerType="action"
+                                                                  align="afterEnd"/>
+                                        </af:commandButton>
+                                        <af:commandButton text="Reviewed" id="cb12"
+                                                          disabled="#{pageFlowScope.NMQWizardBean.currentState ne 'Draft'}"
+                                                          binding="#{pageFlowScope.NMQWizardBean.cntrlReviewed}">
+                                            <af:showPopupBehavior popupId="::confirmReviewed" triggerType="action"
+                                                                  align="afterEnd"/>
+                                        </af:commandButton>
+                                        <af:commandButton text="Approved" id="cb13"
+                                                          disabled="#{pageFlowScope.NMQWizardBean.currentState ne 'Reviewed'}"
+                                                          partialTriggers="cb12"
+                                                          binding="#{pageFlowScope.NMQWizardBean.cntrlApproved}">
+                                            <af:showPopupBehavior popupId="::confirmApproved" triggerType="action" align="afterEnd"/>
+                                        </af:commandButton>
+                                        <af:commandButton text="Delete" id="cb14"
+                                                          disabled="#{RenderingRulesBean.wizardConfirmDisableDelete}">
+                                            <af:showPopupBehavior popupId="::confirmDelete" triggerType="action"
+                                                                  align="afterEnd"/>
+                                        </af:commandButton>
+                                    </af:toolbar>
+                                </f:facet>
+                                <af:panelFormLayout id="pfl3" maxColumns="1" rows="3" inlineStyle="width:1190px;">
+                                    <af:inputText
+                                                  id="it1" label="Reason for Request" readOnly="false"
+                                                  labelStyle="white-space:nowrap" rows="2" columns="150"
+                                                  autoSubmit="true"
+                                                  value="#{pageFlowScope.NMQWizardBean.currentReasonForRequest}"
+                                                  partialTriggers="t1"/>
+                                    <af:inputDate label="Due Date" id="id1"
+                                                  binding="#{pageFlowScope.NMQWizardBean.cntrlDateRequested}"
+                                                  autoSubmit="true"
+                                                  value="#{pageFlowScope.NMQWizardBean.currentRequestedByDate}"
+                                                  partialTriggers="t1">
+                                        <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                                    </af:inputDate>
+                                    <af:inputText id="it7" label="Reason for Approval" readOnly="true"
+                                                  labelStyle="white-space:nowrap" rows="2" columns="150"
+                                                  binding="#{pageFlowScope.NMQWizardBean.cntrlReasonForRequest}"
+                                                  autoSubmit="true"
+                                                  value="#{pageFlowScope.NMQWizardBean.currentReasonForApproval}"
+                                                  partialTriggers="t1"/>
+                                </af:panelFormLayout>
+                            </af:panelBox>
+                        </af:panelGroupLayout>
+       
+          </f:facet>
+          <f:facet name="pageBottom">
+           <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+              
+              <af:spacer width="10" height="10" id="s6"/>
+              <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
+              <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL" immediate="true"
+                                shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
+              <af:spacer width="20" height="10" id="s2"/>
+              <af:inputText label="Dictionary" id="it1aw"
+                              value="#{bindings.Description.inputValue} v#{bindings.Version.inputValue}" readOnly="false"
+                              disabled="true"
+                               columns="200"/>
+              <af:spacer width="10" height="10" id="s7"/>
+              <af:inputText label="#{applicationScope.CSMQBean.customMQName} Name" id="it3"
+                            value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
+                            disabled="true" binding="#{pageFlowScope.NMQWizardBean.controlCurrentTermName}"
+                            columns="75"/>
+            </af:panelGroupLayout>
+          </f:facet>
+          <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+</jsp:root>

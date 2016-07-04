@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view beforePhase="#{NMQWizardUIBean.addRelationsPageLoad}">
+        <af:document id="d1" uncommittedDataWarning="on" title="Add Relations">
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1" value="#{bindings.pt1}">
+                    <f:facet name="header">
+                        <af:group id="g2">
+                            <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+                            <af:spacer width="10" height="10" id="s1"/>
+                        </af:group>
+                    </f:facet>
+                    <f:facet name="main">
+                        <af:group id="g1">
+                            <af:popup id="confirm">
+                                <af:dialog title="Confirm" dialogListener="#{pageFlowScope.NMQSourceTermSearchBean.deleteSelected}" id="d2">
+                                    <af:activeOutputText value="Delete all selected terms?" id="aot1"/>
+                                </af:dialog>
+                            </af:popup>
+                            <af:panelBox id="pgl4" inlineStyle="width:1250px; padding:5px; height:390px;" text="Relations"
+                                         showDisclosure="false">
+                                <af:panelGroupLayout id="pgl1" layout="horizontal" inlineStyle="height:355px; width:1230px; padding:5px;"
+                                                     halign="left" valign="top">
+                                    <af:panelCollection id="pc1" inlineStyle="width:1199px; height:345px; padding:0px;">
+                                        <f:facet name="toolbar">
+                                            <af:toolbar id="t2">
+                                                <af:commandToolbarButton text="Refresh" id="cb7" icon="/image/hierarchy/REFRESH.png"
+                                                                         actionListener="#{pageFlowScope.TermHierarchyBean.refresh}"
+                                                                         rendered="false"/>
+                                                <af:commandToolbarButton text="Delete selected" icon="/image/hierarchy/DELETE.png" id="ctb2"
+                                                                         rendered="#{RenderingRulesBean.wizardRelationsRenderDelete}"
+                                                                         disabled="#{RenderingRulesBean.wizardRelationsDisableDelete}">
+                                                    <af:showPopupBehavior popupId="::confirm" triggerType="action" align="afterEnd"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="Save" id="cb3"
+                                                                         actionListener="#{pageFlowScope.NMQSourceTermSearchBean.updateRelations}"
+                                                                         partialSubmit="true"
+                                                                         disabled="#{!pageFlowScope.TermHierarchyBean.editable or RenderingRulesBean.wizardRelationsDisableSave}"
+                                                                         rendered="#{RenderingRulesBean.wizardRelationsRenderSave}"
+                                                                         icon="/image/database_save.png"/>
+                                                <af:commandToolbarButton text="Export" id="ctb11a" disabled="false"
+                                                                         icon="/image/hierarchy/EXCEL.png">
+                                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.export}"
+                                                                                   contentType="application/x-download"
+                                                                                   filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="Hierarchy Search" id="cb6" icon="/image/tree.png"
+                                                                         rendered="#{RenderingRulesBean.wizardRelationsRenderSave}">
+                                                    <af:showPopupBehavior popupId="::p1"/>
+                                                </af:commandToolbarButton>
+                                            </af:toolbar>
+                                        </f:facet>
+                                        <af:treeTable value="#{pageFlowScope.TermHierarchyBean.treemodel}" var="node" rowSelection="single"
+                                                      id="tableLeft" width="1185" binding="#{pageFlowScope.TermHierarchyBean.targetTree}"
+                                                      columnStretching="column:c1" inlineStyle=" margin:2px;" initiallyExpanded="false"
+                                                      fetchSize="20" autoHeightRows="-1" contentDelivery="immediate">
+                                            <f:facet name="nodeStamp">
+                                                <af:column id="c1"
+                                                           headerText="#{pageFlowScope.NMQWizardBean.currentTermName}"
+                                                           width="180" sortable="true" filterable="true" inlineStyle="height:18px;"
+                                                           noWrap="false">
+                                                    <af:panelGroupLayout id="pgl3" halign="left">
+                                                        <af:outputText value="#{node.term}" id="ot5"
+                                                                       rendered="#{!node.showHasChildrenButton}" shortDesc="#{node.path}"
+                                                                       inlineStyle="white-space:pre-wrap" noWrap="false"/>
+                                                        <af:commandLink text="#{node.term}" id="cl1"
+                                                                        actionListener="#{pageFlowScope.TermHierarchyBean.expandChildren}"
+                                                                        rendered="#{node.showHasChildrenButton}"/>
+                                                    </af:panelGroupLayout>
+                                                </af:column>
+                                            </f:facet>
+                                            <f:facet name="pathStamp">
+                                                <af:outputText value="#{node}" id="ot2"/>
+                                            </f:facet>
+                                            <af:column headerText="Hierarchy Details" id="c6" width="572" sortable="true">
+                                                <af:column id="c19" headerText="Code" width="50" sortable="true" filterable="true">
+                                                    <af:outputText value="#{node.dictContentCode}" id="ot20"/>
+                                                </af:column>
+                                                <af:column id="c2" headerText="Level" width="50" sortable="true" filterable="true">
+                                                    <af:outputText id="ot3" value="#{node.levelName}"/>
+                                                    <!--value="#{pageFlowScope.TermHierarchyBean.queryLevel}"/>-->
+                                                </af:column>
+                                                <af:column id="c3" headerText="Scope" sortable="true" filterable="true"
+                                                           inlineStyle="#{RenderingRulesBean.wizardRelationsBackgroundFieldColor}">
+                                                    <af:selectOneChoice id="soc3" value="#{node.formattedScope}" valuePassThru="true"
+                                                                        unsecure="disabled" immediate="true"
+                                                                        valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.nodeChanged}"
+                                                                        autoSubmit="true" changedDesc="Changed"
+                                                                        rendered="#{!pageFlowScope.NMQWizardBean.isMedDRA}"
+                                                                        readOnly="#{pageFlowScope.NMQWizardBean.currentScope eq 'N' or AddRelationsRenderingRulesBean.wizardRelationsDisableDetails or !node.isDirectRelationOrRoot}"
+                                                                        inlineStyle="#{RenderingRulesBean.wizardRelationsBackgroundFieldColor}">
+                                                        <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ" value="0"
+                                                                       id="si7"/>
+                                                        <af:selectItem label="Broad" value="1" id="si13s"/>
+                                                        <af:selectItem label="Narrow" value="2" id="si13d"/>
+                                                        <af:selectItem label="Child Narrow" value="3" id="si4"/>
+                                                    </af:selectOneChoice>
+                                                </af:column>
+                                                <af:column id="c4" headerText="Category" width="45" sortable="true" filterable="true"
+                                                           inlineStyle="#{RenderingRulesBean.wizardRelationsBackgroundFieldColor}">
+                                                    <af:selectOneChoice id="soc2" value="#{node.termCategory}" valuePassThru="true"
+                                                                        rendered="#{!node.isRoot and !pageFlowScope.NMQWizardBean.isMedDRA}" 
+                                                                        immediate="false"
+                                                                        valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.nodeChanged}"
+                                                                        autoSubmit="true"
+                                                                        readOnly="#{pageFlowScope.NMQWizardBean.currentScope eq 'N' or AddRelationsRenderingRulesBean.wizardRelationsDisableDetails or !node.isDirectRelationOrRoot}">
+                                                        <af:selectItem label="A" value="A" id="si3"/>
+                                                        <af:selectItem label="S" value="S" id="si33"/>
+                                                        <af:selectItem label="B" value="B" id="si8"/>
+                                                        <af:selectItem label="C" value="C" id="si9"/>
+                                                        <af:selectItem label="D" value="D" id="si10"/>
+                                                        <af:selectItem label="E" value="E" id="si11"/>
+                                                        <af:selectItem label="F" value="F" id="si19"/>
+                                                        <af:selectItem label="G" value="G" id="si12"/>
+                                                        <af:selectItem label="H" value="H" id="si17"/>
+                                                        <af:selectItem label="I" value="I" id="si18"/>
+                                                    </af:selectOneChoice>
+                                                </af:column>
+                                                <af:column id="c5" headerText="Weight" width="45" sortable="true" filterable="true"
+                                                           inlineStyle="#{RenderingRulesBean.wizardRelationsBackgroundFieldColor}">
+                                                    <af:inputNumberSpinbox value="#{node.termWeight}" id="ot6" columns="2"
+                                                                           rendered="#{!node.isRoot and !pageFlowScope.NMQWizardBean.isMedDRA}" immediate="false"
+                                                                           valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.nodeChanged}"
+                                                                           autoSubmit="true"
+                                                                           readOnly="#{pageFlowScope.NMQWizardBean.currentScope eq 'N' or AddRelationsRenderingRulesBean.wizardRelationsDisableDetails or !node.isDirectRelationOrRoot}"/>
+                                                </af:column>
+                                                <af:column id="c7" width="16" rowHeader="true" align="left"
+                                                           >
+                                                    <af:selectBooleanCheckbox id="sbc2" rendered="#{node.deletable}"
+                                                                 value="#{node.markedForDeletion}" immediate="true"
+                                                                 autoSubmit="true"/>
+                                                    <f:facet name="header">
+                                                        <af:image source="/image/hierarchy/SMALL_DELETE.png" id="i1" shortDesc="Delete"/>
+                                                    </f:facet>
+                                                </af:column>
+                                            </af:column>
+                                            <af:collectionDropTarget dropListener="#{pageFlowScope.NMQSourceTermSearchBean.onMultiTreeDrop}"
+                                                                     modelName="rowmove" actions="MOVE"/>
+                                        </af:treeTable>
+                                        <f:facet name="statusbar">
+                                            <af:toolbar id="t3" binding="#{pageFlowScope.TermHierarchyBean.cntrlStatusBar}">
+                                                <af:menuBar id="mb1">
+                                                    <af:menu text="Options" id="m34" icon="/image/bullet_wrench_red.png">
+                                                        <af:selectBooleanCheckbox text="Include LLTs in Export" id="sbc3d"
+                                                                                  valueChangeListener="#{pageFlowScope.NMQWizardBean.includeLLTsInExportChanged}"
+                                                                                  autoSubmit="true"
+                                                                                  rendered="#{securityContext.userInRole['Requestor'] or securityContext.userInRole['MQM']}"
+                                                                                  selected="false"/>
+                                                        <af:selectBooleanCheckbox text="Export Displayed Only" id="sbc3t"
+                                                                                  valueChangeListener="#{pageFlowScope.NMQWizardBean.exportDisplayedOnlyChanged}"
+                                                                                  autoSubmit="true" rendered="false"
+                                                                                  binding="#{NMQWizardUIBean.cntrlExportDisplayedOnly}"/>
+                                                    </af:menu>
+                                                </af:menuBar>
+                                                <af:image id="iconError" source="/image/exclamation.png" rendered="true"
+                                                          binding="#{pageFlowScope.TermHierarchyBean.iconMQSaveError}" visible="false"
+                                                          shortDesc="Error saving MQ"/>
+                                                <af:image id="iconWarn" source="/image/error.png" rendered="true"
+                                                          binding="#{pageFlowScope.TermHierarchyBean.iconMQChanged}" visible="false"
+                                                          shortDesc="MQ Modified"/>
+                                                <af:image id="iconSave" source="/image/accept.png"
+                                                          binding="#{pageFlowScope.TermHierarchyBean.iconMQSaved}" rendered="true"
+                                                          visible="false" shortDesc="MQ saved"/>
+                                            </af:toolbar>
+                                        </f:facet>
+                                        <f:facet name="menus">
+                                            <af:menu text="Filter and Sort" id="m2" detachable="true" inlineStyle="padding:1px;"
+                                                     rendered="true">
+                                                <af:toolbar id="t7">
+                                                    <h:panelGroup id="pg2">
+                                                        <af:selectOneChoice label="Sort" value="TERM" id="soc6" autoSubmit="true"
+                                                                            valueChangeListener="#{pageFlowScope.NMQWizardBean.sortChanged}">
+                                                            <af:selectItem label="Term Name" value="TERM" id="si20"/>
+                                                            <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME" id="si21"/>
+                                                            <af:selectItem label="Scope" value="SCOPE" id="si22"/>
+                                                        </af:selectOneChoice>
+                                                        <af:selectBooleanCheckbox label="Show Primary Only" id="sbc4" value="false"
+                                                                                  autoSubmit="true"
+                                                                                  valueChangeListener="#{pageFlowScope.NMQWizardBean.showSecondaryPathChanged}"/>
+                                                        <af:selectOneChoice label="Scope" id="soc8" labelStyle="white-space:nowrap"
+                                                                            value="0" autoSubmit="true" valuePassThru="true"
+                                                                            valueChangeListener="#{pageFlowScope.NMQWizardBean.scopeChanged}"
+                                                                            rendered="#{RenderingRulesBean.wizardRelationsRenderScope}">
+                                                            <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ"
+                                                                           value="0" id="si23"/>
+                                                            <af:selectItem label="Child Narrow" value="3" id="si24"/>
+                                                        </af:selectOneChoice>
+                                                        <af:commandToolbarButton text="Refresh" id="ctb10"
+                                                                                 actionListener="#{NMQWizardUIBean.refreshHierarchy}"
+                                                                                 icon="/image/hierarchy/REFRESH.png"/>
+                                                    </h:panelGroup>
+                                                </af:toolbar>
+                                            </af:menu>
+                                        </f:facet>
+                                    </af:panelCollection>
+                                    <af:popup id="p1" binding="#{NMQSourceTermSearchUIBean.searchPopUp}" autoCancel="disabled"
+                                              contentDelivery="lazyUncached">
+                                        <af:dialog type="cancel" closeIconVisible="true" title="Hierarchy Search" id="d3"
+                                                   stretchChildren="none" modal="false" resize="off">
+<!-- ****************************************************************************************************************** -->
+<!-- ***********************************************  TREE SEARCH START *********************************************** -->
+<!-- ****************************************************************************************************************** -->
+
+                                            <af:panelFormLayout id="pfl2" rows="3" maxColumns="1" inlineStyle="width:542px; height:623px;">
+                                                <af:panelGroupLayout id="pfl1" styleClass="AFStretchWidth" inlineStyle="width:520px;"
+                                                                     layout="horizontal">
+                                                    <af:panelFormLayout id="pfl3" labelAlignment="start">
+                                                        <af:selectOneChoice label="Dictionary" id="soc9" autoSubmit="true"
+                                                                            valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.dictionaryTypeChanged}"
+                                                                            value="BASE"
+                                                                            binding="#{pageFlowScope.NMQSourceTermSearchBean.controlDictionaryType}"
+                                                                            valuePassThru="true">
+                                                            <af:selectItem label="MedDRA" value="BASE" id="si40"/>
+                                                            <af:selectItem label="MQ" value="FILTER" id="si41"/>
+                                                        </af:selectOneChoice>
+                                                        <af:selectOneChoice id="soc10" label="Level" partialTriggers="soc9"
+                                                                            binding="#{pageFlowScope.NMQSourceTermSearchBean.controlLevel}"
+                                                                            value="SOC" valuePassThru="true">
+                                                            <af:selectItem label="SMQ 1" value="MQ1" id="si42"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="SMQ 2" value="MQ2" id="si48"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="SMQ 3" value="MQ3" id="si43"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="SMQ 4" value="MQ4" id="si44"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="SMQ 5" value="MQ5" id="si45"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="NMQ/CMQ 1" value="NMQ1" id="si46"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                            <af:selectItem label="NMQ/CMQ 2" value="NMQ2" id="si49"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                            <af:selectItem label="NMQ/CMQ 3" value="NMQ3" id="si47"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                            <af:selectItem label="NMQ/CMQ 4" value="NMQ4" id="si52"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                            <af:selectItem label="NMQ/CMQ 5" value="NMQ5" id="si50"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                            <af:selectItem label="SOC" value="SOC" id="si51"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                                            <af:selectItem label="HLGT" value="HLGT" id="si53"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                                            <af:selectItem label="HLT" value="HLT" id="si54"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                                            <af:selectItem label="PT" value="PT" id="si55"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
+                                                        </af:selectOneChoice>
+                                                    </af:panelFormLayout>
+                                                    <af:panelFormLayout id="pfl4" labelAlignment="start">
+                                                        <af:inputText label="Term " id="it2"
+                                                                      binding="#{NMQSourceTermSearchUIBean.controlTerm}"/>
+                                                        <af:commandButton text="Search" id="cb1" partialSubmit="true"
+                                                                          actionListener="#{pageFlowScope.NMQSourceTermSearchBean.doMultiSearch}"
+                                                                          inlineStyle="height:auto;"/>
+                                                    </af:panelFormLayout>
+                                                </af:panelGroupLayout>
+                                                <af:treeTable value="#{pageFlowScope.HierarchySearchResultsBean.treemodel}" var="row"
+                                                        
+                                                          emptyText="#{bindings.HierarchySourceTermSearchVO1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                                          fetchSize="#{bindings.HierarchySourceTermSearchVO1.rangeSize}"
+                                                          rowBandingInterval="0"
+                                                          
+                                                          rowSelection="multiple" id="t5" inlineStyle="height:200px;"
+                                                          columnStretching="column:c14"
+                                                          binding="#{pageFlowScope.NMQSourceTermSearchBean.controlMultiResultsTable}"
+                                                          styleClass="AFStretchWidth" autoHeightRows="-1" width="521">
+                                                    <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.name}"
+                                                               sortable="false"
+                                                               headerText="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.label}"
+                                                               id="c10" width="1" minimumWidth="1" rendered="false">
+                                                        <af:inputText value="#{row.bindings.Rnum.inputValue}"
+                                                                      label="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.label}"
+                                                                      required="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.mandatory}"
+                                                                      columns="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.displayWidth}"
+                                                                      maximumLength="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.precision}"
+                                                                      shortDesc="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.tooltip}"
+                                                                      id="it4">
+                                                            <f:validator binding="#{row.bindings.Rnum.validator}"/>
+                                                            <af:convertNumber groupingUsed="false"
+                                                                              pattern="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.format}"/>
+                                                        </af:inputText>
+                                                    </af:column>
+                                                    <af:column 
+                                                               sortable="false" headerText="Content Code" id="c11" width="75">
+                                                        <af:outputText value="#{row.dictContentCode}"
+                                                                       
+                                                                       id="ot8"/>
+                                                    </af:column>
+                                                    <af:column 
+                                                               sortable="false" id="c28" width="20" minimumWidth="15">
+                                                        <af:commandButton id="cb2"
+                                                                          actionListener="#{pageFlowScope.NMQSourceTermSearchBean.loadHierachy}"
+                                                                          inlineStyle="height:10px; width:20px;" partialSubmit="true"/>
+                                                    </af:column>
+                                                    <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                                                    <f:facet name="nodeStamp">
+                                                            <af:column id="c14" headerText="Term" width="200">
+                                                                <af:outputText value="#{row.term}" id="ot11" />
+                                                            </af:column>
+                                                        </f:facet>
+                                                        <f:facet name="pathStamp">
+                                                            <af:group id="g4">
+                                                                <af:outputText value="#{row}" id="ot12"/>
+                                                            </af:group>
+                                                        </f:facet>
+                                                  
+                                                </af:treeTable>
+                                                <af:panelCollection id="pc3" styleClass="AFStretchWidth" inlineStyle="height:361px;">
+                                                    <f:facet name="menus">
+                                                        <af:menu text="Filter and Sort" id="m3" detachable="false"
+                                                                 inlineStyle="padding:1px;">
+                                                            <af:toolbar id="t8">
+                                                                <af:panelFormLayout id="pfl3a" labelAlignment="start">
+                                                                    <af:selectOneChoice label="Sort" value="SCOPE" id="soc11"
+                                                                                        autoSubmit="true"
+                                                                                        valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.sortChanged}"
+                                                                                        binding="#{NMQSourceTermSearchUIBean.cntrlSortList}">
+                                                                        <af:selectItem label="Term Name" value="TERM" id="si57"/>
+                                                                        <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME"
+                                                                                       id="si59"/>
+                                                                        <af:selectItem label="Scope" value="SCOPE" id="si58"/>
+                                                                    </af:selectOneChoice>
+                                                                    <af:selectBooleanCheckbox label="Show Primary Only" id="sbc5"
+                                                                                              value="false" autoSubmit="true"
+                                                                                              valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.showSecondaryPathChanged}"
+                                                                                              binding="#{NMQSourceTermSearchUIBean.ctrlReturnPrimLinkPath}"/>
+                                                                    <af:selectOneChoice label="Scope" id="soc12"
+                                                                                        labelStyle="white-space:nowrap" value="0"
+                                                                                        autoSubmit="true" valuePassThru="true"
+                                                                                        valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.scopeChanged}"
+                                                                                        binding="#{NMQSourceTermSearchUIBean.cntrlScope}">
+                                                                        <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ"
+                                                                                       value="0" id="si60"/>
+                                                                        <af:selectItem label="Child Narrow" value="3" id="si61"/>
+                                                                    </af:selectOneChoice>
+                                                                </af:panelFormLayout>
+                                                            </af:toolbar>
+                                                        </af:menu>
+                                                    </f:facet>
+                                                    <f:facet name="toolbar">
+                                                        <af:toolbar id="t4">
+                                                            <af:commandToolbarButton text="Refresh" id="ctb4"
+                                                                                     actionListener="#{pageFlowScope.NMQSourceTermSearchBean.loadHierachy}"
+                                                                                     icon="/image/hierarchy/REFRESH.png" disabled="false"
+                                                                                     />
+                                                        </af:toolbar>
+                                                    </f:facet>
+                                                    <f:facet name="statusbar"/>
+                                                    <af:treeTable value="#{pageFlowScope.TermHierarchySourceBean.treemodel}" var="node"
+                                                                  rowSelection="multiple" id="hierSrc"
+                                                                  binding="#{pageFlowScope.NMQSourceTermSearchBean.multiHierarchySourceTree}"
+                                                                  columnStretching="column:c8" inlineStyle="height:303px;"
+                                                                  initiallyExpanded="false" fetchSize="-1"
+                                                                  visible="#{pageFlowScope.NMQSourceTermSearchBean.showHierarchyChildTree}"
+                                                                  partialTriggers=":::cb1 :::t5:cb2">
+                                                        <f:facet name="nodeStamp">
+                                                            <af:column id="c8" headerText="#{node.term}" width="200" noWrap="false">
+                                                                <af:panelGroupLayout id="pgl5" halign="left">
+                                                                    <af:outputText value="#{node.term}" id="ot1"
+                                                                                   styleClass="#{node.style}"
+                                                                                   rendered="#{!node.showHasChildrenButton}"/>
+                                                                    <af:commandLink text="#{node.term}" id="cl2"
+                                                                                    actionListener="#{pageFlowScope.TermHierarchySourceBean.expandHierarchyChildren}"
+                                                                                    rendered="#{node.showHasChildrenButton}"
+                                                                                    partialSubmit="true"/>
+                                                                </af:panelGroupLayout>
+                                                            </af:column>
+                                                        </f:facet>
+                                                        <f:facet name="pathStamp">
+                                                            <af:group id="g3">
+                                                                <af:outputText value="#{node}" id="ot4"/>
+                                                            </af:group>
+                                                        </f:facet>
+                                                        <af:column headerText="Hierarchy Details" id="c15" width="572">
+                                                            <af:column id="c26" headerText="Code" width="50" sortable="true"
+                                                                       filterable="true">
+                                                                <af:outputText value="#{node.dictContentCode}" id="ot26"/>
+                                                            </af:column>
+                                                            <af:column id="c18" headerText="Level" width="50" sortable="true"
+                                                                       filterable="true">
+                                                                <af:outputText value="#{node.levelName}" id="ot14"/>
+                                                            </af:column>
+                                                            <af:column id="c17" headerText="Scope" width="50" sortable="true"
+                                                                       filterable="true">
+                                                                <af:outputText value="#{node.scopeName}" id="ot13"/>
+                                                            </af:column>
+                                                        </af:column>
+                                                        <af:dragSource actions="MOVE" discriminant="rowmove"/>
+                                                    </af:treeTable>
+                                                </af:panelCollection>
+                                            </af:panelFormLayout>
+                                        </af:dialog>
+                                    </af:popup>
+                                </af:panelGroupLayout>
+                            </af:panelBox>
+                        </af:group>
+                    </f:facet>
+                    <f:facet name="pageBottom">
+                        <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+                            <af:spacer width="10" height="10" id="s6"/>
+                            <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
+                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL"
+                                              immediate="true" shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
+                            <af:spacer width="20" height="10" id="s5"/>
+                            <!--@author MTW
+                  06/25/2014
+                  @fsds NMAT-UC01.01 & NMAT-UC11.01
+              -->
+                            <af:inputText label="Dictionary Version:" id="it1aw"
+                                          value="#{pageFlowScope.NMQWizardBean.activeDictionary} v#{pageFlowScope.NMQWizardBean.activeDictionaryVersion}"
+                                          readOnly="false" disabled="true" columns="200"/>
+                            <af:spacer width="10" height="10" id="s4"/>
+                            <!--@author MTW
+                  06/25/2014
+                  @fsds NMAT-UC01.01 & NMAT-UC11.01
+              -->
+                            <af:inputText label="Name:" id="it3" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
+                                          disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"/>
+                        </af:panelGroupLayout>
+                    </f:facet>
+                    <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="create-new-task-flow-definition">
+    <default-activity id="__1">setMode</default-activity>
+    <transaction>
+      <new-transaction/>
+    </transaction>
+    <data-control-scope>
+      <shared/>
+    </data-control-scope>
+    <managed-bean id="__5">
+      <managed-bean-name id="__6">NMQWizardBean</managed-bean-name>
+      <managed-bean-class id="__4">com.dbms.csmq.view.backing.NMQ.NMQWizardBean</managed-bean-class>
+      <managed-bean-scope id="__3">pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__22">
+      <managed-bean-name id="__24">TermHierarchyBean</managed-bean-name>
+      <managed-bean-class id="__23">com.dbms.csmq.view.hierarchy.TermHierarchyBean</managed-bean-class>
+      <managed-bean-scope id="__25">pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__28">
+      <managed-bean-name id="__29">TermHierarchySourceBean</managed-bean-name>
+      <managed-bean-class id="__27">com.dbms.csmq.view.hierarchy.TermHierarchySourceBean</managed-bean-class>
+      <managed-bean-scope id="__26">pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__66">
+      <managed-bean-name id="__63">NMQSearchBean</managed-bean-name>
+      <managed-bean-class id="__65">com.dbms.csmq.view.backing.NMQ.NMQSearchBean</managed-bean-class>
+      <managed-bean-scope id="__64">pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__74">
+      <managed-bean-name id="__73">NMQSourceTermSearchBean</managed-bean-name>
+      <managed-bean-class id="__71">com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchBean</managed-bean-class>
+      <managed-bean-scope id="__72">pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__75">
+      <managed-bean-name>NMQWizardSearchBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardSearchBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__76">
+      <managed-bean-name>RenderingRulesBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.RenderingRulesBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__731">
+      <managed-bean-name>HierarchyExportBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.reports.HierarchyExportBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__8">
+      <managed-bean-name>NMQWizardUIBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__9">
+      <managed-bean-name>AddRelationsRenderingRulesBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.AddRelationsRenderingRulesBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__21">
+      <managed-bean-name>NMQSourceTermSearchUIBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchUIBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__32">
+      <managed-bean-name>WorkflowBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.publish.WorkflowBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__33">
+      <managed-bean-name>HierarchySearchResultsBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.hierarchy.HierarchySearchResultsBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <view id="addDetails">
+      <page>/create/addDetails.jspx</page>
+      <train-stop id="__2">
+        <display-name id="__7">Add Details</display-name>
+        <sequential>true</sequential>
+      </train-stop>
+    </view>
+    <view id="addInformativeNotes">
+      <page>/create/addInformativeNotes.jspx</page>
+      <train-stop id="__10">
+        <display-name id="__13">Add Informative Notes</display-name>
+        <sequential>true</sequential>
+        <skip>#{pageFlowScope.NMQWizardBean.saved == null}</skip>
+      </train-stop>
+    </view>
+    <view id="addRelations">
+      <page>/create/addRelations.jspx</page>
+      <train-stop id="__11">
+        <display-name id="__14">Add Relations</display-name>
+        <sequential>true</sequential>
+        <skip>#{pageFlowScope.NMQWizardBean.saved == null}</skip>
+      </train-stop>
+    </view>
+    <method-call id="setMode">
+      <method>#{pageFlowScope.NMQWizardBean.setModeInsertNew}</method>
+      <outcome id="__39">
+        <to-string/>
+      </outcome>
+    </method-call>
+    <view id="confirm">
+      <page id="__20">/create/createConfirm.jspx</page>
+      <train-stop id="__12">
+        <display-name id="__15">Confirm</display-name>
+        <sequential>true</sequential>
+        <skip>#{pageFlowScope.NMQWizardBean.saved == null}</skip>
+      </train-stop>
+    </view>
+    <task-flow-return id="commitFlow">
+      <outcome id="__40">
+        <name>commitFlow</name>
+        <commit/>
+      </outcome>
+    </task-flow-return>
+    <task-flow-return id="cancelFlow">
+      <outcome id="__45">
+        <name>cancelFlow</name>
+        <commit/>
+      </outcome>
+    </task-flow-return>
+    <method-call id="clearMenu">
+      <method>#{UserBean.clear}</method>
+      <outcome id="__37">
+        <fixed-outcome>CLEARED</fixed-outcome>
+      </outcome>
+    </method-call>
+    <train/>
+    <control-flow-rule id="__16">
+      <from-activity-id id="__17">setMode</from-activity-id>
+      <control-flow-case id="__18">
+        <to-activity-id id="__19">addDetails</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__30">
+      <from-activity-id id="__31">confirm</from-activity-id>
+      <control-flow-case id="__56">
+        <from-outcome id="__58">CANCEL</from-outcome>
+        <to-activity-id id="__57">clearMenu</to-activity-id>
+      </control-flow-case>
+      <control-flow-case id="__43">
+        <from-outcome id="__44">OK</from-outcome>
+        <to-activity-id id="__62">commitFlow</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__41">
+      <from-activity-id id="__42">addRelations</from-activity-id>
+      <control-flow-case id="__60">
+        <from-outcome id="__61">CANCEL</from-outcome>
+        <to-activity-id id="__59">clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__46">
+      <from-activity-id id="__47">addDetails</from-activity-id>
+      <control-flow-case id="__49">
+        <from-outcome id="__50">CANCEL</from-outcome>
+        <to-activity-id id="__48">clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__51">
+      <from-activity-id id="__52">addInformativeNotes</from-activity-id>
+      <control-flow-case id="__54">
+        <from-outcome id="__55">CANCEL</from-outcome>
+        <to-activity-id id="__53">clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__38">
+      <from-activity-id id="__67">clearMenu</from-activity-id>
+      <control-flow-case id="__69">
+        <from-outcome id="__70">CLEARED</from-outcome>
+        <to-activity-id id="__68">cancelFlow</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <critical/>
+  </task-flow-definition>
+</adfc-config>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="impact-task-flow-definition">
+    <default-activity>setMode</default-activity>
+    <transaction>
+      <new-transaction/>
+    </transaction>
+    <data-control-scope>
+      <shared/>
+    </data-control-scope>
+    <managed-bean id="__1">
+      <managed-bean-name>MedDRAImpactHierarchyBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__2">
+      <managed-bean-name>NMQSourceTermSearchBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__3">
+      <managed-bean-name>ImpactAnalysisBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.impact.ImpactAnalysisBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__4">
+      <managed-bean-name>FutureImpactHierarchyBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.impact.FutureImpactHierarchyBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__5">
+      <managed-bean-name>NewPTListBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.hierarchy.NewPTListBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__6">
+      <managed-bean-name>NMQWizardBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__7">
+      <managed-bean-name>TermHierarchySourceBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.hierarchy.TermHierarchySourceBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__8">
+      <managed-bean-name>NMQWizardSearchBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardSearchBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__73">
+      <managed-bean-name>HierarchyExportBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.reports.HierarchyExportBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__19">
+      <managed-bean-name>NMQWizardUIBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__21">
+      <managed-bean-name>ImpactAssessmentRenderingRulesBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.ImpactAssessmentRenderingRulesBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__22">
+      <managed-bean-name>ImpactAnalysisUIBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.impact.ImpactAnalysisUIBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__23">
+      <managed-bean-name>NMQSourceTermSearchUIBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchUIBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__24">
+      <managed-bean-name>HierarchySearchResultsBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.hierarchy.HierarchySearchResultsBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <view id="impactAssessment">
+      <page>/impact/impactAssessment.jspx</page>
+      <train-stop>
+        <display-name>Impact Assessment</display-name>
+        <sequential>true</sequential>
+      </train-stop>
+    </view>
+    <view id="informativeNotes">
+      <page>/create/addInformativeNotes.jspx</page>
+      <train-stop>
+        <display-name>Informative Notes</display-name>
+        <sequential>false</sequential>
+      </train-stop>
+    </view>
+    <method-call id="clearMenu">
+      <method>#{UserBean.clear}</method>
+      <outcome id="__44">
+        <fixed-outcome>CLEARED</fixed-outcome>
+      </outcome>
+    </method-call>
+    <task-flow-return id="cancelFlow">
+      <outcome id="__15">
+        <name>cancelFlow</name>
+        <rollback/>
+      </outcome>
+    </task-flow-return>
+    <view id="addDetails">
+      <page>/create/addDetails.jspx</page>
+      <train-stop>
+        <display-name>Details</display-name>
+        <sequential>false</sequential>
+      </train-stop>
+    </view>
+    <method-call id="setMode">
+      <method>#{pageFlowScope.NMQWizardBean.setModeImpactAssessment}</method>
+      <outcome id="__31">
+        <to-string/>
+      </outcome>
+    </method-call>
+    <train/>
+    <control-flow-rule id="__9">
+      <from-activity-id>impactAssessment</from-activity-id>
+      <control-flow-case id="__10">
+        <from-outcome>CANCEL</from-outcome>
+        <to-activity-id>clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__11">
+      <from-activity-id>informativeNotes</from-activity-id>
+      <control-flow-case id="__12">
+        <from-outcome>CANCEL</from-outcome>
+        <to-activity-id>clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__13">
+      <from-activity-id>clearMenu</from-activity-id>
+      <control-flow-case id="__14">
+        <from-outcome>CLEARED</from-outcome>
+        <to-activity-id>cancelFlow</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__16">
+      <from-activity-id>setMode</from-activity-id>
+      <control-flow-case id="__17">
+        <to-activity-id>impactAssessment</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__18">
+      <from-activity-id>addDetails</from-activity-id>
+      <control-flow-case id="__20">
+        <from-outcome>CANCEL</from-outcome>
+        <to-activity-id>clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+  </task-flow-definition>
+</adfc-config>

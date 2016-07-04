@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich" xmlns:h="http://java.sun.com/jsf/html">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document id="d1" onunload="performUnloadEvent" title="NMAT">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
+                    <f:facet name="header"/>
+                    <f:attribute name="currentPage" value=" "/>
+                    <f:attribute name="showBody" value="false"/>
+                </af:pageTemplate>
+               <af:popup childCreation="deferred" autoCancel="enabled" id="p1"
+                          rendered="#{UserBean.showExpiryPopup and securityContext.authenticated}"
+                          popupCanceledListener="#{UserBean.showExpiryPopupCancelled}">
+                    <af:dialog id="d2" title="Password Expiry" type="cancel">
+                        <af:panelGroupLayout id="pgl1">
+                            <af:outputText value="Your password will expire in #{UserBean.passwordExpiryDays} days."
+                                           id="ot1"/>
+                        </af:panelGroupLayout>
+                    </af:dialog>
+                </af:popup>
+                <!--
+        <af:table value="#{bindings.NMAT_PROPS_VO1.collectionModel}" var="row"
+                  rows="#{bindings.NMAT_PROPS_VO1.rangeSize}"
+                  emptyText="#{bindings.NMAT_PROPS_VO1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                  fetchSize="#{bindings.NMAT_PROPS_VO1.rangeSize}" rowBandingInterval="0" id="t1">
+          <af:column sortProperty="#{bindings.NMAT_PROPS_VO1.hints.Domain.name}" sortable="false"
+                     headerText="#{bindings.NMAT_PROPS_VO1.hints.Domain.label}" id="c1">
+            <af:inputText value="#{row.bindings.Domain.inputValue}"
+                          label="#{bindings.NMAT_PROPS_VO1.hints.Domain.label}"
+                          required="#{bindings.NMAT_PROPS_VO1.hints.Domain.mandatory}"
+                          columns="#{bindings.NMAT_PROPS_VO1.hints.Domain.displayWidth}"
+                          maximumLength="#{bindings.NMAT_PROPS_VO1.hints.Domain.precision}"
+                          shortDesc="#{bindings.NMAT_PROPS_VO1.hints.Domain.tooltip}" id="it1">
+              <f:validator binding="#{row.bindings.Domain.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.NMAT_PROPS_VO1.hints.PropName.name}" sortable="false"
+                     headerText="#{bindings.NMAT_PROPS_VO1.hints.PropName.label}" id="c2">
+            <af:inputText value="#{row.bindings.PropName.inputValue}"
+                          label="#{bindings.NMAT_PROPS_VO1.hints.PropName.label}"
+                          required="#{bindings.NMAT_PROPS_VO1.hints.PropName.mandatory}"
+                          columns="#{bindings.NMAT_PROPS_VO1.hints.PropName.displayWidth}"
+                          maximumLength="#{bindings.NMAT_PROPS_VO1.hints.PropName.precision}"
+                          shortDesc="#{bindings.NMAT_PROPS_VO1.hints.PropName.tooltip}" id="it2">
+              <f:validator binding="#{row.bindings.PropName.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.NMAT_PROPS_VO1.hints.PropValue.name}" sortable="false"
+                     headerText="#{bindings.NMAT_PROPS_VO1.hints.PropValue.label}" id="c3">
+            <af:inputText value="#{row.bindings.PropValue.inputValue}"
+                          label="#{bindings.NMAT_PROPS_VO1.hints.PropValue.label}"
+                          required="#{bindings.NMAT_PROPS_VO1.hints.PropValue.mandatory}"
+                          columns="#{bindings.NMAT_PROPS_VO1.hints.PropValue.displayWidth}"
+                          maximumLength="#{bindings.NMAT_PROPS_VO1.hints.PropValue.precision}"
+                          shortDesc="#{bindings.NMAT_PROPS_VO1.hints.PropValue.tooltip}" id="it3">
+              <f:validator binding="#{row.bindings.PropValue.validator}"/>
+            </af:inputText>
+          </af:column>
+          <af:column sortProperty="#{bindings.NMAT_PROPS_VO1.hints.Description.name}" sortable="false"
+                     headerText="#{bindings.NMAT_PROPS_VO1.hints.Description.label}" id="c4">
+            <af:inputText value="#{row.bindings.Description.inputValue}"
+                          label="#{bindings.NMAT_PROPS_VO1.hints.Description.label}"
+                          required="#{bindings.NMAT_PROPS_VO1.hints.Description.mandatory}"
+                          columns="#{bindings.NMAT_PROPS_VO1.hints.Description.displayWidth}"
+                          maximumLength="#{bindings.NMAT_PROPS_VO1.hints.Description.precision}"
+                          shortDesc="#{bindings.NMAT_PROPS_VO1.hints.Description.tooltip}" id="it4">
+              <f:validator binding="#{row.bindings.Description.validator}"/>
+            </af:inputText>
+          </af:column>
+        </af:table>-->
+            </af:form>
+            <af:showPopupBehavior triggerType="load" popupId="p1"/>
+        </af:document>
+    </f:view>
+</jsp:root>
+
+
+
+

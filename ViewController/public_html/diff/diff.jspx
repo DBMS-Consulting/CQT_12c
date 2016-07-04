@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="diff" id="d1">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
+                    <f:facet name="main">
+                        <af:panelGroupLayout id="pgl1" layout="vertical"
+                                             inlineStyle="padding:5px; margin:5px; width:885px; height:430px;"
+                                             halign="center" valign="top">
+                            <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px; width:736px;">
+                                <af:inputListOfValues id="termId"
+                                                      popupTitle="Search and Select: #{bindings.LeftTerm.hints.label}"
+                                                      model="#{bindings.LeftTerm.listOfValuesModel}"
+                                                      required="#{bindings.LeftTerm.hints.mandatory}" columns="75"
+                                                      shortDesc="#{bindings.LeftTerm.hints.tooltip}"
+                                                      valueChangeListener="#{pageFlowScope.DiffBean.LeftTermChanged}"
+                                                      autoSubmit="true"
+                                                      value="#{bindings.LeftTerm.inputValue}" label="MQ 1"
+                                                      styleClass="TagSearchIconHidden">
+                                    <f:validator binding="#{bindings.LeftTerm.validator}"/>
+                                    <af:autoSuggestBehavior suggestedItems="#{bindings.LeftTerm.suggestedItems}"/>
+                                </af:inputListOfValues>
+                                <af:inputListOfValues id="ilov1"
+                                                      popupTitle="Search and Select: #{bindings.RightTerm.hints.label}"
+                                                      model="#{bindings.RightTerm.listOfValuesModel}"
+                                                      required="#{bindings.RightTerm.hints.mandatory}" columns="75"
+                                                      shortDesc="#{bindings.RightTerm.hints.tooltip}"
+                                                      valueChangeListener="#{pageFlowScope.DiffBean.RightTermChanged}"
+                                                      autoSubmit="true" 
+                                                      value="#{bindings.RightTerm.inputValue}" label="MQ 2"
+                                                      styleClass="TagSearchIconHidden">
+                                    <f:validator binding="#{bindings.RightTerm.validator}"/>
+                                    <af:autoSuggestBehavior suggestedItems="#{bindings.RightTerm.suggestedItems}"/>
+                                </af:inputListOfValues>
+                                
+                                <af:commandButton text="Compare" id="cb1" partialSubmit="true"
+                                                  actionListener="#{pageFlowScope.DiffBean.doCompare}">
+                                    <?audit suppress oracle.ide.xml.validation-warning?>
+                                </af:commandButton>
+                            </af:panelGroupLayout>
+                            <af:panelGroupLayout id="pgl3" layout="horizontal" inlineStyle="height:260px; width:866px;">
+                                <af:panelCollection id="pc1" styleClass="AFStretchWidth AFSTretchHeight">
+                                    <f:facet name="menus"/>
+                                    <f:facet name="toolbar">
+                                        <af:toolbar id="t1">
+                                            <af:commandToolbarButton text="Export" id="ctb11a" disabled="false"
+                                                                     icon="/image/hierarchy/EXCEL.png">
+                                                <?audit suppress oracle.ide.xml.validation-warning?>
+                                                <af:exportCollectionActionListener type="excelHTML" exportedId="tt1"
+                                     filename="MQCompare.xls" title="MQ Compare"/>
+                                            </af:commandToolbarButton>
+                                        </af:toolbar>
+                                    </f:facet>
+                                    <f:facet name="statusbar"/>
+                                    <af:treeTable value="#{bindings.MQDiffVO1.treeModel}" var="node"
+                                                  selectionListener="#{bindings.MQDiffVO1.treeModel.makeCurrent}"
+                                                  rowSelection="single" id="tt1" width="878" columnStretching="multiple"
+                                                  fetchSize="-1" autoHeightRows="-1"
+                                                  styleClass=" ADFStretchHeight  ADFStretchWidtth"
+                                                  binding="#{DiffUIBean.cntrlDiffResults}">
+                                        <?audit suppress oracle.adf.faces.tableneedsrowheader?>
+                                        <?audit suppress oracle.adf.faces.compreqsummary?>
+                                        <f:facet name="nodeStamp">
+                                            <af:column id="c4" headerText="MQ Differences">
+                                                <af:column id="c1" headerText="#{pageFlowScope.DiffBean.leftTermName}"
+                                                           minimumWidth="200" width="33%">
+                                                    <af:outputText value="#{node.TermDisplay}" id="ot1"
+                                                                   rendered="#{node.DiffStyle eq 'DIFF_LEFT'}"/>
+                                                </af:column>
+                                                <af:column id="c2" headerText="Common" minimumWidth="200" width="33%">
+                                                    <af:outputText value="#{node.TermDisplay}" id="ot3"
+                                                                   rendered="#{node.DiffStyle eq 'DIFF_BOTH'}"/>
+                                                </af:column>
+                                                <af:column id="c3" headerText="#{pageFlowScope.DiffBean.rightTermName}"
+                                                           minimumWidth="200" width="33%">
+                                                    <af:outputText value="#{node.TermDisplay}" id="ot4"
+                                                                   rendered="#{node.DiffStyle eq 'DIFF_RIGHT'}"/>
+                                                </af:column>
+                                            </af:column>
+                                        </f:facet>
+                                        <f:facet name="pathStamp">
+                                            <af:outputText value="#{node}" id="ot2"/>
+                                        </f:facet>
+                                    </af:treeTable>
+                                </af:panelCollection>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
+                        </f:facet>
+                        <f:facet name="pageBottom">
+                        <af:panelGroupLayout id="pgl26" layout="horizontal" inlineStyle="padding:3px;">
+                            <af:spacer width="10" height="10" id="s21"/>
+                            <af:button text="Cancel" id="cb2" action="CANCEL"/>
+                            <af:spacer width="20" height="10" id="s19"/>
+                            <af:spacer width="10" height="10" id="s20"/>
+                            
+                        </af:panelGroupLayout>
+                    </f:facet>
+                    <f:attribute name="currentPage" value="MQ Compare"/>
+                    </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

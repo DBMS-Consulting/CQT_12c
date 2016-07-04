@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1" uncommittedDataWarning="on">
+      <af:form id="f1">
+        <af:pageTemplate viewId="/CSMQ.jspx"
+                         value="#{bindings.pageTemplateBinding}" id="pt1">
+          <f:facet name="header">
+           <af:group id="g2">
+              <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+              <af:spacer width="10" height="10" id="s1"/>
+            </af:group>
+          </f:facet>
+          <f:facet name="main">
+            <af:group id="g1">
+              <af:panelBox id="pgl3" inlineStyle="width:1195px; padding:5px;" text="Informative Notes for #{pageFlowScope.NMQWizardBean.currentTermName}" showDisclosure="false">
+                <af:panelTabbed id="pt2" inlineStyle="height:371px; width:1161px;">
+                  <!-- @author MTW
+                        06/11/2014
+                        @fsds NMAT-UC01.01 & NMAT-UC11.01 & NMAT-UC01.02 & NMAT-UC11.02
+                    -->
+                  <af:showDetailItem text="Description" id="sdi1" inflexibleHeight="10">
+                    <af:panelGroupLayout id="pgl1" layout="vertical" inlineStyle="height:560px; width:1257px;">
+                      <af:inputText id="it2" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQDescription}"
+                                    required="#{RenderingRulesBean.wizardInfNotesRenderSave}"
+                                    requiredMessageDetail="An MQ Description is required." changed="false" columns="225"
+                                    value="#{pageFlowScope.NMQWizardBean.currentInfNoteDescription}"
+                                    showRequired="true"
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                    </af:panelGroupLayout>
+                  </af:showDetailItem>
+                  <!-- @author MTW
+                        06/11/2014
+                        @fsds NMAT-UC01.02 & NMAT-UC11.02
+                    -->
+                  <af:showDetailItem text="Notes" id="showDetailItem1" inflexibleHeight="10">
+                    <af:panelGroupLayout id="panelGroupLayout1" layout="vertical" inlineStyle="height:560px; width:1257px;">
+                      <af:inputText id="inputText1" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQNotes}" required="false" changed="false"
+                                    columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteNotes}" showRequired="false"
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                    </af:panelGroupLayout>
+                  </af:showDetailItem>
+                  <!-- @author MTW
+                        06/11/2014
+                        @fsds NMAT-UC01.02 & NMAT-UC11.02
+                    -->
+                  <af:showDetailItem text="Source" id="showDetailItem2" inflexibleHeight="10" flex="0">
+                    <af:panelGroupLayout id="panelGroupLayout2" layout="vertical" inlineStyle="height:560px; width:1257px;">
+                      <af:inputText id="inputText2" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQSource}" required="false" changed="false"
+                                    columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteSource}" showRequired="false"
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                    </af:panelGroupLayout>
+                  </af:showDetailItem>
+                </af:panelTabbed>
+                <af:spacer width="20" height="10" id="s2"/>
+                <af:commandButton text="Save" id="cb1" action="#{pageFlowScope.NMQWizardBean.saveAllInfNotes}"
+                                  rendered="#{RenderingRulesBean.wizardInfNotesRenderSave}"
+                                  disabled="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                <f:facet name="toolbar"/>
+              </af:panelBox>
+            </af:group>
+          </f:facet>
+          <f:facet name="pageBottom">
+            <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+              
+              <af:spacer width="10" height="10" id="s6"/>
+              <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
+              <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL" immediate="true"
+                                shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
+              <af:spacer width="20" height="10" id="s3"/>
+              <af:inputText label="Dictionary Version:" id="it1aw"
+                              value="#{pageFlowScope.NMQWizardBean.activeDictionary} v#{pageFlowScope.NMQWizardBean.activeDictionaryVersion}" readOnly="false"
+                              disabled="true"
+                               columns="200"/>
+              <af:spacer width="10" height="10" id="s4"/>
+              <af:inputText label="Name" id="it3"
+                            value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
+                            disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}"
+                            columns="75"/>
+            </af:panelGroupLayout>
+          </f:facet>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+  <!--oracle-jdev-comment:preferred-managed-bean-name:NMQWizardBean-->
+</jsp:root>

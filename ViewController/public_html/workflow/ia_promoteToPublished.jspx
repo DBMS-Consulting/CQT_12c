@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1">
+      <af:messages id="m1"/>
+      <af:form id="f1">
+        <af:popup id="confirm">
+            <af:dialog title="Confirm Promotion" dialogListener="#{pageFlowScope.WorkflowBean.promoteToPublishedIA}" id="d2">
+                <af:activeOutputText value="Are you sure you want to promote the selected #{applicationScope.CSMQBean.customMQName}(s)?" id="aot1"/>
+            </af:dialog>
+        </af:popup>
+        <af:pageTemplate viewId="/CSMQ.jspx" value="#{bindings.pageTemplateBinding}" id="pt1">
+
+          <f:facet name="header">
+            <af:group id="g2">
+              <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+              <af:spacer width="10" height="10" id="s1"/>
+            </af:group>
+          </f:facet>
+          <f:facet name="main">
+          
+          <af:group id="g1">
+              <af:panelBox id="pgl1" text="Promote To Published from Impact Analysis" showDisclosure="false" inlineStyle="width:1195px; padding:5px;">
+                <f:facet name="toolbar"/>
+                <af:panelGroupLayout id="pgl3" layout="horizontal" valign="bottom">
+
+                 <af:selectManyShuttle
+                              binding="#{pageFlowScope.WorkflowBean.sms1}"
+                              id="sms1"
+                              value="#{pageFlowScope.WorkflowBean.selectedTerms}"
+                                       valueChangeListener="#{pageFlowScope.WorkflowBean.termListChanged}"
+                                       autoSubmit="true">
+          <af:forEach items="#{bindings.ViewObjTermsByState1.iteratorBinding.allRowsInRange}" var="row">
+                        <f:selectItem id="si12" itemLabel="#{row.mqterm}" itemValue="#{row.dictNm}"/>
+                    </af:forEach>
+        </af:selectManyShuttle>
+                  <af:spacer width="10" height="10" id="s2"/>
+                  <af:commandButton text="Promote"
+                          binding="#{pageFlowScope.WorkflowBean.cb1}"
+                          id="cb1">
+
+        <af:showPopupBehavior popupId="::confirm" triggerType="action" align="afterEnd"/>
+        </af:commandButton>
+
+                </af:panelGroupLayout>
+              </af:panelBox>
+            </af:group>
+          </f:facet>
+          <f:facet name="pageBottom">
+             <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+              
+              <af:spacer width="10" height="10" id="s6"/>
+              <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
+              <af:commandButton text="Cancel" id="cb1can" action="CANCEL" immediate="true"/>
+            </af:panelGroupLayout>
+          </f:facet>
+          <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+  <!--oracle-jdev-comment:preferred-managed-bean-name:NMQWizardBean-->
+</jsp:root>

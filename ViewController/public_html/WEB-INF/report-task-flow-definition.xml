@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<adfc-config xmlns="http://xmlns.oracle.com/adf/controller" version="1.2">
+  <task-flow-definition id="report-task-flow-definition">
+    <default-activity>reports</default-activity>
+    <transaction>
+      <new-transaction/>
+    </transaction>
+    <managed-bean id="__1">
+      <managed-bean-name>ReportBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.reports.ReportBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean id="__3">
+      <managed-bean-name>ReportDownloadBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.reports.ReportDownloadBean</managed-bean-class>
+      <managed-bean-scope>pageFlow</managed-bean-scope>
+    </managed-bean>
+    <view id="reports">
+      <page>/report/reports.jspx</page>
+      <train-stop/>
+    </view>
+    <method-call id="clearMenu">
+      <method>#{UserBean.clear}</method>
+      <outcome id="__44">
+        <fixed-outcome>CLEARED</fixed-outcome>
+      </outcome>
+    </method-call>
+    <task-flow-return id="cancelFlow">
+      <outcome id="__15">
+        <name>cancelFlow</name>
+        <rollback/>
+      </outcome>
+    </task-flow-return>
+    <train/>
+    <control-flow-rule id="__2">
+      <from-activity-id>reports</from-activity-id>
+      <control-flow-case id="__4">
+        <from-outcome>CANCEL</from-outcome>
+        <to-activity-id>clearMenu</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__5">
+      <from-activity-id>clearMenu</from-activity-id>
+      <control-flow-case id="__6">
+        <from-outcome>CLEARED</from-outcome>
+        <to-activity-id>cancelFlow</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <critical/>
+  </task-flow-definition>
+</adfc-config>

@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document id="d1" uncommittedDataWarning="on">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" value="#{bindings.pageTemplateBinding}" id="pt1">
+                    <f:facet name="header">
+                        <af:group id="g2">
+                            <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
+                                      binding="#{NMQWizardUIBean.cntrlTrain}"/>
+                            <af:spacer width="10" height="10" id="s1"/>
+                        </af:group>
+                    </f:facet>
+                    <f:facet name="main">
+                        <af:group id="g1">
+                        
+                         
+                        
+                        
+              
+                            <af:panelBox id="pgl1" text="Details" showDisclosure="false"
+                                         inlineStyle="height:158px; width:1195px; padding:5px;">
+                                <af:panelGroupLayout id="pgl3" layout="horizontal" valign="top">
+                                    <af:panelGroupLayout id="pgl4" valign="top">
+                                        <af:panelFormLayout id="pfl1">
+                                            <af:selectOneChoice value="#{pageFlowScope.NMQWizardBean.currentExtension}" label="Extension"
+                                                                required="#{bindings.NMQExtentionListVO1.hints.mandatory}"
+                                                                shortDesc="#{bindings.NMQExtentionListVO1.hints.tooltip}" id="soc4"
+                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderExtension}"
+                                                                autoSubmit="true" valueChangeListener="#{NMQWizardUIBean.extensionChanged}"
+                                                                disabled="#{RenderingRulesBean.wizardDetailsDisableExtention}"
+                                                                contentStyle="color:#000000;">
+                                                <af:forEach items="#{bindings.NMQExtentionListVO1.iteratorBinding.allRowsInRange}"
+                                                            var="row">
+                                                    <af:selectItem id="selectItem2" label="#{row.longValue}" value="#{row.longValue}"/>
+                                                </af:forEach>
+                                                <af:selectItem id="si24" label="SMQ" value="SMQ"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsShowSMQInSelectList}"/>
+                                            </af:selectOneChoice>
+                                            <af:inputText label="Name" id="it10" columns="75" showRequired="true"
+                                                          requiredMessageDetail="An MQ Name is required."
+                                                          binding="#{NMQWizardUIBean.controlMQName}"
+                                                          required="#{RenderingRulesBean.wizardDetailsRenderSave}"
+                                                          value="#{pageFlowScope.NMQWizardBean.currentTermName}" immediate="false"
+                                                          readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQName}"
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"/>
+                                            <af:inputText label="Filter Dictionary" id="it4"
+                                                          value="#{pageFlowScope.NMQWizardBean.currentFilterDictionaryShortName}"
+                                                          columns="50" binding="#{NMQWizardUIBean.ctrlActiveDictionary}"
+                                                          labelStyle="white-space:nowrap" readOnly="true" inlineStyle="color:Black;"
+                                                          contentStyle="color:#000000;"/>
+                                            <af:selectOneChoice label="Release Group" id="selectOneChoice2"
+                                                                binding="#{NMQWizardUIBean.controlReleaseGroup}" required="false"
+                                                                valueChangeListener="#{NMQWizardUIBean.releaseGroupChanged}"
+                                                                autoSubmit="false"
+                                                                value="#{pageFlowScope.NMQWizardBean.currentPredictGroups}"
+                                                                labelStyle="white-space:nowrap"
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableReleaseGroup}"
+                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderReleaseGroup}"
+                                                                contentStyle="color:#000000;">
+                                                <af:forEach items="#{bindings.releaseGroups1.iteratorBinding.allRowsInRange}" var="row">
+                                                    <f:selectItem id="si18" itemLabel="#{row.description}" itemValue="#{row.name}"/>
+                                                </af:forEach>
+                                            </af:selectOneChoice>
+                                            <af:selectBooleanCheckbox label="Approved" id="sbc1"
+                                                                      value="#{pageFlowScope.NMQWizardBean.isApproved}"
+                                                                      contentStyle="color:#000000;"
+                                                                      rendered="#{RenderingRulesBean.wizardDetailsRenderIsApproved}"
+                                                                      readOnly="true"/>
+                                            <af:inputText label="Release Status" id="it11" value="#{pageFlowScope.NMQWizardBean.currentStatus}"
+                                                          showRequired="true" readOnly="true" columns="20" rows="1" wrap="off"
+                                                          binding="#{NMQWizardUIBean.controlMQStatus}"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderNMQStatus}"
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"/>
+                                            <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
+                                                                 binding="#{pageFlowScope.NMQWizardBean.productListControl}"
+                                                                 requiredMessageDetail="An MQ Product is required."
+                                                                 valueChangeListener="#{pageFlowScope.NMQWizardBean.productListValueChange}"
+                                                                 value="#{pageFlowScope.NMQWizardBean.productList}"
+                                                                 visible="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
+                                                                 labelStyle="white-space:nowrap" selectAllVisible="false"
+                                                                 readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQProduct}"
+                                                                 showRequired="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
+                                                                 required="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}" contentStyle="color:#000000;width:130px;"
+                                                                 >
+                                                <af:selectItem id="si23" label="Standard" value="STANDARD"
+                                                               rendered="#{pageFlowScope.NMQWizardBean.isNMQ}"/>
+                                                <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                                            var="row">
+                                                    <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"/>
+                                                </af:forEach>
+                                                
+                                            </af:selectManyChoice>
+                                            <af:selectManyChoice label="Designee" id="smc1" autoSubmit="true" valuePassThru="true"
+                                                                 binding="#{pageFlowScope.NMQWizardBean.controlDesignee}"
+                                                                 valueChangeListener="#{NMQWizardUIBean.designeeValueChange}"
+                                                                 value="#{pageFlowScope.NMQWizardBean.designeeList}"
+                                                                 labelStyle="white-space:nowrap" selectAllVisible="false"
+                                                                 readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQDesignee}"
+                                                                 rendered="#{RenderingRulesBean.wizardDetailsShowDesigneeList}"
+                                                                 showRequired="#{pageFlowScope.NMQWizardBean.currentExtension ne 'NMQ'}"
+                                                                 required="#{pageFlowScope.NMQWizardBean.currentExtension ne 'NMQ'}"
+                                                                 contentStyle="color:#000000;width:300px;">
+                                                <!--<af:selectItem id="si19" label="#{UserBean.fullName}"
+                                                               value="#{UserBean.currentUser}"
+                                                               disabled="#{RenderingRulesBean.wizardDetialsDisableCurrentUserDesigneeSelectItem}"
+                                                               rendered="#{UserBean.userRole ne 'MQM'}"/>-->
+                                                <af:forEach items="#{bindings.designeeListVO1Iterator.allRowsInRange}" var="row">
+                                                    <af:selectItem id="si25" label="#{row.personName}" value="#{row.oaAccountName}"/>
+                                                </af:forEach>
+                                            </af:selectManyChoice>
+                                        </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                    <af:panelGroupLayout id="pgl5">
+                                        <af:panelFormLayout id="pfl3">
+                                            <af:inputText label="Algorithm  " id="it14" binding="#{NMQWizardUIBean.controlMqAlgorithm}"
+                                                          maximumLength="300" value="#{pageFlowScope.NMQWizardBean.currentMQALGO}"
+                                                          required="#{RenderingRulesBean.wizardDetailsRequireNMQAlgorithm}"
+                                                          requiredMessageDetail="An MQ Algorithm is required" columns="50" rows="2"
+                                                          labelStyle="white-space:nowrap"
+                                                          readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQAlgorithm}"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderNMQAlgorithm}"
+                                                          showRequired="#{RenderingRulesBean.wizardDetailsRequireNMQAlgorithm}"
+                                                          contentStyle="color:#000000;" partialTriggers="soc4"/>
+                                            <af:inputText value="#{pageFlowScope.NMQWizardBean.currentState}" label="State" id="it6"
+                                                          readOnly="true" binding="#{NMQWizardUIBean.controlMQState}"
+                                                          contentStyle="color:#000000;"/>
+                                            <af:selectOneChoice label="Critical Event" id="soc3"
+                                                                binding="#{pageFlowScope.NMQWizardBean.controlCriticalEvent}"
+                                                                value="#{pageFlowScope.NMQWizardBean.currentMQCRTEV}"
+                                                                labelStyle="white-space:nowrap"
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableCriticalEvent}"
+                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderCriticalEvent}"
+                                                                contentStyle="color:#000000;">
+                                                <af:selectItem label="No" value="N" id="si22"/>
+                                                <af:selectItem label="Yes - Narrow" value="Y_NARROW" id="si21"/>
+                                                <af:selectItem label="Yes - Broad" value="Y_BROAD" id="si20"/>
+                                            </af:selectOneChoice>
+                                            <af:selectOneChoice label="Level" id="soc1" binding="#{NMQWizardUIBean.controlMQLevel}"
+                                                                value="#{pageFlowScope.NMQWizardBean.currentTermLevel}"
+                                                                labelStyle="white-space:nowrap"
+                                                               
+                                                             
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQLevel}">
+                                                <!-- @author MTW
+                        06/16/2014
+                        @fsds NMAT-UC01.01 & NMAT-UC11.01
+                    -->
+                                                <!--NMQ-->
+                                                <af:selectItem label="1" value="NMQ1" id="si1"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
+                                                <af:selectItem label="2" value="NMQ2" id="si14"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
+                                                <af:selectItem label="3" value="NMQ3" id="si16"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
+                                                <af:selectItem label="4" value="NMQ4" id="si15"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
+                                                <af:selectItem label="5" value="NMQ5" id="si13"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
+                                                <!-- @author MTW
+                        06/16/2014
+                        @fsds NMAT-UC01.01 & NMAT-UC11.01
+                    -->
+                                                <!--CMQ-->
+                                                <af:selectItem label="1" value="MQ1" id="si5"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderSMQSelItems}"/>
+                                                <af:selectItem label="2" value="MQ2" id="si6"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderSMQSelItems}"/>
+                                                <af:selectItem label="3" value="MQ3" id="si7"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderSMQSelItems}"/>
+                                                <af:selectItem label="4" value="MQ4" id="si8"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderSMQSelItems}"/>
+                                                <af:selectItem label="5" value="MQ5" id="si9"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderSMQSelItems}"/>
+                                                <af:selectItem label="SOC" value="SOC" id="si10"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderMedDRASelItems}"/>
+                                                <af:selectItem label="HLGT" value="HLGT" id="si11"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderMedDRASelItems}"/>
+                                                <af:selectItem label="HLT" value="HLT" id="si12"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderMedDRASelItems}"/>
+                                                <af:selectItem label="PT" value="PT" id="si17"
+                                                               rendered="#{RenderingRulesBean.wizardDetailsRenderMedDRASelItems}"/>
+                                            </af:selectOneChoice>
+                                            <af:selectOneChoice label="Scope" id="soc2" binding="#{NMQWizardUIBean.controlMQScope}"
+                                                                value="#{pageFlowScope.NMQWizardBean.currentScope}" showRequired="false"
+                                                                required="false" labelStyle="white-space:nowrap"
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQScope}"
+                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQScope}"
+                                                                autoSubmit="true" valueChangeListener="#{NMQWizardUIBean.scopeChanged}"
+                                                                contentStyle="color:#000000;">
+                                                <af:selectItem label="Yes" value="Y" id="si2"/>
+                                                <af:selectItem label="No" value="N" id="si3"/>
+                                            </af:selectOneChoice>
+                                            <af:selectManyChoice label="Group" id="selectManyChoice1"
+                                                                 binding="#{pageFlowScope.NMQWizardBean.controlMQGroup}"
+                                                                 valuePassThru="true" requiredMessageDetail="An MQ Group is required."
+                                                                 required="#{RenderingRulesBean.wizardDetailsRequireNMQGroup}"
+                                                                 valueChangeListener="#{NMQWizardUIBean.nmqGroupChanged}" autoSubmit="true"
+                                                                 value="#{pageFlowScope.NMQWizardBean.MQGroupList}"
+                                                                 showRequired="#{RenderingRulesBean.wizardDetailsRequireNMQGroup}"
+                                                                 labelStyle="white-space:nowrap" inlineStyle="width:130px;"
+                                                                 readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQGroup}"
+                                                                 rendered="#{RenderingRulesBean.wizardDetailsRenderNMQGroup}"
+                                                                 contentStyle="color:#000000;width:350px;">
+                                                <!--   <f:selectItems value="#{bindings.MQGroupsVO1.items}" id="selectItems1"/> -->
+                                                <af:forEach items="#{bindings.MQGroupsVO1.iteratorBinding.allRowsInRange}" var="row">
+                                                    <f:selectItem id="si4" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
+                                                </af:forEach>
+                                            </af:selectManyChoice>
+                                            <af:inputText label="Code" id="it7"
+                                                          
+                                                          readOnly="true" binding="#{NMQWizardUIBean.controlNMQCode}" columns="8" rows="1"
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"
+                                                          value="#{(RenderingRulesBean.wizardDetailsDisplayContentCode || pageFlowScope.NMQWizardBean.saved) ? pageFlowScope.NMQWizardBean.currentContentCode : null}"/>
+                                        </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                    <af:panelGroupLayout id="pgl6">
+                                        <af:panelFormLayout id="pfl4"
+                                                            rendered="#{RenderingRulesBean.wizardDetailsRenderInitalCreateInfo}">
+                                            <af:inputText value="#{pageFlowScope.NMQWizardBean.currentInitialCreationBy}"
+                                                          label="Initial Creation By " id="it2"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderActivationInfo}"
+                                                          contentStyle="color:#000000;" readOnly="true" labelStyle="white-space:nowrap"
+                                                          columns="25"/>
+                                            <af:inputText value="#{pageFlowScope.NMQWizardBean.currentInitialCreationDate}"
+                                                          label="Initial Creation Date" id="it5"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderActivationInfo}"
+                                                          contentStyle="color:#000000;" readOnly="true" labelStyle="white-space:nowrap"
+                                                          columns="20"/>
+                                            <af:inputText value="#{pageFlowScope.NMQWizardBean.currentActivationBy}"
+                                                          label="Last Activation By" id="it13"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderActivationInfo}"
+                                                          contentStyle="color:#000000;" readOnly="true" labelStyle="white-space:nowrap"
+                                                          columns="25"/>
+                                            <af:inputText value="#{pageFlowScope.NMQWizardBean.currentLastActivationDate}"
+                                                          label="Last Activation Date" id="it12"
+                                                          rendered="#{RenderingRulesBean.wizardDetailsRenderActivationInfo}"
+                                                          contentStyle="color:#000000;" readOnly="true" labelStyle="white-space:nowrap"
+                                                          columns="20"/>
+                                        </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                </af:panelGroupLayout>
+                                <f:facet name="toolbar">
+                                    <af:commandButton text="Save" id="cb1" partialSubmit="true" action="#{NMQWizardUIBean.saveDetails}"
+                                                      rendered="#{RenderingRulesBean.wizardDetailsRenderSave}"
+                                                      disabled="#{RenderingRulesBean.wizardDetailsDisableSave}"/>
+                                </f:facet>
+                            </af:panelBox>
+                        </af:group>
+                    </f:facet>
+                    <f:facet name="pageBottom">
+                        <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+                            <af:spacer width="10" height="10" id="s6"/>
+                            <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"
+                                               binding="#{NMQWizardUIBean.cntrlTrainButtons}"/>
+                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL"
+                                              immediate="true" shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
+                            <af:spacer width="20" height="10" id="s3"/>
+                            <!-- @author MTW
+                    06/16/2014
+                    @fsds NMAT-UC01.01 & NMAT-UC11.01
+                -->
+                            <af:inputText label="Dictionary Version:" id="it1aw"
+                                          value="#{pageFlowScope.NMQWizardBean.activeDictionary} v#{pageFlowScope.NMQWizardBean.activeDictionaryVersion}"
+                                          readOnly="true" columns="200"/>
+                            <af:spacer width="10" height="10" id="s7"/>
+                            <af:inputText label="Name:" id="it3" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
+                                          binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"/>
+                        </af:panelGroupLayout>
+                    </f:facet>
+                    <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+    <!--oracle-jdev-comment:preferred-managed-bean-name:NMQWizardBean-->
+</jsp:root>

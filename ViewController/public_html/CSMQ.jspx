@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <af:pageTemplateDef var="attrs">
+        <af:messages globalOnly="true" id="pt_m2"/>
+        <af:xmlContent>
+            <component xmlns="http://xmlns.oracle.com/adf/faces/rich/component">
+                <display-name>CSMQ</display-name>
+                <facet>
+                    <facet-name>header</facet-name>
+                </facet>
+                <facet>
+                    <facet-name>main</facet-name>
+                </facet>
+                <facet>
+                    <facet-name>footer</facet-name>
+                </facet>
+                <facet>
+                    <facet-name>pageBottom</facet-name>
+                </facet>
+                <attribute>
+                    <attribute-name>appName</attribute-name>
+                    <attribute-class>java.lang.String</attribute-class>
+                </attribute>
+                <attribute>
+                    <attribute-name>appVersion</attribute-name>
+                    <attribute-class>java.lang.String</attribute-class>
+                </attribute>
+                <attribute xmlns="http://xmlns.oracle.com/adf/faces/rich/component">
+                    <attribute-name>currentMenu</attribute-name>
+                    <default-value>none</default-value>
+                </attribute>
+                <attribute xmlns="http://xmlns.oracle.com/adf/faces/rich/component">
+                    <attribute-name>currentPage</attribute-name>
+                    <attribute-class>java.lang.String</attribute-class>
+                </attribute>
+                <attribute>
+                    <attribute-name>showBody</attribute-name>
+                    <attribute-class>java.lang.Boolean</attribute-class>
+                    <default-value>true</default-value>
+                </attribute>
+            </component>
+        </af:xmlContent>
+        <af:popup id="loginPU">
+            <af:subform id="sf1" defaultCommand="cb1x4s">
+                <af:panelFormLayout id="pfl1x4s" inlineStyle="text-align:center; width:206px;">
+                    <af:inputText label="Username" id="it1x4s" value="#{UserBean.username}" columns="20"/>
+                    <af:inputText label="Password" id="it2x4s" secret="true" value="#{UserBean.password}" columns="20"/>
+                    <af:commandButton text="Login" id="cb1x4s" action="#{UserBean.doLogin}"/>
+                </af:panelFormLayout>
+            </af:subform>
+        </af:popup>
+        <af:popup id="expiryPU" binding="#{UserBean.cntrlAlertExpiryPopup}" childCreation="deferred">
+            <af:dialog id="pt_d2" title="#{applicationScope.CSMQBean.appName}" type="ok">
+                <af:outputText value="Your password will expire in #{UserBean.passwordExpiryDays}" id="pt_ot6"
+                               noWrap="true"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup childCreation="deferred" autoCancel="disabled" id="pt_p2">
+            <af:dialog id="pt_d3" title="#{applicationScope.CSMQBean.appName}" type="ok">
+                <f:facet name="buttonBar"/>
+                <af:outputText value="#{CSMQBean.version}" id="pt_ot4" noWrap="true"/>
+            </af:dialog>
+        </af:popup>
+        <af:popup childCreation="immediate" autoCancel="disabled" id="pt_p1" resetEditableValues="whenCanceled"
+                  binding="#{UserBean.cntrlChangePasswordPopup}">
+            <af:dialog id="pt_d1" title="Change password" type="cancel" modal="false">
+                <f:facet name="buttonBar"/>
+                <af:panelFormLayout id="pt_pfl2">
+                    <af:inputText label="New password" id="pt_it1" showRequired="true" secret="true" required="true"
+                                  autoSubmit="true" valueChangeListener="#{UserBean.newPWChanged}" immediate="true"/>
+                    <af:inputText label="Repeat" id="pt_it2" showRequired="true" secret="true" required="true"
+                                  autoSubmit="true" valueChangeListener="#{UserBean.repeatPWChanged}" immediate="true"/>
+                    <af:commandButton text="Change" id="pt_cb2" action="#{UserBean.changePassword}"
+                                      binding="#{UserBean.cntrlChangePasswordButton}" disabled="false"/>
+                </af:panelFormLayout>
+            </af:dialog>
+        </af:popup>
+        
+        
+        
+        <af:panelStretchLayout topHeight="120px" id="pt_psl1" bottomHeight="30px">
+            <f:facet name="top">
+                <af:panelGroupLayout layout="vertical" inlineStyle="padding:5.0px;" id="pt_pgl5">
+                    <af:panelBorderLayout id="pt_pbl1" inlineStyle="height:80;" styleClass="ADFStretchWidth">
+                        <f:facet name="start">
+                            <af:group id="pt_g1">
+                                <af:panelGroupLayout id="pt_pgl3" inlineStyle="height:45px;" layout="horizontal">
+                                    <!--<af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png">-->
+                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png">
+                                        <af:showPopupBehavior popupId="pt_p2" triggerType="click" align="overlap"/>
+                                    </af:image>
+                                </af:panelGroupLayout>
+                            </af:group>
+                        </f:facet>
+                        <f:facet name="end">
+                            <af:group id="pt_g2">
+                                <af:panelGroupLayout id="pt_pgl1" layout="vertical"
+                                                     inlineStyle="width:400px; height:78px;" halign="end">
+                                    
+                                    <af:spacer width="10" height="5" id="pt_s1"/>
+                                    <af:panelGroupLayout id="pt_pgl8">
+                                        <af:commandButton text="Logoff" id="pt_cb1"
+                                                          rendered="#{securityContext.authenticated}"
+                                                          action="#{UserBean.logout}" immediate="true"/>
+                                        <af:commandButton text="Login" id="pt_cb1a"
+                                                          rendered="#{!securityContext.authenticated}"
+                                                          partialSubmit="true" immediate="true">
+                                            <af:showPopupBehavior popupId="::loginPU" triggerType="action"
+                                                                  align="beforeStart"/>
+                                        </af:commandButton>
+                                        <af:spacer width="10" height="10" id="pt_s8"/>
+                                        <af:goButton destination='#{CSMQBean.tmsURL}' text="Change Password" id="pt_gb1"
+                                                     targetFrame="_blank"/>
+                                    </af:panelGroupLayout>
+                                    <af:spacer width="10" height="5" id="pt_s1a"/>
+                                    <af:panelGroupLayout id="pt_pgl9" layout="horizontal">
+                                        <af:panelFormLayout id="pt_pfl1">
+                                            <af:panelGroupLayout id="pt_pgl2">
+                                                <af:outputText value="Logged in as: " id="pt_ot1" rendered="#{securityContext.authenticated}" />
+                                                <af:outputText value="#{securityContext.userName}" id="pt_ot2"
+                                                               inlineStyle="font-weight:bold;"   rendered="#{securityContext.authenticated}"/>
+                                            </af:panelGroupLayout>
+                                            <af:panelGroupLayout id="pt_pgl4">
+                                                <af:outputText value="Role: " id="pt_ot1a"
+                                                               rendered="#{securityContext.authenticated}"/>
+                                                <af:outputText id="of2" inlineStyle="font-weight:bold;"
+                                                               value="Requestor"
+                                                               rendered="#{securityContext.userInRole['Requestor']}"/>
+                                                <af:spacer width="10" height="10" id="pt_s4"/>
+                                                <af:outputText id="of2a" inlineStyle="font-weight:bold;" value="User"
+                                                               rendered="#{securityContext.userInRole['User']}"/>
+                                                <af:spacer width="10" height="10" id="pt_s5"/>
+                                                <af:outputText id="of2b" inlineStyle="font-weight:bold;" value="MQM"
+                                                               rendered="#{securityContext.userInRole['MQM']}"/>
+                                                <af:spacer width="10" height="10" id="pt_s2"/>
+                                                <af:outputText id="pt_ot5" inlineStyle="font-weight:bold;" value="Admin"
+                                                               rendered="#{securityContext.userInRole['Admin']}"/>
+                                            </af:panelGroupLayout>
+                                        </af:panelFormLayout>
+                                    </af:panelGroupLayout>
+                                </af:panelGroupLayout>
+                            </af:group>
+                        </f:facet>
+                        <af:spacer width="5" id="pt_s3"/>
+                    </af:panelBorderLayout>
+                    <af:panelGroupLayout layout="scroll" inlineStyle="height:28px; vertical-align:top; padding:0px; "
+                                         valign="top" id="pt_pgl6" styleClass="ADFStretchWidth">
+                        <!--  MENU START  -->
+                        <af:menuBar id="pt_mb1">
+                         <af:statusIndicator id="statind"/>  
+                         
+                            <!-- 
+                                CHANGED: 10-JUN-2014
+                                By: Tom Struzik
+                                REQ ID: NMAT-UC01.01 & NMAT-UC11.01
+                                   -->
+                            <af:commandMenuItem text="Create" id="pt_cmi1"
+                                                action="CREATE_NEW_NMQ"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'CREATE_NEW_NMQ' ? 'bold' : 'normal'};"
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"] or securityContext.userInRole ["Requestor"]}'/>
+                            <af:commandMenuItem text="Update" id="pt_cmi3"
+                                                action="UPDATE_NMQ"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'UPDATE_NMQ' ? 'bold' : 'normal'};"
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"] or securityContext.userInRole ["Requestor"]}'/>
+                            <af:commandMenuItem text="Copy" id="pt_cmi5"
+                                                action="COPY_NMQ"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'COPY_NMQ' ? 'bold' : 'normal'};"
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'/>
+                            <af:commandMenuItem text="Update SMQs" id="pt_cmi6" action="UPDATE_SMQ"
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'UPDATE_SMQ' ? 'bold' : 'normal'};"/>
+                            <af:commandMenuItem text="Browse &amp; Search" id="pt_cmi17" action="BROWSE_SEARCH"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'BROWSE_SEARCH' ? 'bold' : 'normal'};"
+                                                useWindow="false"/>
+                            <af:commandMenuItem text="MQ Compare" id="pt_cmi11" action="DIFF"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'DIFF' ? 'bold' : 'normal'};"
+                                                useWindow="false" rendered="false"/>
+                            <af:menu text="Publish" id="pt_m1"
+                                     inlineStyle="font-weight:#{UserBean.currentMenu eq 'NON_IMPACT_PUBLISH' or UserBean.currentMenu eq 'IMPACT_PUBLISH' ? 'bold' : 'normal'};"
+                                     rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'>
+                                <af:commandMenuItem text="Publish Current Version" id="pt_cmi2"
+                                                    action="NON_IMPACT_PUBLISH"
+                                                    rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
+                                                    inlineStyle="font-weight:#{UserBean.currentMenu eq 'NON_IMPACT_PUBLISH' ? 'bold' : 'normal'};"
+                                                    disabled="false"/>
+                                <af:commandMenuItem text="Publish Future Version" id="pt_cmi8" action="IMPACT_PUBLISH"
+                                                    rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
+                                                    inlineStyle="font-weight:#{UserBean.currentMenu eq 'IMPACT_PUBLISH' ? 'bold' : 'normal'};"
+                                                    disabled="false"/>
+                            </af:menu>
+                            <af:commandMenuItem text="Reports" id="pt_cmi4" action="REPORTS"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'REPORTS' ? 'bold' : 'normal'};"
+                                                disabled="false"/>
+                            <af:commandMenuItem text="Impact Assessment" id="pt_cmi10" action="MEDDRA_IMPACT_ASSESSMENT"
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'MEDDRA_IMPACT_ASSESSMENT' ? 'bold' : 'normal'};"/>
+                            <af:commandMenuItem text="View Version Impact" id="pt_cmi13" action="VIEW_VERSION_IMPACT"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_VERSION_IMPACT' ? 'bold' : 'normal'};"/>                    
+                            <af:commandMenuItem text="Historical #{applicationScope.CSMQBean.customMQName}s/SMQs"
+                                                id="pt_cmi7" action="HISTORICAL_IMPACT_ASSESSMENT"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'HISTORICAL_IMPACT_ASSESSMENT' ? 'bold' : 'normal'};"
+                                                rendered="false"/>
+                            <af:commandMenuItem text="Historic NMQs/SMQs" id="pt_cmi9" action="HISTORIC"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'HISTORIC' ? 'bold' : 'normal'};"
+                                                useWindow="false" rendered="false"/>
+                            <af:commandMenuItem text="Administration" id="pt_cmi12" action="ADMIN"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'ADMIN' ? 'bold' : 'normal'};"
+                                                useWindow="false" rendered="false"/>
+                        </af:menuBar>
+                        <!--  MENU END  -->
+                        <f:facet name="separator"/>
+                    </af:panelGroupLayout>
+                    <af:separator id="pt_s6"/>
+                </af:panelGroupLayout>
+            </f:facet>
+            <f:facet name="center">
+                <af:panelGroupLayout layout="scroll" xmlns:af="http://xmlns.oracle.com/adf/faces/rich" id="pt_pgl7">
+                    <af:panelBorderLayout id="pt_ph1">
+                        <af:facetRef facetName="main"/>
+                        <f:facet name="start"/>
+                        <f:facet name="bottom">
+                            <af:facetRef facetName="footer"/>
+                        </f:facet>
+                        <f:facet name="end"/>
+                        <f:facet name="top">
+                            <af:group id="pt_g3">
+                                
+                                <af:panelGroupLayout id="pt_pgl10" layout="vertical"
+                                                     rendered="#{attrs.showBody eq true}">
+                                                  
+                                    <af:outputText value="›› #{UserBean.currentMenuPath}" id="pt_ot3"
+                                                   inlineStyle="font-weight:bold; padding:10px;" truncateAt="0"
+                                                   rendered="#{attrs.showBody eq true}"/>
+                                    
+                                    <af:spacer width="10" height="10" id="pt_s7"/>
+                                </af:panelGroupLayout>
+                            </af:group>
+                        </f:facet>
+                        <f:facet name="innerTop">
+                            <af:group id="pt_g4">
+                                <af:facetRef facetName="header"/>
+                            </af:group>
+                        </f:facet>
+                    </af:panelBorderLayout>
+                </af:panelGroupLayout>
+            </f:facet>
+            <f:facet name="bottom">
+                <af:facetRef facetName="pageBottom"/>
+            </f:facet>
+        </af:panelStretchLayout>
+    </af:pageTemplateDef>
+    <!--oracle-jdev-comment:preferred-managed-bean-name:UserBean-->
+</jsp:root>

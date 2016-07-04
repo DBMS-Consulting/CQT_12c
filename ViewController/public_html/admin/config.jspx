@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:af="http://xmlns.oracle.com/adf/faces/rich" xmlns:dvt="http://xmlns.oracle.com/dss/adf/faces">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document title="Configuration" id="d1">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
+                    <f:facet name="header"/>
+                    <f:facet name="main">
+                        <af:group id="g1">
+                            <af:panelTabbed id="pt2" inlineStyle="width:1031px; height:856px;">
+                                <af:showDetailItem text="Application Configuration" id="sdi1">
+                                    <af:panelFormLayout id="pfl1" inlineStyle="height:830px;">
+                                        <af:panelLabelAndMessage label="Build #" id="plam17" labelStyle="font-weight:bold;" inlineStyle="font-weight:bold;">
+                                            <af:outputText value="#{bindings.version.inputValue}" id="ot17"/>
+                                        </af:panelLabelAndMessage>
+                                        <p>
+                                        </p>
+                                        <af:showDetailHeader text="Database Settings" disclosed="true" id="sdh1" size="2" inlineStyle="height:231px;">
+                                            <af:panelLabelAndMessage label="Database URL" id="plam1" labelStyle="width:200px;">
+                                                <af:outputText value="#{CSMQBean.dbURL}" id="ot1">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.CmqDraftAgId.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="CMQ Draft Activation Group ID" id="plam12" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.CmqDraftAgId.inputValue}" id="ot12">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.CmqDraftAgId.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="CMQ Draft Activation Group Name" id="plam2" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.CmqDraftAgNm.inputValue}" id="ot2"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="CMQ Publish Activation Group ID" id="plam3" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.CmqPublishAgId.inputValue}" id="ot3">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.CmqPublishAgId.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="CMQ Publish Activation Group Name" id="plam4" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.CmqPublishAgNm.inputValue}" id="ot4"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="MedDRA Activation Group ID" id="plam5" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.MeddraAgId.inputValue}" id="ot5">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.MeddraAgId.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="MedDRA Activation Group Name" id="plam6" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.MeddraAgNm.inputValue}" id="ot6"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="SMQ Activation Group ID" id="plam7" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.SmqAgId.inputValue}" id="ot7">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.SmqAgId.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="SMQ Activation Group Name" id="plam8" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.SmqAgNm.inputValue}" id="ot8"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="SMQ Custom Prefix" id="plam9" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.SmqCustomPrefix.inputValue}" id="ot9"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="SMQ Standard Prefix" id="plam10" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.SmqStdPrefix.inputValue}" id="ot10"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="User" id="plam11" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.User1.inputValue}" id="ot11"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="User Session ID" id="plam19" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.UserenvSessionid.inputValue}" id="ot19">
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.UserenvSessionid.format}"/>
+                                                </af:outputText>
+                                            </af:panelLabelAndMessage>
+                                        </af:showDetailHeader>
+                                        <p>
+                                        </p>
+                                        <!--<af:showDetailHeader text="WLS Settings" id="ph1" disclosed="true" size="2" inlineStyle="height:186px;">
+                                            <af:panelLabelAndMessage label="Config file" id="plam22" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.configFileName.inputValue}" id="ot22"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Custom MQ Name" id="plam21" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.customMQName.inputValue}" id="ot21"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default Filter Dictionary Short Name" id="plam12" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultFilterDictionaryShortName.inputValue}" id="ot12"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default Base Dictionary Short Name" id="plam13" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultBaseDictionaryShortName.inputValue}" id="ot13"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default MedDRA Release Group" id="plam14" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultMedDRAReleaseGroup.inputValue}" id="ot14"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default Draft Release Group" id="plam15" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultDraftReleaseGroup.inputValue}" id="ot15"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Valid Dictionary List" id="plam16" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.validDictionaryList.inputValue}" id="ot16"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default Publish Release Group" id="plam20" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultPublishReleaseGroup.inputValue}" id="ot20"/>
+                                            </af:panelLabelAndMessage>
+                                            <af:panelLabelAndMessage label="Default MEDSMQ Release Group" id="plam18" labelStyle="width:200px;">
+                                                <af:outputText value="#{bindings.defaultMEDSMQReleaseGroup.inputValue}" id="ot18"/>
+                                            </af:panelLabelAndMessage>
+                                        </af:showDetailHeader>-->
+                                   
+                                        <af:panelCollection id="pc1" inlineStyle="width:928px; height:427px;">
+                                            <f:facet name="menus"/>
+                                            <f:facet name="toolbar"/>
+                                            <f:facet name="statusbar"/>
+                                            <af:table value="#{bindings.NMAT_PROP_EOView1.collectionModel}" var="row"
+                                                      rows="#{bindings.NMAT_PROP_EOView1.rangeSize}"
+                                                      emptyText="#{bindings.NMAT_PROP_EOView1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                                      fetchSize="#{bindings.NMAT_PROP_EOView1.rangeSize}"
+                                                      rowBandingInterval="0" id="t1" columnStretching="column:c3">
+                                                <af:column sortProperty="#{bindings.NMAT_PROP_EOView1.hints.Domain.name}"
+                                                           sortable="true"
+                                                           headerText="#{bindings.NMAT_PROP_EOView1.hints.Domain.label}"
+                                                           id="c1" width="236" filterable="true">
+                                                    <af:inputText value="#{row.bindings.Domain.inputValue}"
+                                                                  label="#{bindings.NMAT_PROP_EOView1.hints.Domain.label}"
+                                                                  required="#{bindings.NMAT_PROP_EOView1.hints.Domain.mandatory}"
+                                                                  columns="#{bindings.NMAT_PROP_EOView1.hints.Domain.displayWidth}"
+                                                                  maximumLength="#{bindings.NMAT_PROP_EOView1.hints.Domain.precision}"
+                                                                  shortDesc="#{bindings.NMAT_PROP_EOView1.hints.Domain.tooltip}"
+                                                                  id="it1">
+                                                        <f:validator binding="#{row.bindings.Domain.validator}"/>
+                                                    </af:inputText>
+                                                </af:column>
+                                                <af:column sortProperty="#{bindings.NMAT_PROP_EOView1.hints.PropName.name}"
+                                                           sortable="true"
+                                                           headerText="#{bindings.NMAT_PROP_EOView1.hints.PropName.label}"
+                                                           id="c2" width="272" filterable="true">
+                                                    <af:inputText value="#{row.bindings.PropName.inputValue}"
+                                                                  label="#{bindings.NMAT_PROP_EOView1.hints.PropName.label}"
+                                                                  required="#{bindings.NMAT_PROP_EOView1.hints.PropName.mandatory}"
+                                                                  columns="#{bindings.NMAT_PROP_EOView1.hints.PropName.displayWidth}"
+                                                                  maximumLength="#{bindings.NMAT_PROP_EOView1.hints.PropName.precision}"
+                                                                  shortDesc="#{bindings.NMAT_PROP_EOView1.hints.PropName.tooltip}"
+                                                                  id="it2">
+                                                        <f:validator binding="#{row.bindings.PropName.validator}"/>
+                                                    </af:inputText>
+                                                </af:column>
+                                                <af:column sortProperty="#{bindings.NMAT_PROP_EOView1.hints.PropValue.name}"
+                                                           sortable="true"
+                                                           headerText="#{bindings.NMAT_PROP_EOView1.hints.PropValue.label}"
+                                                           id="c3" width="149" filterable="true">
+                                                    <af:inputText value="#{row.bindings.PropValue.inputValue}"
+                                                                  label="#{bindings.NMAT_PROP_EOView1.hints.PropValue.label}"
+                                                                  required="#{bindings.NMAT_PROP_EOView1.hints.PropValue.mandatory}"
+                                                                  columns="#{bindings.NMAT_PROP_EOView1.hints.PropValue.displayWidth}"
+                                                                  maximumLength="#{bindings.NMAT_PROP_EOView1.hints.PropValue.precision}"
+                                                                  shortDesc="#{bindings.NMAT_PROP_EOView1.hints.PropValue.tooltip}"
+                                                                  id="it3">
+                                                        <f:validator binding="#{row.bindings.PropValue.validator}"/>
+                                                    </af:inputText>
+                                                </af:column>
+                                                <af:column sortProperty="#{bindings.NMAT_PROP_EOView1.hints.Description.name}"
+                                                           sortable="false"
+                                                           headerText="#{bindings.NMAT_PROP_EOView1.hints.Description.label}"
+                                                           id="c4" width="206">
+                                                    <af:inputText value="#{row.bindings.Description.inputValue}"
+                                                                  label="#{bindings.NMAT_PROP_EOView1.hints.Description.label}"
+                                                                  required="#{bindings.NMAT_PROP_EOView1.hints.Description.mandatory}"
+                                                                  columns="#{bindings.NMAT_PROP_EOView1.hints.Description.displayWidth}"
+                                                                  maximumLength="#{bindings.NMAT_PROP_EOView1.hints.Description.precision}"
+                                                                  shortDesc="#{bindings.NMAT_PROP_EOView1.hints.Description.tooltip}"
+                                                                  id="it4">
+                                                        <f:validator binding="#{row.bindings.Description.validator}"/>
+                                                    </af:inputText>
+                                                </af:column>
+                                            </af:table>
+                                        </af:panelCollection>
+                                        <af:commandButton actionListener="#{bindings.Commit.execute}"
+                                                          text="Save changes" id="cb1"
+                                                          action="#{CSMQBean.refreshProperties}"/>
+                                    </af:panelFormLayout>
+                                </af:showDetailItem>
+                                <af:showDetailItem text="Impacted MQs" id="sdi2">
+                                    <!-- <af:poll id="p6" immediate="true" pollListener="#{ImpactRefreshStatusBean.pollTrigger}" interval="-1" binding="#{ImpactRefreshStatusBean.cntrlTimer}"/> 
+                                    <af:panelGroupLayout id="pgl1" binding="#{ImpactRefreshStatusBean.cntrlPanel}">
+                                        <af:inputText label="Status" id="it1" value="#{ImpactRefreshStatusBean.status}"/>
+                                        <af:inputDate label="Start Time" id="id1" value="#{ImpactRefreshStatusBean.startTime}"/>
+                                        <af:inputDate label="End Time" id="id2" value="#{ImpactRefreshStatusBean.endTime}"/>
+                                        <af:inputDate label="Submitted Time" id="id3" value="#{ImpactRefreshStatusBean.submitTime}"/>
+                                        <af:inputText label="MQ Count" id="it2" value="#{ImpactRefreshStatusBean.totalRecords}" columns="5"/>
+                                        <dvt:gauge id="gauge1" gaugeType="STATUSMETER" maxValue="#{requestScope.ImpactRefreshStatusBean.totalRecords}" value="#{requestScope.ImpactRefreshStatusBean.recordCountNow}"
+                                                   inlineStyle="width:320px; height:119px;" contentDelivery="immediate" binding="#{ImpactRefreshStatusBean.cntrlGauge}" shortDesc="X">
+                                            <dvt:gaugeBackground>
+                                                <dvt:specialEffects/>
+                                            </dvt:gaugeBackground>
+                                            <dvt:gaugeFrame/>
+                                            <dvt:indicator/>
+                                            <dvt:indicatorBase rendered="false"/>
+                                            <dvt:gaugePlotArea/>
+                                            <dvt:tickLabel/>
+                                            <dvt:tickMark/>
+                                            <dvt:topLabel/>
+                                            <dvt:bottomLabel position="LP_NONE"/>
+                                            <dvt:metricLabel position="LP_WITH_BOTTOM_LABEL"/>
+                                        </dvt:gauge>
+                                        <af:commandButton text="Refresh Materialized Views" id="cb1" actionListener="#{ImpactRefreshStatusBean.refreshSearchList}"/>
+                                    </af:panelGroupLayout>-->
+                                </af:showDetailItem>
+                            </af:panelTabbed>
+                        </af:group>
+                    </f:facet>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

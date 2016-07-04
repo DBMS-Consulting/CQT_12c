@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+  <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+  <f:view>
+    <af:document id="d1">
+      <af:messages id="m1"/>
+      <af:form id="f1">
+        <af:pageTemplate viewId="/CSMQ.jspx" id="pt1" value="#{bindings.ptb1}">
+          <f:facet name="header"/>
+          <f:facet name="main">
+            <af:panelFormLayout id="pfl1">
+              <af:inputText value="#{bindings.Mqnotes.inputValue}" label="MQ Notes" required="#{bindings.Mqnotes.hints.mandatory}"
+                            columns="140" maximumLength="#{bindings.Mqnotes.hints.precision}"
+                            shortDesc="#{bindings.Mqnotes.hints.tooltip}" id="it1" rows="8" inlineStyle="border-style:inherit;" editable="always">
+                <f:validator binding="#{bindings.Mqnotes.validator}"/>
+              </af:inputText>
+              <af:inputText value="#{bindings.Mqdescription.inputValue}" label="MQ Description "
+                            required="#{bindings.Mqdescription.hints.mandatory}" columns="140"
+                            maximumLength="#{bindings.Mqdescription.hints.precision}" shortDesc="#{bindings.Mqdescription.hints.tooltip}" id="it2" rows="8"
+                            inlineStyle="border-style:inherit;" editable="always">
+                <f:validator binding="#{bindings.Mqdescription.validator}"/>
+              </af:inputText>
+              <af:inputText value="#{bindings.Mqsource.inputValue}" label="	MQ Source " required="#{bindings.Mqsource.hints.mandatory}"
+                            columns="140" maximumLength="#{bindings.Mqsource.hints.precision}"
+                            shortDesc="#{bindings.Mqsource.hints.tooltip}" id="it3" rows="8" inlineStyle="border-style:inherit;" editable="always">
+                <f:validator binding="#{bindings.Mqsource.validator}"/>
+              </af:inputText>
+              <af:panelGroupLayout id="pgl1">
+                <af:commandButton text="Save" id="cb1t"/>
+                <af:commandButton text="Back" id="cb2t" action="BACK"/>
+              </af:panelGroupLayout>
+            </af:panelFormLayout>
+          </f:facet>
+          <f:attribute name="currentPage" value="Informative Notes: #{NMQBean.currentTermName}"/>
+        </af:pageTemplate>
+      </af:form>
+    </af:document>
+  </f:view>
+</jsp:root>

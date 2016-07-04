@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document id="d1">
+            <af:form id="f1">
+                <af:popup id="confirmDemote">
+                    <af:dialog title="Confirm Demotion" dialogListener="#{pageFlowScope.WorkflowBean.demoteSelected}"
+                               id="d2">
+                        <af:activeOutputText value="Demote all selected terms to draft?" id="aot1"/>
+                    </af:dialog>
+                </af:popup>
+                <af:popup id="confirmActivate">
+                    <af:dialog title="Confirm Activation" dialogListener="#{pageFlowScope.WorkflowBean.activate}"
+                               id="d3">
+                        <af:activeOutputText value="You are about to activate this group.  Prior to activation, validation will be performed and if there are any errors the group will not be activated."
+                                             id="aot2"/>
+                    </af:dialog>
+                </af:popup>
+                <af:pageTemplate viewId="/CSMQ.jspx" value="#{bindings.pageTemplateBinding}" id="pt1">
+                    
+                    <f:facet name="header">
+                        <af:group id="g2">
+                            <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+                            <af:spacer width="10" height="10" id="s1"/>
+                        </af:group>
+                    </f:facet>
+                    
+                    
+                    <f:facet name="main">
+                        <af:group id="g1">
+                            <af:panelBox id="pgl1" text="Activate from Impact Analysis" showDisclosure="false"  inlineStyle="width:1195px; padding:5px;">
+  <af:panelGroupLayout id="pgl3" layout="horizontal" valign="top"
+                                                     inlineStyle="height:398px;">
+                                    <af:panelCollection id="pc1" inlineStyle="width:585px; height:382px;">
+                                        <f:facet name="menus"/>
+                                        <f:facet name="toolbar">
+                                            <af:toolbar id="t4">
+                                                <af:commandToolbarButton text="Demote Selected" id="ctb1">
+                                                    <af:showPopupBehavior popupId=":::confirmDemote"
+                                                                          triggerType="action" align="afterEnd"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="Validate Group" id="ctb2"
+                                                                         actionListener="#{pageFlowScope.WorkflowBean.activateInCheckMode}"/>
+                                                <af:commandToolbarButton text="Activate Group" id="ctb3"
+                                                                         disabled="true"
+                                                                         partialTriggers="ctb2"
+                                                                         binding="#{pageFlowScope.WorkflowBean.cntrlActivateButton}" rendered="false">
+                                                    <af:showPopupBehavior popupId=":::confirmActivate"
+                                                                          triggerType="action" align="afterEnd"/>
+                                                </af:commandToolbarButton>
+                                            </af:toolbar>
+                                        </f:facet>
+                                        <f:facet name="statusbar"/>
+                                        
+                                        <af:table value="#{bindings.ViewObjActivationErrors_Contents1.collectionModel}"
+                                                  var="row"
+                                                  rows="#{bindings.ViewObjActivationErrors_Contents1.rangeSize}"
+                                                  emptyText="#{bindings.ViewObjActivationErrors_Contents1.viewable ? 'There are no activation errors' : 'Access Denied.'}"
+                                                  fetchSize="#{bindings.ViewObjActivationErrors_Contents1.rangeSize}"
+                                                  rowBandingInterval="0"
+                                                  filterModel="#{bindings.ViewObjActivationErrors_Contents1Query.queryDescriptor}"
+                                                  queryListener="#{bindings.ViewObjActivationErrors_Contents1Query.processQuery}"
+                                                  filterVisible="false" varStatus="vs" id="t2" width="600"
+                                                  rowSelection="multiple"
+                                                  selectionListener="#{pageFlowScope.WorkflowBean.contentsErrorRowChanged}"
+                                                  binding="#{pageFlowScope.WorkflowBean.cntrlContentErrors}">
+
+                                        <af:column sortProperty="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.name}"
+                                                       filterable="true" sortable="true"
+                                                       headerText="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.label}"
+                                                       id="c1" width="240">
+                                                <af:inputText value="#{row.bindings.Term.inputValue}"
+                                                              label="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.label}"
+                                                              required="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.mandatory}"
+                                                              columns="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.displayWidth}"
+                                                              maximumLength="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.precision}"
+                                                              shortDesc="#{bindings.ViewObjActivationErrors_Contents1.hints.Term.tooltip}"
+                                                              id="it1">
+                                                    <f:validator binding="#{row.bindings.Term.validator}"/>
+                                                </af:inputText>
+                                            </af:column>
+                                        
+                                        <af:column sortProperty="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.name}"
+                                                       filterable="true" sortable="true"
+                                                       headerText="Error"
+                                                       id="c2" width="330">
+                                                <af:inputText value="#{row.bindings.ErrorMsg.inputValue}"
+                                                              label="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.label}"
+                                                              required="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.mandatory}"
+                                                              columns="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.displayWidth}"
+                                                              maximumLength="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.precision}"
+                                                              shortDesc="#{bindings.ViewObjActivationErrors_Contents1.hints.ErrorMsg.tooltip}"
+                                                              id="it2">
+                                                    <f:validator binding="#{row.bindings.ErrorMsg.validator}"/>
+                                                </af:inputText>
+                                            </af:column>
+                                        
+                                        
+                                        
+                                        
+                                          <af:column sortProperty="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.name}"
+                                                       filterable="true" sortable="true"
+                                                       headerText="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.label}"
+                                                       id="c3" width="0" rendered="false">
+                                                <af:inputText value="#{row.bindings.PredictContentId.inputValue}"
+                                                              label="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.label}"
+                                                              required="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.mandatory}"
+                                                              columns="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.displayWidth}"
+                                                              maximumLength="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.precision}"
+                                                              shortDesc="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.tooltip}"
+                                                              id="it3">
+                                                    <f:validator binding="#{row.bindings.PredictContentId.validator}"/>
+                                                    <af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.ViewObjActivationErrors_Contents1.hints.PredictContentId.format}"/>
+                                                </af:inputText>
+                                            </af:column>
+                                        
+                                        
+                                        
+                                        
+                                         </af:table>
+                                        
+                                        
+                                    </af:panelCollection>
+                                    <af:spacer width="10" height="10" id="s2"/>
+                                    <af:table value="#{bindings.ViewObjActivationErrors_Relations1.collectionModel}"
+                                              var="row" rows="#{bindings.ViewObjActivationErrors_Relations1.rangeSize}"
+                                              emptyText="#{bindings.ViewObjActivationErrors_Relations1.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                              fetchSize="#{bindings.ViewObjActivationErrors_Relations1.rangeSize}"
+                                              rowBandingInterval="0"
+                                              filterModel="#{bindings.ViewObjActivationErrors_Relations1Query.queryDescriptor}"
+                                              queryListener="#{bindings.ViewObjActivationErrors_Relations1Query.processQuery}"
+                                              filterVisible="true" varStatus="vs" id="t3" width="585"
+                                              inlineStyle="height:380px;"
+                                              binding="#{pageFlowScope.WorkflowBean.cntrlRelationErrors}">
+                                        <af:column sortProperty="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.name}"
+                                                   sortable="false" headerText="Term" id="c6" width="240">
+                                            <af:inputText value="#{row.bindings.Term.inputValue}"
+                                                          label="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.label}"
+                                                          required="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.mandatory}"
+                                                          columns="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.displayWidth}"
+                                                          maximumLength="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.precision}"
+                                                          shortDesc="#{bindings.ViewObjActivationErrors_Relations1.hints.Term.tooltip}"
+                                                          id="it5">
+                                                <f:validator binding="#{row.bindings.Term.validator}"/>
+                                            </af:inputText>
+                                        </af:column>
+                                        <af:column sortProperty="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.name}"
+                                                   filterable="false" sortable="true" headerText="Relation Errors"
+                                                   id="c4" width="330">
+                                            <af:inputText value="#{row.bindings.ErrorMsg.inputValue}"
+                                                          label="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.label}"
+                                                          required="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.mandatory}"
+                                                          columns="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.displayWidth}"
+                                                          maximumLength="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.precision}"
+                                                          shortDesc="#{bindings.ViewObjActivationErrors_Relations1.hints.ErrorMsg.tooltip}"
+                                                          id="it4">
+                                                <f:validator binding="#{row.bindings.ErrorMsg.validator}"/>
+                                            </af:inputText>
+                                        </af:column>
+                                    </af:table>
+				    </af:panelGroupLayout>
+                                
+                            </af:panelBox>
+                        </af:group>
+                    </f:facet>
+                    <f:facet name="pageBottom">
+                        <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
+                            <af:spacer width="10" height="10" id="s6"/>
+                            <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}"
+                                               id="tbb1"/>
+                            <af:commandButton text="Cancel" id="cb1can" action="CANCEL" immediate="true"/>
+                        </af:panelGroupLayout>
+                    </f:facet>
+                    <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>

@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html" xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <c:set var="viewcontrollerBundle" value="#{adfBundle['viewcontroller.report.reportsBundle']}"/>
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <f:view>
+        <af:document id="d1">
+            <af:messages id="m1"/>
+            <af:form id="f1">
+                <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
+                    <f:facet name="main">
+                        <af:panelBorderLayout id="pbl1">
+                            <f:facet name="bottom">
+                                <af:commandButton text="Cancel" id="cb1" action="CANCEL"/>
+                            </f:facet>
+                            <af:panelTabbed id="pb1" inlineStyle="width:1195px; padding:5px; height:448px;">
+                                <af:showDetailItem id="sdi1" text="Reports">
+                                    <af:panelHeader text="Internal" id="ph1" size="3" inlineStyle="height:214px; padding:5px;">
+                                        <af:selectOneChoice label="Report" id="soc1" binding="#{ReportBean.cntrlReportList}"
+                                                            value="NULL" autoSubmit="true" valuePassThru="true"
+                                                            valueChangeListener="#{ReportBean.reportNameChanged}">
+                                            <af:selectItem label="--Select a report--" value="NULL" id="si48"/>
+                                            <f:selectItems value="#{applicationScope.CSMQBean.reportsSelectItems}" id="si2a"/>
+        
+                                        </af:selectOneChoice>
+                                        <af:inputDate id="id1" binding="#{ReportBean.cntrlStartDate}" columns="10" label="Start Date" autoSubmit="true"
+                                                      partialTriggers="soc1"
+                                                      valueChangeListener="#{ReportBean.validateReportDates}">
+                                            <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                        </af:inputDate>
+                                        <af:inputDate id="id2" binding="#{ReportBean.cntrlEndDate}" columns="10" label="End Date" autoSubmit="true"
+                                                      partialTriggers="soc1"
+                                                      valueChangeListener="#{ReportBean.validateReportDates}">
+                                            <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                        </af:inputDate>
+                                        <af:selectOneChoice label="Format" id="soc3" value="XLS" valuePassThru="true"
+                                                            binding="#{ReportBean.cntrlFormatList}" autoSubmit="true" immediate="true"
+                                                            partialTriggers="soc1">
+                                            <af:selectItem label="Excel" value="XLS" id="si5"/>
+                                            <af:selectItem label="PDF" value="PDF" id="si6"/>
+                                        </af:selectOneChoice>
+                                        <af:commandButton text="Generate" id="commandButton1" partialSubmit="true"
+                                                          binding="#{ReportBean.generateReportButton}">
+                                            <af:fileDownloadActionListener method="#{ReportBean.printReport}"
+                                                                           contentType="application/x-download"
+                                                                           filename="#{ReportBean.generatedReport}"/>
+                                        </af:commandButton>
+                                    </af:panelHeader>
+                                    <af:panelHeader text="MedDRA Versioning Reports" id="ph2" size="3"
+                                                    inlineStyle="height:130px; padding:5px;">
+                                        <af:selectOneChoice label="Report" id="soc2"  autoSubmit="true" valuePassThru="true"
+                                                            binding="#{pageFlowScope.ReportDownloadBean.cntrlReportList}"
+                                                            value="NULL"
+                                                            valueChangeListener="#{pageFlowScope.ReportDownloadBean.reportNameChanged}">
+                                            <af:selectItem label="--Select a report--" value="NULL" id="si2"/>
+                                            <af:forEach var="prop" items="#{ReportDownloadBean.reportList}">
+                                                <af:selectItem label="#{prop}" value="#{prop}" id="si1"/>
+                                            </af:forEach>
+                                        </af:selectOneChoice>
+                                        <af:commandButton text="Generate" id="cb2" partialSubmit="true" partialTriggers="soc2">
+                                            <af:fileDownloadActionListener contentType="application/x-download"
+                                                                           method="#{pageFlowScope.ReportDownloadBean.reportDownloadAction}"
+                                                                           filename="#{pageFlowScope.ReportDownloadBean.fileName}"/>
+                                        </af:commandButton>
+                                    </af:panelHeader>
+                                    <f:facet name="toolbar">
+                                        <af:toolbar id="t1"/>
+                                    </f:facet>
+                                </af:showDetailItem>
+                                <af:showDetailItem text="Lists" id="sdi2">
+                                    <af:panelGroupLayout id="pgl2" layout="horizontal" halign="end">
+                                        <af:button text="#{viewcontrollerBundle.EXPORT}" id="b1"
+                                                   icon="/image/EXCEL.png" styleClass="AFStretchWidth"/>
+                                        <af:spacer width="10" height="10" id="s1"/>
+                                    </af:panelGroupLayout>
+                                    <af:panelGroupLayout id="pgl1" layout="horizontal" inlineStyle="width:589px; padding:2px; margin:2px;">
+                                        <af:panelGroupLayout id="pgl3">
+                                            <af:outputText value="Products" id="ot6" inlineStyle="font-weight:bold;"/>
+                                            <af:selectOneListbox value="#{bindings.ViewObj_ProductList1.inputValue}"
+                                                                 required="#{bindings.ViewObj_ProductList1.hints.mandatory}"
+                                                                 shortDesc="#{bindings.ViewObj_ProductList1.hints.tooltip}" id="sol2"
+                                                                 simple="true" size="20" label="Products">
+                                                <f:selectItems value="#{bindings.ViewObj_ProductList1.items}" id="si4"/>
+                                            </af:selectOneListbox>
+                                        </af:panelGroupLayout>
+                                        <af:panelGroupLayout id="pgl4">
+                                            <af:outputText value="Groups" id="ot7" inlineStyle="font-weight:bold;"/>
+                                            <af:selectOneListbox value="#{bindings.MQGroupsVO1.inputValue}"
+                                                                 required="#{bindings.MQGroupsVO1.hints.mandatory}"
+                                                                 shortDesc="#{bindings.MQGroupsVO1.hints.tooltip}" id="sol1" size="20"
+                                                                 simple="true">
+                                                <f:selectItems value="#{bindings.MQGroupsVO1.items}" id="si3"/>
+                                            </af:selectOneListbox>
+                                        </af:panelGroupLayout>
+                                    </af:panelGroupLayout>
+                                    <f:facet name="toolbar"/>
+                                </af:showDetailItem>
+                            </af:panelTabbed>
+                        </af:panelBorderLayout>
+                    </f:facet>
+                </af:pageTemplate>
+            </af:form>
+        </af:document>
+    </f:view>
+</jsp:root>
