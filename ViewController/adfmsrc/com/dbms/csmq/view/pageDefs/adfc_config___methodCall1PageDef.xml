@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.60.13" id="adfc_config___methodCall1PageDef"
+                Package="com.dbms.csmq.view.pageDefs" SkipValidation="true">
+  <parameters/>
+  <executables>
+    <iterator Binds="SmallTreeVO1" RangeSize="25"
+              DataControl="HierarchyModuleDataControl"
+              id="SmallTreeVO1Iterator" Refresh="renderModel"/>
+  </executables>
+  <bindings>
+    <action IterBinding="SmallTreeVO1Iterator" id="ExecuteWithParams"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="releaseGroup" NDValue="#{NMQBean.currentReleaseGroup}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="dictContentID"
+                 NDValue="#{NMQBean.currentDictContentID}"
+                 NDType="java.lang.String"/>
+    </action>
+  </bindings>
+</pageDefinition>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="promoteToPublishedPageDef"
+                Package="workflow">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ViewObjTermsByState1" RangeSize="75" DataControl="PublishModuleDataControl"
+              id="ViewObjTermsByState1Iterator"/>
+    <invokeAction Binds="ExecuteWithParams" id="Invoke_EWP" Refresh="renderModel"/>
+  </executables>
+  <bindings>
+    <list IterBinding="ViewObjTermsByState1Iterator" ListOperMode="multiSelect" ListIter="ViewObjTermsByState1Iterator"
+          id="ViewObjTermsByState1" SelectItemValueMode="ListObject">
+      <AttrNames>
+        <Item Value="DictNm"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Mqterm"/>
+      </ListDisplayAttrNames>
+    </list>
+    <action IterBinding="ViewObjTermsByState1Iterator" id="ExecuteWithParams"
+            InstanceName="PublishModuleDataControl.ViewObjTermsByState1" DataControl="PublishModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="state" NDValue="Approved" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDValue="#{CSMQBean.defaultDraftReleaseGroup}" NDType="java.lang.String"/>
+    </action>
+    <list ListOperMode="multiSelect" IterBinding="ViewObjTermsByState1Iterator" id="DictNm">
+      <AttrNames>
+        <Item Value="DictNm"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Mqterm"/>
+      </ListDisplayAttrNames>
+    </list>
+  </bindings>
+</pageDefinition>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="historicSearchPageDef" Package="historic">
+ <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="releaseGroups1" RangeSize="25"
+              DataControl="ReleaseGroupModuleDataControl"
+              id="releaseGroupsSearch1Iterator"/>
+    <invokeAction Binds="EWP_releaseGroupsSearch1Iterator"
+                  id="Execute_EWP_releaseGroupsSearch1Iterator"
+                  Refresh="renderModel"/>
+    <iterator Binds="DictionaryVO1" RangeSize="25"
+              DataControl="DictionaryModuleDataControl"
+              id="DictionaryVO1Iterator"/>
+    <iterator Binds="MQGroupsVO1" RangeSize="-1"
+              DataControl="MQGroupModuleDataControl" id="MQGroupsVO1Iterator"/>
+    <iterator Binds="HistoricSearch1" RangeSize="25"
+              DataControl="SearchModuleDataControl" id="HistoricSearch1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="InfNotesVO1" RangeSize="10"
+              DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator"/>
+    <iterator Binds="SmallTreeVO1" RangeSize="-1"
+              DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
+              Refresh="renderModel"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <invokeAction id="Invoke_EWP_DictionaryVO1" Binds="EWP_DictionaryVO1" Refresh="renderModel"/>
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO2Iterator1"/>
+    
+    <iterator Binds="CurrentDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl"
+              id="CurrentDictionaryVO1Iterator"/>
+    <invokeAction Binds="EWP_DictionaryModuleDataControl" id="Invoke_EWP_DictionaryModuleDataControl" Refresh="renderModel"/>
+    <iterator id="SourceTreeVO1Iterator" Binds="SourceTreeVO1" DataControl="HierarchyModuleDataControl" RangeSize="25"/>
+    <iterator Binds="HistoricalListViewObj1" RangeSize="10" DataControl="SearchModuleDataControl"
+              id="HistoricalListViewObj1Iterator"/>
+  </executables>
+  <bindings>
+    <action IterBinding="releaseGroupsSearch1Iterator"
+            id="EWP_releaseGroupsSearch1Iterator"
+            InstanceName="ReleaseGroupModuleDataControl.releaseGroups1"
+            DataControl="ReleaseGroupModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName"
+                 NDValue="#{pageFlowScope.NMQWizardSearchBean.searchDictionaryShortName}"
+                 NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="releaseGroupsSearch1Iterator" ListOperMode="multiSelect"
+          ListIter="releaseGroupsSearch1Iterator" id="releaseGroups1">
+      <AttrNames>
+        <Item Value="PredictGroupId"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Description"/>
+      </ListDisplayAttrNames>
+    </list>
+    <list IterBinding="DictionaryVO1Iterator" ListOperMode="navigation"
+          ListIter="DictionaryVO1Iterator" id="DictionaryVO1"
+          DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <list IterBinding="MQGroupsVO1Iterator" ListOperMode="multiSelect"
+          ListIter="MQGroupsVO1Iterator" id="MQGroupsVO1">
+      <AttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+    <tree IterBinding="HistoricSearch1Iterator" id="HistoricSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HistoricSearch" Name="HistoricSearch10">
+        <AttrNames>
+          <Item Value="DictNm"/>
+          <Item Value="LevelNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="ContentId"/>
+          <Item Value="Version"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="Groupname"/>
+          <Item Value="Createdby"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Prikey"/>
+          <Item Value="State"/>
+          <Item Value="DueDate"/>
+          <Item Value="ReasonForApproval"/>
+          <Item Value="ReasonForRequest"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="DictionaryVO1Iterator" id="EWP_DictionaryVO1" InstanceName="DictionaryModuleDataControl.DictionaryVO1"
+            DataControl="DictionaryModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="defaultDictList" NDValue="#{CSMQBean.validDictionaryList}" NDType="java.lang.String"/>
+    </action>
+    <action IterBinding="LevelsByDictionaryVO2Iterator1" id="EWP_LevelsByDictionaryVO2Iterator1"
+            InstanceName="DictionaryModuleDataControl.LevelsByDictionaryVO1" DataControl="DictionaryModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.TermHierarchyBean.currentDictionary}" NDType="java.lang.String"/>
+    </action>
+    <tree IterBinding="CurrentDictionaryVO1Iterator" id="CurrentDictionaryVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.dictionary.CurrentDictionaryVO" Name="CurrentDictionaryVO10">
+        <AttrNames>
+          <Item Value="Name"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Description">
+      <AttrNames>
+        <Item Value="Description"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Version">
+      <AttrNames>
+        <Item Value="Version"/>
+      </AttrNames>
+    </attributeValues>
+    <action IterBinding="CurrentDictionaryVO1Iterator" id="EWP_DictionaryModuleDataControl" InstanceName="DictionaryModuleDataControl.CurrentDictionaryVO1"
+            DataControl="DictionaryModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="shortName" NDValue="#{CSMQBean.defaultFilterDictionaryShortName}" NDType="java.lang.String"/>
+ </action>
+    <tree IterBinding="HistoricalListViewObj1Iterator" id="HistoricalListViewObj1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HistoricalListViewObj" Name="HistoricalListViewObj10">
+        <AttrNames>
+          <Item Value="DictNm"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="ContentId"/>
+          <Item Value="Createdby"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="DomainNm"/>
+          <Item Value="DueDate"/>
+          <Item Value="Groupname"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="NmatCreatedt"/>
+          <Item Value="NmatUntildt"/>
+          <Item Value="ReasonForApproval"/>
+          <Item Value="ReasonForRequest"/>
+          <Item Value="State"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

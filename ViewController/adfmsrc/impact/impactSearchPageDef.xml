@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.17" id="impactSearchPageDef" Package="impact">
+<parameters/>
+   <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="releaseGroups1" RangeSize="25"
+              DataControl="ReleaseGroupModuleDataControl"
+              id="releaseGroupsSearch1Iterator"/>
+    <invokeAction Binds="EWP_releaseGroupsSearch1Iterator"
+                  id="Execute_EWP_releaseGroupsSearch1Iterator"
+                  Refresh="renderModel"/>
+    <iterator Binds="DictionaryVO1" RangeSize="25"
+              DataControl="DictionaryModuleDataControl"
+              id="DictionaryVO1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="MQGroupsVO1" RangeSize="-1"
+              DataControl="MQGroupModuleDataControl" id="MQGroupsVO1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="SimpleSearch1" RangeSize="25"
+              DataControl="SearchModuleDataControl" id="SimpleSearch1Iterator" RefreshCondition="#{!adfFacesContext.initialRender} "/>
+    <invokeAction Binds="EWP_SimpleSearch1" id="Execute_EWP_SimpleSearch1"
+                  Refresh="renderModel"/>
+    <iterator Binds="InfNotesVO1" RangeSize="10"
+              DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="SmallTreeVO1" RangeSize="-1"
+              DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
+              Refresh="renderModel"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <invokeAction id="Invoke_EWP_DictionaryVO1" Binds="EWP_DictionaryVO1" Refresh="renderModel"/>
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO2Iterator1"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="CurrentDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl"
+              id="CurrentDictionaryVO1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="HierarchyViewObj1" RangeSize="25" DataControl="SearchModuleDataControl" id="HierarchyViewObj1Iterator" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <invokeAction id="Invoke_EWP_HierarchyViewObj1" Binds="EWP_HierarchyViewObj1" Refresh="renderModel"/>
+    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="25" DataControl="SearchModuleDataControl" id="HierarchySourceTermSearchVO1Iterator"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="HierarchyViewObj1" RangeSize="10" DataControl="SearchModuleDataControl" id="HierarchyViewObj1Iterator1" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator Binds="EntryTSListVO1" RangeSize="25" DataControl="SearchModuleDataControl" id="EntryTSListVO1Iterator" Refresh="renderModel"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <invokeAction id="Invoke_EWP_EntryTSListVO1Iterator" Binds="EWP_EntryTSListVO1Iterator" Refresh="renderModel"/>
+    <iterator id="HistoricalImpactVO1Iterator" Binds="HistoricalImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"
+              RefreshCondition="#{!adfFacesContext.initialRender}"/>
+    <iterator id="CurrentImpactVO1Iterator" Binds="CurrentImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1" RefreshCondition="#{!adfFacesContext.initialRender}"/>
+  </executables>
+  <bindings>
+    <action IterBinding="releaseGroupsSearch1Iterator"
+            id="EWP_releaseGroupsSearch1Iterator"
+            InstanceName="ReleaseGroupModuleDataControl.releaseGroups1"
+            DataControl="ReleaseGroupModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName"
+                 NDValue="#{pageFlowScope.ImpactSearchBean.searchDictionaryShortName}"
+                 NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="releaseGroupsSearch1Iterator" ListOperMode="multiSelect"
+          ListIter="releaseGroupsSearch1Iterator" id="releaseGroups1">
+      <AttrNames>
+        <Item Value="PredictGroupId"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Description"/>
+      </ListDisplayAttrNames>
+    </list>
+    <list IterBinding="DictionaryVO1Iterator" ListOperMode="navigation"
+          ListIter="DictionaryVO1Iterator" id="DictionaryVO1"
+          DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <list IterBinding="MQGroupsVO1Iterator" ListOperMode="multiSelect"
+          ListIter="MQGroupsVO1Iterator" id="MQGroupsVO1">
+      <AttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+     <action IterBinding="SimpleSearch1Iterator" id="EWP_SimpleSearch1"
+            InstanceName="SearchModuleDataControl.SimpleSearch1"
+            DataControl="SearchModuleDataControl" RequiresUpdateModel="true"
+            Action="executeWithParams">
+      <NamedData NDName="startDate" NDValue="#{pageFlowScope.ImpactSearchBean.paramStartDate}" NDType="java.lang.String"/>
+      <NamedData NDName="endDate" NDValue="#{pageFlowScope.ImpactSearchBean.paramEndDate}" NDType="java.lang.String"/>
+      <NamedData NDName="term" NDValue="#{pageFlowScope.ImpactSearchBean.paramTerm}" NDType="java.lang.String"/>
+      <NamedData NDName="activityStatus" NDValue="#{pageFlowScope.ImpactSearchBean.paramActivityStatus}" NDType="java.lang.String"/>
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.ImpactSearchBean.paramDictName}" NDType="java.lang.String"/>
+      <NamedData NDName="releaseStatus" NDValue="#{pageFlowScope.ImpactSearchBean.paramReleaseStatus}" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDValue="#{pageFlowScope.ImpactSearchBean.paramReleaseGroup}" NDType="java.lang.String"/>
+      <NamedData NDName="MQGroup" NDValue="#{pageFlowScope.ImpactSearchBean.paramMQGroupList}" NDType="java.lang.String"/>
+      <NamedData NDName="MQCode" NDValue="#{pageFlowScope.ImpactSearchBean.paramMQCode}" NDType="java.lang.String"/>
+      <NamedData NDName="MQCriticalEvent" NDValue="#{pageFlowScope.ImpactSearchBean.paramMQCriticalEvent}" NDType="java.lang.String"/>
+      <NamedData NDName="uniqueIDsOnly" NDValue="#{pageFlowScope.ImpactSearchBean.paramUniqueIDsOnly}" NDType="java.lang.String"/>
+      <NamedData NDName="filterForUser" NDValue="#{pageFlowScope.ImpactSearchBean.paramFilterForUser}" NDType="java.lang.String"/>
+      <NamedData NDName="currentUser" NDValue="#{pageFlowScope.ImpactSearchBean.paramUserName}" NDType="java.lang.String"/>
+      <NamedData NDName="mqType" NDValue="#{pageFlowScope.ImpactSearchBean.paramQueryType}" NDType="java.lang.String"/>
+      <NamedData NDName="killSwitch" NDValue="#{pageFlowScope.ImpactSearchBean.paramKillSwitch}" NDType="java.lang.Integer"/>
+    </action>
+    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch" Name="SimpleSearch10">
+        <AttrNames>
+          <Item Value="DictNm"/>
+          <Item Value="LevelNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="ContentId"/>
+          <Item Value="Version"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="Groupname"/>
+          <Item Value="Createdby"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Prikey"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list ListOperMode="navigation" IterBinding="InfNotesVO1Iterator"
+          id="DictContentCode">
+      <AttrNames>
+        <Item Value="DictContentCode"/>
+      </AttrNames>
+    </list>
+    <action IterBinding="DictionaryVO1Iterator" id="EWP_DictionaryVO1" InstanceName="DictionaryModuleDataControl.DictionaryVO1"
+            DataControl="DictionaryModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="defaultDictList" NDValue="#{CSMQBean.validDictionaryList}" NDType="java.lang.String"/>
+    </action>
+    <action IterBinding="LevelsByDictionaryVO2Iterator1" id="EWP_LevelsByDictionaryVO2Iterator1"
+            InstanceName="DictionaryModuleDataControl.LevelsByDictionaryVO1" DataControl="DictionaryModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.TermHierarchyBean.currentDictionary}" NDType="java.lang.String"/>
+    </action>
+    <tree IterBinding="CurrentDictionaryVO1Iterator" id="CurrentDictionaryVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.dictionary.CurrentDictionaryVO" Name="CurrentDictionaryVO10">
+        <AttrNames>
+          <Item Value="Name"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="HierarchyViewObj1Iterator" id="EWP_HierarchyViewObj1" InstanceName="SearchModuleDataControl.HierarchyViewObj1" DataControl="SearchModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictContentID" NDValue="#{pageFlowScope.ImpactSearchBean.currentDictContentID}" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDValue="#{pageFlowScope.ImpactSearchBean.currentReleaseGroup}" NDType="java.lang.String"/>
+      <NamedData NDName="asOfDate" NDValue="#{pageFlowScope.ImpactSearchBean.historicalAsOfDate}" NDType="java.lang.String"/>
+    </action>
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO" Name="HierarchySourceTermSearchVO10">
+        <AttrNames>
+          <Item Value="Mqprodct"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Dates"/>
+          <Item Value="Createdby"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="ContentId"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Groupname"/>
+          <Item Value="DomainNm"/>
+          <Item Value="Mqscp"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Prikey"/>
+          <Item Value="DictNm"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqterm"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="HierarchyViewObj1Iterator1" id="HierarchyViewObj1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchyViewObj" Name="HierarchyViewObj10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="EntryTSListVO1Iterator" id="EWP_EntryTSListVO1Iterator" InstanceName="SearchModuleDataControl.EntryTSListVO1" DataControl="SearchModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictContentID" NDValue="#{pageFlowScope.ImpactSearchBean.currentDictContentID}" NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="EntryTSListVO1Iterator" ListOperMode="navigation" ListIter="EntryTSListVO1Iterator" id="EntryTSListVO1" DTSupportsMRU="true"
+          SelectItemValueMode="ListObject">
+      <AttrNames>
+        
+        <Item Value="DateRange"/>
+      </AttrNames>
+    </list>
+  </bindings>
+</pageDefinition>

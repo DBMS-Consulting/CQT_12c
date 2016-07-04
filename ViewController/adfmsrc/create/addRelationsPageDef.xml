@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.60.13" id="addRelationsPageDef"
+                Package="create">
+  <parameters/>
+  <executables>
+
+    <variableIterator id="variables"/>
+    <iterator Binds="DictionaryVO1" RangeSize="25"
+              DataControl="DictionaryModuleDataControl"
+              id="DictionaryVO1Iterator" RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    <iterator Binds="SmallTreeVO1" RangeSize="-1"
+              DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
+              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    <iterator Binds="SourceTreeVO1" RangeSize="-1"
+              DataControl="HierarchyModuleDataControl"
+              id="SourceTreeVO1Iterator" RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"/>
+    
+    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+              id="HierarchySourceTermSearchVO1Iterator"/>
+    
+    
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="-1" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator1"
+              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    
+    <iterator Binds="AllLevelsVO1" RangeSize="-1" DataControl="DictionaryModuleDataControl" id="AllLevelsVO1Iterator"
+              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    <iterator Binds="CurrentDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl" id="CurrentDictionaryVO1Iterator"
+              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    <iterator Binds="LastMVUpdateViewObj1" RangeSize="25" DataControl="ImpactModuleDataControl" id="LastMVUpdateViewObj1Iterator"
+              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+    
+  </executables>
+  <bindings>
+    <tree IterBinding="SmallTreeVO1Iterator" id="SmallTreeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.hierarchy.SmallTreeVO"
+                      Name="SmallTreeVO10">
+        <AttrNames>
+          <Item Value="Level"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="Prikey"/>
+          <Item Value="Term"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="Status"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="SourceTreeVO1Iterator" id="SourceTreeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.hierarchy.SourceTreeVO" Name="SourceTreeVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+          <Item Value="PredictGroupId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    
+    <list IterBinding="LevelsByDictionaryVO1Iterator" ListOperMode="navigation" ListIter="LevelsByDictionaryVO1Iterator"
+          id="LevelsByDictionaryVO1" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Querytypelevel"/>
+      </AttrNames>
+    </list>
+    
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+                      Name="HierarchySourceTermSearchVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="ContentId"/>
+          <Item Value="Createdby"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="DictNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="Groupname"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Version"/>
+          <Item Value="Querylevel"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="LastMVUpdateViewObj1Iterator" id="LastUpdate">
+      <AttrNames>
+        <Item Value="LastUpdate"/>
+      </AttrNames>
+    </attributeValues>
+    
+    
+    
+    <list ListOperMode="navigation" IterBinding="AllLevelsVO1Iterator" ListIter="AllLevelsVO1Iterator" id="AllLevelsVO1">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Description">
+      <AttrNames>
+        <Item Value="Description"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Version">
+      <AttrNames>
+        <Item Value="Version"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="LevelsByDictionaryVO1Iterator" id="LevelsByDictionaryVO11">
+      <nodeDefinition DefName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO" Name="LevelsByDictionaryVO110">
+        <AttrNames>
+          <Item Value="Name"/>
+          <Item Value="DefLevelId"/>
+          <Item Value="Querytypelevel"/>
+          <Item Value="ShortName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="saveDetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveDetails"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveDetails_CQTAppModuleDataControl_dataProvider_saveDetails_result">
+      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
+      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
+      <NamedData NDName="tempName" NDType="java.lang.String"/>
+      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
+      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
+      <NamedData NDName="currentScope" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
+      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
+      <NamedData NDName="updateParam" NDType="java.lang.String"/>
+      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
+      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
+      <NamedData NDName="userRole" NDType="java.lang.String"/>
+      <NamedData NDName="currentPendingStatus" NDType="java.lang.String"/>
+      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="saveIADetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIADetails"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIADetails_CQTAppModuleDataControl_dataProvider_saveIADetails_result">
+      <NamedData NDName="tempName" NDType="java.lang.String"/>
+      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
+      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
+      <NamedData NDName="currentScope" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
+      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
+      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
+      <NamedData NDName="updateParam" NDType="java.lang.String"/>
+      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
+      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
+      <NamedData NDName="userRole" NDType="java.lang.String"/>
+      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="saveInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveInfNotes"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveInfNotes_CQTAppModuleDataControl_dataProvider_saveInfNotes_result">
+      <NamedData NDName="noteName" NDType="java.lang.String"/>
+      <NamedData NDName="content" NDType="java.lang.String"/>
+      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
+      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
+      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
+      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
+      <NamedData NDName="userName" NDType="java.lang.String"/>
+      <NamedData NDName="userRole" NDType="java.lang.String"/>
+      <NamedData NDName="extension" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="saveIAInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIAInfNotes"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIAInfNotes_CQTAppModuleDataControl_dataProvider_saveIAInfNotes_result">
+      <NamedData NDName="noteName" NDType="java.lang.String"/>
+      <NamedData NDName="content" NDType="java.lang.String"/>
+      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
+      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
+      <NamedData NDName="userName" NDType="java.lang.String"/>
+      <NamedData NDName="userRole" NDType="java.lang.String"/>
+    </methodAction>
+    <action id="Commit" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="true" Action="commitTransaction"/>
+    <action id="Rollback" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="false"
+            Action="rollbackTransaction"/>
+  </bindings>
+</pageDefinition>
+
+

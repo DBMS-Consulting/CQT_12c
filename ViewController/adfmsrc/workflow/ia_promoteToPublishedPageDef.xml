@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="ia_promoteToPublishedPageDef" Package="workflow">
+ <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ViewObjTermsByState1" RangeSize="75" DataControl="PublishModuleDataControl"
+              id="ViewObjTermsByState1Iterator"/>
+    <invokeAction Binds="ExecuteWithParams" id="Invoke_EWP" Refresh="renderModel"/>
+  </executables>
+  <bindings>
+    <list IterBinding="ViewObjTermsByState1Iterator" ListOperMode="multiSelect" ListIter="ViewObjTermsByState1Iterator"
+          id="ViewObjTermsByState1" SelectItemValueMode="ListObject">
+      <AttrNames>
+        <Item Value="DictNm"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Mqterm"/>
+      </ListDisplayAttrNames>
+    </list>
+    <action IterBinding="ViewObjTermsByState1Iterator" id="ExecuteWithParams"
+            InstanceName="PublishModuleDataControl.ViewObjTermsByState1" DataControl="PublishModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="state" NDValue="Approved IA" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDValue="#{CSMQBean.defaultMedDRAReleaseGroup}" NDType="java.lang.String"/>
+    </action>
+    <list ListOperMode="multiSelect" IterBinding="ViewObjTermsByState1Iterator" id="DictNm">
+      <AttrNames>
+        <Item Value="DictNm"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Mqterm"/>
+      </ListDisplayAttrNames>
+    </list>
+    <methodAction id="changeState" RequiresUpdateModel="true" Action="invokeMethod" MethodName="changeState"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.changeState_CQTAppModuleDataControl_dataProvider_changeState_result">
+      <NamedData NDName="dictContentIDs" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="currentUser" NDType="java.lang.String"/>
+      <NamedData NDName="currentUserRole" NDType="java.lang.String"/>
+      <NamedData NDName="dueDate" NDType="oracle.jbo.domain.Date"/>
+      <NamedData NDName="comment" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDType="java.lang.String"/>
+    </methodAction>
+  </bindings>
+</pageDefinition>

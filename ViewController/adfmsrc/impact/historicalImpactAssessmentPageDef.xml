@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.17" id="historicalImpactAssessmentPageDef" Package="impact">
+<parameters/>
+  <executables>
+
+    <variableIterator id="variables"/>
+    <iterator Binds="SimpleSearch1" RangeSize="25"
+              DataControl="SearchModuleDataControl" id="SimpleSearch1Iterator"/>
+    <iterator Binds="SourceTreeVO1" RangeSize="-1"
+              DataControl="HierarchyModuleDataControl"
+              id="SourceTreeVO1Iterator"/>
+    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+              id="HierarchySourceTermSearchVO1Iterator"/>
+    <invokeAction Binds="EWP_HierarchySourceTermSearchVO1Iterator" id="Invoke_EWP_HierarchySourceTermSearchVO1Iterator"
+                  Refresh="renderModel"/>
+              
+              
+    <page path="create.wizardTemplatePageDef" id="pt1"/>
+    <iterator Binds="ImpactSearchListVO1" DataControl="ImpactModuleDataControl" id="ImpactSearchListVO1Iterator" Sortable="true" RangeSize="-1"/>
+    <invokeAction id="Invoke_EWP_ImpactSearchListVO" Binds="EWP_ImpactSearchListVO" Refresh="renderModel"/>
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"/>
+    <invokeAction id="Execute_EWP_LevelsByDictionaryVO1" Binds="EWP_LevelsByDictionaryVO1" Refresh="renderModel"/>
+    <iterator id="CurrentImpactVO1Iterator" Binds="CurrentImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"/>
+    <iterator id="HistoricalImpactVO1Iterator" Binds="HistoricalImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"/>
+    <iterator Binds="EntryTSListVO1" RangeSize="25" DataControl="SearchModuleDataControl" id="EntryTSListVO1Iterator" Refresh="renderModel"/>
+    <iterator id="SOCsWithNewPTsVO1Iterator" Binds="SOCsWithNewPTsVO1" DataControl="ImpactModuleDataControl" RangeSize="25"/>
+    <invokeAction id="Invoke_EWP_EntryTSListVO1Iterator" Binds="EWP_EntryTSListVO1Iterator" Refresh="renderModel"/>
+    <invokeAction id="Invoke_EWP_SOCsWithNewPTsVO1Iterator" Binds="EWP_SOCsWithNewPTsVO1Iterator" Refresh="renderModel"/>
+    <iterator id="NewPTsVO1Iterator" Binds="NewPTsVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"/>
+  </executables>
+  <bindings>
+  
+    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch" Name="SimpleSearch10">
+        <AttrNames>
+          <Item Value="ContentId"/>
+          <Item Value="Mqterm"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO" Name="HierarchySourceTermSearchVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="ContentId"/>
+          <Item Value="Createdby"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="DictNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="Groupname"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="SOCsWithNewPTsVO1Iterator" id="EWP_SOCsWithNewPTsVO1Iterator" InstanceName="ImpactModuleDataControl.SOCsWithNewPTsVO1" DataControl="ImpactModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="activationGroups" NDValue="#{pageFlowScope.ImpactSearchBean.activationGroups}" NDType="java.lang.String"/>
+    </action>
+    <action IterBinding="ImpactSearchListVO1Iterator" id="EWP_ImpactSearchListVO" InstanceName="ImpactModuleDataControl.ImpactSearchListVO1" DataControl="ImpactModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="showImpact" NDValue="#{pageFlowScope.ImpactSearchBean.showImpact}" NDType="java.lang.String"/>
+      <NamedData NDName="mqType" NDValue="#{pageFlowScope.ImpactSearchBean.mqType}" NDType="java.lang.String"/>
+    </action>
+    <action IterBinding="HierarchySourceTermSearchVO1Iterator" id="EWP_HierarchySourceTermSearchVO1Iterator"
+            InstanceName="SearchModuleDataControl.HierarchySourceTermSearchVO1" DataControl="SearchModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.NMQSourceTermSearchBean.paramDictionary}" NDType="java.lang.String"/>
+      <NamedData NDName="term" NDValue="#{pageFlowScope.NMQSourceTermSearchBean.paramTerm}" NDType="java.lang.String"/>
+      <NamedData NDName="startDate" NDValue="" NDType="java.lang.String"/>
+      <NamedData NDName="endDate" NDValue="" NDType="java.lang.String"/>
+      <NamedData NDName="activityStatus" NDValue="B" NDType="java.lang.String"/>
+      <NamedData NDName="releaseStatus" NDValue="BOTH" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDValue="%" NDType="java.lang.String"/>
+      <NamedData NDName="MQGroup" NDValue="%" NDType="java.lang.String"/>
+      <NamedData NDName="levelName" NDValue="#{pageFlowScope.NMQSourceTermSearchBean.paramLevel}" NDType="java.lang.String"/>
+      <NamedData NDName="MQCode" NDValue="%" NDType="java.lang.String"/>
+      <NamedData NDName="MQCriticalEvent" NDValue="%" NDType="java.lang.String"/>
+      <NamedData NDName="uniqueIDsOnly" NDValue="N" NDType="java.lang.String"/>
+      <NamedData NDName="filterForUser" NDValue="N" NDType="java.lang.String"/>
+      <NamedData NDName="currentUser" NDValue="NULL_USER" NDType="java.lang.String"/>
+    </action>
+        <list IterBinding="LevelsByDictionaryVO1Iterator" ListOperMode="navigation" ListIter="LevelsByDictionaryVO1Iterator"
+          id="LevelsByDictionaryVO1" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <action IterBinding="LevelsByDictionaryVO1Iterator" id="EWP_LevelsByDictionaryVO1"
+            InstanceName="DictionaryModuleDataControl.LevelsByDictionaryVO1" DataControl="DictionaryModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.NMQSourceTermSearchBean.paramDictionary}" NDType="java.lang.String"/>
+    </action>
+    <action IterBinding="EntryTSListVO1Iterator" id="EWP_EntryTSListVO1Iterator" InstanceName="SearchModuleDataControl.EntryTSListVO1" DataControl="SearchModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictContentID" NDValue="#{pageFlowScope.ImpactSearchBean.currentDictContentID}" NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="EntryTSListVO1Iterator" ListOperMode="navigation" ListIter="EntryTSListVO1Iterator" id="EntryTSListVO1" DTSupportsMRU="true"
+          SelectItemValueMode="ListObject">
+      <AttrNames>
+        
+        <Item Value="DateRange"/>
+      </AttrNames>
+    </list>
+    <tree IterBinding="NewPTsVO1Iterator" id="NewPTsVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.NewPTsVO" Name="NewPTsVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ActivationId"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="CActivationId"/>
+          <Item Value="Category"/>
+          <Item Value="CCommentText"/>
+          <Item Value="CCreatedBy"/>
+          <Item Value="CDmlStatement"/>
+          <Item Value="CEndTs"/>
+          <Item Value="CErrorMsg"/>
+          <Item Value="CModifiedBy"/>
+          <Item Value="CommentText"/>
+          <Item Value="ConnectLevel"/>
+          <Item Value="CPredictGroupId"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="CStatus"/>
+          <Item Value="CTransactionId"/>
+          <Item Value="DefDictionaryId"/>
+          <Item Value="DefDictionaryRefId"/>
+          <Item Value="DefDictionaryRefShortName"/>
+          <Item Value="DefDictionaryShortName"/>
+          <Item Value="DefDomainId"/>
+          <Item Value="DefLevelId"/>
+          <Item Value="DefLevelRefId"/>
+          <Item Value="DefLevelRefShortName"/>
+          <Item Value="DefLevelShortName"/>
+          <Item Value="DefNamedRelId"/>
+          <Item Value="DefSearchId"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentEntryTs"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictContentIdPath"/>
+          <Item Value="DictContentRefId"/>
+          <Item Value="DictRelationEntryTs"/>
+          <Item Value="DictRelationId"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="DmlStatement"/>
+          <Item Value="EndTs"/>
+          <Item Value="ErrorMsg"/>
+          <Item Value="ModifiedBy"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="PrimLinkFlag"/>
+          <Item Value="RelationSubtype"/>
+          <Item Value="RelationType"/>
+          <Item Value="SortOrder"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="TermLanguage"/>
+          <Item Value="TermOther"/>
+          <Item Value="TermPath"/>
+          <Item Value="TermScopeId"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="TermType"/>
+          <Item Value="TermUpper"/>
+          <Item Value="TermUpperOther"/>
+          <Item Value="TransactionId"/>
+          <Item Value="Value1"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="Value4"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>
+
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="ia_activatePageDef" Package="workflow">
+ <parameters/>
+    <executables>
+        <variableIterator id="variables"/>
+        <iterator Binds="ViewObjActivationErrors_Contents1" RangeSize="25" DataControl="PublishModuleDataControl"
+                  id="ViewObjActivationErrors_Contents1Iterator"/>
+        <iterator Binds="ViewObjActivationErrors_Relations1" RangeSize="25" DataControl="PublishModuleDataControl"
+                  id="ViewObjActivationErrors_Relations1Iterator"/>
+        <invokeAction Binds="RelationsList" id="EWPRelationsList" Refresh="renderModel"/>
+        <invokeAction id="EWPContentsList" Binds="ContentsList" Refresh="renderModel"/>
+    </executables>
+    <bindings>
+        <tree IterBinding="ViewObjActivationErrors_Contents1Iterator" id="ViewObjActivationErrors_Contents1">
+            <nodeDefinition DefName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Contents"
+                            Name="ViewObjActivationErrors_Contents10">
+                <AttrNames>
+                    <Item Value="Term"/>
+                    <Item Value="ErrorMsg"/>
+                    <Item Value="PredictContentId"/>
+                    <Item Value="DEMOTE"/>
+                </AttrNames>
+            </nodeDefinition>
+        </tree>
+        <tree IterBinding="ViewObjActivationErrors_Relations1Iterator" id="ViewObjActivationErrors_Relations1">
+            <nodeDefinition DefName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Relations"
+                            Name="ViewObjActivationErrors_Relations10">
+                <AttrNames>
+                    <Item Value="ErrorMsg"/>
+                    <Item Value="Term"/>
+                </AttrNames>
+            </nodeDefinition>
+        </tree>
+        <action IterBinding="ViewObjActivationErrors_Relations1Iterator" id="RelationsList"
+                InstanceName="PublishModuleDataControl.ViewObjActivationErrors_Relations1"
+                DataControl="PublishModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+            <NamedData NDName="predictContentID" NDValue="#{pageFlowScope.WorkflowBean.dictContentIDWithError}"
+                       NDType="java.lang.String"/>
+            <NamedData NDName="activationGroup" NDValue="#{CSMQBean.defaultPublishReleaseGroup}"
+                       NDType="java.lang.String"/>
+        </action>
+        <action IterBinding="ViewObjActivationErrors_Contents1Iterator" id="ContentsList"
+                InstanceName="PublishModuleDataControl.ViewObjActivationErrors_Contents1"
+                DataControl="PublishModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+            <NamedData NDName="activationGroup" NDValue="#{CSMQBean.defaultPublishReleaseGroup}"
+                       NDType="java.lang.String"/>
+        </action>
+        <methodAction id="changeState" RequiresUpdateModel="true" Action="invokeMethod" MethodName="changeState"
+                      IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                      InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                      ReturnName="data.CQTAppModuleDataControl.methodResults.changeState_CQTAppModuleDataControl_dataProvider_changeState_result">
+            <NamedData NDName="dictContentIDs" NDType="java.lang.String"/>
+            <NamedData NDName="state" NDType="java.lang.String"/>
+            <NamedData NDName="currentUser" NDType="java.lang.String"/>
+            <NamedData NDName="currentUserRole" NDType="java.lang.String"/>
+            <NamedData NDName="dueDate" NDType="oracle.jbo.domain.Date"/>
+            <NamedData NDName="comment" NDType="java.lang.String"/>
+            <NamedData NDName="activationGroup" NDType="java.lang.String"/>
+        </methodAction>
+        <methodAction id="activateGroup" RequiresUpdateModel="true" Action="invokeMethod" MethodName="activateGroup"
+                      IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                      InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                      ReturnName="data.CQTAppModuleDataControl.methodResults.activateGroup_CQTAppModuleDataControl_dataProvider_activateGroup_result">
+            <NamedData NDName="groupName" NDType="java.lang.String"/>
+        </methodAction>
+        <methodAction id="activateGroupInCheckMode" RequiresUpdateModel="true" Action="invokeMethod"
+                      MethodName="activateGroupInCheckMode" IsViewObjectMethod="false"
+                      DataControl="CQTAppModuleDataControl" InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                      ReturnName="data.CQTAppModuleDataControl.methodResults.activateGroupInCheckMode_CQTAppModuleDataControl_dataProvider_activateGroupInCheckMode_result">
+            <NamedData NDName="groupName" NDType="java.lang.String"/>
+        </methodAction>
+    </bindings>
+</pageDefinition>

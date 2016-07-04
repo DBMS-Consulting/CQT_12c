@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.1.56.60" id="insertNewPageDef" Package="create">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ViewObj_ProductList1" RangeSize="25" DataControl="ProductModuleDataControl" id="ViewObj_ProductList1Iterator"/>
+  </executables>
+  <bindings>
+    <list IterBinding="ViewObj_ProductList1Iterator" ListOperMode="multiSelect" ListIter="ViewObj_ProductList1Iterator" id="ViewObj_ProductList1">
+      <AttrNames>
+        <Item Value="ShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+  </bindings>
+</pageDefinition>

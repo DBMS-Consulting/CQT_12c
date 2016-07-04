@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.60.13" id="searchPageDef" Package="create">
+ <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="releaseGroups1" RangeSize="25"
+              DataControl="ReleaseGroupModuleDataControl"
+              id="releaseGroupsSearch1Iterator"/>
+    <invokeAction Binds="EWP_releaseGroupsSearch1Iterator"
+                  id="Execute_EWP_releaseGroupsSearch1Iterator"
+                  Refresh="renderModel"/>
+    <iterator Binds="DictionaryVO1" RangeSize="25"
+              DataControl="DictionaryModuleDataControl"
+              id="DictionaryVO1Iterator"/>
+    <iterator Binds="SimpleSearch1" RangeSize="25"
+              DataControl="SearchModuleDataControl" id="SimpleSearch1Iterator"/>
+    <invokeAction Binds="EWP_SimpleSearch1" id="Execute_EWP_SimpleSearch1"
+                  Refresh="renderModel"/>
+    <iterator Binds="InfNotesVO1" RangeSize="10"
+              DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator"/>
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"/>
+    <invokeAction id="Execute_EWP_LevelsByDictionaryVO1" Binds="EWP_LevelsByDictionaryVO1" Refresh="renderModel"/>
+  </executables>
+  <bindings>
+    <action IterBinding="releaseGroupsSearch1Iterator"
+            id="EWP_releaseGroupsSearch1Iterator"
+            InstanceName="ReleaseGroupModuleDataControl.releaseGroups1"
+            DataControl="ReleaseGroupModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName"
+                 NDValue="#{pageFlowScope.NMQSearchBean.searchDictionaryShortName}"
+                 NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="releaseGroupsSearch1Iterator" ListOperMode="multiSelect"
+          ListIter="releaseGroupsSearch1Iterator" id="releaseGroups1">
+      <AttrNames>
+        <Item Value="PredictGroupId"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Description"/>
+      </ListDisplayAttrNames>
+    </list>
+    <list IterBinding="DictionaryVO1Iterator" ListOperMode="navigation"
+          ListIter="DictionaryVO1Iterator" id="DictionaryVO1"
+          DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+     <action IterBinding="SimpleSearch1Iterator" id="EWP_SimpleSearch1"
+            InstanceName="SearchModuleDataControl.SimpleSearch1"
+            DataControl="SearchModuleDataControl" RequiresUpdateModel="true"
+            Action="executeWithParams">
+      <NamedData NDName="startDate"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramStartDate}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="endDate"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramEndDate}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="term"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramTerm}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="activityStatus"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramActivityStatus}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="dictShortName"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramDictName}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="releaseStatus"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramReleaseStatus}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramReleaseGroup}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="MQGroup"
+                 NDValue="#{pageFlowScope.NMQSearchBean.paramMQGroupList}"
+                 NDType="java.lang.String"/>
+    </action>
+    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch"
+                      Name="SimpleSearch10">
+        <AttrNames>
+          <Item Value="DictNm"/>
+          <Item Value="LevelNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="ContentId"/>
+          <Item Value="Version"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="Groupname"/>
+          <Item Value="Createdby"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list IterBinding="LevelsByDictionaryVO1Iterator" ListOperMode="navigation" ListIter="LevelsByDictionaryVO1Iterator"
+          id="LevelsByDictionaryVO1" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <action IterBinding="LevelsByDictionaryVO1Iterator" id="EWP_LevelsByDictionaryVO1"
+            InstanceName="DictionaryModuleDataControl.LevelsByDictionaryVO1" DataControl="DictionaryModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName" NDValue="#{pageFlowScope.NMQSearchBean.searchDictionaryShortName}" NDType="java.lang.String"/>
+    </action>
+  </bindings>
+</pageDefinition>

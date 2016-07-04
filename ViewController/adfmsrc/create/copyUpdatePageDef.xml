@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.60.13" id="copyUpdatePageDef" Package="create">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ViewObj_ProductList1" RangeSize="-1"
+              DataControl="ProductModuleDataControl"
+              id="ViewObj_ProductList1Iterator"/>
+    <iterator Binds="releaseGroups1" RangeSize="25"
+              DataControl="ReleaseGroupModuleDataControl"
+              id="releaseGroupsSearch1Iterator"/>
+    <invokeAction Binds="EWP_releaseGroupsSearch1Iterator"
+                  id="Execute_EWP_releaseGroupsSearch1Iterator"
+                  Refresh="renderModel"/>
+    <iterator Binds="DictionaryVO1" RangeSize="25"
+              DataControl="DictionaryModuleDataControl"
+              id="DictionaryVO1Iterator"/>
+    <iterator Binds="MQGroupsVO1" RangeSize="-1"
+              DataControl="MQGroupModuleDataControl" id="MQGroupsVO1Iterator"/>
+  </executables>
+  <bindings>
+    <action IterBinding="releaseGroupsSearch1Iterator"
+            id="EWP_releaseGroupsSearch1Iterator"
+            InstanceName="ReleaseGroupModuleDataControl.releaseGroups1"
+            DataControl="ReleaseGroupModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictShortName"
+                 NDValue="#{viewScope.NMQEditBean.currentDictionary}"
+                 NDType="java.lang.String"/>
+    </action>
+    <list IterBinding="releaseGroupsSearch1Iterator" ListOperMode="multiSelect"
+          ListIter="releaseGroupsSearch1Iterator" id="releaseGroups1">
+      <AttrNames>
+        <Item Value="PredictGroupId"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Description"/>
+      </ListDisplayAttrNames>
+    </list>
+    <list IterBinding="ViewObj_ProductList1Iterator" ListOperMode="multiSelect"
+          ListIter="ViewObj_ProductList1Iterator" id="ViewObj_ProductList1">
+      <AttrNames>
+        <Item Value="ShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+    <list IterBinding="DictionaryVO1Iterator" ListOperMode="navigation"
+          ListIter="DictionaryVO1Iterator" id="DictionaryVO1"
+          DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+    <list IterBinding="MQGroupsVO1Iterator" ListOperMode="multiSelect"
+          ListIter="MQGroupsVO1Iterator" id="MQGroupsVO1">
+      <AttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="RefCodelistValueShortVal"/>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+  </bindings>
+</pageDefinition>

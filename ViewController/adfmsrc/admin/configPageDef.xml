@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="configPageDef" Package="admin">
+   <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="ViewObjDBSettings1" RangeSize="25" DataControl="ConfigModuleDataControl"
+              id="ViewObjDBSettings1Iterator"/>
+    <iterator Binds="root" RangeSize="25" DataControl="CSMQBean" id="CSMQBeanIterator"/>
+    <iterator Binds="NMAT_PROP_EOView1" RangeSize="-1" DataControl="ConfigModuleDataControl"
+              id="NMAT_PROP_EOView1Iterator"/>
+  </executables>
+  <bindings>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="UserenvSessionid">
+      <AttrNames>
+        <Item Value="UserenvSessionid"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultFilterDictionaryShortName">
+      <AttrNames>
+        <Item Value="defaultFilterDictionaryShortName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultBaseDictionaryShortName">
+      <AttrNames>
+        <Item Value="defaultBaseDictionaryShortName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultMedDRAReleaseGroup">
+      <AttrNames>
+        <Item Value="defaultMedDRAReleaseGroup"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultDraftReleaseGroup">
+      <AttrNames>
+        <Item Value="defaultDraftReleaseGroup"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="validDictionaryList">
+      <AttrNames>
+        <Item Value="validDictionaryList"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="version">
+      <AttrNames>
+        <Item Value="version"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultPublishReleaseGroup">
+      <AttrNames>
+        <Item Value="defaultPublishReleaseGroup"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="defaultMEDSMQReleaseGroup">
+      <AttrNames>
+        <Item Value="defaultMEDSMQReleaseGroup"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="CmqDraftAgId">
+      <AttrNames>
+        <Item Value="CmqDraftAgId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="CmqDraftAgNm">
+      <AttrNames>
+        <Item Value="CmqDraftAgNm"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="CmqPublishAgId">
+      <AttrNames>
+        <Item Value="CmqReleaseAgId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="CmqPublishAgNm">
+      <AttrNames>
+        <Item Value="CmqReleaseAgNm"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="MeddraAgId">
+      <AttrNames>
+        <Item Value="MeddraAgId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="MeddraAgNm">
+      <AttrNames>
+        <Item Value="MeddraAgNm"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="SmqAgId">
+      <AttrNames>
+        <Item Value="SmqAgId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="SmqAgNm">
+      <AttrNames>
+        <Item Value="SmqAgNm"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="SmqCustomPrefix">
+      <AttrNames>
+        <Item Value="SmqCustomPrefix"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="SmqStdPrefix">
+      <AttrNames>
+        <Item Value="SmqStdPrefix"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="ViewObjDBSettings1Iterator" id="User1">
+      <AttrNames>
+        <Item Value="User1"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="customMQName">
+      <AttrNames>
+        <Item Value="customMQName"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CSMQBeanIterator" id="configFileName">
+      <AttrNames>
+        <Item Value="configFileName"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="NMAT_PROP_EOView1Iterator" id="NMAT_PROP_EOView1">
+      <nodeDefinition DefName="com.dbms.csmq.model.config.NMAT_PROP_EOView" Name="NMAT_PROP_EOView10">
+        <AttrNames>
+          <Item Value="Domain"/>
+          <Item Value="PropName"/>
+          <Item Value="PropValue"/>
+          <Item Value="Description"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action id="Commit" RequiresUpdateModel="true" Action="commitTransaction" DataControl="ConfigModuleDataControl"/>
+  </bindings>
+</pageDefinition>

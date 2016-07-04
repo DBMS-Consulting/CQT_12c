@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://xmlns.oracle.com/adfm/application" version="11.1.1.56.60" id="DataBindings" SeparateXMLFiles="false" Package="com.dbms.csmq.view" ClientType="Generic">
+    <definitionFactories>
+        <factory nameSpace="http://xmlns.oracle.com/adf/controller/binding" className="oracle.adf.controller.internal.binding.TaskFlowBindingDefFactoryImpl"/>
+        <dtfactory className="oracle.adf.controller.internal.dtrt.binding.BindingDTObjectFactory"/>
+    </definitionFactories>
+    <pageMap>
+        <page path="/login.jspx" usageId="com_dbms_csmq_view_loginPageDef"/>
+        <page path="/impact/impactAssessment.jspx" usageId="com_dbms_csmq_view_impactAssessmentPageDef"/>
+        <page path="/report/reports.jspx" usageId="com_dbms_csmq_view_NMQ_SMQReportPageDef"/>
+        <page path="/index.jspx" usageId="com_dbms_csmq_view_indexPageDef"/>
+        <page path="/informativeNotes/informativeNotes.jspx" usageId="com_dbms_csmq_view_informativeNotesPageDef"/>
+        <page path="/create/addDetails.jspx" usageId="com_dbms_csmq_view_addDetailsPageDef"/>
+        <page path="/create/addRelations.jspx" usageId="com_dbms_csmq_view_addRelationsPageDef"/>
+        <page path="/CSMQ.jspx" usageId="com_dbms_csmq_view_CSMQPageDef"/>
+        <page path="/create/wizardSearch.jspx" usageId="com_dbms_csmq_view_wizardSearchPageDef"/>
+        <page path="/impact/historicalImpactAssessment.jspx" usageId="com_dbms_csmq_view_historicalImpactAssessmentPageDef"/>
+        <page path="/impact/impactSearch.jspx" usageId="com_dbms_csmq_view_impactSearchPageDef"/>
+        <page path="/workflow/activate.jspx" usageId="com_dbms_csmq_view_activatePageDef"/>
+        <page path="/workflow/demoteToDraft.jspx" usageId="com_dbms_csmq_view_demoteToDraftPageDef"/>
+        <page path="/workflow/promoteToPublished.jspx" usageId="com_dbms_csmq_view_promoteToPublishedPageDef"/>
+        <page path="/workflow/ia_activate.jspx" usageId="com_dbms_csmq_view_ia_activatePageDef"/>
+        <page path="/workflow/ia_demoteToDraft.jspx" usageId="com_dbms_csmq_view_ia_demoteToDraftPageDef"/>
+        <page path="/workflow/ia_promoteToPublished.jspx" usageId="com_dbms_csmq_view_ia_promoteToPublishedPageDef"/>
+        <page path="/historic/historicSearch.jspx" usageId="com_dbms_csmq_view_historicSearchPageDef"/>
+        <page path="/admin/config.jspx" usageId="com_dbms_csmq_view_configPageDef"/>
+        <page path="/historic/historicConfirm.jspx" usageId="com_dbms_csmq_view_historicConfirmPageDef"/>
+        <page path="/create/createConfirm.jspx" usageId="com_dbms_csmq_view_createConfirmPageDef"/>
+        <page path="/diff/diff.jspx" usageId="com_dbms_csmq_view_diffPageDef"/>
+        <page path="/viewVersionImpact/viewImpactAssessment.jspx"
+              usageId="com_dbms_csmq_view_viewImpactAssessmentPageDef"/>
+        <page path="/viewVersionImpact/viewDetails.jspx" usageId="com_dbms_csmq_view_viewDetailsPageDef"/>
+        <page path="/create/addInformativeNotes.jspx" usageId="com_dbms_csmq_view_addInformativeNotesPageDef"/>
+    </pageMap>
+    <pageDefinitionUsages>
+        <page id="com_dbms_csmq_view_loginPageDef" path="com.dbms.csmq.view.pageDefs.loginPageDef"/>
+        <page id="com_dbms_csmq_view_copyUpdatePageDef" path="create.copyUpdatePageDef"/>
+        <page id="com_dbms_csmq_view_insertNewPageDef" path="create.insertNewPageDef"/>
+        <page id="com_dbms_csmq_view_impactAssessmentPageDef" path="impact.impactAssessmentPageDef"/>
+        <page id="com_dbms_csmq_view_maintainPageDef" path="maintain.maintainPageDef"/>
+        <page id="com_dbms_csmq_view_maintainSMQPageDef" path="maintain.maintainSMQPageDef"/>
+        <page id="com_dbms_csmq_view_reactivatePageDef" path="maintain.reactivatePageDef"/>
+        <page id="com_dbms_csmq_view_retirePageDef" path="maintain.retirePageDef"/>
+        <page id="com_dbms_csmq_view_freezePageDef" path="publish.freezePageDef"/>
+        <page id="com_dbms_csmq_view_publishReleaseGroupPageDef" path="publish.publishReleaseGroupPageDef"/>
+        <page id="com_dbms_csmq_view_releaseFreezePageDef" path="publish.releaseFreezePageDef"/>
+        <page id="com_dbms_csmq_view_reportReleaseGroupPageDef" path="publish.reportReleaseGroupPageDef"/>
+        <page id="com_dbms_csmq_view_NMQ_SMQReportPageDef" path="report.NMQ_SMQReportPageDef"/>
+        <page id="com_dbms_csmq_view_teamApprovalPageDef" path="review.teamApprovalPageDef"/>
+        <page id="com_dbms_csmq_view_browseSearchPageDef" path="search.browseSearchPageDef"/>
+        <page id="com_dbms_csmq_view_approvalReportPageDef" path="review.approvalReportPageDef"/>
+        <page id="com_dbms_csmq_view_MQMapprovalPageDef" path="review.MQMapprovalPageDef"/>
+        <page id="com_dbms_csmq_view_releaseGroupApprovalPageDef" path="review.releaseGroupApprovalPageDef"/>
+        <page id="com_dbms_csmq_view_validateReleaseGroupPageDef" path="review.validateReleaseGroupPageDef"/>
+        <page id="com_dbms_csmq_view_indexPageDef" path="com.dbms.csmq.view.pageDefs.indexPageDef"/>
+        <page id="com_dbms_csmq_view_treePageDef" path="hierarchy.treePageDef"/>
+        <page id="com_dbms_csmq_view_TreeTestPageDef" path="hierarchy.TreeTestPageDef"/>
+        <page id="com_dbms_csmq_view_TreeTestPageDef1" path="hierarchy.TreeTestPageDef1"/>
+        <page id="com_dbms_csmq_view_SimpleSearchTestPageDef" path="search.SimpleSearchTestPageDef"/>
+        <page id="com_dbms_csmq_view_simpleSearchPageDef" path="search.simpleSearchPageDef"/>
+        <page id="com_dbms_csmq_view_CCLBPageDef" path="test.CCLBPageDef"/>
+        <page id="com_dbms_csmq_view_informativeNotesPageDef" path="informativeNotes.informativeNotesPageDef"/>
+        <page id="com_dbms_csmq_view_editHierarchyPageDef" path="hierarchy.editHierarchyPageDef"/>
+        <page id="com_dbms_csmq_view_TreeTestPageDef2" path="test.TreeTestPageDef"/>
+        <page id="com_dbms_csmq_view_adfc_config___methodCall1PageDef" path="com.dbms.csmq.view.pageDefs.adfc_config___methodCall1PageDef"/>
+        <page id="com_dbms_csmq_view_searchPageDef" path="search.searchPageDef"/>
+        <page id="com_dbms_csmq_view_termHierarchyPageDef" path="hierarchy.termHierarchyPageDef"/>
+        <page id="com_dbms_csmq_view_adfc_config___refreshTermListPageDef" path="com.dbms.csmq.view.pageDefs.adfc_config___refreshTermListPageDef"/>
+        <page id="com_dbms_csmq_view_adfc_config___refreshInfNotesPageDef" path="com.dbms.csmq.view.pageDefs.adfc_config___refreshInfNotesPageDef"/>
+        <page id="com_dbms_csmq_view_detailsPageDef" path="create.detailsPageDef"/>
+        <page id="com_dbms_csmq_view_wizardPageDef" path="create.wizardPageDef"/>
+        <page id="com_dbms_csmq_view_wizardTemplatePageDef" path="create.wizardTemplatePageDef"/>
+        <page id="com_dbms_csmq_view_hierarchyPageDef" path="create.hierarchyPageDef"/>
+        <page id="com_dbms_csmq_view_addDetailsPageDef" path="create.addDetailsPageDef"/>
+        <page id="com_dbms_csmq_view_addRelationsPageDef" path="create.addRelationsPageDef"/>
+        <page id="com_dbms_csmq_view_searchPageDef1" path="create.searchPageDef"/>
+        <page id="com_dbms_csmq_view_CSMQPageDef" path="com.dbms.csmq.view.pageDefs.CSMQPageDef"/>
+        <page id="com_dbms_csmq_view_copy_new_task_flow_definition_task_flow_definition_refreshTreePageDef" path="com.dbms.csmq.view.pageDefs.copy_new_task_flow_definition_task_flow_definition_refreshTreePageDef"/>
+        <page id="com_dbms_csmq_view_copy_new_task_flow_definition_copy_new_task_flow_definition_refreshTreePageDef" path="com.dbms.csmq.view.pageDefs.copy_new_task_flow_definition_copy_new_task_flow_definition_refreshTreePageDef"/>
+        <page id="com_dbms_csmq_view_smallSearchPageDef" path="create.smallSearchPageDef"/>
+        <page id="com_dbms_csmq_view_detailsPageDef1" path="wizard.new.detailsPageDef"/>
+        <page id="com_dbms_csmq_view_informativeNotesPageDef1" path="wizard.new.informativeNotesPageDef"/>
+        <page id="com_dbms_csmq_view_relationsPageDef" path="wizard.new.relationsPageDef"/>
+        <page id="com_dbms_csmq_view_wizardSearchPageDef" path="create.wizardSearchPageDef"/>
+        <page id="com_dbms_csmq_view_showDetailPageDef" path="search.showDetailPageDef"/>
+        <page id="com_dbms_csmq_view_historicalImpactAssessmentPageDef" path="impact.historicalImpactAssessmentPageDef"/>
+        <page id="com_dbms_csmq_view_impactSearchPageDef" path="impact.impactSearchPageDef"/>
+        <page id="com_dbms_csmq_view_administrationPageDef" path="admin.administrationPageDef"/>
+        <page id="com_dbms_csmq_view_activatePageDef" path="workflow.activatePageDef"/>
+        <page id="com_dbms_csmq_view_demoteToDraftPageDef" path="workflow.demoteToDraftPageDef"/>
+        <page id="com_dbms_csmq_view_promoteToPublishedPageDef" path="workflow.promoteToPublishedPageDef"/>
+        <page id="com_dbms_csmq_view_validateInCheckModePageDef" path="workflow.validateInCheckModePageDef"/>
+        <page id="com_dbms_csmq_view_reportViewerPageDef" path="report.reportViewerPageDef"/>
+        <page id="com_dbms_csmq_view_CSMQ_PlainPageDef" path="com.dbms.csmq.view.pageDefs.CSMQ_PlainPageDef"/>
+        <page id="com_dbms_csmq_view_ia_activatePageDef" path="workflow.ia_activatePageDef"/>
+        <page id="com_dbms_csmq_view_ia_demoteToDraftPageDef" path="workflow.ia_demoteToDraftPageDef"/>
+        <page id="com_dbms_csmq_view_ia_promoteToPublishedPageDef" path="workflow.ia_promoteToPublishedPageDef"/>
+        <page id="com_dbms_csmq_view_historicSearchPageDef" path="historic.historicSearchPageDef"/>
+        <page id="com_dbms_csmq_view_configPageDef" path="admin.configPageDef"/>
+        <page id="com_dbms_csmq_view_historicConfirmPageDef" path="historic.historicConfirmPageDef"/>
+        <page id="com_dbms_csmq_view_createConfirmPageDef" path="create.createConfirmPageDef"/>
+        <page id="com_dbms_csmq_view_diffPageDef" path="diff.diffPageDef"/>
+        <page id="com_dbms_csmq_view_viewImpactAssessmentPageDef" path="viewVersionImpact.viewImpactAssessmentPageDef"/>
+        <page id="com_dbms_csmq_view_viewDetailsPageDef" path="viewVersionImpact.viewDetailsPageDef"/>
+        <page id="com_dbms_csmq_view_addInformativeNotesPageDef" path="create.addInformativeNotesPageDef"/>
+    </pageDefinitionUsages>
+    <dataControlUsages>
+        <dc id="ReportDownloadBean" path="com.dbms.csmq.view.ReportDownloadBean"/>
+        <dc id="NMQWizardUIBean" path="com.dbms.csmq.view.NMQWizardUIBean"/>
+        <dc id="CSMQBean" path="com.dbms.csmq.view.CSMQBean"/>
+        <BC4JDataControl id="ProductModuleDataControl" Package="com.dbms.csmq.model.product" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="ProductModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="HierarchyModuleDataControl" Package="com.dbms.csmq.model.hierarchy" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="HierarchyModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="DictionaryModuleDataControl" Package="com.dbms.csmq.model.dictionary" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="DictionaryModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="ReleaseGroupModuleDataControl" Package="com.dbms.csmq.model.releaseGroups" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="ReleaseGroupModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="SearchModuleDataControl" Package="com.dbms.csmq.model.search" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="SearchModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="NMQModuleDataControl" Package="com.dbms.csmq.model.NMQ" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
+                         SupportsSortCollection="true" Configuration="NMQModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="InfNotesModuleDataControl" Package="com.dbms.csmq.model.infNotes" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="InfNotesModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="MQGroupModuleDataControl" Package="com.dbms.csmq.model.MQGroups" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="MQGroupModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="ImpactModuleDataControl" Package="com.dbms.csmq.model.impact" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="ImpactModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="PublishModuleDataControl" Package="com.dbms.csmq.model.publish" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="PublishModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="ConfigModuleDataControl" Package="com.dbms.csmq.model.config" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="ConfigModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="ReportModuleDataControl" Package="com.dbms.csmq.model.report" FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true" SupportsRangesize="true"
+                         SupportsResetState="true" SupportsSortCollection="true" Configuration="ReportModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="DiffModuleDataControl" Package="com.dbms.csmq.model.diff"
+                         FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true"
+                         SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
+                         SupportsSortCollection="true" Configuration="DiffModuleLocal" syncMode="Immediate"
+                         xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="UserAccountsListModuleDataControl" Package="com.dbms.csmq.model.userAccountsList"
+                         FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true"
+                         SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
+                         SupportsSortCollection="true" Configuration="UserAccountsListModuleLocal" syncMode="Immediate"
+                         xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="DesigneeModuleDataControl" Package="com.dbms.csmq.model.designee"
+                         FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true"
+                         SupportsRangesize="true" SupportsResetState="true" SupportsSortCollection="true"
+                         Configuration="UserAccountsListModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+        <BC4JDataControl id="CQTAppModuleDataControl" Package="com.dbms.csmq.model.am"
+                         FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true"
+                         SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
+                         SupportsSortCollection="true" Configuration="CQTAppModuleLocal" syncMode="Immediate"
+                         xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
+    </dataControlUsages>
+</Application>

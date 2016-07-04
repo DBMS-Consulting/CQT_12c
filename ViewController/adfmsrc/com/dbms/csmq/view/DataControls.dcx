@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DataControlConfigs xmlns="http://xmlns.oracle.com/adfm/configuration"
+                    version="11.1.1.60.13" id="DataControls"
+                    Package="com.dbms.csmq.view">
+  <AdapterDataControl id="NMQWizardBean"
+                      FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adf.model.adapter.bean.BeanDefinition"
+                      SupportsTransactions="false" SupportsSortCollection="true"
+                      SupportsResetState="false" SupportsRangesize="false"
+                      SupportsFindMode="false" SupportsUpdates="true"
+                      Definition="com.dbms.csmq.view.backing.NMQ.NMQWizardBean"
+                      BeanClass="com.dbms.csmq.view.backing.NMQ.NMQWizardBean"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="javax.faces.event.ActionEvent"/>
+      <TypeInfo FullName="javax.faces.application.NavigationHandler"/>
+      <TypeInfo FullName="javax.faces.el.PropertyResolver"/>
+      <TypeInfo FullName="javax.faces.el.VariableResolver"/>
+      <TypeInfo FullName="javax.el.FunctionMapper"/>
+      <TypeInfo FullName="javax.el.ValueExpression"/>
+      <TypeInfo FullName="javax.el.VariableMapper"/>
+      <TypeInfo FullName="javax.el.ELContext"/>
+      <TypeInfo FullName="javax.el.ELResolver"/>
+      <TypeInfo FullName="javax.el.MethodInfo"/>
+      <TypeInfo FullName="javax.el.MethodExpression"/>
+      <TypeInfo FullName="javax.faces.event.PhaseEvent"/>
+      <TypeInfo FullName="javax.faces.lifecycle.Lifecycle"/>
+      <TypeInfo FullName="javax.faces.event.FacesEvent"/>
+      <TypeInfo FullName="javax.faces.component.UIViewRoot"/>
+      <TypeInfo FullName="javax.faces.application.ViewHandler"/>
+      <TypeInfo FullName="javax.faces.application.StateManager.SerializedView"/>
+      <TypeInfo FullName="javax.faces.application.StateManager"/>
+      <TypeInfo FullName="javax.el.ExpressionFactory"/>
+      <TypeInfo FullName="javax.el.ELContextEvent"/>
+      <TypeInfo FullName="javax.faces.el.MethodBinding"/>
+      <TypeInfo FullName="javax.faces.application.Application"/>
+      <TypeInfo FullName="java.net.URI"/>
+      <TypeInfo FullName="java.security.PermissionCollection"/>
+      <TypeInfo FullName="java.security.Permission"/>
+      <TypeInfo FullName="java.io.InputStream"/>
+      <TypeInfo FullName="java.io.OutputStream"/>
+      <TypeInfo FullName="java.net.ContentHandler"/>
+      <TypeInfo FullName="java.net.SocketAddress"/>
+      <TypeInfo FullName="java.net.Proxy"/>
+      <TypeInfo FullName="java.net.URLStreamHandler"/>
+      <TypeInfo FullName="java.net.URL"/>
+      <TypeInfo FullName="javax.faces.context.ExternalContext"/>
+      <TypeInfo FullName="javax.faces.render.ResponseStateManager"/>
+      <TypeInfo FullName="javax.faces.render.Renderer"/>
+      <TypeInfo FullName="javax.faces.context.ResponseWriter"/>
+      <TypeInfo FullName="javax.faces.context.ResponseStream"/>
+      <TypeInfo FullName="javax.faces.render.RenderKit"/>
+      <TypeInfo FullName="javax.faces.application.FacesMessage"/>
+      <TypeInfo FullName="javax.faces.context.FacesContext"/>
+      <TypeInfo FullName="javax.faces.el.ValueBinding"/>
+      <TypeInfo FullName="javax.faces.component.UIComponent"/>
+      <TypeInfo FullName="oracle.adf.view.rich.render.ClientEvent"/>
+      <TypeInfo FullName="oracle.adf.view.rich.event.ClientListenerSet"/>
+      <TypeInfo FullName="javax.faces.event.ValueChangeEvent"/>
+      <TypeInfo FullName="org.apache.myfaces.trinidad.bean.FacesBean.Type"/>
+      <TypeInfo FullName="org.apache.myfaces.trinidad.event.AttributeChangeEvent"/>
+      <TypeInfo FullName="org.apache.myfaces.trinidad.component.visit.VisitContext"/>
+      <TypeInfo FullName="oracle.adf.view.rich.component.rich.input.RichInputText"/>
+      <TypeInfo FullName="oracle.adf.view.rich.component.rich.input.RichSelectManyChoice"/>
+      <TypeInfo FullName="oracle.adf.view.rich.component.rich.input.RichSelectOneChoice"/>
+      <TypeInfo FullName="com.dbms.csmq.view.backing.NMQ.NMQWizardBean"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="com.dbms.csmq.view.backing.NMQ.NMQWizardBean"
+                       xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="BrowseAndSearchHierarchyBean" FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl" ImplDef="oracle.adf.model.adapter.bean.BeanDCDefinition"
+                      SupportsTransactions="false" SupportsSortCollection="true" SupportsResetState="false" SupportsRangesize="false" SupportsFindMode="false"
+                      SupportsUpdates="true" Definition="com.dbms.csmq.view.backing.search.BrowseAndSearchHierarchyBean"
+                      BeanClass="com.dbms.csmq.view.backing.search.BrowseAndSearchHierarchyBean" xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="com.dbms.csmq.view.backing.search.BrowseAndSearchHierarchyBean"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="com.dbms.csmq.view.backing.search.BrowseAndSearchHierarchyBean" xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="CSMQBean" FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adf.model.adapter.bean.BeanDCDefinition" SupportsTransactions="false"
+                      SupportsSortCollection="true" SupportsResetState="false" SupportsRangesize="false"
+                      SupportsFindMode="false" SupportsUpdates="true" Definition="com.dbms.csmq.CSMQBean"
+                      BeanClass="com.dbms.csmq.CSMQBean" xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="com.dbms.csmq.CSMQBean"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="com.dbms.csmq.CSMQBean" xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="NMQWizardUIBean" FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adf.model.adapter.bean.BeanDCDefinition" SupportsTransactions="false"
+                      SupportsSortCollection="true" SupportsResetState="false" SupportsRangesize="false"
+                      SupportsFindMode="false" SupportsUpdates="true"
+                      Definition="com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean"
+                      BeanClass="com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="com.dbms.csmq.view.backing.NMQ.NMQWizardBean"/>
+      <TypeInfo FullName="com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="com.dbms.csmq.view.backing.NMQ.NMQWizardUIBean"
+                       xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+  <AdapterDataControl id="ReportDownloadBean" FactoryClass="oracle.adf.model.adapter.DataControlFactoryImpl"
+                      ImplDef="oracle.adf.model.adapter.bean.BeanDCDefinition" SupportsTransactions="false" SupportsSortCollection="true"
+                      SupportsResetState="false" SupportsRangesize="false" SupportsFindMode="false" SupportsUpdates="true"
+                      Definition="com.dbms.csmq.view.reports.ReportDownloadBean" BeanClass="com.dbms.csmq.view.reports.ReportDownloadBean"
+                      xmlns="http://xmlns.oracle.com/adfm/datacontrol">
+    <CreatableTypes>
+      <TypeInfo FullName="com.dbms.csmq.view.reports.ReportDownloadBean"/>
+    </CreatableTypes>
+    <Source>
+      <bean-definition BeanClass="com.dbms.csmq.view.reports.ReportDownloadBean" xmlns="http://xmlns.oracle.com/adfm/adapter/bean"/>
+    </Source>
+  </AdapterDataControl>
+</DataControlConfigs>

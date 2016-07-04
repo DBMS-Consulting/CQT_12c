@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.64.36" id="diffPageDef" Package="diff">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="MQListLeftVO1" RangeSize="-1" DataControl="DiffModuleDataControl" id="MQListVO1LeftIterator"/>
+    <iterator Binds="MQDiffVO1" RangeSize="-1" DataControl="DiffModuleDataControl" id="MQDiffVO1Iterator"/>
+    <iterator id="MQListVO1RightIterator" Binds="MQListRightVO1" DataControl="DiffModuleDataControl" RangeSize="-1"/>
+  </executables>
+  <bindings>
+    <listOfValues StaticList="false" IterBinding="MQListVO1LeftIterator" Uses="LOV_TermName" id="LeftTerm"/>
+    <attributeValues IterBinding="MQListVO1LeftIterator" id="LeftDictContentId">
+      <AttrNames>
+        <Item Value="DictContentId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="MQListVO1LeftIterator" id="LeftDictContentCode">
+      <AttrNames>
+        <Item Value="DictContentCode"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="MQDiffVO1Iterator" id="MQDiffVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.diff.MQDiffVO" Name="MQDiffVO10">
+        <AttrNames>
+          <Item Value="ChTerm"/>
+          <Item Value="DiffStyle"/>
+          <Item Value="Disposition"/>
+          <Item Value="TermDisplay"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <listOfValues StaticList="false" Uses="LOV_TermName" IterBinding="MQListVO1RightIterator" id="RightTerm"/>
+    <attributeValues IterBinding="MQListVO1RightIterator" id="RightDictContentId">
+      <AttrNames>
+        <Item Value="DictContentId"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="MQListVO1RightIterator" id="RightDictContentCode">
+      <AttrNames>
+        <Item Value="DictContentCode"/>
+      </AttrNames>
+    </attributeValues>
+    
+  </bindings>
+</pageDefinition>

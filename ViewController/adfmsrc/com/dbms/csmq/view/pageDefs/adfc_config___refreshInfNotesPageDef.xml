@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.60.13"
+                id="adfc_config___refreshInfNotesPageDef"
+                Package="com.dbms.csmq.view.pageDefs" SkipValidation="true">
+  <parameters/>
+  <executables>
+    <iterator Binds="InfNotesVO1" RangeSize="25"
+              DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator"
+              Refresh="never"/>
+  </executables>
+  <bindings>
+    <action IterBinding="InfNotesVO1Iterator" id="ExecuteWithParams"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="dictContentCode" NDValue="#{NMQBean.currentMqcode}"
+                 NDType="java.lang.String"/>
+      <NamedData NDName="dictShortName" NDValue="#{NMQBean.currentDictionary}"
+                 NDType="java.lang.String"/>
+    </action>
+  </bindings>
+</pageDefinition>

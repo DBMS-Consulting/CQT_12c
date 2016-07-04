@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.60.81" id="historicConfirmPageDef" Package="historic">
+   <parameters/>
+    <executables>
+        <variableIterator id="variables"/>
+        <iterator Binds="CurrentDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl" id="CurrentDictionaryVO1Iterator"/>
+        <invokeAction Binds="EWP_DictionaryModuleDataControl" id="Invoke_EWP_DictionaryModuleDataControl" Refresh="renderModel"/>
+    </executables>
+    <bindings>
+        <tree IterBinding="CurrentDictionaryVO1Iterator" id="CurrentDictionaryVO1">
+            <nodeDefinition DefName="com.dbms.csmq.model.dictionary.CurrentDictionaryVO" Name="CurrentDictionaryVO10">
+                <AttrNames>
+                    <Item Value="Name"/>
+                </AttrNames>
+            </nodeDefinition>
+        </tree>
+        <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Description">
+            <AttrNames>
+                <Item Value="Description"/>
+            </AttrNames>
+        </attributeValues>
+        <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Version">
+            <AttrNames>
+                <Item Value="Version"/>
+            </AttrNames>
+        </attributeValues>
+        <action IterBinding="CurrentDictionaryVO1Iterator" id="EWP_DictionaryModuleDataControl" InstanceName="DictionaryModuleDataControl.CurrentDictionaryVO1"
+                DataControl="DictionaryModuleDataControl" RequiresUpdateModel="true" Action="executeWithParams">
+            <NamedData NDName="shortName" NDValue="#{CSMQBean.defaultFilterDictionaryShortName}" NDType="java.lang.String"/>
+        </action>
+    </bindings>
+</pageDefinition>

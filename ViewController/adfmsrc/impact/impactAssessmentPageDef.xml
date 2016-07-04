@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.1.56.60" id="impactAssessmentPageDef" Package="impact">
+  <parameters/>
+  <executables>
+    <iterator id="CurrentDictionaryVO1Iterator" Binds="CurrentDictionaryVO1" DataControl="DictionaryModuleDataControl" RangeSize="25"
+              Refresh="deferred"/>
+<iterator Binds="MedDRAImpactVO1" RangeSize="-1" DataControl="ImpactModuleDataControl" id="MedDRAImpactVO1Iterator1"
+          Refresh="deferred"/>
+    <iterator Binds="SimpleSearch1" RangeSize="25"
+              DataControl="SearchModuleDataControl" id="SimpleSearch1Iterator" Refresh="deferred"/>
+     <iterator id="InfNotesVO1Iterator" Binds="InfNotesVO1" DataControl="InfNotesModuleDataControl" RangeSize="25"
+               Refresh="deferred"/>
+     <iterator Binds="DraftImpactVO1" RangeSize="-1" DataControl="ImpactModuleDataControl" id="DraftImpactVO1Iterator1"
+               Refresh="deferred"/>
+    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+              id="HierarchySourceTermSearchVO1Iterator" Refresh="deferred"/>
+    <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"
+              Refresh="deferred"/>
+   
+    
+   
+    
+    <iterator id="NewPTsVO1Iterator" Binds="NewPTsVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"
+              Refresh="deferred"/>
+    
+    
+    <iterator Binds="LastMVUpdateViewObj1" RangeSize="25" DataControl="ImpactModuleDataControl" id="LastMVUpdateViewObj1Iterator"
+              Refresh="deferred"/>
+ 
+    
+    
+    
+   
+    
+       <iterator id="SOCsWithNewPTsVO1Iterator" Binds="SOCsWithNewPTsVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"
+                 Refresh="deferred"/>
+     
+    
+    
+    <!--  
+    
+  -->
+    <iterator Binds="SourceTermsVO1" RangeSize="-1" DataControl="HierarchyModuleDataControl" id="SourceTermsVO1Iterator"
+              Refresh="deferred"/>
+    <iterator Binds="SourceTreeVO1" RangeSize="-1" DataControl="HierarchyModuleDataControl" id="SourceTreeVO1Iterator"
+              Refresh="deferred"/>
+    <iterator Binds="ImpactSearchListVO_MQ_N" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_MQ_NIterator" ChangeEventPolicy="none"/>
+    <iterator Binds="ImpactSearchListVO_MQ_Y" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_MQ_YIterator" ChangeEventPolicy="none"/>
+    <iterator Binds="ImpactSearchListVO_NMQ_N" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_NMQ_NIterator" ChangeEventPolicy="none"/>
+    <iterator Binds="ImpactSearchListVO_NMQ_Y" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_NMQ_YIterator" ChangeEventPolicy="none"/>
+    <iterator Binds="ImpactSearchListVO_CMQ_Y" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_CMQ_YIterator" ChangeEventPolicy="none"/>
+    <iterator Binds="ImpactSearchListVO_CMQ_N" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="ImpactSearchListVO_CMQ_NIterator" ChangeEventPolicy="none"/>
+    <iterator id="designeeListByMQVO1Iterator" Binds="designeeListByMQVO1" DataControl="DesigneeModuleDataControl"
+              RangeSize="-1"/>
+  </executables>
+  <bindings>
+  
+ <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch" Name="SimpleSearch10">
+        <AttrNames>
+          <Item Value="ContentId"/>
+          <Item Value="Mqterm"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+                      Name="HierarchySourceTermSearchVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="ContentId"/>
+          <Item Value="Createdby"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="DictNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="Groupname"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Version"/>
+          <Item Value="Rnum"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    
+    
+    
+    
+    
+   <tree id="MedDRAImpactVO1" IterBinding="MedDRAImpactVO1Iterator1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.MedDRAImpactVO" Name="MedDRAImpactVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list IterBinding="LevelsByDictionaryVO1Iterator" ListOperMode="navigation" ListIter="LevelsByDictionaryVO1Iterator"
+          id="LevelsByDictionaryVO1" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="Name"/>
+      </AttrNames>
+    </list>
+   
+   <tree IterBinding="DraftImpactVO1Iterator1" id="DraftImpactVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.DraftImpactVO" Name="DraftImpactVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <!-- -->
+    <tree IterBinding="NewPTsVO1Iterator" id="NewPTsVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.NewPTsVO" Name="NewPTsVO10">
+        <AttrNames>
+          <Item Value="DefLevelId"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="Term"/>
+          <Item Value="TermUpper"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    
+     <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Description">
+      <AttrNames>
+        <Item Value="Description"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Version">
+      <AttrNames>
+        <Item Value="Version"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="LastMVUpdateViewObj1Iterator" id="LastUpdate">
+      <AttrNames>
+        <Item Value="LastUpdate"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO11">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO" Name="HierarchySourceTermSearchVO110">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ContentId"/>
+          <Item Value="Mqterm"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="SourceTreeVO1Iterator" id="SourceTreeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.hierarchy.SourceTreeVO" Name="SourceTreeVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="ChildExists"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="PrimLinkFlag"/>
+          <Item Value="SortOrder"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_MQ_NIterator" id="ImpactSearchListVO_MQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_MQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="Status"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_MQ_YIterator" id="ImpactSearchListVO_MQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_MQ_Y0">
+        <AttrNames>
+           <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="Status"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_NMQ_NIterator" id="ImpactSearchListVO_NMQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_NMQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="Status"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_NMQ_YIterator" id="ImpactSearchListVO_NMQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_NMQ_Y0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="Status"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_CMQ_YIterator" id="ImpactSearchListVO_CMQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_CMQ_Y0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="Status"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="ImpactSearchListVO_CMQ_NIterator" id="ImpactSearchListVO_CMQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.ImpactSearchListVO" Name="ImpactSearchListVO_CMQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="Status"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="DictContentId"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <list IterBinding="SOCsWithNewPTsVO1Iterator" ListOperMode="multiSelect" ListIter="SOCsWithNewPTsVO1Iterator"
+          id="SOCsWithNewPTsVO1" SelectItemValueMode="ListObject" DTSupportsMRU="true">
+      <AttrNames>
+        <Item Value="DictContentId"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="Term"/>
+      </ListDisplayAttrNames>
+    </list>
+    <methodAction id="setDefaultIAState" RequiresUpdateModel="true" Action="invokeMethod" MethodName="setDefaultIAState"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.setDefaultIAState_CQTAppModuleDataControl_dataProvider_setDefaultIAState_result">
+      <NamedData NDName="dictContentIDs" NDType="java.lang.String"/>
+      <NamedData NDName="currentUser" NDType="java.lang.String"/>
+      <NamedData NDName="currentUserRole" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="changeState" RequiresUpdateModel="true" Action="invokeMethod" MethodName="changeState"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.changeState_CQTAppModuleDataControl_dataProvider_changeState_result">
+      <NamedData NDName="dictContentIDs" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="currentUser" NDType="java.lang.String"/>
+      <NamedData NDName="currentUserRole" NDType="java.lang.String"/>
+      <NamedData NDName="dueDate" NDType="oracle.jbo.domain.Date"/>
+      <NamedData NDName="comment" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="delete" RequiresUpdateModel="true" Action="invokeMethod" MethodName="delete"
+                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
+                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
+                  ReturnName="data.CQTAppModuleDataControl.methodResults.delete_CQTAppModuleDataControl_dataProvider_delete_result">
+      <NamedData NDName="dictContentID" NDType="java.lang.String"/>
+      <NamedData NDName="predictGroupName" NDType="java.lang.String"/>
+    </methodAction>
+  </bindings>
+</pageDefinition>
+
+
