@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ProductModule"
+  Version="11.1.2.64.36"
+  ClearCacheOnRollback="true"
+  ComponentClass="com.dbms.csmq.model.product.ProductModuleImpl"
+  DefClass="com.dbms.csmq.model.product.ProductModuleDefImpl"
+  ComponentInterface="com.dbms.csmq.model.product.common.ProductModule"
+  ClientProxyName="com.dbms.csmq.model.product.client.ProductModuleClient">
+  <DesignTime>
+    <Attr Name="_isDefCodegen" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <ViewUsage
+    Name="ViewObj_ProductList1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"/>
+  <ViewUsage
+    Name="ProductListByMQ1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListByMQVO"/>
+  <ViewUsage
+    Name="ProductListByMQVO1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListByMQVO"/>
+  <ClientInterface>
+    <Method
+      Name="filterProducts"
+      MethodName="filterProducts">
+      <Return
+        Type="void"/>
+      <Parameter
+        Name="searchString"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="selectedList"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
+</AppModule>

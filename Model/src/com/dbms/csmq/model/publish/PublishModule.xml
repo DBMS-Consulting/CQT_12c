@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="PublishModule"
+  Version="11.1.2.60.81"
+  ClearCacheOnRollback="true">
+  <ViewUsage
+    Name="ViewObjTermsByState1"
+    ViewObjectName="com.dbms.csmq.model.publish.ViewObjTermsByState"/>
+  <ViewUsage
+    Name="ViewObjActivationErrors_Contents1"
+    ViewObjectName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Contents"/>
+  <ViewUsage
+    Name="ViewObjActivationErrors_Relations1"
+    ViewObjectName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Relations"/>
+</AppModule>

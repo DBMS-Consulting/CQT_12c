@@ -1,0 +1,206 @@
+<wsdl:definitions
+     name="ServiceModuleService"
+     targetNamespace="/com/dbms/csmq/model/service/common/"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:errors="http://xmlns.oracle.com/adf/svc/errors/"
+     xmlns:orafault="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="/com/dbms/csmq/model/service/common/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:types="/com/dbms/csmq/model/service/common/types/"
+    >
+    <plnk:partnerLinkType name="ServiceModuleService">
+        <plnk:role name="ServiceModuleServiceProvider">
+            <plnk:portType name="tns:ServiceModuleService"/>
+        </plnk:role>
+        <plnk:role name="ServiceModuleServiceRequestor">
+            <plnk:portType name="tns:ServiceModuleServiceResponse"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="http://xmlns.oracle.com/adf/svc/errors/" location="classpath:/META-INF/wsdl/ServiceException.wsdl"/>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0" schemaLocation="classpath:/META-INF/oracle-webservices-async-fault-11_0.xsd"/>
+            <import namespace="/com/dbms/csmq/model/service/common/types/" schemaLocation="ServiceModuleService.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ServiceModuleService_onFault">
+        <wsdl:part name="parameters" element="orafault:Fault"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_getDfltCtrlHintsAsyncResponse">
+        <wsdl:part name="parameters" element="types:getDfltCtrlHintsAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1AsyncResponse">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1AsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1Response">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1Response"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_getDfltCtrlHints">
+        <wsdl:part name="parameters" element="types:getDfltCtrlHints"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_getDfltCtrlHintsResponse">
+        <wsdl:part name="parameters" element="types:getDfltCtrlHintsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_getDfltCtrlHintsAsync">
+        <wsdl:part name="parameters" element="types:getDfltCtrlHintsAsync"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1Async">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1Async"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteria">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1ViewObjTMSQueryCriteria"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaResponse">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1ViewObjTMSQueryCriteriaResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync">
+        <wsdl:part name="parameters" element="types:findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync"/>
+    </wsdl:message>
+    <wsdl:portType name="ServiceModuleServiceResponse">
+        <wsdl:operation name="onFault">
+            <wsdl:input message="tns:ServiceModuleService_onFault" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0/Fault"/>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHintsAsyncResponse">
+            <wsdl:input message="tns:ServiceModuleService_getDfltCtrlHintsAsyncResponse" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action="/com/dbms/csmq/model/service/common/getDfltCtrlHintsAsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1AsyncResponse">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1AsyncResponse" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1AsyncResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse"
+                 xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl" ns1:Action="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="ServiceModuleService">
+        <wsdl:documentation>
+            <ViewInstance xmlns="http://xmlns.oracle.com/adf/svc/metadata/" Name="ViewObjTMSQuery1" SDOName="tns:ViewObjTMSQuerySDO"
+                 FindOpName="findViewObjTMSQuery1"/>
+        </wsdl:documentation>
+        <wsdl:operation name="findViewObjTMSQuery1">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1"/>
+            <wsdl:output message="tns:ServiceModuleService_findViewObjTMSQuery1Response"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHints">
+            <wsdl:input message="tns:ServiceModuleService_getDfltCtrlHints"/>
+            <wsdl:output message="tns:ServiceModuleService_getDfltCtrlHintsResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHintsAsync">
+            <wsdl:input message="tns:ServiceModuleService_getDfltCtrlHintsAsync" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action="/com/dbms/csmq/model/service/common/getDfltCtrlHintsAsync"/>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1Async">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1Async" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1Async"/>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteria">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteria"/>
+            <wsdl:output message="tns:ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaResponse"/>
+            <wsdl:fault name="ServiceException" message="errors:ServiceException"/>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync">
+            <wsdl:input message="tns:ServiceModuleService_findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync"
+                 xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl" ns1:Action="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ServiceModuleServiceResponseBinding" type="tns:ServiceModuleServiceResponse">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="onFault">
+            <soap:operation soapAction="http://xmlns.oracle.com/oracleas/schema/oracle-fault-11_0/Fault"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHintsAsyncResponse">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/getDfltCtrlHintsAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1AsyncResponse">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1AsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ServiceModuleServiceSoapHttp" type="tns:ServiceModuleService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="findViewObjTMSQuery1">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHints">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/getDfltCtrlHints"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDfltCtrlHintsAsync">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/getDfltCtrlHintsAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1Async">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1Async"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteria">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1ViewObjTMSQueryCriteria"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceException">
+                <soap:fault name="ServiceException" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync">
+            <soap:operation soapAction="/com/dbms/csmq/model/service/common/findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ServiceModuleService">
+        <wsdl:port name="ServiceModuleServiceSoapHttpPort" binding="tns:ServiceModuleServiceSoapHttp">
+            <soap:address location="http://localhost:7101/NMAT-Model-context-root/ServiceModuleService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

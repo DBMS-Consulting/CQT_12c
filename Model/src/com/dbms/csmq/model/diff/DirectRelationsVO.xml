@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="DirectRelationsVO"
+  Version="11.1.2.64.36"
+  OrderBy="2,6"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.diff.DirectRelationsVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="dictionary"
+    Kind="where"
+    Type="java.lang.String"
+    DefaultValue="NMATSMQ"/>
+  <Variable
+    Name="parentDictContentCode"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[select d.short_name                  dict_name,
+       dc.term                       pr_term,
+       dc.dict_content_code          pr_code,
+       dl.short_name                 pr_level,
+       mc.dict_content_code          ch_code,
+       mc.term                       ch_term,
+       ml.short_name                 ch_level,
+       r.status                       termcat ,
+       r.comment_text                 termweig,
+       r.relation_type                relation
+FROM tms.tms_def_dictionaries d,
+     tms.tms_def_levels       ml,
+     tms.tms_def_levels       dl,
+     tms.tms_dict_contents    dc,
+     tms.tms_dict_contents    mc,
+     tms.tms_dict_relations   r
+WHERE d.short_name = UPPER(:dictionary)
+AND d.def_dictionary_id = ml.def_dictionary_id
+AND d.def_dictionary_id = dl.def_dictionary_id
+--      AND dl.short_name = 'PT'
+--      AND ml.short_name LIKE 'ATC%'
+AND dl.def_level_id = dc.def_level_id
+--AND dc.def_domain_id = 0
+AND ml.def_level_id = mc.def_level_id
+--AND mc.def_domain_id = 0
+AND mc.dict_content_id = r.dict_content_id
+AND dc.dict_content_id = r.dict_content_ref_id
+AND TO_CHAR(mc.end_ts,'DD-MON-YYYY') = '15-AUG-3501'
+AND TO_CHAR(dc.end_ts,'DD-MON-YYYY') = '15-AUG-3501'
+AND TO_CHAR(r.end_ts, 'DD-MON-YYYY') = '15-AUG-3501'
+
+AND dc.dict_content_code = :parentDictContentCode]]></SQLQuery>
+  <ViewAttribute
+    Name="DictName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DICT_NAME"
+    Expression="DICT_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PrTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PR_TERM"
+    Expression="PR_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PrCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PR_CODE"
+    Expression="PR_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="PrLevel"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PR_LEVEL"
+    Expression="PR_LEVEL"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ChCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CH_CODE"
+    Expression="CH_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ChTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CH_TERM"
+    Expression="CH_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ChLevel"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="CH_LEVEL"
+    Expression="CH_LEVEL"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="10"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Termcat"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="15"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="TERMCAT"
+    Expression="TERMCAT"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="15"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Termweig"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="200"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="TERMWEIG"
+    Expression="TERMWEIG"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Relation"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="15"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="RELATION"
+    Expression="RELATION"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="15"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

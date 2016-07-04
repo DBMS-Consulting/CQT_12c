@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ReportModule"
+  Version="11.1.2.60.81"
+  ClearCacheOnRollback="true">
+  <ViewUsage
+    Name="ViewObjUserListForState1"
+    ViewObjectName="com.dbms.csmq.model.report.ViewObjUserListForState"/>
+  <ViewUsage
+    Name="ViewObjLatestActivationState1"
+    ViewObjectName="com.dbms.csmq.model.report.ViewObjLatestActivationState"/>
+</AppModule>

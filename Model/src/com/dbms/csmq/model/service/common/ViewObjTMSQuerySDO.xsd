@@ -1,0 +1,37 @@
+<xsd:schema xmlns:sdoJava="commonj.sdo/java" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="/com/dbms/csmq/model/service/common/"
+     xmlns="/com/dbms/csmq/model/service/common/" elementFormDefault="qualified" sdoJava:package="com.dbms.csmq.model.service.common">
+    <xsd:annotation>
+        <xsd:documentation>View Obj Tms Query</xsd:documentation>
+    </xsd:annotation>
+    <xsd:import schemaLocation="classpath:/xml/sdoJava.xsd" namespace="commonj.sdo/java"/>
+    <xsd:complexType name="ViewObjTMSQuerySDO">
+        <xsd:annotation>
+            <xsd:appinfo source="http://xmlns.oracle.com/adf/svc/metadata/">
+                <key xmlns="http://xmlns.oracle.com/adf/svc/metadata/"/>
+            </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Prikey" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="Parent" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="DictContentId" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="Term" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="Level" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="LevelName" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="DictShortName" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="DictContentAltCode" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="ApprovedFlag" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="Status" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="PrimLinkFlag" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="Termlvl" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="Termscp" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="Termcat" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="Termweig" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="PredictGroupId" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="FormattedScope" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="TermPath" type="xsd:string" minOccurs="0" nillable="true"/>
+            <xsd:element name="SortOrder" type="xsd:decimal" minOccurs="0" nillable="true"/>
+            <xsd:element name="ChildExists" type="xsd:string" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="viewObjTMSQuerySDO" type="ViewObjTMSQuerySDO"/>
+</xsd:schema>

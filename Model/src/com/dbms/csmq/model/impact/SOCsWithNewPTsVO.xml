@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="SOCsWithNewPTsVO"
+  Version="11.1.2.60.81"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  RowClass="com.dbms.csmq.model.impact.SOCsWithNewPTsVORowImpl"
+  ComponentClass="com.dbms.csmq.model.impact.SOCsWithNewPTsVOImpl"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.impact.SOCsWithNewPTsVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <SQLQuery><![CDATA[SELECT dc2.dict_content_id,
+       dc2.term, 
+       count(pc1.predict_content_id)
+FROM  tms_predict_relations prel,
+      tms_predict_contents pc1,
+      tms_dict_contents dc2
+WHERE prel.def_level_id = smq_codelist_pkg.soc_level_id
+AND   prel.def_level_ref_id = smq_codelist_pkg.pt_level_id
+AND   prel.def_dictionary_id = smq_codelist_pkg.meddra_dict_id
+AND   prel.def_dictionary_ref_id = smq_codelist_pkg.meddra_dict_id
+AND   prel.predict_group_id = smq_codelist_pkg.meddra_ag_id
+AND   pc1.predict_content_id = prel.predict_content_ref_id
+AND   pc1.predict_group_id = prel.predict_group_id
+AND   pc1.dml_statement = 'I'
+AND   dc2.dict_content_id = prel.predict_content_id
+AND   dc2.end_ts = to_date('15aug3501','ddmonyyyy')
+GROUP BY dc2.dict_content_id, dc2.term
+ORDER BY dc2.term]]></SQLQuery>
+  <ViewAttribute
+    Name="DictContentId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="DICT_CONTENT_ID"
+    Expression="DICT_CONTENT_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Term"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="TERM"
+    Expression="TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="CountPc1PredictContentId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName='"COUNT(PC1.PREDICT_CONTENT_ID)"'
+    Expression='"COUNT(PC1.PREDICT_CONTENT_ID)"'
+    SQLType="NUMERIC"/>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="DictContentId"/>
+  </AttrArray>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

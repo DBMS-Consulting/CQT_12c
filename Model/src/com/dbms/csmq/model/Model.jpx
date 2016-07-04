@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<!DOCTYPE JboProject SYSTEM "jbo_03_01.dtd">
+<!---->
+
+<JboProject
+   xmlns="http://xmlns.oracle.com/bc4j"
+   Name="Model"
+   Version="12.2.1.0.31"
+   SeparateXMLFiles="true"
+   PackageName="com.dbms.csmq.model">
+   <DesignTime>
+      <Attr Name="_appModuleNames3" Value="com.dbms.csmq.model.search.SearchModule"/>
+      <Attr Name="_appModuleNames2" Value="com.dbms.csmq.model.releaseGroups.ReleaseGroupModule"/>
+      <Attr Name="_jprName" Value="../../../../../Model.jpr"/>
+      <Attr Name="_appModuleNames5" Value="com.dbms.csmq.model.NMQ.NMQModule"/>
+      <Attr Name="_appModuleNames4" Value="com.dbms.csmq.model.dictionary.DictionaryModule"/>
+      <Attr Name="_appModuleNames1" Value="com.dbms.csmq.model.hierarchy.HierarchyModule"/>
+      <Attr Name="_appModuleNames0" Value="com.dbms.csmq.model.product.ProductModule"/>
+      <Attr Name="_NamedConnection" Value="TMS"/>
+      <Attr Name="_appModuleNames6" Value="com.dbms.csmq.model.infNotes.InfNotesModule"/>
+      <Attr Name="_appModuleNames7"
+         Value="com.dbms.csmq.model.MQGroups.MQGroupModule"/>
+      <Attr Name="_appModuleNames8" Value="com.dbms.csmq.model.impact.ImpactModule"/>
+      <Attr Name="_appModuleNames9" Value="com.dbms.csmq.model.publish.PublishModule"/>
+      <Attr Name="_appModuleNames10" Value="com.dbms.csmq.model.config.ConfigModule"/>
+      <Attr Name="_appModuleNames11" Value="com.dbms.csmq.model.report.ReportModule"/>
+      <Attr Name="_appModuleNames12" Value="com.dbms.csmq.model.diff.DiffModule"/>
+      <Attr Name="_appModuleNames13" Value="com.dbms.csmq.model.userAccountsList.UserAccountsListModule"/>
+      <Attr Name="_appModuleNames14" Value="com.dbms.csmq.model.designee.DesigneeModule"/>
+      <Attr Name="_appModuleNames15" Value="com.dbms.csmq.model.am.CQTAppModule"/>
+      <Attr Name="_appModuleNames16" Value="com.dbms.csmq.model.am.SearchAppModule"/>
+   </DesignTime>
+   <Containee
+      Name="am"
+      PackageName="com.dbms.csmq.model.am"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="config"
+      PackageName="com.dbms.csmq.model.config"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+         <Attr Name="_EO" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="designee"
+      PackageName="com.dbms.csmq.model.designee"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="dictionary"
+      PackageName="com.dbms.csmq.model.dictionary"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="diff"
+      PackageName="com.dbms.csmq.model.diff"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="hierarchy"
+      PackageName="com.dbms.csmq.model.hierarchy"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="impact"
+      PackageName="com.dbms.csmq.model.impact"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="infNotes"
+      PackageName="com.dbms.csmq.model.infNotes"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="MQGroups"
+      PackageName="com.dbms.csmq.model.MQGroups"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="NMQ"
+      PackageName="com.dbms.csmq.model.NMQ"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="product"
+      PackageName="com.dbms.csmq.model.product"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="publish"
+      PackageName="com.dbms.csmq.model.publish"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="releaseGroups"
+      PackageName="com.dbms.csmq.model.releaseGroups"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="report"
+      PackageName="com.dbms.csmq.model.report"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="search"
+      PackageName="com.dbms.csmq.model.search"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
+      Name="userAccountsList"
+      PackageName="com.dbms.csmq.model.userAccountsList"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_VO" Value="true"/>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+</JboProject>

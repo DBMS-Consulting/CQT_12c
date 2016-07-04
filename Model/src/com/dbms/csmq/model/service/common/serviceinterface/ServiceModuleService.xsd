@@ -1,0 +1,98 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="/com/dbms/csmq/model/service/common/types/"
+     xmlns:tns="/com/dbms/csmq/model/service/common/types/" xmlns:ns0="/com/dbms/csmq/model/service/common/"
+     xmlns:ns1="http://xmlns.oracle.com/adf/svc/types/">
+    <import namespace="http://xmlns.oracle.com/adf/svc/types/" schemaLocation="classpath:/META-INF/wsdl/BC4JService.xsd"/>
+    <import namespace="/com/dbms/csmq/model/service/common/" schemaLocation="../ViewObjTMSQuerySDO.xsd"/>
+    <element name="findViewObjTMSQuery1">
+        <complexType>
+            <sequence>
+                <element name="findCriteria" type="ns1:FindCriteria"/>
+                <element name="findControl" type="ns1:FindControl"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1Response">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns0:ViewObjTMSQuerySDO" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="getDfltCtrlHints">
+        <complexType>
+            <sequence>
+                <element name="viewName" type="string"/>
+                <element name="localeName" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="getDfltCtrlHintsResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns1:AttrCtrlHints" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="getDfltCtrlHintsAsync">
+        <complexType>
+            <sequence>
+                <element name="viewName" type="string"/>
+                <element name="localeName" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="getDfltCtrlHintsAsyncResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns1:AttrCtrlHints" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1Async">
+        <complexType>
+            <sequence>
+                <element name="findCriteria" type="ns1:FindCriteria"/>
+                <element name="findControl" type="ns1:FindControl"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1AsyncResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns0:ViewObjTMSQuerySDO" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1ViewObjTMSQueryCriteria">
+        <complexType>
+            <sequence>
+                <element name="findCriteria" type="ns1:FindCriteria"/>
+                <element name="dictContentID" type="string"/>
+                <element name="findControl" type="ns1:FindControl"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns0:ViewObjTMSQuerySDO" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsync">
+        <complexType>
+            <sequence>
+                <element name="findCriteria" type="ns1:FindCriteria"/>
+                <element name="dictContentID" type="string"/>
+                <element name="findControl" type="ns1:FindControl"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="findViewObjTMSQuery1ViewObjTMSQueryCriteriaAsyncResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="ns0:ViewObjTMSQuerySDO" minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+</schema>

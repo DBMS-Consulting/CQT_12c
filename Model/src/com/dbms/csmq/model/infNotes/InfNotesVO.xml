@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="InfNotesVO"
+  Version="11.1.2.60.81"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  FetchMode="FETCH_AS_NEEDED"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Variable
+    Name="dictContentCode"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="dictShortName"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="SMQNOTE"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="SMQDESC"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="SMQSRC"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="groupname"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="dictContentID"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="currentPendingStatus"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[select * from table(nmat_ui_pkg.f_informative_notes_records
+	(pDctName           => :dictShortName,
+	pGrpName            => :groupname,
+	pDictContentId      => :dictContentID,
+	pDictContentCd      => :dictContentCode,
+	pSMQDesc            => :SMQDESC,
+	pSMQNote            => :SMQNOTE,
+	pSMQSRC             => :SMQSRC,
+	pCurrPendStatus     => :currentPendingStatus
+	))]]></SQLQuery>
+  <ViewAttribute
+    Name="Mqcode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MQCODE"
+    Expression="MQCODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Mqnote"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="4000"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MQNOTE"
+    Expression="MQNOTE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="4000"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Mqdesc"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="4000"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MQDESC"
+    Expression="MQDESC"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="4000"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Mqsrc"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="4000"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="MQSRC"
+    Expression="MQSRC"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="4000"/>
+    </DesignTime>
+  </ViewAttribute>
+</ViewObject>

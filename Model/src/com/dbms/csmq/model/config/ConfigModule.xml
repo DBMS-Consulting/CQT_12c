@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ConfigModule"
+  Version="11.1.2.64.36"
+  ClearCacheOnRollback="true">
+  <ViewUsage
+    Name="ViewObjDBSettings1"
+    ViewObjectName="com.dbms.csmq.model.config.ViewObjDBSettings"/>
+  <ViewUsage
+    Name="NMAT_PROP_EOView1"
+    ViewObjectName="com.dbms.csmq.model.config.NMAT_PROP_EOView"/>
+</AppModule>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ReleaseGroupModule"
+  Version="11.1.1.60.13"
+  ClearCacheOnRollback="true"
+  ComponentClass="com.dbms.csmq.model.releaseGroups.ReleaseGroupModuleImpl"
+  DefClass="com.dbms.csmq.model.releaseGroups.ReleaseGroupModuleDefImpl">
+  <DesignTime>
+    <Attr Name="_deployType" Value="0"/>
+    <Attr Name="_isDefCodegen" Value="true"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <ViewUsage
+    Name="releaseGroups1"
+    ViewObjectName="com.dbms.csmq.model.releaseGroups.ReleaseGroupsVO"/>
+</AppModule>

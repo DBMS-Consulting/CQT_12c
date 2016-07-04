@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ViewObjActivationErrors_Relations"
+  Version="11.1.2.60.81"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.publish.ViewObjActivationErrors_Relations_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="predictContentID"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="activationGroup"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[SELECT c.term, r.error_msg 
+FROM tms.tms_predict_relations r,
+     tms.tms_predict_groups g,
+     tms.tms_dict_contents c,
+     tms.tms_predict_contents pc
+WHERE g.predict_group_id = r.predict_group_id 
+AND c.dict_content_id = r.predict_content_ref_id
+AND r.predict_content_id =pc.predict_content_id
+AND r.predict_content_id = :predictContentID
+AND g.name = :activationGroup
+AND r.error_msg is NOT NULL]]></SQLQuery>
+  <ViewAttribute
+    Name="Term"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="TERM"
+    Expression="TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ErrorMsg"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="200"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ERROR_MSG"
+    Expression="ERROR_MSG"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </ViewAttribute>
+ 
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

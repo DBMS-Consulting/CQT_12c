@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ProductListVO"
+  Version="11.1.2.64.36"
+  OrderBy="long_value"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  FetchMode="FETCH_AS_NEEDED"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  RowClass="com.dbms.csmq.model.product.ProductListVORowImpl"
+  ComponentClass="com.dbms.csmq.model.product.ProductListVOImpl"
+  DefClass="com.dbms.csmq.model.product.ProductListVODefImpl">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Def|Coll|Prog|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <ViewAccessor
+    Name="ViewObj_ProductList1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"
+    RowLevelBinds="true"/>
+  <SQLQuery><![CDATA[Select ref_codelist_value_short_val short_val, long_value 
+from rxc.reference_codelist_values where ref_codelist_name = 'NMQ_PRODUCT_LIST'
+and active_flag ='Y' AND ref_codelist_value_short_val <> 'STANDARD']]></SQLQuery>
+  <ViewAttribute
+    Name="ShortVal"
+    IsUpdateable="false"
+    IsPersistent="false"
+    IsNotNull="true"
+    PrecisionRule="true"
+    Precision="15"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="SHORT_VAL"
+    Expression="SHORT_VAL"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="15"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LongValue"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="60"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="LONG_VALUE"
+    Expression="LONG_VALUE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="60"/>
+    </DesignTime>
+  </ViewAttribute>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="ShortVal"/>
+  </AttrArray>
+</ViewObject>

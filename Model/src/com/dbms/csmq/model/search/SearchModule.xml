@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE AppModule SYSTEM "jbo_03_01.dtd">
+<!---->
+<AppModule
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="SearchModule"
+  Version="11.1.2.64.36"
+  ClearCacheOnRollback="true">
+  <ViewUsage
+    Name="SimpleSearch1"
+    ViewObjectName="com.dbms.csmq.model.search.SimpleSearch"/>
+  <ViewUsage
+    Name="HierarchySourceTermSearchVO1"
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"/>
+  <ViewUsage
+    Name="HierarchyViewObj1"
+    ViewObjectName="com.dbms.csmq.model.search.HierarchyViewObj"/>
+  <ViewUsage
+    Name="EntryTSListVO1"
+    ViewObjectName="com.dbms.csmq.model.search.EntryTSListVO"/>
+  <ViewUsage
+    Name="HistoricSearch1"
+    ViewObjectName="com.dbms.csmq.model.search.HistoricSearch"/>
+  <ViewUsage
+    Name="HistoricalListViewObj1"
+    ViewObjectName="com.dbms.csmq.model.search.HistoricalListViewObj"/>
+  <ViewUsage
+    Name="HierarchySourceTermSearchFixVO1"
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchFixVO"/>
+</AppModule>

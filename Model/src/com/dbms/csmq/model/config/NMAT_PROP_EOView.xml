@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="NMAT_PROP_EOView"
+  Version="11.1.2.64.36"
+  SelectList="NMAT_PROP_EO.DOMAIN, 
+       NMAT_PROP_EO.PROP_NAME, 
+       NMAT_PROP_EO.PROP_VALUE, 
+       NMAT_PROP_EO.DESCRIPTION"
+  FromList="NMAT_PROPERTIES NMAT_PROP_EO"
+  BindingStyle="OracleName"
+  CustomQuery="false"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <EntityUsage
+    Name="NMAT_PROP_EO"
+    Entity="com.dbms.csmq.model.config.NMAT_PROP_EO"/>
+  <ViewAttribute
+    Name="Domain"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="Domain"
+    EntityUsage="NMAT_PROP_EO"
+    AliasName="DOMAIN"/>
+  <ViewAttribute
+    Name="PropName"
+    IsNotNull="true"
+    PrecisionRule="true"
+    EntityAttrName="PropName"
+    EntityUsage="NMAT_PROP_EO"
+    AliasName="PROP_NAME"/>
+  <ViewAttribute
+    Name="PropValue"
+    PrecisionRule="true"
+    EntityAttrName="PropValue"
+    EntityUsage="NMAT_PROP_EO"
+    AliasName="PROP_VALUE"/>
+  <ViewAttribute
+    Name="Description"
+    PrecisionRule="true"
+    EntityAttrName="Description"
+    EntityUsage="NMAT_PROP_EO"
+    AliasName="DESCRIPTION"/>
+</ViewObject>

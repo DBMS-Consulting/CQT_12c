@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="designeeListVO"
+  Version="11.1.2.64.36"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false"
+  RowClass="com.dbms.csmq.model.designee.designeeListVORowImpl"
+  ComponentClass="com.dbms.csmq.model.designee.designeeListVOImpl">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.designee.designeeListVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <SQLQuery><![CDATA[SELECT distinct u.last_name||', '||u.first_name  person_name,
+         r.grantee                        oracle_user,
+         r.granted_role                   oracle_nmat_role,
+oa_account_name
+  FROM dba_role_privs        r,
+       tms.tms_user_accounts u,
+       tms.tms_accounts      t
+  WHERE r.granted_role IN ('TMS_NMAT_MQM','TMS_NMAT_REQUESTOR')
+    AND r.grantee = t.account_name
+    AND t.account_name = u.oa_account_name
+    AND r.grantee <> 'NMAT'  -- Exclude NMAT Admin Account
+  ORDER BY grantee]]></SQLQuery>
+  <ViewAttribute
+    Name="PersonName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="302"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PERSON_NAME"
+    Expression="PERSON_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="302"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OracleUser"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ORACLE_USER"
+    Expression="ORACLE_USER"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OracleNmatRole"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ORACLE_NMAT_ROLE"
+    Expression="ORACLE_NMAT_ROLE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OaAccountName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="OA_ACCOUNT_NAME"
+    Expression="OA_ACCOUNT_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>
