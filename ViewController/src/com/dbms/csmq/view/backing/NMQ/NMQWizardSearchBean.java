@@ -8,6 +8,8 @@ import com.dbms.csmq.view.hierarchy.TermHierarchyBean;
 import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
+import java.io.OutputStream;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
@@ -59,6 +61,10 @@ import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 
 public class NMQWizardSearchBean  {
@@ -2239,6 +2245,165 @@ public class NMQWizardSearchBean  {
         ob.getParamsMap().put("dictionaryID", currentDictionary);
         activationInfo = (Hashtable <String, String>)ob.execute();
         return activationInfo;
+    }
+
+    public void downloadSearchReport(FacesContext facesContext, OutputStream outputStream) {
+        try {
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Search Report");
+            HSSFRow excelrow = null;
+
+            int i = 0;
+            int colCount = 0;
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            HSSFCell cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Search Criteria");
+
+            i++;
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Dictionary");
+            HSSFCell cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamDictName());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Extenstion");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamExtension());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Release Status");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamReleaseStatus());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Approved");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamApproved());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Level");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamLevel());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Critical Event");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamMQCriticalEvent());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Product");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamProductList());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Status");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamActivityStatus());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Group");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamMQGroupList());
+
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Scope");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(getParamMQScope());
+
+            i++;
+            i++;
+
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Search Results Table");
+
+            i++;
+            i++;
+
+            int k = i;
+
+            BindingContext bc = BindingContext.getCurrent();
+            DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+            DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("SimpleSearch1Iterator");
+
+
+            RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+
+            while (rs.hasNext()) {
+                Row row = rs.next();
+                //print header on first row in excel
+                if (i == k) {
+                    excelrow = (HSSFRow) worksheet.createRow((short) i);
+                    short j = 0;
+                    for (String colName : row.getAttributeNames()) {
+                        cellA1 = excelrow.createCell((short) j);
+                        cellA1.setCellValue(colName);
+                        j++;
+
+                    }
+                }
+
+                //print data from second row in excel
+                ++i;
+                short j = 0;
+                excelrow = worksheet.createRow((short) i);
+                for (String colName : row.getAttributeNames()) {
+                    HSSFCell cell = excelrow.createCell(j);
+                    if (row.getAttribute(colName) != null)
+                        cell.setCellValue(row.getAttribute(colName).toString());
+                    j++;
+                }
+                colCount = j;
+            }
+            
+            i++;
+            i++;
+            excelrow = (HSSFRow) worksheet.createRow((short) i);
+            cellA1 = excelrow.createCell((short) 0);
+            cellA1.setCellValue("Row Count");
+            cellA2 = excelrow.createCell((short) 1);
+            cellA2.setCellValue(dcIter.getEstimatedRowCount());
+            
+            worksheet.createFreezePane(0, 1, 0, 1);
+
+            for (int x = 0; x < colCount; x++) {
+                worksheet.autoSizeColumn(x);
+            }
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

@@ -347,7 +347,16 @@
                     </af:column>
                   </af:table>
                 </af:panelGroupLayout>
-                <f:facet name="toolbar"/>
+                <f:facet name="toolbar">
+                  <af:panelGroupLayout id="pgl12" layout="horizontal">
+                    <af:button text="Export" id="b1" icon="/image/EXCEL.png">
+                      <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                     filename="SearchReport.xls"
+                                                     method="#{pageFlowScope.NMQWizardSearchBean.downloadSearchReport}"/>
+                    </af:button>
+                    <af:spacer width="10" height="10" id="s11"/>
+                  </af:panelGroupLayout>
+                </f:facet>
               </af:panelBox>
               
             </af:group>
