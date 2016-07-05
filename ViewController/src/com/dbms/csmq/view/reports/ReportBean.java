@@ -8,6 +8,8 @@ import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 
 import com.dbms.util.ADFUtils;
 
+import com.dbms.util.ExcelExportUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -62,6 +64,15 @@ import oracle.binding.OperationBinding;
 
 import oracle.jbo.Row;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 
 public class ReportBean {
 
@@ -95,7 +106,6 @@ public class ReportBean {
     
     public static final String GROUP_DELIMETER = ",";
     private RichGoButton cntrlOpenReport;
-
     private String reportURL;
     //private RichSelectBooleanCheckbox cntrlProposed;
     //private RichSelectBooleanCheckbox cntrlRequested;
@@ -553,4 +563,72 @@ public class ReportBean {
         java.sql.Date retVal = (java.sql.Date) ob.execute();
         return retVal;
     }
+
+    public void exportProductAndGroup(FacesContext facesContext, OutputStream outputStream) {
+        try {
+
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Products and Group Lists");
+
+            DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+            DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("ViewObj_ProductList1Iterator");
+            HSSFRow excelrow = null;
+
+            // Get all the rows of a iterator
+            oracle.jbo.Row[] rows = dcIteratorBindings.getAllRowsInRange();
+            int i = 0;
+
+
+            for (oracle.jbo.Row row : rows) {
+
+                //print header on first row in excel
+                if (i == 0) {
+                    excelrow = (HSSFRow) worksheet.createRow((short) 0);
+                    HSSFCell cellA1 = excelrow.createCell((short) 0);
+                    HSSFCell cellA2 = excelrow.createCell((short) 1);
+                    cellA1.setCellValue("Products");
+                    cellA2.setCellValue("Group Lists");
+                }
+
+                //print data from second row in excel
+                ++i;
+                excelrow = worksheet.createRow((short) i);
+                HSSFCell cell = excelrow.createCell((short) 0);
+                cell.setCellValue(row.getAttribute("LongValue").toString());
+
+            }
+
+            dcIteratorBindings = bindings.findIteratorBinding("MQGroupsVO1Iterator");
+            excelrow = null;
+
+            // Get all the rows of a iterator
+            rows = dcIteratorBindings.getAllRowsInRange();
+            i = 0;
+
+            for (oracle.jbo.Row row : rows) {
+
+
+                //print data from second row in excel
+                ++i;
+                short j = 1;
+                excelrow = worksheet.getRow(i);;
+                HSSFCell cell = excelrow.createCell(j);
+                cell.setCellValue(row.getAttribute("LongValue").toString());
+
+            }
+
+
+            worksheet.createFreezePane(0, 1, 0, 1);
+            worksheet.autoSizeColumn(0);
+            worksheet.autoSizeColumn(1);
+            workbook.write(outputStream);
+            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
