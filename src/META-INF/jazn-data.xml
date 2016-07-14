@@ -7,7 +7,7 @@
       <users>
         <user>
           <name>TEST_MQM</name>
-          <credentials>{903}BU7i7WQMhp+5nwEwqtWvC6Q9anNBFOpQFpEnf+hPTuQ=</credentials>
+          <credentials>{903}WUF6hMKs6oskLp3zcBJ3N2gWgenaoiaqHGXtwtnDCV0=</credentials>
         </user>
         <user>
           <name>TEST_USER</name>
@@ -23,7 +23,7 @@
         </user>
         <user>
           <name>NMAT_REQUESTOR</name>
-          <credentials>{903}l7tC43CUnvaZiRjeczTVJMWRdXxiqGPwd1rEkzpfRX4=</credentials>
+          <credentials>{903}epyoVHJx2jV6f9T/158opl3vwH5Ozk+z9WctKFEm+0c=</credentials>
         </user>
       </users>
       <roles>

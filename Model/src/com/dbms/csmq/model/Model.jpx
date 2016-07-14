@@ -5,7 +5,7 @@
 <JboProject
    xmlns="http://xmlns.oracle.com/bc4j"
    Name="Model"
-   Version="12.2.1.0.31"
+   Version="11.1.2.64.36"
    SeparateXMLFiles="true"
    PackageName="com.dbms.csmq.model">
    <DesignTime>

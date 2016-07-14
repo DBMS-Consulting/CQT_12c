@@ -1,26 +1,26 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <References xmlns="http://xmlns.oracle.com/adf/jndi">
    <Reference name="TMS" className="oracle.jdeveloper.db.adapter.DatabaseProvider" credentialStoreKey="TMS" xmlns="">
-      <Factory className="oracle.jdevimpl.db.adapter.DatabaseProviderFactory1212"/>
+      <Factory className="oracle.jdeveloper.db.adapter.DatabaseProviderFactory"/>
       <RefAddresses>
-         <StringRefAddr addrType="oraDriverType">
-            <Contents>thin</Contents>
+         <StringRefAddr addrType="sid">
+            <Contents>octrn2</Contents>
          </StringRefAddr>
-         <StringRefAddr addrType="hostname">
-            <Contents>23.246.122.46</Contents>
-         </StringRefAddr>
-         <SecureRefAddr addrType="password"/>
          <StringRefAddr addrType="subtype">
             <Contents>oraJDBC</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="port">
-            <Contents>1526</Contents>
+            <Contents>1521</Contents>
+         </StringRefAddr>
+         <StringRefAddr addrType="hostname">
+            <Contents>chbsux0119.eu.novartis.net</Contents>
          </StringRefAddr>
          <StringRefAddr addrType="user">
             <Contents>nmat</Contents>
          </StringRefAddr>
-         <StringRefAddr addrType="sid">
-            <Contents>opa46</Contents>
+         <SecureRefAddr addrType="password"/>
+         <StringRefAddr addrType="oraDriverType">
+            <Contents>thin</Contents>
          </StringRefAddr>
       </RefAddresses>
    </Reference>
