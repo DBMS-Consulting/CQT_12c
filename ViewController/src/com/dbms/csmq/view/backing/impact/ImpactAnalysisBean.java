@@ -4,10 +4,8 @@ package com.dbms.csmq.view.backing.impact;
 import com.dbms.csmq.CSMQBean;
 import com.dbms.csmq.UserBean;
 import com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchBean;
-import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 import com.dbms.csmq.view.backing.NMQ.NMQWizardBean;
 import com.dbms.csmq.view.backing.NMQ.NMQWizardSearchBean;
-import com.dbms.csmq.view.diff.DiffUIBean;
 import com.dbms.csmq.view.hierarchy.GenericTreeNode;
 import com.dbms.csmq.view.hierarchy.HierarchyAccessor;
 import com.dbms.csmq.view.hierarchy.NewPTListBean;
@@ -21,12 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -35,16 +31,10 @@ import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
-import oracle.adf.view.rich.component.rich.RichMenu;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTreeTable;
-import oracle.adf.view.rich.component.rich.input.RichSelectBooleanCheckbox;
-import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
-import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
-import oracle.adf.view.rich.component.rich.nav.RichCommandToolbarButton;
-import oracle.adf.view.rich.component.rich.nav.RichTrain;
 import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.dnd.DnDAction;
@@ -58,45 +48,45 @@ import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 
 
 public class ImpactAnalysisBean extends HierarchyAccessor {
-    
+
     private String showImpact = CSMQBean.TRUE;
-    private String mqType = "";//CSMQBean.NMQ;
-    FutureImpactHierarchyBean futureImpactHierarchyBean = (FutureImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
-    CSMQBean cSMQBean = (CSMQBean)ADFContext.getCurrent().getApplicationScope().get("CSMQBean");
-    UserBean userBean = (UserBean)ADFContext.getCurrent().getSessionScope().get("UserBean");
-    NMQWizardSearchBean nMQWizardSearchBean = (NMQWizardSearchBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
+    private String mqType = ""; //CSMQBean.NMQ;
+    FutureImpactHierarchyBean futureImpactHierarchyBean =
+        (FutureImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
+    CSMQBean cSMQBean = (CSMQBean) ADFContext.getCurrent().getApplicationScope().get("CSMQBean");
+    UserBean userBean = (UserBean) ADFContext.getCurrent().getSessionScope().get("UserBean");
+    NMQWizardSearchBean nMQWizardSearchBean =
+        (NMQWizardSearchBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
     NMQWizardBean nMQWizardBean = nMQWizardSearchBean.getNMQWizardBean();
     ImpactAnalysisUIBean impactAnalysisUIBean = null;
-    
+
     private RichTreeTable preferedTermSourceTree;
     private RichTreeTable medDRATree;
     private RichTreeTable futureTree;
     private RichTreeTable hierarchySourceTree;
-    
-    
-    
+
+
     private String paramReleaseGroup;
     private String parentSOCcontentID;
     private String currentTermName;
     private String activationGroups;
     private String activeDictionaryName;
     private String currentDictId;
-    
+
     // FOR WORKFLOW
     private String currentState = CSMQBean.STATE_PROPOSED;
     private String currentReasonForApproval;
-    
+
     private String currentPredictGroups;
     private String currentContentCode;
-    
+
     int mode;
-    
+
     private String paramFutureShowNonImpacted = CSMQBean.TRUE;
     private String paramFutureSort = "SCOPE";
     private String paramFuturePrimaryOnly = CSMQBean.FALSE;
@@ -106,7 +96,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private String paramMedDRASort = "SCOPE";
     private String paramMedDRAPrimaryOnly = CSMQBean.FALSE;
     private String paramMedDRAScope = CSMQBean.FULL_NMQ_SMQ;
-    
+
     private String allGroups;
     private boolean futureShowImpacted;
     private boolean renderSave = false;
@@ -115,113 +105,158 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private Object socList;
     private Object newPTDisclosedKeys;
 
+    private String searchLevelStr = "%";
+    private String searchTermStr;
+
+    public void setHints(RichPopup.PopupHints hints) {
+        this.hints = hints;
+    }
+
+    public RichPopup.PopupHints getHints() {
+        return hints;
+    }
+
+    public void setSearchLevelStr(String searchLevelStr) {
+        this.searchLevelStr = searchLevelStr;
+    }
+
+    public String getSearchLevelStr() {
+        return searchLevelStr;
+    }
+
+    public void setSearchTermStr(String searchTermStr) {
+        this.searchTermStr = searchTermStr;
+    }
+
+    public String getSearchTermStr() {
+        return searchTermStr;
+    }
+
+    public void setSearchCodeStr(String searchCodeStr) {
+        this.searchCodeStr = searchCodeStr;
+    }
+
+    public String getSearchCodeStr() {
+        return searchCodeStr;
+    }
+    private String searchCodeStr;
+
     public ImpactAnalysisBean() {
-        
+
         super();
         System.out.println("START: ImpactAnalysisBean");
-        activationGroups = applicationBean.getDefaultDraftReleaseGroup() + "," + applicationBean.getDefaultMedDRAReleaseGroup();
+        activationGroups =
+            applicationBean.getDefaultDraftReleaseGroup() + "," + applicationBean.getDefaultMedDRAReleaseGroup();
         //NMATDRAFT_AG,NMATMED_AG
         CSMQBean.logger.info(userBean.getCaller() + " @ImpactAnalysisBean");
         CSMQBean.logger.info(userBean.getCaller() + " New PT search groups: " + activationGroups);
-        
-        userBean.setCurrentMenuPath("Impact Assessment › MedDRA Version");
+
+        String isViewPreviousFlow =
+            (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");
+        CSMQBean.logger.info(userBean.getCaller() + " isViewPreviousFlow : " + isViewPreviousFlow);
+
+        userBean.setCurrentMenuPath("Y".equals(isViewPreviousFlow) ? "Previous Version Impact › MedDRA Version" :
+                                    "Impact Assessment › MedDRA Version");
         userBean.setCurrentMenu("MEDDRA_IMPACT_ASSESSMENT");
         this.currentPredictGroups = cSMQBean.getDefaultMedDRAReleaseGroup();
         getDictionaryInfo();
         allGroups = this.defaultDraftGroupName + "," + this.defaultMedDRAGroupName + "," + this.defaultReleaseGroupName;
         nMQWizardBean.setPerformImpactPriorToExport(true);
-        if (nMQWizardBean.getMode() == CSMQBean.MODE_VIEW_VERSION_IMPACT){
-            userBean.setCurrentMenuPath("View Version Impact › MedDRA Version");
+        if (nMQWizardBean.getMode() == CSMQBean.MODE_VIEW_VERSION_IMPACT) {
+            userBean.setCurrentMenuPath("Y".equals(isViewPreviousFlow) ? "Previous Version Impact › MedDRA Version" :
+                                        "View Version Impact › MedDRA Version");
             userBean.setCurrentMenu("VIEW_VERSION_IMPACT");
         }
         hints = new RichPopup.PopupHints();
         System.out.println("END: ImpactAnalysisBean");
-        }
+    }
 
 
     private ImpactAnalysisUIBean getImpactAnalysisUIBean() {
-        if (impactAnalysisUIBean == null) impactAnalysisUIBean = (ImpactAnalysisUIBean)ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
+        if (impactAnalysisUIBean == null)
+            impactAnalysisUIBean =
+                (ImpactAnalysisUIBean) ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
         return impactAnalysisUIBean;
-        }
+    }
 
     public void getDictionaryInfo() {
         CSMQBean.logger.info(">> Start getDictionaryInfo");
         BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("CurrentDictionaryVO1Iterator");
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding) binding.get("CurrentDictionaryVO1Iterator");
         ViewObject vo = dciterb.getViewObject();
         vo.setNamedWhereClauseParam("shortName", CSMQBean.defaultBaseDictionaryShortName);
         vo.executeQuery();
         Enumeration rows = dciterb.getRowSetIterator().enumerateRowsInRange();
-        Row row = (Row)rows.nextElement();
+        Row row = (Row) rows.nextElement();
         this.activeDictionaryName = Utils.getAsString(row, "Name");
         CSMQBean.logger.info(">> End getDictionaryInfo");
-        }
-    
+    }
 
-//    public void doSearch(ActionEvent actionEvent) {        
-//        // THIS IS NOT USED ANY MORE
-//        impactAnalysisUIBean = (ImpactAnalysisUIBean)ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
-//        impactAnalysisUIBean.getImpactSearchPopUp().show(hints);
-//    
-//        String assessmentType = impactAnalysisUIBean.getCtrlImpact().getValue().toString();
-//        if (assessmentType.equals("INMQ")){
-//            this.showImpact = CSMQBean.TRUE;
-//            this.mqType = CSMQBean.NMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-//            }
-//        else if (assessmentType.equals("NINMQ")){
-//            this.showImpact = CSMQBean.FALSE;
-//            this.mqType = CSMQBean.NMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-//            }
-//        else if (assessmentType.equals("ISMQ")){
-//            this.showImpact = CSMQBean.TRUE;
-//            this.mqType = CSMQBean.SMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_SMQ;
-//            }
-//        else if (assessmentType.equals("NISMQ")){
-//            this.showImpact = CSMQBean.FALSE;
-//            this.mqType = CSMQBean.SMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_SMQ;
-//            }
-//        
-//        CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING SEARCH **");
-//        CSMQBean.logger.info(userBean.getCaller() + " showImpact: " + this.showImpact);
-//        CSMQBean.logger.info(userBean.getCaller() + " mqType: " + this.mqType);
-//        CSMQBean.logger.info(userBean.getCaller() + " killSwitch: " + CSMQBean.KILL_SWITCH_OFF);
-//        CSMQBean.logger.info(userBean.getCaller() + " ***********************");
-// 
-//        BindingContext bc = BindingContext.getCurrent();
-//        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-//        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("ImpactSearchListVO1Iterator");
-//        ViewObject vo = dciterb.getViewObject();
-//        
-//        vo.setNamedWhereClauseParam("showImpact", this.showImpact);
-//        vo.setNamedWhereClauseParam("mqType", this.mqType);
-//        vo.setNamedWhereClauseParam("killSwitch", CSMQBean.KILL_SWITCH_OFF);
-//       
-//        vo.executeQuery();
-//        
-//        
-//        
-//        impactAnalysisUIBean.getImpactSearchPopUp().show(hints);
-//        
-//
-//        
-//        
-//        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getCntrlImpactSearchResults());
-//        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getCntrlImpactSearchResults());
-//        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getCntrlTrain());
-//        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getCntrlTrain());
-//        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getPromotionToolBar());
-//        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getPromotionToolBar());
-//        //clear the selected row
-//        RowKeySet rks = impactAnalysisUIBean.getCntrlImpactSearchResults().getSelectedRowKeys();
-//        rks.clear();
-//     
-//        
-//        }
+
+    //    public void doSearch(ActionEvent actionEvent) {
+    //        // THIS IS NOT USED ANY MORE
+    //        impactAnalysisUIBean = (ImpactAnalysisUIBean)ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
+    //        impactAnalysisUIBean.getImpactSearchPopUp().show(hints);
+    //
+    //        String assessmentType = impactAnalysisUIBean.getCtrlImpact().getValue().toString();
+    //        if (assessmentType.equals("INMQ")){
+    //            this.showImpact = CSMQBean.TRUE;
+    //            this.mqType = CSMQBean.NMQ;
+    //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+    //            }
+    //        else if (assessmentType.equals("NINMQ")){
+    //            this.showImpact = CSMQBean.FALSE;
+    //            this.mqType = CSMQBean.NMQ;
+    //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+    //            }
+    //        else if (assessmentType.equals("ISMQ")){
+    //            this.showImpact = CSMQBean.TRUE;
+    //            this.mqType = CSMQBean.SMQ;
+    //            this.mode = CSMQBean.MODE_UPDATE_SMQ;
+    //            }
+    //        else if (assessmentType.equals("NISMQ")){
+    //            this.showImpact = CSMQBean.FALSE;
+    //            this.mqType = CSMQBean.SMQ;
+    //            this.mode = CSMQBean.MODE_UPDATE_SMQ;
+    //            }
+    //
+    //        CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING SEARCH **");
+    //        CSMQBean.logger.info(userBean.getCaller() + " showImpact: " + this.showImpact);
+    //        CSMQBean.logger.info(userBean.getCaller() + " mqType: " + this.mqType);
+    //        CSMQBean.logger.info(userBean.getCaller() + " killSwitch: " + CSMQBean.KILL_SWITCH_OFF);
+    //        CSMQBean.logger.info(userBean.getCaller() + " ***********************");
+    //
+    //        BindingContext bc = BindingContext.getCurrent();
+    //        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+    //        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("ImpactSearchListVO1Iterator");
+    //        ViewObject vo = dciterb.getViewObject();
+    //
+    //        vo.setNamedWhereClauseParam("showImpact", this.showImpact);
+    //        vo.setNamedWhereClauseParam("mqType", this.mqType);
+    //        vo.setNamedWhereClauseParam("killSwitch", CSMQBean.KILL_SWITCH_OFF);
+    //
+    //        vo.executeQuery();
+    //
+    //
+    //
+    //        impactAnalysisUIBean.getImpactSearchPopUp().show(hints);
+    //
+    //
+    //
+    //
+    //        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getCntrlImpactSearchResults());
+    //        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getCntrlImpactSearchResults());
+    //        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getCntrlTrain());
+    //        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getCntrlTrain());
+    //        AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getPromotionToolBar());
+    //        AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getPromotionToolBar());
+    //        //clear the selected row
+    //        RowKeySet rks = impactAnalysisUIBean.getCntrlImpactSearchResults().getSelectedRowKeys();
+    //        rks.clear();
+    //
+    //
+    //        }
 
 
     public String getShowImpact() {
@@ -250,306 +285,309 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
 
     public void rowSelected(SelectionEvent selectionEvent) {
         CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE ****");
-
-        String source = ((RichTable)selectionEvent.getSource()).getId();
+        String isViewPreviousFlow =
+            (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");
+        CSMQBean.logger.info(userBean.getCaller() + " isViewPreviousFlow =" + isViewPreviousFlow);
+        String source = ((RichTable) selectionEvent.getSource()).getId();
         String iterator = null;
-        if (source.equalsIgnoreCase("T_CMQ_Y")){
-            iterator = "ImpactSearchListVO_CMQ_Y";
-//            this.showImpact = CSMQBean.TRUE;
-//            this.mqType = CSMQBean.CMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-        } else if (source.equalsIgnoreCase("T_CMQ_N")){
-            iterator = "ImpactSearchListVO_CMQ_N";
-//            this.showImpact = CSMQBean.FALSE;
-//            this.mqType = CSMQBean.CMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+        if (source.equalsIgnoreCase("T_CMQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_CMQ_Y" : "ImpactSearchListVO_CMQ_Y";
+            //            this.showImpact = CSMQBean.TRUE;
+            //            this.mqType = CSMQBean.CMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+        } else if (source.equalsIgnoreCase("T_CMQ_N")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_CMQ_N" : "ImpactSearchListVO_CMQ_N";
+            //            this.showImpact = CSMQBean.FALSE;
+            //            this.mqType = CSMQBean.CMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
         } else if (source.equalsIgnoreCase("TBL_MQ_N")) {
-            iterator = "ImpactSearchListVO_MQ_N";
-//            this.showImpact = CSMQBean.FALSE;
-//            this.mqType = CSMQBean.SMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_SMQ;
-            }
-        else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
-            iterator = "ImpactSearchListVO_MQ_Y";
-//            this.showImpact = CSMQBean.TRUE;
-//            this.mqType = CSMQBean.SMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_SMQ;
-            }
-        else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
-            iterator = "ImpactSearchListVO_NMQ_N";
-//            this.showImpact = CSMQBean.FALSE;
-//            this.mqType = CSMQBean.NMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-            }
-        else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
-            iterator = "ImpactSearchListVO_NMQ_Y";
-//            this.showImpact = CSMQBean.TRUE;
-//            this.mqType = CSMQBean.NMQ;
-//            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_MQ_N" : "ImpactSearchListVO_MQ_N";
+            //            this.showImpact = CSMQBean.FALSE;
+            //            this.mqType = CSMQBean.SMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_SMQ;
+        } else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_MQ_Y" : "ImpactSearchListVO_MQ_Y";
+            //            this.showImpact = CSMQBean.TRUE;
+            //            this.mqType = CSMQBean.SMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_SMQ;
+        } else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_NMQ_N" : "ImpactSearchListVO_NMQ_N";
+            //            this.showImpact = CSMQBean.FALSE;
+            //            this.mqType = CSMQBean.NMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
+        } else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_NMQ_Y" : "ImpactSearchListVO_NMQ_Y";
+            //            this.showImpact = CSMQBean.TRUE;
+            //            this.mqType = CSMQBean.NMQ;
+            //            this.mode = CSMQBean.MODE_UPDATE_EXISTING;
         }
 
 
-
-        resolveMethodExpression("#{bindings."+ iterator +".collectionModel.makeCurrent}", null, new Class[] { SelectionEvent.class }, new Object[] {selectionEvent});
-        RichTable object = (RichTable)selectionEvent.getSource();
+        resolveMethodExpression("#{bindings." + iterator + ".collectionModel.makeCurrent}", null, new Class[] {
+                                SelectionEvent.class }, new Object[] { selectionEvent });
+        RichTable object = (RichTable) selectionEvent.getSource();
         Row row = null;
         for (Object facesRowKey : object.getSelectedRowKeys()) {
             object.setRowKey(facesRowKey);
             Object o = object.getRowData();
-            JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding)o;
+            JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding) o;
             row = rowData.getRow();
-            }
-        
-        if (row == null) return;
-        String selectedTermState  =  Utils.getAsString(row, "WorkflowState");
+        }
+
+        if (row == null)
+            return;
+        String selectedTermState = Utils.getAsString(row, "WorkflowState");
         CSMQBean.logger.info(userBean.getCaller() + " selected Term State: " + selectedTermState);
         //validate the current state of the selected term and allow only for the below states activated or all IA states
-        if (null == selectedTermState || (
-             selectedTermState.equalsIgnoreCase(CSMQBean.STATE_ACTIVATED)
-            || selectedTermState.equalsIgnoreCase(CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT) 
-            || selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_REVIEWED)
-            || selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_APPROVED)
-            || selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_PUBLISHED)
-            )){
-            
-            if (source.equalsIgnoreCase("T_CMQ_Y")){
-               // iterator = "ImpactSearchListVO_CMQ_Y";
+        if (null == selectedTermState ||
+            (selectedTermState.equalsIgnoreCase(CSMQBean.STATE_ACTIVATED) ||
+             selectedTermState.equalsIgnoreCase(CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT) ||
+             selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_REVIEWED) ||
+             selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_APPROVED) ||
+             selectedTermState.equalsIgnoreCase(CSMQBean.IA_STATE_PUBLISHED))) {
+
+            if (source.equalsIgnoreCase("T_CMQ_Y")) {
+                // iterator = "ImpactSearchListVO_CMQ_Y";
                 this.showImpact = CSMQBean.TRUE;
                 this.mqType = CSMQBean.CMQ;
                 this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-            } else if (source.equalsIgnoreCase("T_CMQ_N")){
-              //  iterator = "ImpactSearchListVO_CMQ_N";
+            } else if (source.equalsIgnoreCase("T_CMQ_N")) {
+                //  iterator = "ImpactSearchListVO_CMQ_N";
                 this.showImpact = CSMQBean.FALSE;
                 this.mqType = CSMQBean.CMQ;
                 this.mode = CSMQBean.MODE_UPDATE_EXISTING;
             } else if (source.equalsIgnoreCase("TBL_MQ_N")) {
-             //   iterator = "ImpactSearchListVO_MQ_N";
+                //   iterator = "ImpactSearchListVO_MQ_N";
                 this.showImpact = CSMQBean.FALSE;
                 this.mqType = CSMQBean.SMQ;
                 this.mode = CSMQBean.MODE_UPDATE_SMQ;
-                }
-            else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
+            } else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
                 iterator = "ImpactSearchListVO_MQ_Y";
                 this.showImpact = CSMQBean.TRUE;
                 this.mqType = CSMQBean.SMQ;
                 this.mode = CSMQBean.MODE_UPDATE_SMQ;
-                }
-            else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
-              //  iterator = "ImpactSearchListVO_NMQ_N";
+            } else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
+                //  iterator = "ImpactSearchListVO_NMQ_N";
                 this.showImpact = CSMQBean.FALSE;
                 this.mqType = CSMQBean.NMQ;
                 this.mode = CSMQBean.MODE_UPDATE_EXISTING;
-                }
-            else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
-             //   iterator = "ImpactSearchListVO_NMQ_Y";
+            } else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
+                //   iterator = "ImpactSearchListVO_NMQ_Y";
                 this.showImpact = CSMQBean.TRUE;
                 this.mqType = CSMQBean.NMQ;
                 this.mode = CSMQBean.MODE_UPDATE_EXISTING;
             }
-            
-       
-        
-        this.currentDictId = Utils.getAsString(row, "DictContentId");        
-        this.currentContentCode = Utils.getAsString(row, "DictContentCode");  
-        this.currentTermName = Utils.getAsString(row, "Term");
-        this.activationGroups = CSMQBean.defaultMedDRAReleaseGroup;
-        String smqNmq = Utils.getAsString(row, "NmqSmq");                        
-        String queryLevel = Utils.getAsString(row, "DefLevelsShortName");
-        
-        nMQWizardBean.setFooterInfo(this.currentTermName);
-        
-        String status = Utils.getAsString(row, "Status");
-        
-        CSMQBean.logger.info(userBean.getCaller() + " currentDictId: " + currentDictId);
-            
-        HashMap result = null;
-        if(null == selectedTermState || selectedTermState.equalsIgnoreCase(CSMQBean.STATE_ACTIVATED)){
-            //result = NMQUtils.setDefaultIAState(this.currentDictId, smqNmq, userBean.getCurrentUser(), userBean.getCurrentUserRole());
-            DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-            OperationBinding ob = bc.getOperationBinding("setDefaultIAState");
-            ob.getParamsMap().put("dictContentIDs", this.currentDictId);
-            ob.getParamsMap().put("currentUser", userBean.getCurrentUser());
-            ob.getParamsMap().put("currentUserRole", userBean.getCurrentUserRole());
 
-            result = (HashMap)ob.execute();
-            if (null != result){
-                String retCode = (String) result.get("RETURN_CODE");
-                if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                    this.setCurrentState((String)result.get("STATE"));
-                     CSMQBean.logger.info(userBean.getCaller() + " STATE : " + (String)result.get("STATE"));
-                } else {
-                    this.setCurrentState(selectedTermState);
+
+            this.currentDictId = Utils.getAsString(row, "DictContentId");
+            this.currentContentCode = Utils.getAsString(row, "DictContentCode");
+            this.currentTermName = Utils.getAsString(row, "Term");
+            this.activationGroups = CSMQBean.defaultMedDRAReleaseGroup;
+            String smqNmq = Utils.getAsString(row, "NmqSmq");
+            String queryLevel = Utils.getAsString(row, "DefLevelsShortName");
+
+            nMQWizardBean.setFooterInfo(this.currentTermName);
+
+            String status = Utils.getAsString(row, "Status");
+
+            CSMQBean.logger.info(userBean.getCaller() + " currentDictId: " + currentDictId);
+
+            HashMap result = null;
+            if (null == selectedTermState || selectedTermState.equalsIgnoreCase(CSMQBean.STATE_ACTIVATED)) {
+                //result = NMQUtils.setDefaultIAState(this.currentDictId, smqNmq, userBean.getCurrentUser(), userBean.getCurrentUserRole());
+                DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+                OperationBinding ob = bc.getOperationBinding("setDefaultIAState");
+                ob.getParamsMap().put("dictContentIDs", this.currentDictId);
+                ob.getParamsMap().put("currentUser", userBean.getCurrentUser());
+                ob.getParamsMap().put("currentUserRole", userBean.getCurrentUserRole());
+
+                result = (HashMap) ob.execute();
+                if (null != result) {
+                    String retCode = (String) result.get("RETURN_CODE");
+                    if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)) {
+                        this.setCurrentState((String) result.get("STATE"));
+                        CSMQBean.logger.info(userBean.getCaller() + " STATE : " + (String) result.get("STATE"));
+                    } else {
+                        this.setCurrentState(selectedTermState);
+                    }
                 }
+
+            } else {
+                this.setCurrentState(selectedTermState);
             }
-            
-        } else {
-            this.setCurrentState(selectedTermState);
-        }
-//        if (result != null) {
-//           this.setCurrentState((String)result.get("STATE"));
-//            CSMQBean.logger.info(userBean.getCaller() + " STATE : " + (String)result.get("STATE")); 
-//        } else {
-//            this.setCurrentState(selectedTermState);
-//        }
-        CSMQBean.logger.info(userBean.getCaller() + " Current state : " + this.getCurrentState()); 
-        // INF NOTES STUFF
-        nMQWizardBean.setCurrentDictContentID(this.currentDictId);
-        //nMQWizardBean.setCurrentState(this.getCurrentState());
-        //nMQWizardBean.setCurrentStatus(this.getCurrentState());
-        nMQWizardBean.setCurrentStatus(status);
-        nMQWizardSearchBean.setCurrentStatus(status);
-        if (null != queryLevel && !queryLevel.isEmpty()){
-            nMQWizardSearchBean.setParamLevel(queryLevel.substring(queryLevel.length()-1));
-            CSMQBean.logger.info("queryLevel >>>" + nMQWizardSearchBean.getParamLevel());
-        }
-        
-        String termProduct = Utils.getAsString(row, "Value3");
-        nMQWizardBean.setCurrentContentCode(this.currentContentCode);
-        // set product and group data
-        if (termProduct != null) {
-            termProduct = termProduct.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
-            Collections.addAll(nMQWizardBean.getProductList(), termProduct.split("%"));
-            CSMQBean.logger.info("Term Product list >>>"+nMQWizardBean.getProductList());
-        }
-        String termGroup = Utils.getAsString(row, "Value2");
-        if (termGroup != null) {
-            termGroup = termGroup.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
-            Collections.addAll(nMQWizardBean.getMQGroupList(), termGroup.split("%"));
-            CSMQBean.logger.info("Term Group list >>>"+nMQWizardBean.getMQGroupList());
-        }
-        nMQWizardBean.setIsNMQ(smqNmq.equalsIgnoreCase("NMQ"));
-        nMQWizardBean.setIsSMQ(smqNmq.equalsIgnoreCase("SMQ"));
-        nMQWizardSearchBean.initForImpactAnalysis(currentContentCode, currentDictId, activationGroups);
-        nMQWizardBean.setCurrentState(this.getCurrentState());
-        clearSearch ();
-        
-        
-        getImpactAnalysisUIBean().getImpactSearchPopUp().cancel();
-        
-        if (medDRATree != null && medDRATree.getDisclosedRowKeys()!=null)
-            medDRATree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-                
-        if (futureTree != null && futureTree.getDisclosedRowKeys()!=null)
-            futureTree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-               
-        getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
-        getImpactAnalysisUIBean().getCntrlExportDisplayedButtonLeft().setDisabled(false);
-        getImpactAnalysisUIBean().getCntrlExportDisplayedButtonRight().setDisabled(false);
-       // getImpactAnalysisUIBean().getCntrlRefreshButton().setDisabled(false);
-        getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlTrain());
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlTrain());        
-        refreshTrees();
+            //        if (result != null) {
+            //           this.setCurrentState((String)result.get("STATE"));
+            //            CSMQBean.logger.info(userBean.getCaller() + " STATE : " + (String)result.get("STATE"));
+            //        } else {
+            //            this.setCurrentState(selectedTermState);
+            //        }
+            CSMQBean.logger.info(userBean.getCaller() + " Current state : " + this.getCurrentState());
+            // INF NOTES STUFF
+            nMQWizardBean.setCurrentDictContentID(this.currentDictId);
+            //nMQWizardBean.setCurrentState(this.getCurrentState());
+            //nMQWizardBean.setCurrentStatus(this.getCurrentState());
+            nMQWizardBean.setCurrentStatus(status);
+            nMQWizardSearchBean.setCurrentStatus(status);
+            if (null != queryLevel && !queryLevel.isEmpty()) {
+                nMQWizardSearchBean.setParamLevel(queryLevel.substring(queryLevel.length() - 1));
+                CSMQBean.logger.info("queryLevel >>>" + nMQWizardSearchBean.getParamLevel());
+            }
+
+            String termProduct = Utils.getAsString(row, "Value3");
+            nMQWizardBean.setCurrentContentCode(this.currentContentCode);
+            // set product and group data
+            if (termProduct != null) {
+                termProduct = termProduct.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+                Collections.addAll(nMQWizardBean.getProductList(), termProduct.split("%"));
+                CSMQBean.logger.info("Term Product list >>>" + nMQWizardBean.getProductList());
+            }
+            String termGroup = Utils.getAsString(row, "Value2");
+            if (termGroup != null) {
+                termGroup = termGroup.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+                Collections.addAll(nMQWizardBean.getMQGroupList(), termGroup.split("%"));
+                CSMQBean.logger.info("Term Group list >>>" + nMQWizardBean.getMQGroupList());
+            }
+            nMQWizardBean.setIsNMQ(smqNmq.equalsIgnoreCase("NMQ"));
+            nMQWizardBean.setIsSMQ(smqNmq.equalsIgnoreCase("SMQ"));
+            nMQWizardSearchBean.initForImpactAnalysis(currentContentCode, currentDictId, activationGroups);
+            nMQWizardBean.setCurrentState(this.getCurrentState());
+            clearSearch();
+
+
+            getImpactAnalysisUIBean().getImpactSearchPopUp().cancel();
+
+            if (medDRATree != null && medDRATree.getDisclosedRowKeys() != null)
+                medDRATree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
+            if (futureTree != null && futureTree.getDisclosedRowKeys() != null)
+                futureTree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
+            getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
+            getImpactAnalysisUIBean().getCntrlExportDisplayedButtonLeft().setDisabled(false);
+            getImpactAnalysisUIBean().getCntrlExportDisplayedButtonRight().setDisabled(false);
+            // getImpactAnalysisUIBean().getCntrlRefreshButton().setDisabled(false);
+            getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlTrain());
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlTrain());
+            refreshTrees();
         } else {
             CSMQBean.logger.info(userBean.getCaller() + " selected Term State: " + selectedTermState);
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "The MedDRA Query is being updated. Activate the MedDRA Query first, then run impact assessment.", "");
+            FacesMessage msg =
+                new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                 "The MedDRA Query is being updated. Activate the MedDRA Query first, then run impact assessment.",
+                                 "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
         }
     }
-    
-    
-    private void clearSearch () {
+
+
+    private void clearSearch() {
         try {
-            /*
-            BindingContext bc = BindingContext.getCurrent();
-            DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-            DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("ImpactSearchListVO1Iterator");
-            ViewObject vo = dciterb.getViewObject();
-            vo.setNamedWhereClauseParam("killSwitch", CSMQBean.KILL_SWITCH_ON);
-            vo.executeQuery();
-            impactAnalysisUIBean = (ImpactAnalysisUIBean)ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
-            AdfFacesContext.getCurrentInstance().addPartialTarget(impactAnalysisUIBean.getCntrlImpactSearchResults());
-            AdfFacesContext.getCurrentInstance().partialUpdateNotify(impactAnalysisUIBean.getCntrlImpactSearchResults());
-            */
+            searchLevelStr = "%";
+            searchTermStr = null;
+            searchCodeStr = null;
+            onImpartSearchAction(null);
             //reset the filters
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y().getDisclosedRowKeys()!=null )
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y().getDisclosedRowKeys().clear();
-            
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N().getDisclosedRowKeys()!=null )
+
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N().getDisclosedRowKeys().clear();
-           
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y().getDisclosedRowKeys()!=null )
+
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y().getDisclosedRowKeys().clear();
-            
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y().getDisclosedRowKeys()!=null )
+
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y().getDisclosedRowKeys().clear();
-            
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N().getDisclosedRowKeys()!=null )
+
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N().getDisclosedRowKeys().clear();
-            
-            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N() != null && getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N().getDisclosedRowKeys()!=null )
+
+            if (getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N() != null &&
+                getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N().getDisclosedRowKeys() != null)
                 getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N().getDisclosedRowKeys().clear();
-           
+
             getImpactAnalysisUIBean().getCntrlShowImpactedFilterExisting().setValue(false);
             getImpactAnalysisUIBean().getCntrlShowPrimaryFilterExisting().setValue(false);
             getImpactAnalysisUIBean().getCntrlShowSortFilterExisting().setValue("TERM");
             getImpactAnalysisUIBean().getCntrlShowImpactedFilterFuture().setValue(false);
             getImpactAnalysisUIBean().getCntrlShowPrimaryFilterFuture().setValue(false);
             getImpactAnalysisUIBean().getCntrlShowSortFilterFuture().setValue("TERM");
-            
+
             getImpactAnalysisUIBean().getCntrlShowImpactedFilterExisting().resetValue();
             getImpactAnalysisUIBean().getCntrlShowPrimaryFilterExisting().resetValue();
             getImpactAnalysisUIBean().getCntrlShowSortFilterExisting().resetValue();
             getImpactAnalysisUIBean().getCntrlShowImpactedFilterFuture().resetValue();
             getImpactAnalysisUIBean().getCntrlShowPrimaryFilterFuture().resetValue();
             getImpactAnalysisUIBean().getCntrlShowSortFilterFuture().resetValue();
-            
+
             this.paramFutureShowNonImpacted = CSMQBean.TRUE;
             this.paramFuturePrimaryOnly = CSMQBean.FALSE;
             this.paramMedDRAShowNonImpacted = CSMQBean.TRUE;
             this.paramMedDRAPrimaryOnly = CSMQBean.FALSE;
             this.paramFutureSort = "TERM";
             this.paramMedDRASort = "SCOPE";
-            
-            AdfFacesContext.getCurrentInstance().addPartialTarget (getImpactAnalysisUIBean().getCntrlFutureMenu());
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlFutureMenu());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlFutureMenu());
-            
-            AdfFacesContext.getCurrentInstance().addPartialTarget (getImpactAnalysisUIBean().getCntrlExistingMenu());
+
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlExistingMenu());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlExistingMenu());
-            }
-        catch (Exception e) {}
+        } catch (Exception e) {
         }
-    
-    
-    public void refreshTrees () {
+    }
+
+
+    public void refreshTrees() {
         refreshFutureTree(null);
         refreshMedDRATree();
-        }
+    }
 
-    
-    public void refreshFutureTree () {
+
+    public void refreshFutureTree() {
         refreshFutureTree(null);
     }
-    
-    
-    public void refreshMedDRATree () {
+
+
+    public void refreshMedDRATree() {
         BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-        DCIteratorBinding medDRAImpactVO1Iterator = (DCIteratorBinding)binding.get("MedDRAImpactVO1Iterator1");
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding medDRAImpactVO1Iterator = (DCIteratorBinding) binding.get("MedDRAImpactVO1Iterator1");
         ViewObject medDRATreeVO = medDRAImpactVO1Iterator.getViewObject();
-        
-        CSMQBean.logger.info(userBean.getCaller() + " UPDATING: " +  allGroups); 
+
+        CSMQBean.logger.info(userBean.getCaller() + " UPDATING: " + allGroups);
         medDRATreeVO.setNamedWhereClauseParam("activationGroup", allGroups);
         medDRATreeVO.setNamedWhereClauseParam("dictContentID", this.currentDictId);
         medDRATreeVO.setNamedWhereClauseParam("sortKey", this.paramMedDRASort);
         medDRATreeVO.setNamedWhereClauseParam("showNonImpacted", this.paramMedDRAShowNonImpacted);
         medDRATreeVO.setNamedWhereClauseParam("returnPrimLinkPath", this.paramMedDRAPrimaryOnly);
         medDRATreeVO.setNamedWhereClauseParam("scopeFilter", this.paramMedDRAScope);
-            
+
         medDRATreeVO.setNamedWhereClauseParam("maxLevels", CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
         medDRATreeVO.setNamedWhereClauseParam("startLevel", 0);
-        
+
         CSMQBean.logger.info(userBean.getCaller() + " Iterator: " + "MedDRAImpactVO1Iterator1");
         CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + allGroups);
         CSMQBean.logger.info(userBean.getCaller() + " dictContentID: " + this.currentDictId);
@@ -557,30 +595,32 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         CSMQBean.logger.info(userBean.getCaller() + " showNonImpacted: " + this.paramMedDRAShowNonImpacted);
         CSMQBean.logger.info(userBean.getCaller() + " returnPrimLinkPath: " + this.paramMedDRAPrimaryOnly);
         CSMQBean.logger.info("scopeFilter: " + this.paramMedDRAScope);
-        CSMQBean.logger.info(userBean.getCaller() + " maxLevels: " + CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
+        CSMQBean.logger.info(userBean.getCaller() + " maxLevels: " +
+                             CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
         CSMQBean.logger.info(userBean.getCaller() + " startLevel: " + 0);
-        
-        medDRATreeVO.executeQuery(); 
-        MedDRAImpactHierarchyBean medDRAImpactHierarchyBean = (MedDRAImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
+
+        medDRATreeVO.executeQuery();
+        MedDRAImpactHierarchyBean medDRAImpactHierarchyBean =
+            (MedDRAImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
         medDRAImpactHierarchyBean.init();
         AdfFacesContext.getCurrentInstance().addPartialTarget(medDRATree);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(medDRATree);
-        }
-    
-    
-    public void refreshFutureTree (ActionEvent actionEvent) {
-   
-        
+    }
+
+
+    public void refreshFutureTree(ActionEvent actionEvent) {
+
+
         BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-        DCIteratorBinding draftImpactVO1Iterator = (DCIteratorBinding)binding.get("DraftImpactVO1Iterator1");
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding draftImpactVO1Iterator = (DCIteratorBinding) binding.get("DraftImpactVO1Iterator1");
         ViewObject draftTree = draftImpactVO1Iterator.getViewObject();
         //String bothGroups = this.defaultDraftGroupName + "," + this.defaultMedDRAGroupName;
-        CSMQBean.logger.info(userBean.getCaller() + " UPDATING: " +  allGroups); 
+        CSMQBean.logger.info(userBean.getCaller() + " UPDATING: " + allGroups);
         draftTree.setNamedWhereClauseParam("activationGroup", allGroups);
         draftTree.setNamedWhereClauseParam("dictContentID", this.currentDictId);
-        
-            
+
+
         draftTree.setNamedWhereClauseParam("activationGroup", allGroups);
         draftTree.setNamedWhereClauseParam("dictContentID", this.currentDictId);
         draftTree.setNamedWhereClauseParam("sortKey", this.paramFutureSort);
@@ -589,7 +629,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         draftTree.setNamedWhereClauseParam("scopeFilter", this.paramFutureScope);
         draftTree.setNamedWhereClauseParam("maxLevels", CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
         draftTree.setNamedWhereClauseParam("startLevel", 0);
-        
+
         CSMQBean.logger.info(userBean.getCaller() + " Iterator: " + "DraftImpactVO1Iterator1");
         CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + allGroups);
         CSMQBean.logger.info(userBean.getCaller() + " dictContentID: " + this.currentDictId);
@@ -597,23 +637,25 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         CSMQBean.logger.info(userBean.getCaller() + " showNonImpacted: " + this.paramFutureShowNonImpacted);
         CSMQBean.logger.info(userBean.getCaller() + " returnPrimLinkPath: " + this.paramFuturePrimaryOnly);
         CSMQBean.logger.info("scopeFilter: " + this.paramFutureScope);
-        CSMQBean.logger.info(userBean.getCaller() + " maxLevels: " + CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
+        CSMQBean.logger.info(userBean.getCaller() + " maxLevels: " +
+                             CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
         CSMQBean.logger.info(userBean.getCaller() + " startLevel: " + 0);
-        
-        draftTree.executeQuery();   
-        FutureImpactHierarchyBean futureImpactHierarchyBean = (FutureImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
+
+        draftTree.executeQuery();
+        FutureImpactHierarchyBean futureImpactHierarchyBean =
+            (FutureImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
         boolean hasScope = false;
         if (nMQWizardBean.getCurrentScope() != null)
             hasScope = nMQWizardBean.getCurrentScope().equals(CSMQBean.HAS_SCOPE);
-            
+
         CSMQBean.logger.info(userBean.getCaller() + " hasScope: " + hasScope);
         futureImpactHierarchyBean.init(hasScope);
         clearKeys(futureTree);
         AdfFacesContext.getCurrentInstance().addPartialTarget(futureTree);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(futureTree);
-        }
-    
- 
+    }
+
+
     public void setCurrentDictId(String currentDictId) {
         this.currentDictId = currentDictId;
     }
@@ -622,7 +664,6 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         return currentDictId;
     }
 
-    
 
     public void setParamReleaseGroup(String paramReleaseGroup) {
         this.paramReleaseGroup = paramReleaseGroup;
@@ -632,84 +673,84 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         return paramReleaseGroup;
     }
 
-    
-    
+
     public DnDAction onTreeDrop(DropEvent dropEvent) {
         showStatus(CSMQBean.MQ_MODIFIED);
         RichTreeTable sourceTree = null;
-        if (dropEvent.getDragClientId().toString().indexOf("ptList") > 0) { 
+        if (dropEvent.getDragClientId().toString().indexOf("ptList") > 0) {
             sourceTree = preferedTermSourceTree;
-        } else if(dropEvent.getDragClientId().equals("pt1:tt5")){
-              NMQSourceTermSearchBean nMQSourceTermSearchBean = 
-                  (NMQSourceTermSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
-              if (null != nMQSourceTermSearchBean){
-                  sourceTree = nMQSourceTermSearchBean.getControlMultiResultsTable();
-              }
+        } else if (dropEvent.getDragClientId().equals("pt1:tt5")) {
+            NMQSourceTermSearchBean nMQSourceTermSearchBean =
+                (NMQSourceTermSearchBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
+            if (null != nMQSourceTermSearchBean) {
+                sourceTree = nMQSourceTermSearchBean.getControlMultiResultsTable();
+            }
         } else {
             sourceTree = hierarchySourceTree;
         }
         ///  THIS WILL PROBABLY NEED TO BE FIXED TO USE THE OTHER TREES - TES 1/26/2012
-        return processDragAndDropEvent(dropEvent, sourceTree, futureTree, futureImpactHierarchyBean.getTreemodel(), Integer.parseInt(CSMQBean.FULL_NMQ_SMQ));
+        return processDragAndDropEvent(dropEvent, sourceTree, futureTree, futureImpactHierarchyBean.getTreemodel(),
+                                       Integer.parseInt(CSMQBean.FULL_NMQ_SMQ));
     }
-    
-    
-    public void onTreeNodeDelete(ActionEvent actionEvent) { 
+
+
+    public void onTreeNodeDelete(ActionEvent actionEvent) {
         showStatus(CSMQBean.MQ_MODIFIED);
         processTreeNodeDelete(futureTree, futureImpactHierarchyBean.getTreemodel());
-        }
+    }
 
-    
+
     public void deleteSelected(DialogEvent dialogEvent) {
         processDeleteSelected(dialogEvent, futureTree, futureImpactHierarchyBean.getTreemodel());
-        }
-    
-    
-    
+    }
+
+
     public void SOCChanged(ValueChangeEvent valueChangeEvent) {
         valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
         ArrayList list = new ArrayList(Arrays.asList(valueChangeEvent.getNewValue()));
-        String retVal = "";//(String)list.get(0);;//
-        
-        for (Object obj : list) 
+        String retVal = ""; //(String)list.get(0);;//
+
+        for (Object obj : list)
             retVal += obj.toString().trim();
-        
+
         retVal = retVal.replace("[", "");
         retVal = retVal.replace("]", "");
         retVal = retVal.replace(',', '^');
-        
+
         socList = retVal;
-        }
-    
-    
-    public void refreshNewPTList () {
-        
+    }
+
+
+    public void refreshNewPTList() {
+
         CSMQBean.logger.info(userBean.getCaller() + " CREATING NEW PT TREE");
         String selectedSocList = getSOCList();
-        if (null != selectedSocList && !selectedSocList.isEmpty()){
+        if (null != selectedSocList && !selectedSocList.isEmpty()) {
             BindingContext bc = BindingContext.getCurrent();
-            DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-            DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("NewPTsVO1Iterator");
+            DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+            DCIteratorBinding dciterb = (DCIteratorBinding) binding.get("NewPTsVO1Iterator");
             ViewObject newPTsVO1Iterator = dciterb.getViewObject();
-            
+
             String groups = CSMQBean.defaultMEDSMQReleaseGroup + "^" + CSMQBean.defaultMedDRAReleaseGroup;
-            
+
             newPTsVO1Iterator.setNamedWhereClauseParam("dictionaryName", CSMQBean.defaultBaseDictionaryShortName);
             newPTsVO1Iterator.setNamedWhereClauseParam("releaseGroups", groups);
             newPTsVO1Iterator.setNamedWhereClauseParam("contentIDs", selectedSocList);
             //DEFAULT_MEDSMQ_RELEASE_GROUP
             //DEFAULT_MEDDRA_RELEASE_GROUP
-            
+
             CSMQBean.logger.info(userBean.getCaller() + " NewPTsVO1Iterator");
             CSMQBean.logger.info(userBean.getCaller() + " dictionaryName: " + CSMQBean.defaultBaseDictionaryShortName);
             CSMQBean.logger.info(userBean.getCaller() + " releaseGroups: " + groups);
             CSMQBean.logger.info(userBean.getCaller() + " contentIDs: " + socList);
-            
+
             newPTsVO1Iterator.executeQuery();
-            
-            if ( preferedTermSourceTree.getDisclosedRowKeys() !=null)
-                preferedTermSourceTree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-            
-            NewPTListBean newPTListBean = (NewPTListBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NewPTListBean");
+
+            if (preferedTermSourceTree.getDisclosedRowKeys() != null)
+                preferedTermSourceTree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
+            NewPTListBean newPTListBean =
+                (NewPTListBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NewPTListBean");
             newPTListBean.init();
             AdfFacesContext.getCurrentInstance().addPartialTarget(preferedTermSourceTree);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(preferedTermSourceTree);
@@ -718,22 +759,21 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select atleast one SOC term.", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        
+
     }
-    
-    
-    private String getSOCList () {
+
+
+    private String getSOCList() {
         String SOCListString = "";
-        
+
         Object selProd = getImpactAnalysisUIBean().getCntlSOCList().getValue();
         if (selProd instanceof java.lang.String) {
             String temp = selProd.toString();
             temp.replace("[", "");
             temp.replace("]", "");
             SOCListString = temp;
-            } 
-        else {
-            List selected = (List)getImpactAnalysisUIBean().getCntlSOCList().getValue();
+        } else {
+            List selected = (List) getImpactAnalysisUIBean().getCntlSOCList().getValue();
             if (selected != null) {
                 String temp = "";
                 for (Object s : selected)
@@ -743,51 +783,51 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
                 temp.replace("]", "");
 
                 if (temp != null & temp.length() > 0)
-                    SOCListString= temp.substring(0, temp.length() - 1);
+                    SOCListString = temp.substring(0, temp.length() - 1);
             }
         }
         return SOCListString;
     }
-    
+
     private RichToolbar cntrlStatusBar;
 
     private RichImage iconMQChanged;
     private RichImage iconMQSaveError;
     private RichImage iconMQSaved;
-    
-    
-    
-    public void showStatus (int code) {
-    
+
+
+    public void showStatus(int code) {
+
         this.iconMQChanged.setVisible(false);
         this.iconMQSaveError.setVisible(false);
         this.iconMQSaved.setVisible(false);
-        
+
         switch (code) {
-            case CSMQBean.MQ_SAVED:
-                this.iconMQSaved.setVisible(true);
-                break;
-            case CSMQBean.MQ_SAVE_ERROR:
-                this.iconMQSaveError.setVisible(true);
-                break;
-            case CSMQBean.MQ_MODIFIED:
-                this.iconMQChanged.setVisible(true);
-                break;
-            }
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlStatusBar); 
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlStatusBar);
+        case CSMQBean.MQ_SAVED:
+            this.iconMQSaved.setVisible(true);
+            break;
+        case CSMQBean.MQ_SAVE_ERROR:
+            this.iconMQSaveError.setVisible(true);
+            break;
+        case CSMQBean.MQ_MODIFIED:
+            this.iconMQChanged.setVisible(true);
+            break;
         }
+
+        AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlStatusBar);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlStatusBar);
+    }
 
     public void updateRelations(ActionEvent actionEvent) {
-        
-        int result = processUpdateRelations(futureTree, this.currentDictId);
-        if (result == 0) showStatus(CSMQBean.MQ_SAVED);
-        else showStatus(CSMQBean.MQ_SAVE_ERROR);
-        refreshFutureTree(null);
-        }
 
-    
+        int result = processUpdateRelations(futureTree, this.currentDictId);
+        if (result == 0)
+            showStatus(CSMQBean.MQ_SAVED);
+        else
+            showStatus(CSMQBean.MQ_SAVE_ERROR);
+        refreshFutureTree(null);
+    }
+
 
     public void setParentSOCcontentID(String parentSOCcontentID) {
         this.parentSOCcontentID = parentSOCcontentID;
@@ -805,69 +845,71 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public String getActivationGroups() {
         return activationGroups;
     }
-   
 
 
-    public void clearMedDRATree () {
+    public void clearMedDRATree() {
         RichTreeTable targetTree = medDRATree;
         // Clear keys
-        if (targetTree != null && targetTree.getDisclosedRowKeys()!=null )
-            targetTree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-        
-        // REQUERY 
+        if (targetTree != null && targetTree.getDisclosedRowKeys() != null)
+            targetTree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
+        // REQUERY
         BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("MedDRAImpactVO1Iterator1");
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding) binding.get("MedDRAImpactVO1Iterator1");
         ViewObject vo = dciterb.getViewObject();
 
         vo.setNamedWhereClauseParam("dictContentID", 0);
         vo.executeQuery();
-        
-        AdfFacesContext.getCurrentInstance().addPartialTarget(targetTree); 
-        AdfFacesContext.getCurrentInstance().partialUpdateNotify(targetTree);
-        }
 
-   /*  public void showNewPTs(ActionEvent actionEvent) {
+        AdfFacesContext.getCurrentInstance().addPartialTarget(targetTree);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(targetTree);
+    }
+
+    /*  public void showNewPTs(ActionEvent actionEvent) {
         UIComponent source = (UIComponent) actionEvent.getSource();
         refreshNewPTList ("ALL");
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         hints.add(RichPopup.PopupHints.HintTypes.HINT_ALIGN_ID, source)
               .add(RichPopup.PopupHints.HintTypes.HINT_LAUNCH_ID, source)
-              .add(RichPopup.PopupHints.HintTypes.HINT_ALIGN, 
+              .add(RichPopup.PopupHints.HintTypes.HINT_ALIGN,
                    RichPopup.PopupHints.AlignTypes.ALIGN_BEFORE_START);
         getImpactAnalysisUIBean().getNewPreferedTermsPopup().show(hints);
     } */
 
-   
 
-    public void reviewed(DialogEvent dialogEvent) {        
-        HashMap result = this.changeState(this.currentDictId, CSMQBean.IA_STATE_REVIEWED, userBean.getCurrentUser(), userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
+    public void reviewed(DialogEvent dialogEvent) {
+        HashMap result =
+            this.changeState(this.currentDictId, CSMQBean.IA_STATE_REVIEWED, userBean.getCurrentUser(),
+                             userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
-            this.currentState = (String)result.get("STATE");
-            this.currentReasonForApproval = (String)result.get("REASON");
+            this.currentState = (String) result.get("STATE");
+            this.currentReasonForApproval = (String) result.get("REASON");
             nMQWizardBean.setCurrentState(this.getCurrentState());
             AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
-            }
         }
+    }
 
-    public void approve(DialogEvent dialogEvent) {        
-        HashMap result = this.changeState(this.currentDictId, CSMQBean.IA_STATE_APPROVED, userBean.getCurrentUser(), userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
+    public void approve(DialogEvent dialogEvent) {
+        HashMap result =
+            this.changeState(this.currentDictId, CSMQBean.IA_STATE_APPROVED, userBean.getCurrentUser(),
+                             userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
-            this.currentState = (String)result.get("STATE");
-            this.currentReasonForApproval = (String)result.get("REASON");
+            this.currentState = (String) result.get("STATE");
+            this.currentReasonForApproval = (String) result.get("REASON");
             nMQWizardBean.setCurrentState(this.getCurrentState());
             AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
-            
+
             AdfFacesContext.getCurrentInstance().addPartialTarget(getFutureTree());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getFutureTree());
-            }
         }
+    }
 
     public void delete(DialogEvent dialogEvent) {
         FacesMessage msg;
-        
+
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
         OperationBinding ob = bc.getOperationBinding("delete");
         ob.getParamsMap().put("dictContentID", this.currentDictId);
@@ -877,27 +919,29 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         //if (NMQUtils.delete(this.currentDictId, CSMQBean.defaultDraftReleaseGroup)) {
         if (retVal.booleanValue()) {
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query Deleted Successfully", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg); 
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
         } else {
             msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to Delete MedDRA Query", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg); 
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
-    public void demoteToPendingIA (DialogEvent dialogEvent)  {
-        HashMap result = this.changeState(this.currentDictId, CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT, userBean.getCurrentUser(), userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
+    public void demoteToPendingIA(DialogEvent dialogEvent) {
+        HashMap result =
+            this.changeState(this.currentDictId, CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT, userBean.getCurrentUser(),
+                             userBean.getUserRole(), null, null, cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
-            this.currentState = (String)result.get("STATE");
-            this.currentReasonForApproval = (String)result.get("REASON");
+            this.currentState = (String) result.get("STATE");
+            this.currentReasonForApproval = (String) result.get("REASON");
             nMQWizardBean.setCurrentState(this.getCurrentState());
             AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
-            }
         }
-    
-   
+    }
+
+
     public void setCurrentState(String currentState) {
         this.currentState = currentState;
     }
@@ -907,12 +951,14 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     }
 
     public void existingPrimLinkFlagChanged(ValueChangeEvent valueChangeEvent) {
-        if (valueChangeEvent.getNewValue().toString().equals(valueChangeEvent.getOldValue())) return; // it didn't change
+        if (valueChangeEvent.getNewValue().toString().equals(valueChangeEvent.getOldValue()))
+            return; // it didn't change
         refreshMedDRATree();
     }
 
     public void futurePrimLinkFlagChanged(ValueChangeEvent valueChangeEvent) {
-        if (valueChangeEvent.getNewValue().toString().equals(valueChangeEvent.getOldValue())) return; // it didn't change
+        if (valueChangeEvent.getNewValue().toString().equals(valueChangeEvent.getOldValue()))
+            return; // it didn't change
         refreshFutureTree(null);
     }
 
@@ -934,43 +980,43 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
 
     public void futureParamsChanged(ValueChangeEvent valueChangeEvent) {
         String source = valueChangeEvent.getComponent().getId();
-        
+
         if (source.equals("paramFutureSIO")) {
-            paramFutureShowNonImpacted = (Boolean)valueChangeEvent.getNewValue() ? CSMQBean.FALSE : CSMQBean.TRUE;
-            }
-        if (source.equals("paramFutureSPO")) {
-            paramFuturePrimaryOnly = (Boolean)valueChangeEvent.getNewValue() ? CSMQBean.TRUE : CSMQBean.FALSE;
-            }
-        if (source.equals("paramFutureSort")) {
-            paramFutureSort = ((String)valueChangeEvent.getNewValue());
-            }
-        if (source.equals("paramFutureScope")) {
-            paramFutureScope = ((String)valueChangeEvent.getNewValue());
-            }
-    
-        //refreshFutureTree(null); 
+            paramFutureShowNonImpacted = (Boolean) valueChangeEvent.getNewValue() ? CSMQBean.FALSE : CSMQBean.TRUE;
         }
+        if (source.equals("paramFutureSPO")) {
+            paramFuturePrimaryOnly = (Boolean) valueChangeEvent.getNewValue() ? CSMQBean.TRUE : CSMQBean.FALSE;
+        }
+        if (source.equals("paramFutureSort")) {
+            paramFutureSort = ((String) valueChangeEvent.getNewValue());
+        }
+        if (source.equals("paramFutureScope")) {
+            paramFutureScope = ((String) valueChangeEvent.getNewValue());
+        }
+
+        //refreshFutureTree(null);
+    }
 
 
     public void existingParamsChanged(ValueChangeEvent valueChangeEvent) {
         String source = valueChangeEvent.getComponent().getId();
-        
+
         if (source.equals("paramMedDRASIO")) {
-            paramMedDRAShowNonImpacted = (Boolean)valueChangeEvent.getNewValue() ? CSMQBean.FALSE : CSMQBean.TRUE;
-            }
-        if (source.equals("paramMedDRASPO")) {
-            paramMedDRAPrimaryOnly = (Boolean)valueChangeEvent.getNewValue() ? CSMQBean.TRUE : CSMQBean.FALSE;
-            }
-        if (source.equals("paramMedDRASort")) {
-            paramMedDRASort = ((String)valueChangeEvent.getNewValue());
-            }
-        if (source.equals("paramMedDRAScope")) {
-            paramMedDRAScope = ((String)valueChangeEvent.getNewValue());
-            }
-    
-            refreshMedDRATree(); 
+            paramMedDRAShowNonImpacted = (Boolean) valueChangeEvent.getNewValue() ? CSMQBean.FALSE : CSMQBean.TRUE;
         }
-    
+        if (source.equals("paramMedDRASPO")) {
+            paramMedDRAPrimaryOnly = (Boolean) valueChangeEvent.getNewValue() ? CSMQBean.TRUE : CSMQBean.FALSE;
+        }
+        if (source.equals("paramMedDRASort")) {
+            paramMedDRASort = ((String) valueChangeEvent.getNewValue());
+        }
+        if (source.equals("paramMedDRAScope")) {
+            paramMedDRAScope = ((String) valueChangeEvent.getNewValue());
+        }
+
+        refreshMedDRATree();
+    }
+
 
     public void setParamFutureScope(String paramFutureScope) {
         this.paramFutureScope = paramFutureScope;
@@ -1037,27 +1083,28 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     }
 
     public void hierarchyPopUpFetch(PopupFetchEvent popupFetchEvent) {
-        NMQSourceTermSearchBean nMQSourceTermSearchBean = (NMQSourceTermSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
+        NMQSourceTermSearchBean nMQSourceTermSearchBean =
+            (NMQSourceTermSearchBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
         //nMQSourceTermSearchBean.refreshLevelList(applicationBean.getDefaultFilterDictionaryShortName());
-       if (paramFutureShowNonImpacted.equals(CSMQBean.FALSE)) {
-            paramFutureShowNonImpacted = CSMQBean.TRUE;
-            futureShowImpacted = false;
-            refreshFutureTree(null);     
-            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlFutureMenu());
-            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlFutureMenu());
-            }
-    }
-
-    public void newPTPopUpFetch(PopupFetchEvent popupFetchEvent) {
-       //here
-       
-       if (paramFutureShowNonImpacted.equals(CSMQBean.FALSE)) {
+        if (paramFutureShowNonImpacted.equals(CSMQBean.FALSE)) {
             paramFutureShowNonImpacted = CSMQBean.TRUE;
             futureShowImpacted = false;
             refreshFutureTree(null);
             AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlFutureMenu());
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlFutureMenu());
-            }
+        }
+    }
+
+    public void newPTPopUpFetch(PopupFetchEvent popupFetchEvent) {
+        //here
+
+        if (paramFutureShowNonImpacted.equals(CSMQBean.FALSE)) {
+            paramFutureShowNonImpacted = CSMQBean.TRUE;
+            futureShowImpacted = false;
+            refreshFutureTree(null);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlFutureMenu());
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlFutureMenu());
+        }
     }
 
     public void setFutureShowImpacted(boolean futureShowImpacted) {
@@ -1074,55 +1121,57 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
 
     public boolean isRenderSave() {
         this.renderSave = false;
-        
+
         //if (this.mqType == CSMQBean.NMQ && (
-        
-        
-        if (this.currentState != null && (this.currentState.equals(CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT) ||
-            this.currentState.equals(CSMQBean.IA_STATE_APPROVED) ||
-            this.currentState.equals(CSMQBean.IA_STATE_REVIEWED)
-            )) this.renderSave = true;
+
+
+        if (this.currentState != null &&
+            (this.currentState.equals(CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT) ||
+             this.currentState.equals(CSMQBean.IA_STATE_APPROVED) ||
+             this.currentState.equals(CSMQBean.IA_STATE_REVIEWED)))
+            this.renderSave = true;
         return this.renderSave;
     }
 
     public void nodeChanged(ValueChangeEvent valueChangeEvent) {
-    
-        
+
+
         /* soc3 = scope
          * soc2 = category
          * ot6 = weight
          */
-        
+
         Object o = valueChangeEvent;
         RowKeySet rks = futureTree.getSelectedRowKeys();
         Iterator rksIterator = rks.iterator();
-        List key = (List)rksIterator.next();
-        
+        List key = (List) rksIterator.next();
+
         int rowKey = Integer.parseInt(key.get(1).toString());
-        GenericTreeNode node = (GenericTreeNode)futureTree.getRowData(rowKey);
-        
+        GenericTreeNode node = (GenericTreeNode) futureTree.getRowData(rowKey);
+
         // TEST TO SEE IF IT'S ALREADY BEEN EDITED
         GenericTreeNode oldNode = updates.get(node.getPrikey());
-        if (oldNode != null) node = oldNode;
-        
+        if (oldNode != null)
+            node = oldNode;
+
         // UPDATE THE NODE (EITHER THE OLD OR THE NEW) WITH THE CHANGED VALUES
         if (valueChangeEvent.getSource().toString().indexOf("soc3") > -1)
             node.setFormattedScope(valueChangeEvent.getNewValue().toString());
-        
+
         if (valueChangeEvent.getSource().toString().indexOf("soc2") > -1)
             node.setTermCategory(valueChangeEvent.getNewValue().toString());
-        
+
         if (valueChangeEvent.getSource().toString().indexOf("ot6") > -1)
             node.setTermWeight(valueChangeEvent.getNewValue().toString());
-        
-        if (oldNode == null)  // ADD IT SINCE IT'S NOT THERE ALREADY
+
+        if (oldNode == null) // ADD IT SINCE IT'S NOT THERE ALREADY
             updates.put(node.getPrikey(), node);
     }
 
     public void refreshMedDRATree(ActionEvent actionEvent) {
         refreshMedDRATree();
     }
-    
+
     public String doSearch() {
         // Add event code here...
         return null;
@@ -1151,7 +1200,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public RichImage getIconMQSaveError() {
         return iconMQSaveError;
     }
-    
+
     public void setIconMQSaved(RichImage iconMQSaved) {
         this.iconMQSaved = iconMQSaved;
     }
@@ -1169,7 +1218,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     }
 
     public void refreshNewPTList(ActionEvent actionEvent) {
-        refreshNewPTList ();
+        refreshNewPTList();
     }
 
     public void setSocList(Object socList) {
@@ -1187,7 +1236,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public Object getNewPTDisclosedKeys() {
         return newPTDisclosedKeys;
     }
-    
+
     public void setPreferedTermSourceTree(RichTreeTable sourceTree) {
         this.preferedTermSourceTree = sourceTree;
     }
@@ -1195,8 +1244,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public RichTreeTable getPreferedTermSourceTree() {
         return preferedTermSourceTree;
     }
-    
-   
+
 
     public void setHierarchySourceTree(RichTreeTable hierarchySourceTree) {
         this.hierarchySourceTree = hierarchySourceTree;
@@ -1205,6 +1253,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public RichTreeTable getHierarchySourceTree() {
         return hierarchySourceTree;
     }
+
     public void setMedDRATree(RichTreeTable medDRATree) {
         this.medDRATree = medDRATree;
     }
@@ -1220,85 +1269,93 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public RichTreeTable getFutureTree() {
         return futureTree;
     }
+
     public void viewRowSelected(SelectionEvent selectionEvent) {
         CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE ****");
-
-        String source = ((RichTable)selectionEvent.getSource()).getId();
+        String isViewPreviousFlow =
+            (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");
+        CSMQBean.logger.info(userBean.getCaller() + " isViewPreviousFlow =" + isViewPreviousFlow);
+        String source = ((RichTable) selectionEvent.getSource()).getId();
         String iterator = null;
-        if (source.equalsIgnoreCase("T_CMQ_Y")){
-            iterator = "ImpactSearchListVO_CMQ_Y";
+        if (source.equalsIgnoreCase("T_CMQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_CMQ_Y" : "ImpactSearchListVO_CMQ_Y";
             this.showImpact = CSMQBean.TRUE;
             this.mqType = CSMQBean.CMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
-        } else if (source.equalsIgnoreCase("T_CMQ_N")){
-            iterator = "ImpactSearchListVO_CMQ_N";
+        } else if (source.equalsIgnoreCase("T_CMQ_N")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_CMQ_N" : "ImpactSearchListVO_CMQ_N";
             this.showImpact = CSMQBean.FALSE;
             this.mqType = CSMQBean.CMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
         } else if (source.equalsIgnoreCase("TBL_MQ_N")) {
-            iterator = "ImpactSearchListVO_MQ_N";
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_MQ_N" : "ImpactSearchListVO_MQ_N";
             this.showImpact = CSMQBean.FALSE;
             this.mqType = CSMQBean.SMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
-            }
-        else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
-            iterator = "ImpactSearchListVO_MQ_Y";
+        } else if (source.equalsIgnoreCase("TBL_MQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_MQ_Y" : "ImpactSearchListVO_MQ_Y";
             this.showImpact = CSMQBean.TRUE;
             this.mqType = CSMQBean.SMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
-            }
-        else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
-            iterator = "ImpactSearchListVO_NMQ_N";
+        } else if (source.equalsIgnoreCase("TBL_NMQ_N")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_NMQ_N" : "ImpactSearchListVO_NMQ_N";
             this.showImpact = CSMQBean.FALSE;
             this.mqType = CSMQBean.NMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
-            }
-        else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
-            iterator = "ImpactSearchListVO_NMQ_Y";
+        } else if (source.equalsIgnoreCase("TBL_NMQ_Y")) {
+            iterator =
+                "Y".equals(isViewPreviousFlow) ? "PreviousVerImpactSearchListVO_NMQ_Y" : "ImpactSearchListVO_NMQ_Y";
             this.showImpact = CSMQBean.TRUE;
             this.mqType = CSMQBean.NMQ;
             this.mode = CSMQBean.MODE_BROWSE_SEARCH;
         }
-        resolveMethodExpression("#{bindings."+ iterator +".collectionModel.makeCurrent}", null, new Class[] { SelectionEvent.class }, new Object[] {selectionEvent});
-        RichTable object = (RichTable)selectionEvent.getSource();
+        resolveMethodExpression("#{bindings." + iterator + ".collectionModel.makeCurrent}", null, new Class[] {
+                                SelectionEvent.class }, new Object[] { selectionEvent });
+        RichTable object = (RichTable) selectionEvent.getSource();
         Row row = null;
         for (Object facesRowKey : object.getSelectedRowKeys()) {
             object.setRowKey(facesRowKey);
             Object o = object.getRowData();
-            JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding)o;
+            JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding) o;
             row = rowData.getRow();
         }
-        
-        if (row == null) return;
 
-        this.currentDictId = Utils.getAsString(row, "DictContentId");        
-        this.currentContentCode = Utils.getAsString(row, "DictContentCode");  
+        if (row == null)
+            return;
+
+        this.currentDictId = Utils.getAsString(row, "DictContentId");
+        this.currentContentCode = Utils.getAsString(row, "DictContentCode");
         this.currentTermName = Utils.getAsString(row, "Term");
         this.activationGroups = CSMQBean.defaultMedDRAReleaseGroup;
         this.currentState = Utils.getAsString(row, "WorkflowState");
         String smqNmq = Utils.getAsString(row, "NmqSmq");
         String queryLevel = Utils.getAsString(row, "DefLevelsShortName");
-        
+
         nMQWizardBean.setFooterInfo(this.currentTermName);
-        
+
         String status = Utils.getAsString(row, "Status");
-        
+
         CSMQBean.logger.info(userBean.getCaller() + " currentDictId: " + currentDictId);
-            
-//       Hashtable result = NMQUtils.setDefaultIAState(this.currentDictId, smqNmq, userBean.getCurrentUser(), userBean.getCurrentUserRole());
-//        
-//        if (result != null) {
-//           this.setCurrentState((String)result.get("STATE"));   
-//            }
-         
+
+        //       Hashtable result = NMQUtils.setDefaultIAState(this.currentDictId, smqNmq, userBean.getCurrentUser(), userBean.getCurrentUserRole());
+        //
+        //        if (result != null) {
+        //           this.setCurrentState((String)result.get("STATE"));
+        //            }
+
         // INF NOTES STUFF
         nMQWizardBean.setCurrentDictContentID(this.currentDictId);
         //nMQWizardBean.setCurrentState(this.getCurrentState());
-              
+
         nMQWizardSearchBean.setCurrentStatus(status);
         nMQWizardSearchBean.setCurrentDictContentID(this.currentDictId);
-        if (null != queryLevel && !queryLevel.isEmpty()){
-            nMQWizardSearchBean.setParamLevel(queryLevel.substring(queryLevel.length()-1));
+        if (null != queryLevel && !queryLevel.isEmpty()) {
+            nMQWizardSearchBean.setParamLevel(queryLevel.substring(queryLevel.length() - 1));
             CSMQBean.logger.info("queryLevel >>>" + nMQWizardSearchBean.getParamLevel());
         }
         /*String termProduct = Utils.getAsString(row, "Value3");
@@ -1317,32 +1374,32 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         nMQWizardBean.setIsSMQ(smqNmq.equalsIgnoreCase("SMQ"));
         nMQWizardSearchBean.initForImpactAnalysis(currentContentCode, currentDictId, activationGroups);
         nMQWizardBean.setCurrentState(this.getCurrentState());
-        clearSearch ();
-        
-        
+        clearSearch();
+
+
         getImpactAnalysisUIBean().getImpactSearchPopUp().cancel();
-        
-        if (medDRATree != null && medDRATree.getDisclosedRowKeys()!=null)
-            medDRATree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-                
-        if (futureTree != null && futureTree.getDisclosedRowKeys()!=null)
-            futureTree.getDisclosedRowKeys().clear();//to resolve NoRowAvailableException
-               
+
+        if (medDRATree != null && medDRATree.getDisclosedRowKeys() != null)
+            medDRATree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
+        if (futureTree != null && futureTree.getDisclosedRowKeys() != null)
+            futureTree.getDisclosedRowKeys().clear(); //to resolve NoRowAvailableException
+
         getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
         getImpactAnalysisUIBean().getCntrlExportDisplayedButtonLeft().setDisabled(false);
         getImpactAnalysisUIBean().getCntrlExportDisplayedButtonRight().setDisabled(false);
         getImpactAnalysisUIBean().getCntrlRefreshButton().setDisabled(false);
         getImpactAnalysisUIBean().getCntrlExportButton().setDisabled(false);
-        
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getPromotionToolBar());
-        
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactLeftToolbar());
-        
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlImpactRightToolbar());
-        
+
         AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getCntrlTrain());
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(getImpactAnalysisUIBean().getCntrlTrain());
         AdfFacesContext.getCurrentInstance().addPartialTarget(getImpactAnalysisUIBean().getPromotionToolBar());
@@ -1351,38 +1408,42 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         //RowKeySet rks = impactAnalysisUIBean.getCntrlImpactSearchResults().getSelectedRowKeys();
         //rks.clear();
 
-        
-        refreshTrees(); 
-        }
-    private HashMap changeState(String dictContentIDs, String state, String currentUser, String currentUserRole, oracle.jbo.domain.Date dueDate, String comment, String activationGroup){
+
+        refreshTrees();
+    }
+
+    private HashMap changeState(String dictContentIDs, String state, String currentUser, String currentUserRole,
+                                oracle.jbo.domain.Date dueDate, String comment, String activationGroup) {
         HashMap retVal;
         FacesMessage msg;
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
         OperationBinding ob = bc.getOperationBinding("changeState");
         ob.getParamsMap().put("dictContentIDs", dictContentIDs);
         ob.getParamsMap().put("state", state);
-        ob.getParamsMap().put("currentUser",currentUser);
+        ob.getParamsMap().put("currentUser", currentUser);
         ob.getParamsMap().put("currentUserRole", currentUserRole);
         ob.getParamsMap().put("dueDate", dueDate);
         ob.getParamsMap().put("comment", comment);
         ob.getParamsMap().put("activationGroup", activationGroup);
 
-        retVal = (HashMap)ob.execute();
-        if (null != retVal){
+        retVal = (HashMap) ob.execute();
+        if (null != retVal) {
             String retCode = (String) retVal.get("RETURN_CODE");
-            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + state, null);
+            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)) {
+                msg =
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + state,
+                                     null);
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {
                 String messageText = "";
-                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
+                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {
                     messageText = CSMQBean.getProperty("INVALID_PROMOTION_ERROR");
                 } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_SEQUENCE_ERROR)) {
                     messageText = CSMQBean.getProperty("INVALID_PROMOTION_SEQUENCE_ERROR");
                 } else if (retCode.equalsIgnoreCase(CSMQBean.PROMOTION_DEPENDENCY_ERROR)) {
                     messageText = CSMQBean.getProperty("PROMOTION_DEPENDENCY_ERROR");
                 } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR)) {
-                    messageText =  CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
+                    messageText = CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
                 } else if (retCode.equalsIgnoreCase(CSMQBean.MUST_BE_NMQ_OR_SMQ_ERROR)) {
                     messageText = CSMQBean.getProperty("MUST_BE_NMQ_OR_SMQ_ERROR");
                 } else if (retCode.equalsIgnoreCase(CSMQBean.GENERIC_ACTIVATION_ERROR)) {
@@ -1401,5 +1462,16 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         }
         return retVal;
     }
-    
+
+    public void onImpartSearchAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+
 }

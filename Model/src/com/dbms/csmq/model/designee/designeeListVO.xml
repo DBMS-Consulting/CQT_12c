@@ -4,13 +4,13 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="designeeListVO"
-  Version="11.1.2.64.36"
+  Version="12.1.3.10.8"
   BindingStyle="OracleName"
   CustomQuery="true"
-  PageIterMode="Full"
-  UseGlueCode="false"
+  PageIterMode="Partial"
   RowClass="com.dbms.csmq.model.designee.designeeListVORowImpl"
-  ComponentClass="com.dbms.csmq.model.designee.designeeListVOImpl">
+  ComponentClass="com.dbms.csmq.model.designee.designeeListVOImpl"
+  FetchMode="FETCH_ALL">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
@@ -33,7 +33,7 @@ oa_account_name
     AND r.grantee = t.account_name
     AND t.account_name = u.oa_account_name
     AND r.grantee <> 'NMAT'  -- Exclude NMAT Admin Account
-  ORDER BY grantee]]></SQLQuery>
+  ORDER BY person_name]]></SQLQuery>
   <ViewAttribute
     Name="PersonName"
     IsUpdateable="false"

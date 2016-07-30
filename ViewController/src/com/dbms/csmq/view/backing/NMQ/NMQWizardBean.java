@@ -9,7 +9,6 @@ import com.dbms.util.dml.DMLUtils;
 
 import java.io.Serializable;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +17,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -33,7 +31,6 @@ import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
 
 import oracle.adf.model.BindingContext;
-import oracle.binding.OperationBinding;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
@@ -41,10 +38,9 @@ import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
-import oracle.jbo.Row;
-import oracle.jbo.RowSetIterator;
+import oracle.binding.OperationBinding;
+
 import oracle.jbo.ViewObject;
-import oracle.jbo.server.DBTransaction;
 
 
 public class NMQWizardBean implements Serializable {
@@ -1614,8 +1610,14 @@ public class NMQWizardBean implements Serializable {
     }
     
     public String setModeViewVersionImpact() {
+        String isViewPreviousFlow = (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");            
         this.currentPredictGroups = cSMQBean.getDefaultMedDRAReleaseGroup();
-        userBean.setCurrentMenuPath("View Version Impact");
+        if("Y".equals(isViewPreviousFlow)){
+            userBean.setCurrentMenuPath("Previous Version Impact");
+        } else {
+            userBean.setCurrentMenuPath("View Version Impact");
+        }
+        
         userBean.setCurrentMenu("VIEW_VERSION_IMPACT");
         this.mode = CSMQBean.MODE_VIEW_VERSION_IMPACT;
         this.updateParam = CSMQBean.DML_NONE;

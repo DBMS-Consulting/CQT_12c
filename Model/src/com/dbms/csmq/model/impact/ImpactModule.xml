@@ -4,8 +4,13 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ImpactModule"
-  Version="11.1.2.64.36"
-  ClearCacheOnRollback="true">
+  Version="12.1.3.10.8"
+  ClearCacheOnRollback="true"
+  ComponentClass="com.dbms.csmq.model.impact.ImpactModuleImpl"
+  ComponentInterface="com.dbms.csmq.model.impact.common.ImpactModule">
+  <DesignTime>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
   <ViewUsage
     Name="MedDRAImpactVO1"
     ViewObjectName="com.dbms.csmq.model.impact.MedDRAImpactVO"/>
@@ -106,4 +111,110 @@
       </PIMap>
     </ParameterMap>
   </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_CMQ_N"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['CMQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_CMQ_Y"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['CMQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_MQ_N"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['MQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_MQ_Y"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['MQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_NMQ_N"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['NMQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO_NMQ_Y"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+    <ParameterMap>
+      <PIMap Variable="showImpact">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="mqType">
+        <TransientExpression
+          trustMode="untrusted"><![CDATA['NMQ']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+  <ViewUsage
+    Name="PreviousVerImpactSearchListVO1"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO"/>
+  <ClientInterface
+    Name="__clientInterface">
+    <Method
+      Name="onPreviousVerImpactSearch"
+      MethodName="onPreviousVerImpactSearch">
+      <Return
+        Name="_return_type_"
+        Type="void"/>
+      <Parameter
+        Name="searchLevelStr"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="searchTermStr"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="searchCodeStr"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
 </AppModule>

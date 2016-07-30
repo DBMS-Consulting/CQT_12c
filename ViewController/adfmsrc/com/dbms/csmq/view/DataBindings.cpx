@@ -31,6 +31,13 @@
               usageId="com_dbms_csmq_view_viewImpactAssessmentPageDef"/>
         <page path="/viewVersionImpact/viewDetails.jspx" usageId="com_dbms_csmq_view_viewDetailsPageDef"/>
         <page path="/create/addInformativeNotes.jspx" usageId="com_dbms_csmq_view_addInformativeNotesPageDef"/>
+        <page path="/viewPreviousVersionImpact/viewDetails.jspx" usageId="com_dbms_csmq_view_viewDetailsPageDef1"/>
+        <page path="/viewPreviousVersionImpact/viewImpactAssessment.jspx"
+              usageId="com_dbms_csmq_view_viewImpactAssessmentPageDef1"/>
+        <page path="/viewVersionImpact/viewInformationNotes.jspx"
+              usageId="com_dbms_csmq_view_viewInformationNotesPageDef"/>
+        <page path="/viewPreviousVersionImpact/viewInformationNotes.jspx"
+              usageId="com_dbms_csmq_view_viewInformationNotesPageDef1"/>
     </pageMap>
     <pageDefinitionUsages>
         <page id="com_dbms_csmq_view_loginPageDef" path="com.dbms.csmq.view.pageDefs.loginPageDef"/>
@@ -103,6 +110,12 @@
         <page id="com_dbms_csmq_view_viewImpactAssessmentPageDef" path="viewVersionImpact.viewImpactAssessmentPageDef"/>
         <page id="com_dbms_csmq_view_viewDetailsPageDef" path="viewVersionImpact.viewDetailsPageDef"/>
         <page id="com_dbms_csmq_view_addInformativeNotesPageDef" path="create.addInformativeNotesPageDef"/>
+        <page id="com_dbms_csmq_view_viewDetailsPageDef1" path="viewPreviousVersionImpact.viewDetailsPageDef"/>
+        <page id="com_dbms_csmq_view_viewImpactAssessmentPageDef1"
+              path="viewPreviousVersionImpact.viewImpactAssessmentPageDef"/>
+        <page id="com_dbms_csmq_view_viewInformationNotesPageDef" path="viewVersionImpact.viewInformationNotesPageDef"/>
+        <page id="com_dbms_csmq_view_viewInformationNotesPageDef1"
+              path="viewPreviousVersionImpact.viewInformationNotesPageDef"/>
     </pageDefinitionUsages>
     <dataControlUsages>
         <dc id="ReportDownloadBean" path="com.dbms.csmq.view.ReportDownloadBean"/>

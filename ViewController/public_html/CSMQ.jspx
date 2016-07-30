@@ -197,8 +197,13 @@
                             <af:commandMenuItem text="Impact Assessment" id="pt_cmi10" action="MEDDRA_IMPACT_ASSESSMENT"
                                                 rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'MEDDRA_IMPACT_ASSESSMENT' ? 'bold' : 'normal'};"/>
-                            <af:commandMenuItem text="View Version Impact" id="pt_cmi13" action="VIEW_VERSION_IMPACT"
-                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_VERSION_IMPACT' ? 'bold' : 'normal'};"/>                    
+                            <af:menu text="View Version Impact" id="pt_m3"
+                                     inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_CURRENT_VERSION_IMPACT' or UserBean.currentMenu eq 'VIEW_PREVIOUS_VERSION_IMPACT' ? 'bold' : 'normal'};">
+                                <af:commandMenuItem text="View Current Version Impact" id="pt_cmi13" action="VIEW_CURRENT_VERSION_IMPACT"
+                                                    inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_CURRENT_VERSION_IMPACT' ? 'bold' : 'normal'};"/> 
+                                <af:commandMenuItem text="View Previous Version Impact" id="pt_cmi14" action="VIEW_PREVIOUS_VERSION_IMPACT"
+                                                    inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_PREVIOUS_VERSION_IMPACT' ? 'bold' : 'normal'};"/> 
+                            </af:menu>
                             <af:commandMenuItem text="Historical #{applicationScope.CSMQBean.customMQName}s/SMQs"
                                                 id="pt_cmi7" action="HISTORICAL_IMPACT_ASSESSMENT"
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'HISTORICAL_IMPACT_ASSESSMENT' ? 'bold' : 'normal'};"

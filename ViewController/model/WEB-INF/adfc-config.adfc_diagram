@@ -350,7 +350,7 @@
       <property
          name="fromOutcome">SEARCH</property>
       <property
-         name="sdm:polyPoints">B56,2834.79,137.14941,2838.29,193.35733,T61</property>
+         name="sdm:polyPoints">B56,2834.79,137.14941,2838.29,193.34903,T61</property>
    </ControlFlowCase>
    <TaskFlowCall
       id="TaskFlowCall35">
@@ -444,8 +444,35 @@
       from="WildcardControlFlowRule40"
       to="TaskFlowCall37">
       <property
-         name="fromOutcome">VIEW_VERSION_IMPACT</property>
+         name="fromOutcome">VIEW_CURRENT_VERSION_IMPACT</property>
       <property
-         name="sdm:polyPoints">R17,1477.1434,63.149414,2120.0,-1.1552734,L50</property>
+         name="sdm:polyPoints">R23,1478.3468,66.649414,2120.0,-1.1552734,L50</property>
+   </ControlFlowCase>
+   <TaskFlowCall
+      id="TaskFlowCall38">
+      <property
+         name="taskFlowId">view-previous-version-impact-definition</property>
+      <property
+         name="activityId">view-previous-version-impact-definition</property>
+      <property
+         name="documentReference">/WEB-INF/view-previous-version-impact-definition.xml</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>view-previous-version-impact-definition&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Call&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">-160.55176</property>
+      <property
+         name="x">1864.7051</property>
+   </TaskFlowCall>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase40"
+      from="WildcardControlFlowRule40"
+      to="TaskFlowCall38">
+      <property
+         name="fromOutcome">VIEW_PREVIOUS_VERSION_IMPACT</property>
+      <property
+         name="sdm:polyPoints">R12,1477.1434,59.649414,1823.7051,-160.90234,L50</property>
    </ControlFlowCase>
 </SDM>

@@ -7,7 +7,7 @@
       <users>
         <user>
           <name>TEST_MQM</name>
-          <credentials>{903}WUF6hMKs6oskLp3zcBJ3N2gWgenaoiaqHGXtwtnDCV0=</credentials>
+          <credentials>{903}w1KOroaSC4cc1FjMLXPEEro5vbOgm7Xd</credentials>
         </user>
         <user>
           <name>TEST_USER</name>
@@ -15,7 +15,7 @@
         </user>
         <user>
           <name>TEST_REQUESTOR</name>
-          <credentials>{903}H9h3k2TmH2UsbL+i4A+K4KCVSg6JYfGe9CrfDI24yjI=</credentials>
+          <credentials>{903}GqBXd4WeGYkr2WoxfDMu4fv9ujWSgZ+0</credentials>
         </user>
         <user>
           <name>tstruzik</name>
@@ -23,17 +23,37 @@
         </user>
         <user>
           <name>NMAT_REQUESTOR</name>
-          <credentials>{903}epyoVHJx2jV6f9T/158opl3vwH5Ozk+z9WctKFEm+0c=</credentials>
+          <credentials>{903}odNNWMZQHSkeHH5Fb74VIl1v5AO+JLVY</credentials>
         </user>
       </users>
       <roles>
         <role>
           <name>MQM</name>
           <display-name>MQM</display-name>
+          <members>
+            <member>
+              <type>user</type>
+              <name>NMAT_REQUESTOR</name>
+            </member>
+            <member>
+              <type>user</type>
+              <name>TEST_MQM</name>
+            </member>
+          </members>
         </role>
         <role>
           <name>Requestor</name>
           <display-name>Requestor</display-name>
+          <members>
+            <member>
+              <type>user</type>
+              <name>NMAT_REQUESTOR</name>
+            </member>
+            <member>
+              <type>user</type>
+              <name>TEST_MQM</name>
+            </member>
+          </members>
         </role>
         <role>
           <name>User</name>
@@ -65,6 +85,10 @@
                 <name>tstruzik</name>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
               </member>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
+                <name>NMAT_REQUESTOR</name>
+              </member>
             </members>
           </app-role>
           <app-role>
@@ -86,6 +110,16 @@
             <name>Admin</name>
             <class>oracle.security.jps.service.policystore.ApplicationRole</class>
             <display-name>Admin</display-name>
+            <members>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
+                <name>NMAT_REQUESTOR</name>
+              </member>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
+                <name>TEST_MQM</name>
+              </member>
+            </members>
           </app-role>
           <app-role>
             <name>Requestor</name>
@@ -93,16 +127,16 @@
             <display-name>Requestor</display-name>
             <members>
               <member>
-                <name>Requestor</name>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
-              </member>
-              <member>
                 <name>TEST_REQUESTOR</name>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
               </member>
               <member>
                 <name>NMAT_REQUESTOR</name>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
+              </member>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
+                <name>TEST_MQM</name>
               </member>
             </members>
           </app-role>
@@ -187,6 +221,11 @@
               <permission>
                 <class>oracle.adf.share.security.authorization.RegionPermission</class>
                 <name>viewVersionImpact.viewDetailsPageDef</name>
+                <actions>view</actions>
+              </permission>
+              <permission>
+                <class>oracle.adf.controller.security.TaskFlowPermission</class>
+                <name>/WEB-INF/view-previous-version-impact-definition.xml#view-previous-version-impact-definition</name>
                 <actions>view</actions>
               </permission>
             </permissions>
@@ -468,6 +507,11 @@
                 <name>viewVersionImpact.viewImpactAssessmentPageDef</name>
                 <actions>view</actions>
               </permission>
+              <permission>
+                <class>oracle.adf.controller.security.TaskFlowPermission</class>
+                <name>/WEB-INF/view-previous-version-impact-definition.xml#view-previous-version-impact-definition</name>
+                <actions>view</actions>
+              </permission>
             </permissions>
           </grant>
           <grant>
@@ -660,6 +704,11 @@
                 <name>viewVersionImpact.viewImpactAssessmentPageDef</name>
                 <actions>view</actions>
               </permission>
+              <permission>
+                <class>oracle.adf.controller.security.TaskFlowPermission</class>
+                <name>/WEB-INF/view-previous-version-impact-definition.xml#view-previous-version-impact-definition</name>
+                <actions>view</actions>
+              </permission>
             </permissions>
           </grant>
           <grant>
@@ -825,6 +874,11 @@
               <permission>
                 <class>oracle.adf.share.security.authorization.RegionPermission</class>
                 <name>viewVersionImpact.viewImpactAssessmentPageDef</name>
+                <actions>view</actions>
+              </permission>
+              <permission>
+                <class>oracle.adf.controller.security.TaskFlowPermission</class>
+                <name>/WEB-INF/view-previous-version-impact-definition.xml#view-previous-version-impact-definition</name>
                 <actions>view</actions>
               </permission>
             </permissions>
@@ -1047,6 +1101,11 @@
               <permission>
                 <class>oracle.adf.controller.security.TaskFlowPermission</class>
                 <name>/WEB-INF/view-version-impact-definition.xml#view-version-impact-definition</name>
+                <actions>view</actions>
+              </permission>
+              <permission>
+                <class>oracle.adf.controller.security.TaskFlowPermission</class>
+                <name>/WEB-INF/view-previous-version-impact-definition.xml#view-previous-version-impact-definition</name>
                 <actions>view</actions>
               </permission>
             </permissions>

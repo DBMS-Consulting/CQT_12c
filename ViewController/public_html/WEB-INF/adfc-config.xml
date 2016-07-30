@@ -80,6 +80,16 @@
       <id>view-version-impact-definition</id>
     </task-flow-reference>
   </task-flow-call>
+  <task-flow-call id="view-previous-version-impact-definition">
+    <task-flow-reference>
+      <document>/WEB-INF/view-previous-version-impact-definition.xml</document>
+      <id>view-previous-version-impact-definition</id>
+    </task-flow-reference>
+    <input-parameter id="__46">
+      <name>isViewPreviousFlow</name>
+      <value>Y</value>
+    </input-parameter>
+  </task-flow-call>
   <control-flow-rule id="__2">
     <control-flow-case id="__32">
       <from-outcome id="__33">CREATE_NEW_NMQ</from-outcome>
@@ -138,8 +148,12 @@
       <to-activity-id>diff</to-activity-id>
     </control-flow-case>
     <control-flow-case id="__5">
-      <from-outcome>VIEW_VERSION_IMPACT</from-outcome>
+      <from-outcome>VIEW_CURRENT_VERSION_IMPACT</from-outcome>
       <to-activity-id>view-version-impact-definition</to-activity-id>
+    </control-flow-case>
+    <control-flow-case id="__21">
+      <from-outcome>VIEW_PREVIOUS_VERSION_IMPACT</from-outcome>
+      <to-activity-id>view-previous-version-impact-definition</to-activity-id>
     </control-flow-case>
   </control-flow-rule>
   <control-flow-rule id="__52">

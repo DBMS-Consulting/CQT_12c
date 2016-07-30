@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.10.8" id="viewImpactAssessmentPageDef"
+                Package="viewPreviousVersionImpact">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator id="PreviousVerImpactSearchListVO_CMQ_NIterator" Binds="PreviousVerImpactSearchListVO_CMQ_N"
+              DataControl="ImpactModuleDataControl" RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="PreviousVerImpactSearchListVO_CMQ_YIterator" Binds="PreviousVerImpactSearchListVO_CMQ_Y"
+              DataControl="ImpactModuleDataControl" RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="PreviousVerImpactSearchListVO_MQ_NIterator" Binds="PreviousVerImpactSearchListVO_MQ_N" DataControl="ImpactModuleDataControl"
+              RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="PreviousVerImpactSearchListVO_MQ_YIterator" Binds="PreviousVerImpactSearchListVO_MQ_Y" DataControl="ImpactModuleDataControl"
+              RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="PreviousVerImpactSearchListVO_NMQ_NIterator" Binds="PreviousVerImpactSearchListVO_NMQ_N"
+              DataControl="ImpactModuleDataControl" RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="PreviousVerImpactSearchListVO_NMQ_YIterator" Binds="PreviousVerImpactSearchListVO_NMQ_Y"
+              DataControl="ImpactModuleDataControl" RangeSize="-1" ChangeEventPolicy="none"/>
+    <iterator id="SourceTermsVO1Iterator" Binds="SourceTermsVO1" DataControl="HierarchyModuleDataControl"
+              RangeSize="-1"/>
+    <iterator id="SourceTreeVO1Iterator" Binds="SourceTreeVO1" DataControl="HierarchyModuleDataControl" RangeSize="-1"/>
+    <iterator id="HierarchySourceTermSearchVO1Iterator" Binds="HierarchySourceTermSearchVO1"
+              DataControl="SearchModuleDataControl" RangeSize="-1"/>
+    <iterator id="SimpleSearch1Iterator" Binds="SimpleSearch1" DataControl="SearchModuleDataControl" RangeSize="-1"/>
+    <iterator id="LastMVUpdateViewObj1Iterator" Binds="LastMVUpdateViewObj1" DataControl="ImpactModuleDataControl"
+              RangeSize="25"/>
+    <iterator id="CurrentDictionaryVO1Iterator" Binds="CurrentDictionaryVO1" DataControl="DictionaryModuleDataControl"
+              RangeSize="25"/>
+    <iterator id="MedDRAImpactVO1Iterator1" Binds="MedDRAImpactVO1" DataControl="ImpactModuleDataControl"
+              RangeSize="-1"/>
+    <iterator id="DraftImpactVO1Iterator1" Binds="DraftImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"/>
+    <iterator id="InfNotesVO1Iterator" Binds="InfNotesVO1" DataControl="InfNotesModuleDataControl" RangeSize="25"/>
+    <iterator id="designeeListByMQVO1Iterator" Binds="designeeListByMQVO1" DataControl="DesigneeModuleDataControl"
+              RangeSize="-1"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="PreviousVerImpactSearchListVO_NMQ_NIterator" id="PreviousVerImpactSearchListVO_NMQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_NMQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerImpactSearchListVO_MQ_NIterator" id="PreviousVerImpactSearchListVO_MQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_MQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerImpactSearchListVO_CMQ_NIterator" id="PreviousVerImpactSearchListVO_CMQ_N">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_CMQ_N0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerImpactSearchListVO_CMQ_YIterator" id="PreviousVerImpactSearchListVO_CMQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_CMQ_Y0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerImpactSearchListVO_MQ_YIterator" id="PreviousVerImpactSearchListVO_MQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_MQ_Y0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerImpactSearchListVO_NMQ_YIterator" id="PreviousVerImpactSearchListVO_NMQ_Y">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO" Name="PreviousVerImpactSearchListVO_NMQ_Y0">
+        <AttrNames>
+          <Item Value="Term"/>
+          <Item Value="DictContentId"/>
+          <Item Value="ReleaseGroup"/>
+          <Item Value="Status"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="WorkflowState"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="NmqSmq"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="LastMVUpdateViewObj1Iterator" id="LastUpdate">
+      <AttrNames>
+        <Item Value="LastUpdate"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Version">
+      <AttrNames>
+        <Item Value="Version"/>
+      </AttrNames>
+    </attributeValues>
+    <attributeValues IterBinding="CurrentDictionaryVO1Iterator" id="Description">
+      <AttrNames>
+        <Item Value="Description"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch" Name="SimpleSearch10">
+        <AttrNames>
+          <Item Value="ContentId"/>
+          <Item Value="Mqterm"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="HierarchySourceTermSearchVO1Iterator" id="HierarchySourceTermSearchVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+                      Name="HierarchySourceTermSearchVO10">
+        <AttrNames>
+          <Item Value="Rnum"/>
+          <Item Value="ApprFlag"/>
+          <Item Value="ContentId"/>
+          <Item Value="Createdby"/>
+          <Item Value="CurPendStatus"/>
+          <Item Value="Dates"/>
+          <Item Value="DictNm"/>
+          <Item Value="DomainNm"/>
+          <Item Value="DueDate"/>
+          <Item Value="Groupname"/>
+          <Item Value="LevelNm"/>
+          <Item Value="Mqalgo"/>
+          <Item Value="Mqaltcode"/>
+          <Item Value="Mqcode"/>
+          <Item Value="Mqcrtev"/>
+          <Item Value="Mqgroup"/>
+          <Item Value="MqgroupF"/>
+          <Item Value="Mqlevel"/>
+          <Item Value="Mqprodct"/>
+          <Item Value="Mqscp"/>
+          <Item Value="Mqstatus"/>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqtransid"/>
+          <Item Value="Prikey"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="Version"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="MedDRAImpactVO1Iterator1" id="MedDRAImpactVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.MedDRAImpactVO" Name="MedDRAImpactVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="SourceTreeVO1Iterator" id="SourceTreeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.hierarchy.SourceTreeVO" Name="SourceTreeVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="ChildExists"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="PrimLinkFlag"/>
+          <Item Value="SortOrder"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="DraftImpactVO1Iterator1" id="DraftImpactVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.DraftImpactVO" Name="DraftImpactVO10">
+        <AttrNames>
+          <Item Value="Prikey"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictShortName"/>
+          <Item Value="DisplayAttribute"/>
+          <Item Value="FormattedScope"/>
+          <Item Value="Level"/>
+          <Item Value="LevelName"/>
+          <Item Value="Parent"/>
+          <Item Value="PredictGroupId"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Termcat"/>
+          <Item Value="Termlvl"/>
+          <Item Value="TermPath"/>
+          <Item Value="Termscp"/>
+          <Item Value="Termweig"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="onPreviousVerImpactSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl" InstanceName="data.ImpactModuleDataControl.dataProvider"
+                  ReturnName="data.ImpactModuleDataControl.methodResults.onPreviousVerImpactSearch_ImpactModuleDataControl_dataProvider_onPreviousVerImpactSearch_result">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+    </methodAction>
+  </bindings>
+</pageDefinition>

@@ -41,7 +41,7 @@
     <iterator Binds="designeeListByMQVO1" RangeSize="-1" DataControl="DesigneeModuleDataControl" id="designeeListByMQVO1Iterator"
               Refresh="default"/>
     <iterator id="designeeListVO1Iterator" Binds="designeeListVO1" DataControl="DesigneeModuleDataControl"
-              RangeSize="25"/>
+              RangeSize="-1"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
