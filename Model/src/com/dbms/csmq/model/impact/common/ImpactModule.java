@@ -7,5 +7,7 @@ import oracle.jbo.ApplicationModule;
 // ---------------------------------------------------------------------
 public interface ImpactModule extends ApplicationModule {
     void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr);
+
+    void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId);
 }
 

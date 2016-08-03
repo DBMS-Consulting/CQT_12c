@@ -148,8 +148,8 @@
                                                               shortDesc="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.tooltip}"
                                                               id="it4">
                                                     <f:validator binding="#{row.bindings.Rnum.validator}"/>
-                                                    <af:convertNumber groupingUsed="false"
-                                                                      pattern="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.format}"/>
+                                                    <!--<af:convertNumber groupingUsed="false"
+                                                                      pattern="#{bindings.HierarchySourceTermSearchVO1.hints.Rnum.format}"/>-->
                                                 </af:inputText>
                                             </af:column>
                                             <af:column sortProperty="#{bindings.HierarchySourceTermSearchVO1.hints.ContentId.name}"
@@ -509,7 +509,7 @@
                                                 </af:commandToolbarButton>
                                             </af:toolbar>
                                         </f:facet>
-                                        <af:treeTable value="#{pageFlowScope.MedDRAImpactHierarchyBean.treemodel}"
+                                        <af:treeTable value="#{pageFlowScope.PreviousVerCurrentImpactHierarchyBean.treemodel}"
                                                       var="node" rowSelection="multiple" id="hTable" width="504"
                                                       binding="#{pageFlowScope.ImpactAnalysisBean.medDRATree}"
                                                       columnStretching="column:column1" height="400" inlineStyle="height:400px;"
@@ -518,7 +518,7 @@
                                                 <af:column id="column1" headerText="#{node.term}" width="200"
                                                            inlineStyle="height:18px; white-space:nowrap;"
                                                            headerNoWrap="true" noWrap="true"
-                                                           rendered="#{pageFlowScope.MedDRAImpactHierarchyBean.hasData}">
+                                                           rendered="#{pageFlowScope.PreviousVerCurrentImpactHierarchyBean.hasData}">
                                                     <af:panelGroupLayout id="pgl2" halign="left">
                                                         <af:image id="i2" rendered="#{node.icon gt 0}"
                                                                   shortDesc="#{node.description}"
@@ -531,7 +531,7 @@
                                                         <af:commandLink text="#{node.term}" id="cl1"
                                                                         styleClass="#{node.style}"
                                                                         shortDesc="#{node.path}"
-                                                                        actionListener="#{pageFlowScope.MedDRAImpactHierarchyBean.expandChildren}"
+                                                                        actionListener="#{pageFlowScope.PreviousVerCurrentImpactHierarchyBean.expandChildren}"
                                                                         rendered="#{node.rendered and node.showHasChildrenButton}"
                                                                         partialSubmit="true"/>
                                                     </af:panelGroupLayout>
@@ -548,7 +548,7 @@
                                                 <af:outputText value="#{node}" id="outputText2"/>
                                             </f:facet>
                                             <af:column headerText="Hierarchy Details" id="column2" width="572"
-                                                       rendered="#{pageFlowScope.MedDRAImpactHierarchyBean.hasData}">
+                                                       rendered="#{pageFlowScope.PreviousVerCurrentImpactHierarchyBean.hasData}">
                                                 <af:column id="c19" headerText="Code" width="50" sortable="true"
                                                            filterable="true">
                                                     <af:outputText value="#{node.dictContentCode}" id="ot20"/>
@@ -585,7 +585,7 @@
                                                 </af:commandToolbarButton>
                                             </af:toolbar>
                                         </f:facet>
-                                        <af:treeTable value="#{pageFlowScope.FutureImpactHierarchyBean.treemodel}"
+                                        <af:treeTable value="#{pageFlowScope.PreviousVerFutureImpactHierarchyBean.treemodel}"
                                                       var="node" rowSelection="single" id="fTable" width="664"
                                                       binding="#{pageFlowScope.ImpactAnalysisBean.futureTree}"
                                                       columnStretching="column:c1" inlineStyle="height:400px;"
@@ -607,7 +607,7 @@
                                                         <af:commandLink text="#{node.term}" id="cl2"
                                                                         styleClass="#{node.style}"
                                                                         shortDesc="#{node.path}"
-                                                                        actionListener="#{pageFlowScope.FutureImpactHierarchyBean.expandChildren}"
+                                                                        actionListener="#{pageFlowScope.PreviousVerFutureImpactHierarchyBean.expandChildren}"
                                                                         rendered="#{node.rendered and node.showHasChildrenButton}"
                                                                         partialSubmit="true"/>
                                                     </af:panelGroupLayout>
@@ -629,7 +629,7 @@
                                                 </af:column>
                                                 <af:column id="c2" headerText="Level" width="50" sortable="true"
                                                            filterable="true"
-                                                           attributeChangeListener="#{pageFlowScope.FutureImpactHierarchyBean.sortByLevel}">
+                                                           attributeChangeListener="#{pageFlowScope.PreviousVerFutureImpactHierarchyBean.sortByLevel}">
                                                     <af:outputText value="#{node.levelName}" id="ot3"/>
                                                 </af:column>
                                                 <af:column id="c3" headerText="Scope" width="75" sortable="true"
@@ -678,7 +678,7 @@
                                         <af:popup id="p1">
                                             <af:menu text="menu 1" id="m4">
                                                 <af:commandMenuItem text="Remove term" id="cmi1"
-                                                                    actionListener="#{pageFlowScope.FutureImpactHierarchyBean.onTreeNodeDelete}"/>
+                                                                    actionListener="#{pageFlowScope.PreviousVerFutureImpactHierarchyBean.onTreeNodeDelete}"/>
                                             </af:menu>
                                         </af:popup>
                                     </f:facet>-->

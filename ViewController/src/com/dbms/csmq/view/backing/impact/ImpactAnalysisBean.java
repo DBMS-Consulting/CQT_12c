@@ -11,6 +11,8 @@ import com.dbms.csmq.view.hierarchy.HierarchyAccessor;
 import com.dbms.csmq.view.hierarchy.NewPTListBean;
 import com.dbms.csmq.view.impact.FutureImpactHierarchyBean;
 import com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean;
+import com.dbms.csmq.view.impact.PreviousVerCurrentImpactHierarchyBean;
+import com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean;
 import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
@@ -457,8 +459,6 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
             nMQWizardBean.setIsSMQ(smqNmq.equalsIgnoreCase("SMQ"));
             nMQWizardSearchBean.initForImpactAnalysis(currentContentCode, currentDictId, activationGroups);
             nMQWizardBean.setCurrentState(this.getCurrentState());
-            clearSearch();
-
 
             getImpactAnalysisUIBean().getImpactSearchPopUp().cancel();
 
@@ -561,15 +561,33 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
 
 
     public void refreshTrees() {
-        refreshFutureTree(null);
-        refreshMedDRATree();
+        String isViewPreviousFlow =
+            (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");
+        if ("Y".equals(isViewPreviousFlow)) {
+            refreshPreviousVersionTrees();
+        } else {
+            refreshFutureTree(null);
+            refreshMedDRATree();
+        }
     }
 
+    public void refreshPreviousVersionTrees() {
+        System.out.println("Start exec refreshPreviousVersionTrees() this.currentDictId --> "+this.currentDictId);
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("loadPrevVersionCurrentNFurteMQDetails");
+        Long dictContentId = new Long(this.currentDictId); 
+        System.out.println("refreshPreviousVersionTrees() dictContentId --> "+dictContentId);
+        ob.getParamsMap().put("dictContentId", dictContentId);
+        ob.execute();
+
+        refreshPreviousVersionCurrentTree();
+        refreshPreviousVersionFutureTree();
+        System.out.println("End of exec refreshPreviousVersionTrees()");
+    }
 
     public void refreshFutureTree() {
         refreshFutureTree(null);
     }
-
 
     public void refreshMedDRATree() {
         BindingContext bc = BindingContext.getCurrent();
@@ -655,6 +673,32 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(futureTree);
     }
 
+    public void refreshPreviousVersionCurrentTree() {
+        boolean hasScope = false;
+        if (nMQWizardBean.getCurrentScope() != null)
+            hasScope = nMQWizardBean.getCurrentScope().equals(CSMQBean.HAS_SCOPE);
+
+        PreviousVerCurrentImpactHierarchyBean previousVerCurrentImpactHierarchyBean =
+            (PreviousVerCurrentImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("PreviousVerCurrentImpactHierarchyBean");
+        previousVerCurrentImpactHierarchyBean.init(hasScope);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(medDRATree);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(medDRATree);
+    }
+
+
+    public void refreshPreviousVersionFutureTree() {
+        PreviousVerFutureImpactHierarchyBean futureImpactHierarchyBean =
+            (PreviousVerFutureImpactHierarchyBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("PreviousVerFutureImpactHierarchyBean");
+        boolean hasScope = false;
+        if (nMQWizardBean.getCurrentScope() != null)
+            hasScope = nMQWizardBean.getCurrentScope().equals(CSMQBean.HAS_SCOPE);
+
+        CSMQBean.logger.info(userBean.getCaller() + " hasScope: " + hasScope);
+        futureImpactHierarchyBean.init(hasScope);
+        clearKeys(futureTree);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(futureTree);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(futureTree);
+    }
 
     public void setCurrentDictId(String currentDictId) {
         this.currentDictId = currentDictId;
@@ -1374,7 +1418,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
         nMQWizardBean.setIsSMQ(smqNmq.equalsIgnoreCase("SMQ"));
         nMQWizardSearchBean.initForImpactAnalysis(currentContentCode, currentDictId, activationGroups);
         nMQWizardBean.setCurrentState(this.getCurrentState());
-        clearSearch();
+        //clearSearch();
 
 
         getImpactAnalysisUIBean().getImpactSearchPopUp().cancel();

@@ -218,5 +218,35 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         previousVerImpactSearchListVO.executeQuery();
         System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
     }
+    
+    public void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId){
+        System.out.println("loadPrevVersionCurrentNFurteMQDetails() dictContentId --> " + dictContentId );
+        // Load CURRENT MQs based on dictContentCode 
+        ViewObjectImpl previousVerCurrentImpactVO = getPreviousVerCurrentImpactVO1();
+        previousVerCurrentImpactVO.setNamedWhereClauseParam("bindDictContentId", dictContentId);
+        previousVerCurrentImpactVO.executeQuery();
+        System.out.println("loadPrevVersionCurrentNFurteMQDetails() CURRENT QUERY --> " + previousVerCurrentImpactVO.getQuery());
+        // Load FUTURE MQs based on dictContentCode 
+        ViewObjectImpl previousVerFutureImpactVO1 = getPreviousVerFutureImpactVO1();
+        previousVerFutureImpactVO1.setNamedWhereClauseParam("bindDictContentId", dictContentId);
+        previousVerFutureImpactVO1.executeQuery();
+        System.out.println("loadPrevVersionCurrentNFurteMQDetails() FUTURE QUERY --> " + previousVerFutureImpactVO1.getQuery());
+    }
+
+    /**
+     * Container's getter for PreviousVerCurrentImpactVO1.
+     * @return PreviousVerCurrentImpactVO1
+     */
+    public ViewObjectImpl getPreviousVerCurrentImpactVO1() {
+        return (ViewObjectImpl) findViewObject("PreviousVerCurrentImpactVO1");
+    }
+
+    /**
+     * Container's getter for PreviousVerFutureImpactVO1.
+     * @return PreviousVerFutureImpactVO1
+     */
+    public ViewObjectImpl getPreviousVerFutureImpactVO1() {
+        return (ViewObjectImpl) findViewObject("PreviousVerFutureImpactVO1");
+    }
 }
 

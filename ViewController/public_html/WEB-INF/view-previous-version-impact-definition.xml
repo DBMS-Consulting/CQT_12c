@@ -29,8 +29,8 @@
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
     <managed-bean id="__4">
-      <managed-bean-name>FutureImpactHierarchyBean</managed-bean-name>
-      <managed-bean-class>com.dbms.csmq.view.impact.FutureImpactHierarchyBean</managed-bean-class>
+      <managed-bean-name>PreviousVerFutureImpactHierarchyBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean</managed-bean-class>
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
     <managed-bean id="__5">
@@ -74,8 +74,8 @@
       <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean id="__13">
-      <managed-bean-name>MedDRAImpactHierarchyBean</managed-bean-name>
-      <managed-bean-class>com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean</managed-bean-class>
+      <managed-bean-name>PreviousVerCurrentImpactHierarchyBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.impact.PreviousVerCurrentImpactHierarchyBean</managed-bean-class>
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
     <method-call id="setMode">

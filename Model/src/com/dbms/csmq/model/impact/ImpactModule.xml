@@ -198,6 +198,12 @@
   <ViewUsage
     Name="PreviousVerImpactSearchListVO1"
     ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO"/>
+  <ViewUsage
+    Name="PreviousVerCurrentImpactVO1"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerCurrentImpactVO"/>
+  <ViewUsage
+    Name="PreviousVerFutureImpactVO1"
+    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerFutureImpactVO"/>
   <ClientInterface
     Name="__clientInterface">
     <Method
@@ -215,6 +221,16 @@
       <Parameter
         Name="searchCodeStr"
         Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="loadPrevVersionCurrentNFurteMQDetails"
+      MethodName="loadPrevVersionCurrentNFurteMQDetails">
+      <Return
+        Name="_return_type_"
+        Type="void"/>
+      <Parameter
+        Name="dictContentId"
+        Type="java.lang.Long"/>
     </Method>
   </ClientInterface>
 </AppModule>

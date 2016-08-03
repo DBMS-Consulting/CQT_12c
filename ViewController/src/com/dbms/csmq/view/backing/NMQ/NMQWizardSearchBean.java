@@ -34,7 +34,6 @@ import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
-import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichColumn;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputDate;
@@ -47,11 +46,9 @@ import oracle.adf.view.rich.component.rich.nav.RichTrain;
 import oracle.adf.view.rich.component.rich.output.RichSpacer;
 import oracle.adf.view.rich.component.rich.output.RichStatusIndicator;
 import oracle.adf.view.rich.context.AdfFacesContext;
-
 import oracle.adf.view.rich.event.DialogEvent;
 
 import oracle.binding.BindingContainer;
-
 import oracle.binding.OperationBinding;
 
 import oracle.jbo.Row;
@@ -667,37 +664,42 @@ public class NMQWizardSearchBean  {
 
 
     public void initForImpactAnalysis (String mqCode, String dictContentID, String releaseGroups) {
-        // used for impact analysis 
-        this.IASearch = true;
-        this.currentMqcode = mqCode;
-        this.paramMQCode = mqCode;
-        this.paramQueryType = CSMQBean.SMQ_SEARCH;
-        this.currentDictContentID = dictContentID;
-        this.paramState = CSMQBean.WILDCARD;
-        this.currentDictionary = CSMQBean.defaultFilterDictionaryShortName;
-        this.paramDictName = CSMQBean.defaultFilterDictionaryShortName;
-        this.paramReleaseGroup = releaseGroups;
-        setUIDefaults(); 
-        
-        doSearch(null);  // run the search with the params above - these come from the IA search
-        // get the results - there should just be one row
-        BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
+        try {
+           // used for impact analysis 
+           this.IASearch = true;
+           this.currentMqcode = mqCode;
+           this.paramMQCode = mqCode;
+           this.paramQueryType = CSMQBean.SMQ_SEARCH;
+           this.currentDictContentID = dictContentID;
+           this.paramState = CSMQBean.WILDCARD;
+           this.currentDictionary = CSMQBean.defaultFilterDictionaryShortName;
+           this.paramDictName = CSMQBean.defaultFilterDictionaryShortName;
+           this.paramReleaseGroup = releaseGroups;
+           setUIDefaults(); 
+           
+           doSearch(null);  // run the search with the params above - these come from the IA search
+           // get the results - there should just be one row
+           BindingContext bc = BindingContext.getCurrent();
+           DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+           DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
 
-        Enumeration rows = dciterb.getRowSetIterator().enumerateRowsInRange();
-        if (rows == null || !rows.hasMoreElements()) return;
-        
-        Row row = (Row)rows.nextElement();
-        
-        
-        processSearchResults(row);
-        this.getInfNotes();  
-        //nMQWizardBean.setMode(mode);
-        nMQWizardBean.setCurrentTermName(currentTermName);
-        nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
-        nMQWizardBean.getDictionaryInfo(); // GET BASE DICT INFO FROM FILTER
-        }
+           Enumeration rows = dciterb.getRowSetIterator().enumerateRowsInRange();
+           if (rows == null || !rows.hasMoreElements()) return;
+           
+           Row row = (Row)rows.nextElement();
+           
+           
+           processSearchResults(row);
+           this.getInfNotes();  
+           //nMQWizardBean.setMode(mode);
+           nMQWizardBean.setCurrentTermName(currentTermName);
+           nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
+           nMQWizardBean.getDictionaryInfo(); // GET BASE DICT INFO FROM FILTER
+       } catch (Exception e) {
+            // TODO: Add catch code
+            e.printStackTrace();
+        }       
+    }
     
     
     public void getInfNotes() {

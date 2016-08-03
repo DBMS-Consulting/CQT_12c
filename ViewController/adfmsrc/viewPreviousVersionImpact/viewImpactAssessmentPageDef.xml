@@ -26,12 +26,13 @@
               RangeSize="25"/>
     <iterator id="CurrentDictionaryVO1Iterator" Binds="CurrentDictionaryVO1" DataControl="DictionaryModuleDataControl"
               RangeSize="25"/>
-    <iterator id="MedDRAImpactVO1Iterator1" Binds="MedDRAImpactVO1" DataControl="ImpactModuleDataControl"
-              RangeSize="-1"/>
-    <iterator id="DraftImpactVO1Iterator1" Binds="DraftImpactVO1" DataControl="ImpactModuleDataControl" RangeSize="-1"/>
     <iterator id="InfNotesVO1Iterator" Binds="InfNotesVO1" DataControl="InfNotesModuleDataControl" RangeSize="25"/>
     <iterator id="designeeListByMQVO1Iterator" Binds="designeeListByMQVO1" DataControl="DesigneeModuleDataControl"
               RangeSize="-1"/>
+    <iterator Binds="PreviousVerCurrentImpactVO1" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="PreviousVerCurrentImpactVO1Iterator"/>
+    <iterator Binds="PreviousVerFutureImpactVO1" RangeSize="-1" DataControl="ImpactModuleDataControl"
+              id="PreviousVerFutureImpactVO1Iterator"/>
   </executables>
   <bindings>
     <tree IterBinding="PreviousVerImpactSearchListVO_NMQ_NIterator" id="PreviousVerImpactSearchListVO_NMQ_N">
@@ -180,30 +181,7 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <tree IterBinding="MedDRAImpactVO1Iterator1" id="MedDRAImpactVO1">
-      <nodeDefinition DefName="com.dbms.csmq.model.impact.MedDRAImpactVO" Name="MedDRAImpactVO10">
-        <AttrNames>
-          <Item Value="Prikey"/>
-          <Item Value="ApprovedFlag"/>
-          <Item Value="DictContentAltCode"/>
-          <Item Value="DictContentId"/>
-          <Item Value="DictShortName"/>
-          <Item Value="DisplayAttribute"/>
-          <Item Value="FormattedScope"/>
-          <Item Value="Level"/>
-          <Item Value="LevelName"/>
-          <Item Value="Parent"/>
-          <Item Value="PredictGroupId"/>
-          <Item Value="Status"/>
-          <Item Value="Term"/>
-          <Item Value="Termcat"/>
-          <Item Value="Termlvl"/>
-          <Item Value="TermPath"/>
-          <Item Value="Termscp"/>
-          <Item Value="Termweig"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
+    
     <tree IterBinding="SourceTreeVO1Iterator" id="SourceTreeVO1">
       <nodeDefinition DefName="com.dbms.csmq.model.hierarchy.SourceTreeVO" Name="SourceTreeVO10">
         <AttrNames>
@@ -230,31 +208,7 @@
           <Item Value="Termweig"/>
         </AttrNames>
       </nodeDefinition>
-    </tree>
-    <tree IterBinding="DraftImpactVO1Iterator1" id="DraftImpactVO1">
-      <nodeDefinition DefName="com.dbms.csmq.model.impact.DraftImpactVO" Name="DraftImpactVO10">
-        <AttrNames>
-          <Item Value="Prikey"/>
-          <Item Value="ApprovedFlag"/>
-          <Item Value="DictContentAltCode"/>
-          <Item Value="DictContentId"/>
-          <Item Value="DictShortName"/>
-          <Item Value="DisplayAttribute"/>
-          <Item Value="FormattedScope"/>
-          <Item Value="Level"/>
-          <Item Value="LevelName"/>
-          <Item Value="Parent"/>
-          <Item Value="PredictGroupId"/>
-          <Item Value="Status"/>
-          <Item Value="Term"/>
-          <Item Value="Termcat"/>
-          <Item Value="Termlvl"/>
-          <Item Value="TermPath"/>
-          <Item Value="Termscp"/>
-          <Item Value="Termweig"/>
-        </AttrNames>
-      </nodeDefinition>
-    </tree>
+    </tree>    
     <methodAction id="onPreviousVerImpactSearch" RequiresUpdateModel="true" Action="invokeMethod"
                   MethodName="onPreviousVerImpactSearch" IsViewObjectMethod="false"
                   DataControl="ImpactModuleDataControl" InstanceName="data.ImpactModuleDataControl.dataProvider"
@@ -262,6 +216,115 @@
       <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
       <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
       <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+    </methodAction>
+    <tree IterBinding="PreviousVerCurrentImpactVO1Iterator" id="PreviousVerCurrentImpactVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerCurrentImpactVO"
+                      Name="PreviousVerCurrentImpactVO10">
+        <AttrNames>
+          <Item Value="RootDictName"/>
+          <Item Value="DtlsDictContentCode"/>
+          <Item Value="DtlsDictContentId"/>
+          <Item Value="DtlsDictName"/>
+          <Item Value="DtlsLevelExtension"/>
+          <Item Value="DtlsLevelName"/>
+          <Item Value="DtlsNmatDisplayProperty"/>
+          <Item Value="DtlsNmatImpactDesc"/>
+          <Item Value="DtlsNmatImpactFlag"/>
+          <Item Value="DtlsTerm"/>
+          <Item Value="DtlsTermSubtype"/>
+          <Item Value="DtlsTermUpper"/>
+          <Item Value="GuiHierarchyImpactFlag"/>
+          <Item Value="GuiNmatDisplayProperty"/>
+          <Item Value="GuiNmatImpactDesc"/>
+          <Item Value="MstrDictContentCode"/>
+          <Item Value="MstrDictContentId"/>
+          <Item Value="MstrDictName"/>
+          <Item Value="MstrLevelExtension"/>
+          <Item Value="MstrLevelName"/>
+          <Item Value="MstrNmatDisplayProperty"/>
+          <Item Value="MstrNmatImpactDesc"/>
+          <Item Value="MstrNmatImpactFlag"/>
+          <Item Value="MstrTerm"/>
+          <Item Value="MstrTermSubtype"/>
+          <Item Value="MstrTermUpper"/>
+          <Item Value="RelDepthFromRoot"/>
+          <Item Value="RelDictRelationId"/>
+          <Item Value="RelNmatDisplayProperty"/>
+          <Item Value="RelNmatImpactDesc"/>
+          <Item Value="RelNmatImpactFlag"/>
+          <Item Value="RelRelationCategory"/>
+          <Item Value="RelRelationDmlStatement"/>
+          <Item Value="RelRelationScope"/>
+          <Item Value="RelRelationSubtype"/>
+          <Item Value="RelRelationWeight"/>
+          <Item Value="RootDictContentCode"/>
+          <Item Value="RootDictContentId"/>
+          <Item Value="RootLevelExtension"/>
+          <Item Value="RootLevelName"/>
+          <Item Value="RootNmatDisplayProperty"/>
+          <Item Value="RootNmatImpactDesc"/>
+          <Item Value="RootNmatImpactFlag"/>
+          <Item Value="RootTerm"/>
+          <Item Value="RootTermUpper"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <tree IterBinding="PreviousVerFutureImpactVO1Iterator" id="PreviousVerFutureImpactVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.PreviousVerFutureImpactVO" Name="PreviousVerFutureImpactVO10">
+        <AttrNames>
+          <Item Value="RootDictName"/>
+          <Item Value="DtlsDictContentCode"/>
+          <Item Value="DtlsDictContentId"/>
+          <Item Value="DtlsDictName"/>
+          <Item Value="DtlsLevelExtension"/>
+          <Item Value="DtlsLevelName"/>
+          <Item Value="DtlsNmatDisplayProperty"/>
+          <Item Value="DtlsNmatImpactDesc"/>
+          <Item Value="DtlsNmatImpactFlag"/>
+          <Item Value="DtlsTerm"/>
+          <Item Value="DtlsTermSubtype"/>
+          <Item Value="DtlsTermUpper"/>
+          <Item Value="GuiHierarchyImpactFlag"/>
+          <Item Value="GuiNmatDisplayProperty"/>
+          <Item Value="GuiNmatImpactDesc"/>
+          <Item Value="MstrDictContentCode"/>
+          <Item Value="MstrDictContentId"/>
+          <Item Value="MstrDictName"/>
+          <Item Value="MstrLevelExtension"/>
+          <Item Value="MstrLevelName"/>
+          <Item Value="MstrNmatDisplayProperty"/>
+          <Item Value="MstrNmatImpactDesc"/>
+          <Item Value="MstrNmatImpactFlag"/>
+          <Item Value="MstrTerm"/>
+          <Item Value="MstrTermSubtype"/>
+          <Item Value="MstrTermUpper"/>
+          <Item Value="RelDepthFromRoot"/>
+          <Item Value="RelDictRelationId"/>
+          <Item Value="RelNmatDisplayProperty"/>
+          <Item Value="RelNmatImpactDesc"/>
+          <Item Value="RelNmatImpactFlag"/>
+          <Item Value="RelRelationCategory"/>
+          <Item Value="RelRelationDmlStatement"/>
+          <Item Value="RelRelationScope"/>
+          <Item Value="RelRelationSubtype"/>
+          <Item Value="RelRelationWeight"/>
+          <Item Value="RootDictContentCode"/>
+          <Item Value="RootDictContentId"/>
+          <Item Value="RootLevelExtension"/>
+          <Item Value="RootLevelName"/>
+          <Item Value="RootNmatDisplayProperty"/>
+          <Item Value="RootNmatImpactDesc"/>
+          <Item Value="RootNmatImpactFlag"/>
+          <Item Value="RootTerm"/>
+          <Item Value="RootTermUpper"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="loadPrevVersionCurrentNFurteMQDetails" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadPrevVersionCurrentNFurteMQDetails" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl" InstanceName="data.ImpactModuleDataControl.dataProvider"
+                  ReturnName="data.ImpactModuleDataControl.methodResults.loadPrevVersionCurrentNFurteMQDetails_ImpactModuleDataControl_dataProvider_loadPrevVersionCurrentNFurteMQDetails_result">
+      <NamedData NDName="dictContentId" NDType="java.lang.Long"/>
     </methodAction>
   </bindings>
 </pageDefinition>
