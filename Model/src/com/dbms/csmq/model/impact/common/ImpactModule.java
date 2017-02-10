@@ -8,6 +8,10 @@ import oracle.jbo.ApplicationModule;
 public interface ImpactModule extends ApplicationModule {
     void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr);
 
-    void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId);
+    void loadPrevVersionCurrentMQDetails(Long dictContentId, Boolean showImpactedOnly);
+
+    void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId, Boolean showImpactedOnly);
+
+    void loadPrevVersionFurteMQDetails(Long dictContentId, Boolean showImpactedOnly);
 }
 

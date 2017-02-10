@@ -4,10 +4,11 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="designeeListVO"
-  Version="12.1.3.10.8"
+  Version="11.1.2.64.36"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Partial"
+  UseGlueCode="false"
   RowClass="com.dbms.csmq.model.designee.designeeListVORowImpl"
   ComponentClass="com.dbms.csmq.model.designee.designeeListVOImpl"
   FetchMode="FETCH_ALL">

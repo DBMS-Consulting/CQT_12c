@@ -24,7 +24,6 @@
               DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator"/>
     <iterator Binds="SmallTreeVO1" RangeSize="-1"
               DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
-              Refresh="default"
               RefreshCondition="#{!adfFacesContext.initialRender}"/>
     <invokeAction id="Invoke_EWP_DictionaryVO1" Binds="EWP_DictionaryVO1" Refresh="renderModel"/>
     <iterator Binds="LevelsByDictionaryVO1" RangeSize="10" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO2Iterator1"/>
@@ -39,9 +38,17 @@
                   Binds="EWP_MedDRAVirtualDictionariesViewObj1Iterator" Refresh="renderModel"/>
     <iterator Binds="NMQExtentionListVO1" RangeSize="10" DataControl="NMQModuleDataControl" id="NMQExtentionListVO1Iterator"/>
     <iterator Binds="designeeListByMQVO1" RangeSize="-1" DataControl="DesigneeModuleDataControl" id="designeeListByMQVO1Iterator"
-              Refresh="default"/>
+              />
     <iterator id="designeeListVO1Iterator" Binds="designeeListVO1" DataControl="DesigneeModuleDataControl"
               RangeSize="-1"/>
+    <iterator Binds="TermHistoricInfoVO1" RangeSize="10" DataControl="SearchModuleDataControl"
+              id="TermHistoricInfoVO1Iterator"/>
+    <iterator id="ProductScopeVO1Iterator" Binds="ProductScopeVO1" DataControl="ProductModuleDataControl"
+              RangeSize="25"/>
+    <iterator id="NMQExtentionListVO1Iterator1" Binds="NMQExtentionListVO1" DataControl="ProductModuleDataControl"
+              RangeSize="25"/>
+    <iterator id="ProductTypeVO1Iterator" Binds="ProductTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
+    <iterator id="GroupTypeVO1Iterator" Binds="GroupTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
@@ -178,12 +185,76 @@
         <Item Value="PersonName"/>
       </ListDisplayAttrNames>
     </list>
-    <methodAction id="updateMQDesignee" RequiresUpdateModel="true" Action="invokeMethod" MethodName="updateMQDesignee"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.updateMQDesignee_CQTAppModuleDataControl_dataProvider_updateMQDesignee_result">
-      <NamedData NDName="dictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="designee" NDType="java.lang.String"/>
+    <tree IterBinding="TermHistoricInfoVO1Iterator" id="TermHistoricInfoVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.TermHistoricInfoVO" Name="TermHistoricInfoVO10">
+        <AttrNames>
+          <Item Value="HistoryAsOfDate"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="Category"/>
+          <Item Value="CommentText"/>
+          <Item Value="CreatedBy"/>
+          <Item Value="DefDictionaryId"/>
+          <Item Value="DefDictionaryType"/>
+          <Item Value="DefDomainId"/>
+          <Item Value="DefLevelId"/>
+          <Item Value="DictContentAltCode"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentEntryTs"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DictionaryName"/>
+          <Item Value="DictVersionAsOfDate"/>
+          <Item Value="DomainName"/>
+          <Item Value="EndTs"/>
+          <Item Value="FirstTmsEntryBy"/>
+          <Item Value="FirstTmsEntryTs"/>
+          <Item Value="LastTmsEntryBy"/>
+          <Item Value="LastTmsEntryTs"/>
+          <Item Value="LevelExtension"/>
+          <Item Value="LevelName"/>
+          <Item Value="MqgroupExpanded"/>
+          <Item Value="MqproductExpanded"/>
+          <Item Value="NmatEndTs"/>
+          <Item Value="SmqAlg"/>
+          <Item Value="SmqDesc"/>
+          <Item Value="SmqNote"/>
+          <Item Value="SmqSrc"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="TermSubtype"/>
+          <Item Value="TermType"/>
+          <Item Value="TermUpper"/>
+          <Item Value="TransactionId"/>
+          <Item Value="Value1"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="Value4"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="loadHistoricTermInformation" InstanceName="data.SearchModuleDataControl.dataProvider"
+                  DataControl="SearchModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadHistoricTermInformation" IsViewObjectMethod="false">
+      <NamedData NDName="dictContentId" NDType="java.math.BigDecimal"/>
+      <NamedData NDName="effectiveDTStr" NDType="java.lang.String"/>
     </methodAction>
+    <tree IterBinding="ProductTypeVO1Iterator" id="ProductTypeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.product.ProductTypeVO" Name="ProductTypeVO10">
+        <AttrNames>
+          <Item Value="Value"/>
+          <Item Value="Meaning"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <action IterBinding="ProductSearchTransVO1Iterator" id="Delete"
+            InstanceName="ProductModuleDataControl.ProductSearchTransVO1" DataControl="ProductModuleDataControl"
+            RequiresUpdateModel="false" Action="removeCurrentRow"/>
+    <tree IterBinding="GroupTypeVO1Iterator" id="GroupTypeVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.product.GroupTypeVO" Name="GroupTypeVO10">
+        <AttrNames>
+          <Item Value="Value"/>
+          <Item Value="Meaning"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>

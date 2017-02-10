@@ -38,6 +38,8 @@
               usageId="com_dbms_csmq_view_viewInformationNotesPageDef"/>
         <page path="/viewPreviousVersionImpact/viewInformationNotes.jspx"
               usageId="com_dbms_csmq_view_viewInformationNotesPageDef1"/>
+        <page path="/workflow/iaPublishedMQs.jspx" usageId="com_dbms_csmq_view_iaPublishedMQsPageDef"/>
+        <page path="/workflow/publishedMQList.jspx" usageId="com_dbms_csmq_view_publishedMQListPageDef"/>
     </pageMap>
     <pageDefinitionUsages>
         <page id="com_dbms_csmq_view_loginPageDef" path="com.dbms.csmq.view.pageDefs.loginPageDef"/>
@@ -116,6 +118,8 @@
         <page id="com_dbms_csmq_view_viewInformationNotesPageDef" path="viewVersionImpact.viewInformationNotesPageDef"/>
         <page id="com_dbms_csmq_view_viewInformationNotesPageDef1"
               path="viewPreviousVersionImpact.viewInformationNotesPageDef"/>
+        <page id="com_dbms_csmq_view_iaPublishedMQsPageDef" path="workflow.iaPublishedMQsPageDef"/>
+        <page id="com_dbms_csmq_view_publishedMQListPageDef" path="workflow.publishedMQListPageDef"/>
     </pageDefinitionUsages>
     <dataControlUsages>
         <dc id="ReportDownloadBean" path="com.dbms.csmq.view.ReportDownloadBean"/>
@@ -159,10 +163,5 @@
                          FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true" SupportsFindMode="true"
                          SupportsRangesize="true" SupportsResetState="true" SupportsSortCollection="true"
                          Configuration="UserAccountsListModuleLocal" syncMode="Immediate" xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
-        <BC4JDataControl id="CQTAppModuleDataControl" Package="com.dbms.csmq.model.am"
-                         FactoryClass="oracle.adf.model.bc4j.DataControlFactoryImpl" SupportsTransactions="true"
-                         SupportsFindMode="true" SupportsRangesize="true" SupportsResetState="true"
-                         SupportsSortCollection="true" Configuration="CQTAppModuleLocal" syncMode="Immediate"
-                         xmlns="http://xmlns.oracle.com/adfm/datacontrol"/>
     </dataControlUsages>
 </Application>

@@ -1,5 +1,6 @@
 package com.dbms.csmq.view.impact;
 
+
 import com.dbms.csmq.CSMQBean;
 import com.dbms.csmq.view.backing.impact.ImpactAnalysisBean;
 import com.dbms.csmq.view.hierarchy.GenericTreeNode;
@@ -30,6 +31,7 @@ import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.myfaces.trinidad.model.RowKeySetTreeImpl;
 import org.apache.myfaces.trinidad.model.TreeModel;
 
+
 public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
 
     private TreeModel treemodel;
@@ -43,6 +45,7 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
     private RichInputText term;
     private int numberOfTermsToBeDeleted;
     private boolean hasScope = false;
+    protected GenericTreeNode rootCopy;
 
 
     public PreviousVerFutureImpactHierarchyBean() {
@@ -54,27 +57,110 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
     public void init(boolean hasScope) {
         this.hasScope = hasScope;
         parentNodesByLevel = new HashMap();
+        if (root != null) {
+            root.getChildren().clear();
+        }
+
         createTree();
         List nodes = new ArrayList();
         nodes.add(root);
+        rootCopy = root;
         treemodel = new ChildPropertyTreeModel(nodes, "children") {
-            public boolean isContainer() {
-                if (getRowData() == null)
-                    return false;
-                return ((GenericTreeNode) getRowData()).getChildCount() > 0;
-            }
-        };
+                public boolean isContainer() {
+                    if (getRowData() == null)
+                        return false;
+                    return ((GenericTreeNode)getRowData()).getChildCount() > 0;
+                }
+            };
     }
+
+    public void rebuildTree(boolean isShowImpactedOnly) {
+        System.out.println("START: PreviousVerFutureImpactHierarchyBean.rebuildTree() isShowImpactedOnly=" +
+                           isShowImpactedOnly);
+        if (isShowImpactedOnly) {
+            /*
+            root = copyNode(rootCopy);
+            if(rootCopy.getChildren() != null && rootCopy.getChildren().size() > 0){
+                int size = rootCopy.getChildren().size();
+                List<GenericTreeNode> impactedNodes = null;
+                GenericTreeNode childNode = null;
+                GenericTreeNode copyNode = null;
+                for (int i = 0; i < size; i++) {
+                    childNode = (GenericTreeNode) rootCopy.getChildren().get(i);
+                    impactedNodes = getImpactedNodes(childNode);
+                    if(impactedNodes != null && impactedNodes.size() > 0){
+                        copyNode = copyNode(childNode);
+                        copyNode.getChildren().addAll(impactedNodes);
+                        root.getChildren().add(copyNode);
+                    }
+                }
+            }
+            */
+            root = copyNode(rootCopy);
+            copyNBuildImpactTreeNode(rootCopy, root);
+        } else {
+            root = rootCopy;
+        }
+        List nodes = new ArrayList();
+        nodes.add(root);
+        treemodel = new ChildPropertyTreeModel(nodes, "children") {
+                public boolean isContainer() {
+                    if (getRowData() == null)
+                        return false;
+                    return ((GenericTreeNode)getRowData()).getChildCount() > 0;
+                }
+            };
+        System.out.println("END: PreviousVerFutureImpactHierarchyBean.rebuildTree()");
+    }
+
+    public GenericTreeNode copyNBuildImpactTreeNode(GenericTreeNode node, GenericTreeNode uiDisplayNode) {
+        if (node.getChildren() != null && node.getChildren().size() > 0) {
+            int size = node.getChildren().size();
+            GenericTreeNode childNode = null;
+            GenericTreeNode uiDisplaychildNode = null;
+            for (int i = 0; i < size; i++) {
+                childNode = (GenericTreeNode)node.getChildren().get(i);
+                if (!"0".equalsIgnoreCase(childNode.getIcon())) {
+                    uiDisplaychildNode = copyNode(childNode);
+                    copyNBuildImpactTreeNode(childNode, uiDisplaychildNode);
+                    uiDisplayNode.getChildren().add(uiDisplaychildNode);
+                }
+            }
+        }
+        return uiDisplayNode;
+    }
+
+    //    private List<GenericTreeNode> getImpactedNodes(GenericTreeNode node){
+    //        List<GenericTreeNode> impactedNodes = new ArrayList<GenericTreeNode>();
+    //        if(node.getChildren() != null && node.getChildren().size() > 0){
+    //            int size = node.getChildren().size();
+    //            GenericTreeNode childNode = null;
+    //            GenericTreeNode copyNode = null;
+    //            for (int i = 0; i < size; i++) {
+    //                childNode = (GenericTreeNode) node.getChildren().get(i);
+    //                if(!"0".equalsIgnoreCase(childNode.getIcon()) ){
+    //                    //copyNode = copyNode(childNode);
+    //                    copyNode = copyNBuildImpactTreeNode(childNode);
+    //                    impactedNodes.add(copyNode);
+    //                }
+    //            }
+    //        }
+    //        return impactedNodes;
+    //    }
 
     private void createTree() {
 
         BindingContext bc = BindingContext.getCurrent();
-        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
-        DCIteratorBinding dciterb = (DCIteratorBinding) binding.get("PreviousVerFutureImpactVO1Iterator");
+        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("PreviousVerFutureImpactVO1Iterator");
 
         rows = dciterb.getRowSetIterator().enumerateRowsInRange();
 
-        Row row = (Row) rows.nextElement();
+        if (rows != null && !rows.hasMoreElements()) {
+            return;
+        }
+
+        Row row = (Row)rows.nextElement();
         root = new GenericTreeNode();
         root.setIsRoot(true);
         root.setTerm(Utils.getAsString(row, "RootTerm"));
@@ -120,12 +206,14 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
             root.setEditable(false);
             this.editable = false;
         }
+        root.setScopeName("Full " + root.getMqType() + "/SMQ");
 
         //NEW FOR IMPACT
         String displayAttribute = Utils.getAsString(row, "RootNmatDisplayProperty");
         if (displayAttribute != null) {
             String code =
-                displayAttribute.indexOf("_") > 0 ? displayAttribute.substring(displayAttribute.lastIndexOf("_")+1) : "0";
+                displayAttribute.indexOf("_") > 0 ? displayAttribute.substring(displayAttribute.lastIndexOf("_") + 1) :
+                "0";
             root.setDescription(displayAttribute);
             root.setStyle(displayAttribute); // THIS IS USED TO CALL THE CORRECT STYLE
             root.setIcon(code); // SET THE MATCHING ICON - IF IT'S NULL IT WON'T SHOW
@@ -137,7 +225,7 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
 
         populateTreeNode(row);
         while (rows.hasMoreElements()) {
-            row = (Row) rows.nextElement();
+            row = (Row)rows.nextElement();
             populateTreeNode(row);
         }
         hasData = true;
@@ -170,43 +258,134 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
         termNode.setFormattedScope(Utils.getAsString(row, "RelRelationScope"));
         termNode.setHasScope(this.hasScope);
         termNode.setEditable(this.editable); // 4.APR.2014
+        termNode.setFormattedScope(Utils.getAsString(row, "RelRelationScope"));
 
+        GenericTreeNode parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
 
-        GenericTreeNode parentNode = (GenericTreeNode) parentNodesByLevel.get(termNode.getParent());
-        parentNode.getChildren().add(termNode); // add to the parent
-        termNode.setParentNode(parentNode); // set the parent for the child
-        if (parentNode.isIsRoot())
-            termNode.setDeletable(true); //it's a child of the root - it can be deleted
-        if (root.equals(parentNode))
-            termNode.setIsDirectRelation(true); // it's a direct relation
+        if (parentNode == null) {
+            populateTreeNodeFromMaster(row);
+            parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
+        }
 
-        termNode.setMqType(parentNode.getMqType()); // set the query type the same as the parent
-        String displayAttribute = (String) row.getAttribute("RelNmatDisplayProperty");
+        if (parentNode != null) {
+            parentNode.getChildren().add(termNode); // add to the parent
+            termNode.setParentNode(parentNode); // set the parent for the child
+            if (parentNode.isIsRoot())
+                termNode.setDeletable(true); //it's a child of the root - it can be deleted
+            if (root.equals(parentNode))
+                termNode.setIsDirectRelation(true); // it's a direct relation
+
+            termNode.setMqType(parentNode.getMqType()); // set the query type the same as the parent
+        }
+
+        String displayAttribute = (String)row.getAttribute("GuiNmatDisplayProperty");
         if (displayAttribute != null) {
             String code =
-                displayAttribute.indexOf("_") > 0 ? displayAttribute.substring(displayAttribute.lastIndexOf("_")+1) : "0";
+                displayAttribute != null && displayAttribute.indexOf("_") > 0 ? displayAttribute.substring(displayAttribute.lastIndexOf("_") +
+                                                                                                           1) : "0";
             termNode.setDescription(displayAttribute);
             termNode.setStyle(displayAttribute); // THIS IS USED TO CALL THE CORRECT STYLE
             termNode.setIcon(code); // SET THE MATCHING ICON - IF IT'S NULL IT WON'T SHOW
             //FILTER OUT THESE CODES
-            if (code.equals(CSMQBean.DELETED_MERGED_MOVED_TERM_RELATION)) {
-                CSMQBean.logger.info(userBean.getCaller() + " FUTURE: IGNORING " + termNode);
-                termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
-            }
+            //            if (code.equals(CSMQBean.DELETED_MERGED_MOVED_TERM_RELATION)) {
+            //                CSMQBean.logger.info(userBean.getCaller() + " FUTURE: IGNORING " + termNode);
+            //                termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+            //            }
         }
         //REMOVE LLTs FROM THTE ROOT
-        if (parentNode.isIsRoot() && termNode.getLevelName().equals("LLT")) {
+        if (parentNode != null && parentNode.isIsRoot() && termNode.getLevelName().equals("LLT")) {
             termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
             CSMQBean.logger.info(userBean.getCaller() + " REMOVING LLT " + termNode);
         }
 
         // FOR 'LAZY' LOADING
-//        boolean showMoreChildren = Utils.getAsBoolean(row, "ChildExists");
-//        if (showMoreChildren)
-//            termNode.setShowHasChildrenButton(true);
+        //        boolean showMoreChildren = Utils.getAsBoolean(row, "ChildExists");
+        //        if (showMoreChildren)
+        //            termNode.setShowHasChildrenButton(true);
 
         setDerivedRelations(termNode);
+        if (termNode.getFormattedScope().contains("BROAD")) {
+            termNode.setScopeName("Broad");
+        } else if (termNode.getFormattedScope().contains("NARROW")) {
+            termNode.setScopeName("Narrow");
+        }
         CSMQBean.logger.info(userBean.getCaller() + " FUTURE ADDING NODE: " + termNode);
+
+        if (termNode != null)
+            parentNodesByLevel.put(termNode.getDictContentId(), termNode);
+    }
+
+    private void populateTreeNodeFromMaster(Row row) {
+        //store node and level
+        GenericTreeNode termNode = new GenericTreeNode();
+        termNode.setTerm(Utils.getAsString(row, "MstrTerm"));
+
+        termNode.setPrikey(Utils.getAsString(row, "MstrDictContentId"));
+        termNode.setParent(Utils.getAsString(row, "RootDictContentId"));
+        termNode.setLevelName(Utils.getAsString(row, "MstrLevelName"));
+        //termNode.setLevel(Utils.getAsNumber(row, "Level"));
+        termNode.setDictShortName(Utils.getAsString(row, "MstrDictName"));
+        termNode.setDictContentId(Utils.getAsString(row, "MstrDictContentId"));
+        termNode.setDictContentCode(Utils.getAsString(row, "MstrDictContentCode"));
+        termNode.setApprovedFlag("A");
+        termNode.setDictContentAltCode(Utils.getAsString(row, "MstrDictContentCode"));
+        termNode.setStatus(Utils.getAsString(row, "RelRelationScope")); //TODO
+        //termNode.setPredictGroupId(Utils.getAsNumber(row, "PredictGroupId"));
+        termNode.setPath(Utils.getAsString(row, "RelDepthFromRoot"));
+        termNode.setTermCategory(Utils.getAsString(row, "RelRelationCategory"));
+        termNode.setTermLevel(Utils.getAsString(row, "MstrLevelName"));
+        termNode.setTermScope(Utils.getAsNumber(row, "RelRelationScope"));
+        termNode.setTermWeight(Utils.getAsString(row, "RelRelationWeight"));
+        termNode.setHasScope(this.hasScope);
+        termNode.setEditable(this.editable); // 4.APR.2014
+        termNode.setFormattedScope(Utils.getAsString(row, "RelRelationScope"));
+
+        GenericTreeNode parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
+
+        if (parentNode != null) {
+            parentNode.getChildren().add(termNode); // add to the parent
+            termNode.setParentNode(parentNode); // set the parent for the child
+            if (parentNode.isIsRoot())
+                termNode.setDeletable(true); //it's a child of the root - it can be deleted
+            if (root.equals(parentNode))
+                termNode.setIsDirectRelation(true); // it's a direct relation
+
+            termNode.setMqType(parentNode.getMqType()); // set the query type the same as the parent
+        }
+        String displayAttribute = (String)row.getAttribute("MstrNmatDisplayProperty");
+        if (displayAttribute != null) {
+            String code =
+                displayAttribute != null && displayAttribute.indexOf("_") > 0 ? displayAttribute.substring(displayAttribute.lastIndexOf("_") +
+                                                                                                           1) : "0";
+            termNode.setDescription(displayAttribute);
+            termNode.setStyle(displayAttribute); // THIS IS USED TO CALL THE CORRECT STYLE
+            termNode.setIcon(code); // SET THE MATCHING ICON - IF IT'S NULL IT WON'T SHOW
+            //FILTER OUT THESE CODES
+            //            if (code.equals(CSMQBean.DELETED_MERGED_MOVED_TERM_RELATION)) {
+            //                CSMQBean.logger.info(userBean.getCaller() + " FUTURE: IGNORING " + termNode);
+            //                termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+            //            }
+        }
+        //REMOVE LLTs FROM THTE ROOT
+        if (parentNode != null && parentNode.isIsRoot() && termNode.getLevelName().equals("LLT")) {
+            termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+            CSMQBean.logger.info(userBean.getCaller() + " REMOVING LLT " + termNode);
+        }
+
+        // FOR 'LAZY' LOADING
+        //        boolean showMoreChildren = Utils.getAsBoolean(row, "ChildExists");
+        //        if (showMoreChildren)
+        //            termNode.setShowHasChildrenButton(true);
+
+        setDerivedRelations(termNode);
+
+        if (termNode.getFormattedScope().contains("BROAD")) {
+            termNode.setScopeName("Broad");
+        } else if (termNode.getFormattedScope().contains("NARROW")) {
+            termNode.setScopeName("Narrow");
+        }
+
+        CSMQBean.logger.info(userBean.getCaller() + " CURRENT ADDING NODE: " + termNode);
 
         if (termNode != null)
             parentNodesByLevel.put(termNode.getDictContentId(), termNode);
@@ -272,7 +451,7 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
 
     private void showChildren() {
         ImpactAnalysisBean impactAnalysisBean =
-            (ImpactAnalysisBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("ImpactAnalysisBean");
+            (ImpactAnalysisBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("ImpactAnalysisBean");
         RichTreeTable targetTree = impactAnalysisBean.getFutureTree();
         // Clear keys
 
@@ -287,7 +466,7 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
         Object[] keys = droppedValue.toArray();
 
         for (int i = 0; i < keys.length; i++) {
-            List list = (List) keys[i];
+            List list = (List)keys[i];
 
             int depth = list.size();
             int rootKey = Integer.parseInt(list.get(0).toString());
@@ -308,34 +487,34 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
                 break;
             case 2:
                 c1key = Integer.parseInt(list.get(1).toString());
-                c1 = (GenericTreeNode) root.getChildren().get(c1key);
+                c1 = (GenericTreeNode)root.getChildren().get(c1key);
                 newRootNode = c1;
                 break;
             case 3:
                 c1key = Integer.parseInt(list.get(1).toString());
-                c1 = (GenericTreeNode) root.getChildren().get(c1key);
+                c1 = (GenericTreeNode)root.getChildren().get(c1key);
                 c2key = Integer.parseInt(list.get(2).toString());
-                c2 = (GenericTreeNode) c1.getChildren().get(c2key);
+                c2 = (GenericTreeNode)c1.getChildren().get(c2key);
                 newRootNode = c2;
                 break;
             case 4:
                 c1key = Integer.parseInt(list.get(1).toString());
-                c1 = (GenericTreeNode) root.getChildren().get(c1key);
+                c1 = (GenericTreeNode)root.getChildren().get(c1key);
                 c2key = Integer.parseInt(list.get(2).toString());
-                c2 = (GenericTreeNode) c1.getChildren().get(c2key);
+                c2 = (GenericTreeNode)c1.getChildren().get(c2key);
                 c3key = Integer.parseInt(list.get(3).toString());
-                c3 = (GenericTreeNode) c2.getChildren().get(c3key);
+                c3 = (GenericTreeNode)c2.getChildren().get(c3key);
                 newRootNode = c3;
                 break;
             case 5:
                 c1key = Integer.parseInt(list.get(1).toString());
-                c1 = (GenericTreeNode) root.getChildren().get(c1key);
+                c1 = (GenericTreeNode)root.getChildren().get(c1key);
                 c2key = Integer.parseInt(list.get(2).toString());
-                c2 = (GenericTreeNode) c1.getChildren().get(c2key);
+                c2 = (GenericTreeNode)c1.getChildren().get(c2key);
                 c3key = Integer.parseInt(list.get(3).toString());
-                c3 = (GenericTreeNode) c2.getChildren().get(c3key);
+                c3 = (GenericTreeNode)c2.getChildren().get(c3key);
                 c4key = Integer.parseInt(list.get(4).toString());
-                c4 = (GenericTreeNode) c3.getChildren().get(c4key);
+                c4 = (GenericTreeNode)c3.getChildren().get(c4key);
                 newRootNode = c4;
                 break;
             }
@@ -364,12 +543,20 @@ public class PreviousVerFutureImpactHierarchyBean extends Hierarchy {
     public boolean isHasScope() {
         return hasScope;
     }
-    
+
     public void setHasData(boolean hasData) {
         this.hasData = hasData;
     }
 
     public boolean isHasData() {
         return hasData;
+    }
+
+    public void setRootCopy(GenericTreeNode rootCopy) {
+        this.rootCopy = rootCopy;
+    }
+
+    public GenericTreeNode getRootCopy() {
+        return rootCopy;
     }
 }

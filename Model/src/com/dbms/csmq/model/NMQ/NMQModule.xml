@@ -7,7 +7,9 @@
   Version="11.1.2.64.36"
   ComponentClass="com.dbms.csmq.model.NMQ.NMQModuleImpl"
   DefClass="com.dbms.csmq.model.NMQ.NMQModuleDefImpl"
-  ClearCacheOnRollback="true">
+  ClearCacheOnRollback="true"
+  ComponentInterface="com.dbms.csmq.model.NMQ.common.NMQModule"
+  ClientProxyName="com.dbms.csmq.model.NMQ.client.NMQModuleClient">
   <DesignTime>
     <Attr Name="_isDefCodegen" Value="true"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -18,4 +20,12 @@
   <ViewUsage
     Name="NMQExtentionListVO1"
     ViewObjectName="com.dbms.csmq.model.NMQ.NMQExtentionListVO"/>
+  <ClientInterface>
+    <Method
+      Name="isUpgradePending"
+      MethodName="isUpgradePending">
+      <Return
+        Type="java.lang.Boolean"/>
+    </Method>
+  </ClientInterface>
 </AppModule>

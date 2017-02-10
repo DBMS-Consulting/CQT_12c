@@ -86,24 +86,6 @@
     </method-call>
     <view id="viewImpactAssessment">
       <page>/viewPreviousVersionImpact/viewImpactAssessment.jspx</page>
-      <train-stop>
-        <display-name>Previous Version Impact</display-name>
-        <sequential>true</sequential>
-      </train-stop>
-    </view>
-    <view id="viewInformationNotes">
-      <page>/viewPreviousVersionImpact/viewInformationNotes.jspx</page>
-      <train-stop>
-        <display-name>Information Notes</display-name>
-        <sequential>false</sequential>
-      </train-stop>
-    </view>
-    <view id="viewDetails">
-      <page>/viewPreviousVersionImpact/viewDetails.jspx</page>
-      <train-stop>
-        <display-name>Details</display-name>
-        <sequential>false</sequential>
-      </train-stop>
     </view>
     <method-call id="clearMenu">
       <method>#{UserBean.clear}</method>
@@ -117,7 +99,6 @@
         <rollback/>
       </outcome>
     </task-flow-return>
-    <train/>
     <control-flow-rule id="__14">
       <from-activity-id>setMode</from-activity-id>
       <control-flow-case id="__15">
@@ -127,20 +108,6 @@
     <control-flow-rule id="__16">
       <from-activity-id>viewImpactAssessment</from-activity-id>
       <control-flow-case id="__17">
-        <from-outcome>CANCEL</from-outcome>
-        <to-activity-id>clearMenu</to-activity-id>
-      </control-flow-case>
-    </control-flow-rule>
-    <control-flow-rule id="__18">
-      <from-activity-id>viewInformationNotes</from-activity-id>
-      <control-flow-case id="__19">
-        <from-outcome>CANCEL</from-outcome>
-        <to-activity-id>clearMenu</to-activity-id>
-      </control-flow-case>
-    </control-flow-rule>
-    <control-flow-rule id="__20">
-      <from-activity-id>viewDetails</from-activity-id>
-      <control-flow-case id="__21">
         <from-outcome>CANCEL</from-outcome>
         <to-activity-id>clearMenu</to-activity-id>
       </control-flow-case>

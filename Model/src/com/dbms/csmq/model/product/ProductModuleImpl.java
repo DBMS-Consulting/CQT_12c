@@ -1,6 +1,7 @@
 package com.dbms.csmq.model.product;
 
-import com.dbms.csmq.model.product.common.ProductModule;
+
+import com.dbms.csmq.model.NMQ.NMQExtentionListVOImpl;
 
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewObjectImpl;
@@ -10,7 +11,7 @@ import oracle.jbo.server.ViewObjectImpl;
 // ---    Custom code may be added to this class.
 // ---    Warning: Do not modify method signatures of generated methods.
 // ---------------------------------------------------------------------
-public class ProductModuleImpl extends ApplicationModuleImpl implements ProductModule {
+public class ProductModuleImpl extends ApplicationModuleImpl {
     /**
      * This is the default constructor (do not remove).
      */
@@ -40,11 +41,53 @@ public class ProductModuleImpl extends ApplicationModuleImpl implements ProductM
     public ViewObjectImpl getProductListByMQVO1() {
         return (ViewObjectImpl)findViewObject("ProductListByMQVO1");
     }
-    
 
-    
-    
-    
-    
-    
+
+    /**
+     * Container's getter for ProductSearchTransVO1.
+     * @return ProductSearchTransVO1
+     */
+    public ViewObjectImpl getProductSearchTransVO1() {
+        return (ViewObjectImpl)findViewObject("ProductSearchTransVO1");
+    }
+
+    /**
+     * Container's getter for ProductTypeVO1.
+     * @return ProductTypeVO1
+     */
+    public ViewObjectImpl getProductTypeVO1() {
+        return (ViewObjectImpl)findViewObject("ProductTypeVO1");
+    }
+
+    /**
+     * Container's getter for NMQExtentionListVO1.
+     * @return NMQExtentionListVO1
+     */
+    public NMQExtentionListVOImpl getNMQExtentionListVO1() {
+        return (NMQExtentionListVOImpl)findViewObject("NMQExtentionListVO1");
+    }
+
+    /**
+     * Container's getter for ProductListVO1.
+     * @return ProductListVO1
+     */
+    public ProductListVOImpl getProductListVO1() {
+        return (ProductListVOImpl)findViewObject("ProductListVO1");
+    }
+
+    /**
+     * Container's getter for ProductScopeVO1.
+     * @return ProductScopeVO1
+     */
+    public ViewObjectImpl getProductScopeVO1() {
+        return (ViewObjectImpl)findViewObject("ProductScopeVO1");
+    }
+
+    /**
+     * Container's getter for GroupTypeVO1.
+     * @return GroupTypeVO1
+     */
+    public ViewObjectImpl getGroupTypeVO1() {
+        return (ViewObjectImpl)findViewObject("GroupTypeVO1");
+    }
 }

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:f="http://java.sun.com/jsf/core"
-          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich" xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewcontrollerBundle" value="#{adfBundle['viewcontroller.create.addInformativeNotesBundle']}"/>
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view>
     <af:document id="d1" uncommittedDataWarning="on">
@@ -9,10 +10,20 @@
         <af:pageTemplate viewId="/CSMQ.jspx"
                          value="#{bindings.pageTemplateBinding}" id="pt1">
           <f:facet name="header">
-           <af:group id="g2">
+           <af:panelGroupLayout id="g2" layout="horizontal">
               <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
-              <af:spacer width="10" height="10" id="s1"/>
-            </af:group>
+              <af:spacer width="200" height="10" id="s1"/>
+              <af:panelGroupLayout id="pgl14" layout="horizontal" halign="center" styleClass="AFStretchWidth"
+                                     rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}">  
+                  <af:outputText value="Historic View as of " id="ot26" 
+                                 inlineStyle="font-weight: bold;font-size: 16px;"/>
+                  <af:spacer width="5" height="10" id="s12"/>  
+                  <af:outputText value="#{pageFlowScope.NMQWizardSearchBean.historyDate}" id="ot27" 
+                                 inlineStyle="font-weight: bold;font-size: 16px;">                                 
+                        <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                  </af:outputText>
+                </af:panelGroupLayout>
+            </af:panelGroupLayout>
           </f:facet>
           <f:facet name="main">
             <af:group id="g1">
@@ -29,7 +40,8 @@
                                     requiredMessageDetail="An MQ Description is required." changed="false" columns="225"
                                     value="#{pageFlowScope.NMQWizardBean.currentInfNoteDescription}"
                                     showRequired="true"
-                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
+                                    valueChangeListener="#{pageFlowScope.NMQWizardBean.notesChanged}"/>
                     </af:panelGroupLayout>
                   </af:showDetailItem>
                   <!-- @author MTW
@@ -40,7 +52,8 @@
                     <af:panelGroupLayout id="panelGroupLayout1" layout="vertical" inlineStyle="height:560px; width:1257px;">
                       <af:inputText id="inputText1" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQNotes}" required="false" changed="false"
                                     columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteNotes}" showRequired="false"
-                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
+                                    valueChangeListener="#{pageFlowScope.NMQWizardBean.notesChanged}"/>
                     </af:panelGroupLayout>
                   </af:showDetailItem>
                   <!-- @author MTW
@@ -51,7 +64,8 @@
                     <af:panelGroupLayout id="panelGroupLayout2" layout="vertical" inlineStyle="height:560px; width:1257px;">
                       <af:inputText id="inputText2" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQSource}" required="false" changed="false"
                                     columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteSource}" showRequired="false"
-                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}"/>
+                                    readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
+                                    valueChangeListener="#{pageFlowScope.NMQWizardBean.notesChanged}"/>
                     </af:panelGroupLayout>
                   </af:showDetailItem>
                 </af:panelTabbed>
@@ -68,7 +82,8 @@
               
               <af:spacer width="10" height="10" id="s6"/>
               <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
-              <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL" immediate="true"
+              <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
+                                action="#{pageFlowScope.NMQWizardBean.showInfoNotesWarningPopup}" immediate="true"
                                 shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
               <af:spacer width="20" height="10" id="s3"/>
               <af:inputText label="Dictionary Version:" id="it1aw"
@@ -80,6 +95,19 @@
                             value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
                             disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}"
                             columns="75"/>
+              <af:popup childCreation="deferred" autoCancel="disabled" id="p1"
+                        binding="#{pageFlowScope.NMQWizardBean.infoNotesWarningPopup}">
+                <af:dialog id="d2" type="none" title="Warning">
+                  <f:facet name="buttonBar">
+                    <af:panelGroupLayout id="pgl4" layout="horizontal">
+                      <af:commandButton text="#{viewcontrollerBundle.YES}" id="cb2"
+                                        action="#{pageFlowScope.NMQWizardBean.yesWarning}"/>
+                      <af:commandButton text="#{viewcontrollerBundle.NO}" id="cb3" action="CANCEL"/>
+                    </af:panelGroupLayout>
+                  </f:facet>
+                  <af:outputText value="The data you have modified has not been saved and will be lost unless you save.  Would you like to save the data?" id="ot1"/>
+                </af:dialog>
+              </af:popup>
             </af:panelGroupLayout>
           </f:facet>
         </af:pageTemplate>

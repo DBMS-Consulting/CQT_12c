@@ -38,21 +38,18 @@
                                 </af:inputListOfValues>
                                 
                                 <af:commandButton text="Compare" id="cb1" partialSubmit="true"
-                                                  actionListener="#{pageFlowScope.DiffBean.doCompare}">
-                                    <?audit suppress oracle.ide.xml.validation-warning?>
-                                </af:commandButton>
+                                                  actionListener="#{pageFlowScope.DiffBean.doCompare}"/>
                             </af:panelGroupLayout>
                             <af:panelGroupLayout id="pgl3" layout="horizontal" inlineStyle="height:260px; width:866px;">
                                 <af:panelCollection id="pc1" styleClass="AFStretchWidth AFSTretchHeight">
                                     <f:facet name="menus"/>
                                     <f:facet name="toolbar">
                                         <af:toolbar id="t1">
-                                            <af:commandToolbarButton text="Export" id="ctb11a" disabled="false"
+                                            <af:button text="Export" id="ctb11a" disabled="false"
                                                                      icon="/image/hierarchy/EXCEL.png">
-                                                <?audit suppress oracle.ide.xml.validation-warning?>
                                                 <af:exportCollectionActionListener type="excelHTML" exportedId="tt1"
                                      filename="MQCompare.xls" title="MQ Compare"/>
-                                            </af:commandToolbarButton>
+                                            </af:button>
                                         </af:toolbar>
                                     </f:facet>
                                     <f:facet name="statusbar"/>
@@ -62,8 +59,6 @@
                                                   fetchSize="-1" autoHeightRows="-1"
                                                   styleClass=" ADFStretchHeight  ADFStretchWidtth"
                                                   binding="#{DiffUIBean.cntrlDiffResults}">
-                                        <?audit suppress oracle.adf.faces.tableneedsrowheader?>
-                                        <?audit suppress oracle.adf.faces.compreqsummary?>
                                         <f:facet name="nodeStamp">
                                             <af:column id="c4" headerText="MQ Differences">
                                                 <af:column id="c1" headerText="#{pageFlowScope.DiffBean.leftTermName}"
@@ -93,7 +88,7 @@
                         <f:facet name="pageBottom">
                         <af:panelGroupLayout id="pgl26" layout="horizontal" inlineStyle="padding:3px;">
                             <af:spacer width="10" height="10" id="s21"/>
-                            <af:button text="Cancel" id="cb2" action="CANCEL"/>
+                            <af:commandButton text="Cancel" id="cb2" action="CANCEL"/>
                             <af:spacer width="20" height="10" id="s19"/>
                             <af:spacer width="10" height="10" id="s20"/>
                             

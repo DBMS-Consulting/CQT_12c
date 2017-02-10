@@ -7,9 +7,7 @@
   Version="11.1.2.64.36"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.product.ProductModuleImpl"
-  DefClass="com.dbms.csmq.model.product.ProductModuleDefImpl"
-  ComponentInterface="com.dbms.csmq.model.product.common.ProductModule"
-  ClientProxyName="com.dbms.csmq.model.product.client.ProductModuleClient">
+  DefClass="com.dbms.csmq.model.product.ProductModuleDefImpl">
   <DesignTime>
     <Attr Name="_isDefCodegen" Value="true"/>
     <Attr Name="_isCodegen" Value="true"/>
@@ -23,18 +21,22 @@
   <ViewUsage
     Name="ProductListByMQVO1"
     ViewObjectName="com.dbms.csmq.model.product.ProductListByMQVO"/>
-  <ClientInterface>
-    <Method
-      Name="filterProducts"
-      MethodName="filterProducts">
-      <Return
-        Type="void"/>
-      <Parameter
-        Name="searchString"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="selectedList"
-        Type="java.lang.String"/>
-    </Method>
-  </ClientInterface>
+  <ViewUsage
+    Name="ProductSearchTransVO1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductSearchTransVO"/>
+  <ViewUsage
+    Name="ProductTypeVO1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductTypeVO"/>
+  <ViewUsage
+    Name="NMQExtentionListVO1"
+    ViewObjectName="com.dbms.csmq.model.NMQ.NMQExtentionListVO"/>
+  <ViewUsage
+    Name="ProductListVO1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"/>
+  <ViewUsage
+    Name="ProductScopeVO1"
+    ViewObjectName="com.dbms.csmq.model.product.ProductScopeVO"/>
+  <ViewUsage
+    Name="GroupTypeVO1"
+    ViewObjectName="com.dbms.csmq.model.product.GroupTypeVO"/>
 </AppModule>

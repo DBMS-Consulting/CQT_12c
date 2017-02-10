@@ -46,6 +46,13 @@
         <to-string/>
       </outcome>
     </method-call>
+    <view id="iaPublishedMQs">
+      <page>/workflow/iaPublishedMQs.jspx</page>
+      <train-stop>
+        <display-name>Published IA MQs List</display-name>
+        <sequential>false</sequential>
+      </train-stop>
+    </view>
     <train/>
     <control-flow-rule id="__1">
       <from-activity-id>promoteToPublished</from-activity-id>
@@ -79,6 +86,13 @@
       <from-activity-id>init</from-activity-id>
       <control-flow-case id="__13">
         <to-activity-id>promoteToPublished</to-activity-id>
+      </control-flow-case>
+    </control-flow-rule>
+    <control-flow-rule id="__4">
+      <from-activity-id>iaPublishedMQs</from-activity-id>
+      <control-flow-case id="__14">
+        <from-outcome>CANCEL</from-outcome>
+        <to-activity-id>clearMenu</to-activity-id>
       </control-flow-case>
     </control-flow-rule>
   </task-flow-definition>

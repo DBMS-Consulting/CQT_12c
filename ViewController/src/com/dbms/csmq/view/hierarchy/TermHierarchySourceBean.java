@@ -7,8 +7,6 @@ import com.dbms.csmq.view.backing.NMQ.NMQSourceTermSearchBean;
 import com.dbms.csmq.view.backing.impact.ImpactAnalysisBean;
 import com.dbms.util.Utils;
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -39,25 +37,22 @@ import org.apache.myfaces.trinidad.model.TreeModel;
 //import javax.faces.event.ActionEvent;
 
 
-public class TermHierarchySourceBean extends Hierarchy implements Serializable {
+public class TermHierarchySourceBean extends Hierarchy {
 
-    @SuppressWarnings("compatibility:4183707243586059543")
-    private static final long serialVersionUID = 3177839331058851172L;
-
-    private transient TreeModel treemodel;
+    private TreeModel treemodel;
     //private GenericTreeNode root;
-    private transient Enumeration rows;
+    private Enumeration rows;
     private HashMap parentNodesByLevel;
     
     //Search terms used for term list box
     private String dictionaryVersionSearchCriteria = "";
     private String levelSearchCriteria = "";
     private String termSearchCriteria = "";
-    private transient RichSelectOneChoice dictionaryVersion;
-    private transient RichSelectOneChoice levelList;
-    private transient RichInputText term;
-    private transient RichTreeTable targetTree;
-    private transient RichTreeTable sourceTree;
+    private RichSelectOneChoice dictionaryVersion;
+    private RichSelectOneChoice levelList;
+    private RichInputText term;
+    private RichTreeTable targetTree;
+    private RichTreeTable sourceTree;
     private boolean hasScope = false;
     
 

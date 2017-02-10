@@ -3,8 +3,6 @@ package com.dbms.csmq.view.hierarchy;
 
 import com.dbms.csmq.CSMQBean;
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,10 +258,12 @@ public class GenericTreeNode {
 
     public String getScopeName() {
         if (formattedScope == null) return null;
-        if (formattedScope.equals("0")) scopeName = "Full " + CSMQBean.customMQName + "/SMQ";
-        if (formattedScope.equals("1")) scopeName = "Broad";
-        if (formattedScope.equals("2")) scopeName = "Narrow";
-        if (formattedScope.equals("3")) scopeName = "Child/Narrow";
+        if(scopeName == null){
+            if (formattedScope.equals("0")) scopeName = "Full " + CSMQBean.customMQName + "/SMQ";
+            if (formattedScope.equals("1")) scopeName = "Broad";
+            if (formattedScope.equals("2")) scopeName = "Narrow";
+            if (formattedScope.equals("3")) scopeName = "Child/Narrow";
+        }        
         return scopeName;
     }
 
@@ -423,7 +423,7 @@ public class GenericTreeNode {
     }
     
     public boolean equals(Object aThat) {
-     //   if ( this == aThat ) return true;
+        if ( this == aThat ) return true;
         if ( !(aThat instanceof GenericTreeNode) ) return false;
         GenericTreeNode that = (GenericTreeNode)aThat;
         return (this.prikey == that.prikey);
@@ -440,4 +440,7 @@ public class GenericTreeNode {
     }
 
 
+    public void setScopeName(String scopeName) {
+        this.scopeName = scopeName;
+    }
 }

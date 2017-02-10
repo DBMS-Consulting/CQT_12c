@@ -6,13 +6,15 @@ import com.dbms.csmq.UserBean;
 import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 
 import com.dbms.csmq.view.backing.NMQ.NMQWizardBean;
-import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
-import com.dbms.util.logged.CallableStatement;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -40,17 +42,29 @@ import oracle.adf.view.rich.component.rich.nav.RichCommandToolbarButton;
 import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.event.DialogEvent;
 
-import oracle.binding.OperationBinding;
-
 import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
-import oracle.jbo.server.DBTransaction;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 
 
 public class WorkflowBean {
@@ -126,35 +140,29 @@ public class WorkflowBean {
         }
         return selectedTerms;
     }
+    
+    /**
+     * @param sheet
+     * @throws IOException
+     */
+    public static void writeImageTOExcel(Sheet sheet,InputStream imageInputStream)throws IOException{
+        byte[] bytes = IOUtils.toByteArray(imageInputStream);
+        int pictureIdx = sheet.getWorkbook().addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+        imageInputStream.close();
+        CreationHelper helper = sheet.getWorkbook().getCreationHelper();
+        Drawing drawing = sheet.createDrawingPatriarch();
+        ClientAnchor anchor = new HSSFClientAnchor(0,0,0,0,(short)0,0,(short)1,3);
+        anchor.setAnchorType(2);
+        Picture pict = drawing.createPicture(anchor, pictureIdx);
+    //        pict.resize();
+    }
 
     public void setSelectedTerms(List selectedItems) {
         this.selectedTerms = selectedItems;
     }
 
     public void activate(DialogEvent actionEvent) {
-        String messageText;
-        FacesMessage msg;
-        //NMQUtils.activateGroup(CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("activateGroup");
-        String groupName = CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP");
-        ob.getParamsMap().put("groupName", groupName);
-        String retVal = (String)ob.execute();
-        if (null != retVal){
-            if (retVal.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Activation group " + groupName + " successfully activated", null); 
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (retVal.equalsIgnoreCase(CSMQBean.CHECK_MODE_ERRORS)){
-                messageText = "Errors occurred during the pre-activation validation and need to be resolved before " + groupName + " can be activated.";
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (retVal.equalsIgnoreCase(CSMQBean.FAILURE)){
-                messageText = "Error occurred during activation";
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-            
-        }
+        NMQUtils.activateGroup(CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));
     }
 
     public void demoteToDraft(DialogEvent actionEvent) {
@@ -165,41 +173,17 @@ public class WorkflowBean {
         changeState(CSMQBean.STATE_PENDING_IMPACT_ASSESSMENT, CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP"));
     }
     
-    public void activateInCheckMode(ActionEvent actionEvent) {
-        String messageText;
-        FacesMessage msg;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("activateGroupInCheckMode");
-        String groupName = CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP");
-        ob.getParamsMap().put("groupName", groupName);
-        String retVal = (String) ob.execute();
-        if (null != retVal){
-            if (retVal.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Activation group " + groupName + " successfully activated", null); 
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            //  if (NMQUtils.activateGroupInCheckMode(CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"))) {
-                  this.cntrlActivateButton.setDisabled(false);
-                  AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlActivateButton);
-                  AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlActivateButton);
-                  AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlRelationErrors);
-                  AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlRelationErrors);
-                  AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlContentErrors);
-                  AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlContentErrors);
-            } else if (retVal.equalsIgnoreCase(CSMQBean.ACTIVATION_ERRORS)){
-                messageText = "The errors found during CHECK mode activation are displayed on the screen. Demote the NMQs in error to Draft to resolve, Promote and Validate again.";
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }else if (retVal.equalsIgnoreCase(CSMQBean.RECORD_LOCKED_ERROR)){
-                messageText = CSMQBean.getProperty("RECORD_LOCKED_ERROR");
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (retVal.equalsIgnoreCase(CSMQBean.FAILURE)){
-                messageText = "Error occurred during activation";
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+    public void activateInCheckMode(ActionEvent actionEvent) {  
+        if (NMQUtils.activateGroupInCheckMode(CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"))) {
+            this.cntrlActivateButton.setDisabled(false);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlActivateButton);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlActivateButton);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlRelationErrors);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlRelationErrors);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlContentErrors);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlContentErrors);
             }
         }
-    }
 
     public void promoteToPublished(DialogEvent actionEvent) {
         changeState(CSMQBean.STATE_PUBLISHED, CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));
@@ -209,58 +193,17 @@ public class WorkflowBean {
 
 
     public void promoteSingleMQToPublished(DialogEvent actionEvent)  {
-        FacesMessage msg;
-        String messageText;
-        HashMap retVal = null;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("changeStateFromDraftToPublish");
-        ob.getParamsMap().put("dictContentIDs", nMQWizardBean.getCurrentDictContentID());
-        ob.getParamsMap().put("state", CSMQBean.STATE_REQUESTED);
-        ob.getParamsMap().put("currentUser", userBean.getCurrentUser());
-        ob.getParamsMap().put("currentUserRole", userBean.getUserRole());
-        ob.getParamsMap().put("dueDate", null);
-        ob.getParamsMap().put("comment", "Publish MedDRA Query");
-        ob.getParamsMap().put("activationGroup", CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));
-
-        retVal = (HashMap)ob.execute();
-            //NMQUtils.changeStateFromDraftToPublish(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REQUESTED, userBean.getCurrentUser(), userBean.getUserRole(), null, "Publish MedDRA Query", CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));           
-        if (null != retVal){
-            String retCode = (String) retVal.get("RETURN_CODE");
-            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + retVal.get("STATE"), null);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                if (retVal.get("STATE").equals("Published")) {
-                    nMQWizardBean.setCurrentState(CSMQBean.STATE_PUBLISHED);
-                    AdfFacesContext.getCurrentInstance().addPartialTarget(cb1);
-                    AdfFacesContext.getCurrentInstance().partialUpdateNotify(cb1);
-                    AdfFacesContext.getCurrentInstance().addPartialTarget(controlMQState);
-                    AdfFacesContext.getCurrentInstance().partialUpdateNotify(controlMQState);
-                }
-            } else {
-                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_SEQUENCE_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_SEQUENCE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.PROMOTION_DEPENDENCY_ERROR)) {
-                    messageText = CSMQBean.getProperty("PROMOTION_DEPENDENCY_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR)) {
-                    messageText =  CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.MUST_BE_NMQ_OR_SMQ_ERROR)) {
-                    messageText = CSMQBean.getProperty("MUST_BE_NMQ_OR_SMQ_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.GENERIC_ACTIVATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("GENERIC_ACTIVATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.DATABASE_CONFIGURATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("DATABASE_CONFIGURATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR");
-                } else { // it's something else
-                    messageText = "Error occurred during state change to Published";
-                }
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+        Hashtable h = new Hashtable();
+        h = NMQUtils.changeStateFromDraftToPublish(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REQUESTED, userBean.getCurrentUser(), userBean.getUserRole(), null, "Publish MedDRA Query", CSMQBean.getProperty("DEFAULT_PUBLISH_RELEASE_GROUP"));           
+        System.out.println("Changing state : " + h);
+        if (h.get("STATE").equals("Published")) {
+            nMQWizardBean.setCurrentState(CSMQBean.STATE_PUBLISHED);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cb1);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cb1);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(controlMQState);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(controlMQState);
+            
             }
-        }
-       
             
          /*   
         if (nMQWizardBean.getCurrentState().equals(CSMQBean.STATE_PROPOSED )){
@@ -354,51 +297,7 @@ public class WorkflowBean {
             return;
             }
         terms = terms.substring(0, terms.length() - 1);
-        //NMQUtils.changeState(terms, state, userBean.getCurrentUser(), userBean.getUserRole(), null, null, activationGroup);
-        HashMap retVal;
-        FacesMessage msg;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("changeState");
-        ob.getParamsMap().put("dictContentIDs", terms);
-        ob.getParamsMap().put("state", state);
-        ob.getParamsMap().put("currentUser", userBean.getCurrentUser());
-        ob.getParamsMap().put("currentUserRole", userBean.getUserRole());
-        ob.getParamsMap().put("dueDate", null);
-        ob.getParamsMap().put("comment", null);
-        ob.getParamsMap().put("activationGroup", activationGroup);
-        retVal = (HashMap)ob.execute();
-        if (null != retVal){
-            String retCode = (String) retVal.get("RETURN_CODE");
-            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + state, null);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else {
-                String messageText = "";
-                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_SEQUENCE_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_SEQUENCE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.PROMOTION_DEPENDENCY_ERROR)) {
-                    messageText = CSMQBean.getProperty("PROMOTION_DEPENDENCY_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR)) {
-                    messageText =  CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.MUST_BE_NMQ_OR_SMQ_ERROR)) {
-                    messageText = CSMQBean.getProperty("MUST_BE_NMQ_OR_SMQ_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.GENERIC_ACTIVATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("GENERIC_ACTIVATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.DATABASE_CONFIGURATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("DATABASE_CONFIGURATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR");
-                } else { // it's something else
-                    messageText = "Error occurred during state change to " + state;
-                }
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                //return null;
-            }
-        }
-
+        NMQUtils.changeState(terms, state, userBean.getCurrentUser(), userBean.getUserRole(), null, null, activationGroup);
     }
 
     public void setSms1(RichSelectManyShuttle sms1) {
@@ -495,8 +394,7 @@ public class WorkflowBean {
             }
 
         terms = terms.substring(0, terms.length()-1);
-        //NMQUtils.changeState(terms, CSMQBean.STATE_DRAFT, userBean.getCurrentUser(), userBean.getUserRole(), null, null, CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP")); 
-        this.changeState(terms, CSMQBean.STATE_DRAFT, CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP"));
+        NMQUtils.changeState(terms, CSMQBean.STATE_DRAFT, userBean.getCurrentUser(), userBean.getUserRole(), null, null, CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP")); 
         }
 
 
@@ -538,51 +436,242 @@ public class WorkflowBean {
     public RichInputText getControlMQState() {
         return controlMQState;
     }
-    private void changeState(String terms , String state, String activationGroup) {
-            //NMQUtils.changeState(terms, state, userBean.getCurrentUser(), userBean.getUserRole(), null, null, activationGroup);
-        HashMap retVal;
-        FacesMessage msg;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("changeState");
-        ob.getParamsMap().put("dictContentIDs", terms);
-        ob.getParamsMap().put("state", state);
-        ob.getParamsMap().put("currentUser", userBean.getCurrentUser());
-        ob.getParamsMap().put("currentUserRole", userBean.getUserRole());
-        ob.getParamsMap().put("dueDate", null);
-        ob.getParamsMap().put("comment", null);
-        ob.getParamsMap().put("activationGroup", activationGroup);
-        retVal = (HashMap)ob.execute();
-        if (null != retVal){
-            String retCode = (String) retVal.get("RETURN_CODE");
-            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + state, null);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else {
-                String messageText = "";
-                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_SEQUENCE_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_SEQUENCE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.PROMOTION_DEPENDENCY_ERROR)) {
-                    messageText = CSMQBean.getProperty("PROMOTION_DEPENDENCY_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR)) {
-                    messageText =  CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.MUST_BE_NMQ_OR_SMQ_ERROR)) {
-                    messageText = CSMQBean.getProperty("MUST_BE_NMQ_OR_SMQ_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.GENERIC_ACTIVATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("GENERIC_ACTIVATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.DATABASE_CONFIGURATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("DATABASE_CONFIGURATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR");
-                } else { // it's something else
-                    messageText = "Error occurred during state change to " + state;
-                }
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                //return null;
+    
+    public InputStream getImageInpStream() {
+        String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
+        InputStream inputStreamOfExcel = 
+            loadResourceAsStream(sourceDirectory + "/app_logo.png");
+//                 this.getClass().getClassLoader().getResourceAsStream("app_logo.png");
+//                loadResourceAsStream("E:\\CQT\\branches\\CQT_Enhancements\\ViewController\\public_html\\image\\app_logo.png");
+        return inputStreamOfExcel;
+    }
+
+
+    /**
+     * This method to upload the file from local.
+     * @param resourceName
+     * @return
+     */
+    public static InputStream loadResourceAsStream(final String resourceName) {
+        //_logger.info("Start of CRSReportsBean:loadResourceAsStream()");
+        InputStream input = null;
+        try {
+            input = new FileInputStream(resourceName);
+        } catch (FileNotFoundException e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                                                         new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                          null,
+                                                                          "File not found in the provided location"));
+            //  _logger.log(_logger.ERROR, "Exception occured in ManageDealsBean loadResourceAsStream() method", e);
+            e.printStackTrace();
+            //  _logger.severe("Exception message ManageDealsBean loadResourceAsStream()-->"+e.getMessage());
+        }
+        // _logger.info("End of CRSReportsBean:loadResourceAsStream()");
+        return input;
+    }
+    
+    
+    public void downloadReport(FacesContext facesContext, OutputStream outputStream) {
+        
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet worksheet = workbook.createSheet("Published IA MQ Report");
+
+        DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+        DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("PublishedIAMQVO1Iterator");
+        HSSFRow excelrow = null;
+
+        // Get all the rows of a iterator
+        oracle.jbo.Row[] rows = dcIteratorBindings.getAllRowsInRange();
+        int i = 0;
+
+        try {
+            writeImageTOExcel(worksheet, getImageInpStream());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        HSSFFont font= workbook.createFont();
+        font.setFontHeightInPoints((short)10);
+        font.setFontName("Arial");
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setItalic(false);
+
+        excelrow = (HSSFRow) worksheet.createRow((short) 0);
+        HSSFCell cellTitle = excelrow.createCell((short) 1);
+        cellTitle.setCellValue("Published IA MQ Report");
+        CellStyle style1 = workbook.createCellStyle();
+        style1.setFont(font);
+        cellTitle.setCellStyle(style1);
+        
+        for (oracle.jbo.Row row : rows) {
+
+            //print header on first row in excel
+            if (i == 0) {
+                excelrow = (HSSFRow) worksheet.createRow((short) 3);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("MQ Code");
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue("Term Name");
+                HSSFCell cellA3 = excelrow.createCell((short) 2);
+                cellA3.setCellValue("Level Name");
+                
+                HSSFCell cellA7 = excelrow.createCell((short) 3);
+                cellA7.setCellValue("Created By");
+                
+                HSSFCell cellA4 = excelrow.createCell((short) 4);
+                cellA4.setCellValue("Activation Group");
+                
+                CellStyle style = workbook.createCellStyle();
+                style.setFont(font);
+                style.setFillBackgroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+                style.setFillPattern(CellStyle.FINE_DOTS);
+                cellA1.setCellStyle(style);
+                cellA2.setCellStyle(style);
+                cellA3.setCellStyle(style);
+                cellA4.setCellStyle(style);
+                cellA7.setCellStyle(style);
+                
+                i=3;
             }
+
+            //print data from second row in excel
+            ++i;
+            excelrow = worksheet.createRow((short) i);
+            HSSFCell cell = excelrow.createCell((short) 0);
+            cell.setCellValue(row.getAttribute("TmsCode") + "" );
+            HSSFCell cell1 = excelrow.createCell((short) 1);
+            cell1.setCellValue(row.getAttribute("TmsName") + "");
+            HSSFCell cell2 = excelrow.createCell((short) 2);
+            cell2.setCellValue((row.getAttribute("LevelName") == null ? "" : row.getAttribute("LevelName")) + "");
+            
+            HSSFCell cell7 = excelrow.createCell((short) 3);
+            cell7.setCellValue(row.getAttribute("TmsCreatedBy") + "");
+            
+            HSSFCell cell3 = excelrow.createCell((short) 4);
+            cell3.setCellValue(row.getAttribute("ActivationGroup") + "");
         }
 
+        
+
+
+        worksheet.createFreezePane(0, 1, 0, 1);
+        worksheet.autoSizeColumn(0);
+        worksheet.autoSizeColumn(1);
+        worksheet.autoSizeColumn(2);
+        worksheet.autoSizeColumn(3);
+        worksheet.autoSizeColumn(4);
+        worksheet.autoSizeColumn(5);
+        worksheet.autoSizeColumn(6);
+        try{
+        workbook.write(outputStream);
+        outputStream.flush();
+
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+    }
+        
+
+    public void downloadPublishedMQReport(FacesContext facesContext, OutputStream outputStream) {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet worksheet = workbook.createSheet("Published MQ Report");
+
+        DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+        DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("PublishedMQVO1Iterator");
+        HSSFRow excelrow = null;
+
+        // Get all the rows of a iterator
+        oracle.jbo.Row[] rows = dcIteratorBindings.getAllRowsInRange();
+        int i = 0;
+
+        try {
+            writeImageTOExcel(worksheet, getImageInpStream());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        HSSFFont font= workbook.createFont();
+        font.setFontHeightInPoints((short)10);
+        font.setFontName("Arial");
+        font.setColor(IndexedColors.BLACK.getIndex());
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setItalic(false);
+        
+
+        excelrow = (HSSFRow) worksheet.createRow((short) 0);
+        HSSFCell cellTitle = excelrow.createCell((short) 1);
+        cellTitle.setCellValue("Published MQ Report");
+        CellStyle style1 = workbook.createCellStyle();
+        style1.setFont(font);
+        cellTitle.setCellStyle(style1);
+
+        for (oracle.jbo.Row row : rows) {
+
+            //print header on first row in excel
+            if (i == 0) {
+                excelrow = (HSSFRow) worksheet.createRow((short) 3);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("MQ Code");
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue("Term Name");
+                HSSFCell cellA3 = excelrow.createCell((short) 2);
+                cellA3.setCellValue("Level Name");
+                
+                HSSFCell cellA7 = excelrow.createCell((short) 3);
+                cellA7.setCellValue("Created By");
+                
+                HSSFCell cellA4 = excelrow.createCell((short) 4);
+                cellA4.setCellValue("Activation Group");
+                
+                CellStyle style = workbook.createCellStyle();
+                style.setFont(font);
+                style.setFillBackgroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+                style.setFillPattern(CellStyle.FINE_DOTS);
+                cellA1.setCellStyle(style);
+                cellA2.setCellStyle(style);
+                cellA3.setCellStyle(style);
+                cellA4.setCellStyle(style);
+                cellA7.setCellStyle(style);
+                
+                i=3;
+            }
+
+            //print data from second row in excel
+            ++i;
+            excelrow = worksheet.createRow((short) i);
+            HSSFCell cell = excelrow.createCell((short) 0);
+            cell.setCellValue(row.getAttribute("TmsCode") + "");
+            HSSFCell cell1 = excelrow.createCell((short) 1);
+            cell1.setCellValue(row.getAttribute("TmsName") + "");
+            HSSFCell cell2 = excelrow.createCell((short) 2);
+            cell2.setCellValue((row.getAttribute("LevelName") == null ? "" : row.getAttribute("LevelName")) + "");
+            
+            HSSFCell cell7 = excelrow.createCell((short) 3);
+            cell7.setCellValue(row.getAttribute("TmsCreatedBy") + "");
+            
+            HSSFCell cell3 = excelrow.createCell((short) 4);
+            cell3.setCellValue(row.getAttribute("ActivationGroup") + "");
+        }
+
+        
+
+
+        worksheet.createFreezePane(0, 1, 0, 1);
+        worksheet.autoSizeColumn(0);
+        worksheet.autoSizeColumn(1);
+        worksheet.autoSizeColumn(2);
+        worksheet.autoSizeColumn(3);
+        worksheet.autoSizeColumn(4);
+        worksheet.autoSizeColumn(5);
+        worksheet.autoSizeColumn(6);
+        
+        try{
+        workbook.write(outputStream);
+        outputStream.flush();
+
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
     }
 }

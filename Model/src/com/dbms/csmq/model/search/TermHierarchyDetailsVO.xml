@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="TermHierarchyDetailsVO"
+  Version="11.1.2.64.36"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Partial"
+  UseGlueCode="false"
+  FetchSize="100"
+  FetchMode="FETCH_AS_NEEDED">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.search.TermHierarchyDetailsVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <Variable
+    Name="bindDictContentId"
+    Kind="where"
+    Type="java.math.BigDecimal"/>
+  <Variable
+    Name="bindTMSRecordStatus"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindActivationGroup"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[select 
+root_term,
+root_dict_content_code,
+root_level_name,
+root_level_extension, 
+dtls_dict_name,   
+dtls_level_name,   
+dtls_level_extension,   
+dtls_term_subtype,   
+dtls_dict_content_id,   
+dtls_dict_content_code,   
+dtls_term,   
+dtls_term_upper,   
+rel_dict_relation_id,   
+rel_relation_subtype,   
+rel_relation_scope,   
+rel_relation_category,   
+rel_relation_weight,   
+rel_depth_from_root,
+mstr_dict_content_id
+from table (  
+    nmat_tms_query_utils.get_tms_hierarchy (
+        pContentID => :bindDictContentId,
+        pTMSRecordStatus => :bindTMSRecordStatus, 
+        pActivationGroup => :bindActivationGroup) 
+)]]></SQLQuery>
+  <ViewAttribute
+    Name="RootTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ROOT_TERM"
+    Expression="ROOT_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1200"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RootDictContentCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="120"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ROOT_DICT_CONTENT_CODE"
+    Expression="ROOT_DICT_CONTENT_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="120"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RootLevelName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ROOT_LEVEL_NAME"
+    Expression="ROOT_LEVEL_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RootLevelExtension"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="ROOT_LEVEL_EXTENSION"
+    Expression="ROOT_LEVEL_EXTENSION"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsDictName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_DICT_NAME"
+    Expression="DTLS_DICT_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsLevelName"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_LEVEL_NAME"
+    Expression="DTLS_LEVEL_NAME"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsLevelExtension"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_LEVEL_EXTENSION"
+    Expression="DTLS_LEVEL_EXTENSION"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsTermSubtype"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="60"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_TERM_SUBTYPE"
+    Expression="DTLS_TERM_SUBTYPE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="60"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsDictContentId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="DTLS_DICT_CONTENT_ID"
+    Expression="DTLS_DICT_CONTENT_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsDictContentCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="120"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_DICT_CONTENT_CODE"
+    Expression="DTLS_DICT_CONTENT_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="120"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="1200"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_TERM"
+    Expression="DTLS_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1200"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="DtlsTermUpper"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="1200"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="DTLS_TERM_UPPER"
+    Expression="DTLS_TERM_UPPER"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="1200"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelDictRelationId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="REL_DICT_RELATION_ID"
+    Expression="REL_DICT_RELATION_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelRelationSubtype"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="60"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REL_RELATION_SUBTYPE"
+    Expression="REL_RELATION_SUBTYPE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="60"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelRelationScope"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="40"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REL_RELATION_SCOPE"
+    Expression="REL_RELATION_SCOPE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="40"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelRelationCategory"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="60"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REL_RELATION_CATEGORY"
+    Expression="REL_RELATION_CATEGORY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="60"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelRelationWeight"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="800"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="REL_RELATION_WEIGHT"
+    Expression="REL_RELATION_WEIGHT"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="800"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="RelDepthFromRoot"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="3"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="REL_DEPTH_FROM_ROOT"
+    Expression="REL_DEPTH_FROM_ROOT"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="MstrDictContentId"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="10"
+    Scale="0"
+    Type="oracle.jbo.domain.Number"
+    ColumnType="NUMBER"
+    AliasName="MSTR_DICT_CONTENT_ID"
+    Expression="MSTR_DICT_CONTENT_ID"
+    SQLType="NUMERIC">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="22"/>
+    </DesignTime>
+  </ViewAttribute>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="DtlsDictContentId"/>
+  </AttrArray>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+</ViewObject>

@@ -7,16 +7,16 @@ import com.dbms.csmq.view.hierarchy.TermHierarchyBean;
 import com.dbms.util.ADFUtils;
 import com.dbms.util.dml.DMLUtils;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 
-import java.sql.Connection;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -24,26 +24,26 @@ import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
-import javax.naming.NamingException;
 
 import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
+import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
-import oracle.binding.OperationBinding;
-
 import oracle.jbo.ViewObject;
+import oracle.jbo.server.DBTransaction;
 
 
-public class NMQWizardBean implements Serializable {
+public class NMQWizardBean {
    
     public static final int MAX_PRODUCT_COUNT = 3;
     public static final String INITIAL_STATUS = "PENDING";
@@ -66,6 +66,7 @@ public class NMQWizardBean implements Serializable {
     private String currentContentCode;
     private String copiedDictContentID;
     private String currentRequestor;
+    private String currentReleaseGroup;
     /* @author MTW
         06/12/2014
         NMAT-UC01.02 & NMAT-UC11.02
@@ -162,6 +163,9 @@ public class NMQWizardBean implements Serializable {
     private boolean actionDelete = false;
     private String productListAsString;
 	private boolean renderProduct = false;
+    private RichPopup addDetailsWarningPopup;
+    private RichPopup infoNotesWarningPopup;
+    private RichPopup addRelationsWarningPopup;
 
     public NMQWizardBean() {           
         
@@ -183,9 +187,9 @@ public class NMQWizardBean implements Serializable {
         this.currentFilterDictionaryShortName = cSMQBean.getDefaultFilterDictionaryShortName();
         
 
-        this.noteInformativeNoteShortName = CSMQBean.getProperty("SMQ_NOTE_INFORMATIVE_NOTE");
-        this.descriptionInformativeNoteShortName = CSMQBean.getProperty("SMQ_DESCRIPTION_INFORMATIVE_NOTE");
-        this.sourceInformativeNoteShortName = CSMQBean.getProperty("SMQ_SOURCE_INFORMATIVE_NOTE");
+        this.noteInformativeNoteShortName = cSMQBean.getProperty("SMQ_NOTE_INFORMATIVE_NOTE");
+        this.descriptionInformativeNoteShortName = cSMQBean.getProperty("SMQ_DESCRIPTION_INFORMATIVE_NOTE");
+        this.sourceInformativeNoteShortName = cSMQBean.getProperty("SMQ_SOURCE_INFORMATIVE_NOTE");
         
         this.currentMQType = cSMQBean.getCustomMQName();
         if (!dictionaryInfoFetched)
@@ -306,7 +310,7 @@ public class NMQWizardBean implements Serializable {
         String designee = userBean.getCurrentUser().toUpperCase();
         CSMQBean.logger.info("ADDING DESIGNEE: " + designee);
         designeeList.add(designee);
-		this.setRenderProduct(Boolean.TRUE);
+        this.setRenderProduct(Boolean.TRUE);
         return null;
     }
 
@@ -559,7 +563,7 @@ public class NMQWizardBean implements Serializable {
         }
         String action = (mode == CSMQBean.MODE_INSERT_NEW && !isSaved()) ?  "Inserted" : "Updated";
        
-        HashMap results = null;
+        Hashtable results = null;
         CSMQBean.logger.info(userBean.getCaller() + " ***** SAVING NMQ DETAILS *****");
         CSMQBean.logger.info(userBean.getCaller() + " mode: " + this.mode);
         CSMQBean.logger.info(userBean.getCaller() + " currentDictContentID: " + this.currentDictContentID);
@@ -589,31 +593,10 @@ public class NMQWizardBean implements Serializable {
             designeeListString = designeeList.toString();
             CSMQBean.logger.info(userBean.getCaller() + " currentDesignee: " + designeeListString);
         }
-        
         if (mode == CSMQBean.MODE_IMPACT_ASSESSMENT) {
             CSMQBean.logger.info(userBean.getCaller() + " CALLING: saveIADetails");
-            DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-            OperationBinding ob = bc.getOperationBinding("saveIADetails");
-
-            ob.getParamsMap().put("currentFilterDictionaryShortName", currentFilterDictionaryShortName);
-            ob.getParamsMap().put("currentPredictGroups", currentPredictGroups);
-            ob.getParamsMap().put("tempName", tempName);
-            ob.getParamsMap().put("currentProduct", currentProduct);
-            ob.getParamsMap().put("currentTermLevel", currentTermLevel);
-            ob.getParamsMap().put("currentScope", currentScope);
-            ob.getParamsMap().put("currentMQALGO", currentMQALGO);
-            ob.getParamsMap().put("currentMQGROUP", currentMQGROUP);
-            ob.getParamsMap().put("currentContentCode", currentContentCode);
-            ob.getParamsMap().put("updateParam", this.getUpdateParam());
-            ob.getParamsMap().put("currentRequestor", currentRequestor);
-            ob.getParamsMap().put("currentDictContentID", currentDictContentID);
-            ob.getParamsMap().put("userRole", userBean.getUserRole());
-            ob.getParamsMap().put("currentDesignee", designeeListString);
-
-            results = (HashMap <String,String>) ob.execute();
-            //results = NMQUtils.saveIADetails(tempName, currentProduct, currentTermLevel, currentScope, currentMQALGO, currentMQCRTEV, currentMQGROUP, currentContentCode, this.getUpdateParam(), currentRequestor, currentDictContentID, userBean.getUserRole(), action, designeeListString); 
-            
-        }
+            results = NMQUtils.saveIADetails(tempName, currentProduct, currentTermLevel, currentScope, currentMQALGO, currentMQCRTEV, currentMQGROUP, currentContentCode, this.getUpdateParam(), currentRequestor, currentDictContentID, userBean.getUserRole(), action, designeeListString); 
+            }
         /*
          * @author MTW
          * 06/30/2014
@@ -622,47 +605,10 @@ public class NMQWizardBean implements Serializable {
          */
         else {
             CSMQBean.logger.info(userBean.getCaller() + " CALLING: saveDetails");
-            DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-            OperationBinding ob = bc.getOperationBinding("saveDetails");
-
-            ob.getParamsMap().put("currentFilterDictionaryShortName", currentFilterDictionaryShortName);
-            ob.getParamsMap().put("currentPredictGroups", currentPredictGroups);
-            ob.getParamsMap().put("tempName", tempName);
-            ob.getParamsMap().put("currentProduct", currentProduct);
-            ob.getParamsMap().put("currentTermLevel", currentTermLevel);
-            ob.getParamsMap().put("currentScope", currentScope);
-            ob.getParamsMap().put("currentMQALGO", currentMQALGO);
-            ob.getParamsMap().put("currentMQGROUP", currentMQGROUP);
-            ob.getParamsMap().put("currentContentCode", currentContentCode);
-            ob.getParamsMap().put("updateParam", this.getUpdateParam());
-            ob.getParamsMap().put("currentRequestor", currentRequestor);
-            ob.getParamsMap().put("currentDictContentID", currentDictContentID);
-            ob.getParamsMap().put("userRole", userBean.getUserRole());
-            ob.getParamsMap().put("currentPendingStatus", currentStatus);
-            ob.getParamsMap().put("currentDesignee", designeeListString);
-
-            results = (HashMap <String,String>)ob.execute();
-            //results = NMQUtils.saveDetails(currentFilterDictionaryShortName, currentPredictGroups, tempName, currentProduct, currentTermLevel, currentScope, currentMQALGO, currentMQCRTEV, currentMQGROUP, currentContentCode, this.getUpdateParam(), currentRequestor, currentDictContentID, userBean.getUserRole(), action, currentStatus, designeeListString); 
+            results = NMQUtils.saveDetails(currentFilterDictionaryShortName, currentPredictGroups, tempName, currentProduct, currentTermLevel, currentScope, currentMQALGO, currentMQCRTEV, currentMQGROUP, currentContentCode, this.getUpdateParam(), currentRequestor, currentDictContentID, userBean.getUserRole(), action, currentStatus, designeeListString); 
             }
        
-        if (results == null || null != results && results.size() == 1){
-            if (null != results && results.size() == 1){
-                String retCode = (String) results.get("RETURN_CODE");
-                String messageText = "";
-                if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.NAME_IN_USE_ERROR)){
-					//messageText = "The name: " + tempName + " is already in use.  Please use another name";
-					messageText = "This MQ already exists.  Please modify the MQ name or use the MQ, which already exists by this name.";
-                } else if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR) && mode != CSMQBean.MODE_IMPACT_ASSESSMENT){
-                    messageText = tempName + " is Pending Impact Assessment and must be deleted in Impact Assessment to Update the Current NMQ.";
-                } else if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.FAILURE)){
-                    messageText = "Error occurred.  " + tempName + " was not " + action + " successfully.";
-                }
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-            
-            return false; // it failed
-        }
+       if (results == null) return false; // it failed
        this.currentStatus = INITIAL_STATUS;
        //if it's new or a copy, update the content code & ID with the new values & change the mode from insert to update & save the old code
        if ((this.mode == CSMQBean.MODE_INSERT_NEW || this.mode == CSMQBean.MODE_COPY_EXISTING) && !isSaved()) {
@@ -717,21 +663,14 @@ public class NMQWizardBean implements Serializable {
 
     private void copyAllRelations() {
 
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("copyAllRelations");
-        ob.getParamsMap().put("copiedDictContentID", copiedDictContentID);
-        ob.getParamsMap().put("currentDictContentID", currentDictContentID);
-        ob.getParamsMap().put("currentPredictGroups", currentPredictGroups);
-        ob.getParamsMap().put("userName", currentUser);
-        ob.execute();
-        /*
         CSMQBean.logger.info(userBean.getCaller() + " >>> COPYING RELATIONS");
         CSMQBean.logger.info(userBean.getCaller() + " copiedDictContentID:" + copiedDictContentID);
         CSMQBean.logger.info(userBean.getCaller() + " currentDictContentID:" + currentDictContentID);
         CSMQBean.logger.info(userBean.getCaller() + " currentPredictGroups:" + currentPredictGroups);
         CSMQBean.logger.info(userBean.getCaller() + " currentUser:" + currentUser);
-        
-       
+
+
+        /*
         PROCEDURE copy_all_relations (
           i_old_parent_id IN tms_dict_contents.dict_content_id%TYPE,
           i_new_parent_id IN tms_dict_contents.dict_content_id%TYPE,
@@ -739,8 +678,7 @@ public class NMQWizardBean implements Serializable {
           i_src_group_name  IN tms.tms_predict_groups.name%TYPE := NULL,
           i_as_of_date    IN tms_dict_contents.end_ts%TYPE := SYSDATE);
 
-       
-        
+        */
 
         String sql = "{call dict_pkg.copy_all_relations(?,?,?,?,?)}";
         DBTransaction dBTransaction = DMLUtils.getDBTransaction();
@@ -757,7 +695,7 @@ public class NMQWizardBean implements Serializable {
             } 
         catch (SQLException e) {
             e.printStackTrace();
-        } */
+        }
     }
 
     
@@ -835,7 +773,7 @@ public class NMQWizardBean implements Serializable {
             vo.setNamedWhereClauseParam("asOfDate", this.getCurrentUntilDate());
     
         vo.executeQuery();
-        dciterb.setRefreshed(true);
+        
         
         return null;
     }
@@ -868,37 +806,22 @@ public class NMQWizardBean implements Serializable {
    
     public void getDictionaryInfo() {
 
-            String sql = "SELECT dict.short_name, dict.name, dict.description, s.def_detail_value VERSION FROM tms.tms_def_details    d, tms.tms_dict_info_hdrs h,                tms.tms_dict_info_strs s,                tms.tms_def_dictionaries dict           WHERE d.short_name               = '~DICTVER' and dict.short_name = ?  AND h.dict_content_relation_id = dict.def_dictionary_id AND d.def_detail_id            = h.def_detail_id AND h.dict_info_hdr_id = s.dict_info_hdr_id AND h.end_ts = TO_DATE(3000000,'J') AND s.end_ts = TO_DATE(3000000,'J')";
+            String sql = "SELECT dict.short_name, dict.name, dict.description, s.def_detail_value VERSION FROM tms.tms_def_details    d, tms.tms_dict_info_hdrs h,                tms.tms_dict_info_strs s,                tms.tms_def_dictionaries dict           WHERE d.short_name               = '~DICTVER'             and dict.short_name = '" +this.currentFilterDictionaryShortName+ "'             AND h.dict_content_relation_id = dict.def_dictionary_id             AND d.def_detail_id            = h.def_detail_id AND h.dict_info_hdr_id = s.dict_info_hdr_id AND h.end_ts = TO_DATE(3000000,'J') AND s.end_ts = TO_DATE(3000000,'J')";
             PreparedStatement stmt = null;
             ResultSet rs = null;
-            Connection conn = null;
-                //
-            //CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
-            CSMQBean.logger.info("getDictionaryInfo: " +  sql);
+            DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+            
+            CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
+                
+            System.out.println("***** : " + sql);
             try {
-                conn = DMLUtils.getConnectionFromDS();
-                stmt = conn.prepareCall(sql);
-                stmt.setString(1, this.currentFilterDictionaryShortName);
-                rs = stmt.executeQuery();
+                rs = cstmt.executeQuery();
                 rs.next();
                 this.activeDictionaryName =  rs.getString("Name");// Utils.getAsString(row, "Name");
                 this.activeDictionaryVersion = rs.getString("Version");//Utils.getAsString(row, "Version");
                 
             } catch (SQLException e) {
-                CSMQBean.logger.error("SQLException in getDictionaryInfo: ", e);
                 e.printStackTrace();
-            } catch (NamingException ne) {
-                CSMQBean.logger.error("NamingException in getDictionaryInfo: ", ne);
-                ne.printStackTrace();
-            } finally {
-                try {
-                    rs.close();
-                    stmt.close();
-                   // conn.close();
-                }catch (SQLException e1){
-                    CSMQBean.logger.error("Error while closing connection in getDictionaryInfo: ");
-                    e1.printStackTrace();
-                }
             }
             dictionaryInfoFetched = true;
 
@@ -907,22 +830,23 @@ public class NMQWizardBean implements Serializable {
     
         
     public String saveAllInfNotes() {
+        ADFUtils.setEL("#{pageFlowScope.isNotesChanged}", Boolean.FALSE);
         String action = (mode == CSMQBean.MODE_INSERT_NEW) ? "Inserted" : "Updated";
         int errorCount = 0;
         
         if (this.mode == CSMQBean.MODE_IMPACT_ASSESSMENT) {
-            errorCount += this.saveIAInfNotes(this.noteInformativeNoteShortName, this.currentInfNoteNotes, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole());
+            errorCount += NMQUtils.saveIAInfNotes(this.noteInformativeNoteShortName, this.currentInfNoteNotes, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
              try {Thread.sleep(1000);} catch (InterruptedException e) {}
-            errorCount += this.saveIAInfNotes(this.descriptionInformativeNoteShortName, this.currentInfNoteDescription,  currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole());
+            errorCount += NMQUtils.saveIAInfNotes(this.descriptionInformativeNoteShortName, this.currentInfNoteDescription,  currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
              try {Thread.sleep(1000);} catch (InterruptedException e) {}
-            errorCount += this.saveIAInfNotes(this.sourceInformativeNoteShortName, this.currentInfNoteSource, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole());
+            errorCount += NMQUtils.saveIAInfNotes(this.sourceInformativeNoteShortName, this.currentInfNoteSource, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
          }
         else {
-            errorCount += this.saveInfNotes(this.noteInformativeNoteShortName, this.currentInfNoteNotes, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), currentExtension);
+            errorCount += NMQUtils.saveInfNotes(this.noteInformativeNoteShortName, this.currentInfNoteNotes, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
             try {Thread.sleep(1000);} catch (InterruptedException e) {}
-            errorCount += this.saveInfNotes(this.descriptionInformativeNoteShortName, this.currentInfNoteDescription, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), currentExtension);
+            errorCount += NMQUtils.saveInfNotes(this.descriptionInformativeNoteShortName, this.currentInfNoteDescription, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
             try {Thread.sleep(1000);} catch (InterruptedException e) {}
-            errorCount += this.saveInfNotes(this.sourceInformativeNoteShortName, this.currentInfNoteSource, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), currentExtension);
+            errorCount += NMQUtils.saveInfNotes(this.sourceInformativeNoteShortName, this.currentInfNoteSource, currentFilterDictionaryShortName, currentPredictGroups, currentDictContentID, currentTermLevel, userBean.getCurrentUser(), userBean.getCurrentUserRole(), action, currentExtension);
             }
         
         if (errorCount == 0) { // IF IT'S >0 THEN ONE FAILED
@@ -1523,6 +1447,7 @@ public class NMQWizardBean implements Serializable {
     }
 
     public void productListValueChange(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         ArrayList newList = new ArrayList(Arrays.asList(valueChangeEvent.getNewValue()));
         ArrayList oldList = new ArrayList(Arrays.asList(valueChangeEvent.getOldValue()));
 
@@ -1610,14 +1535,13 @@ public class NMQWizardBean implements Serializable {
     }
     
     public String setModeViewVersionImpact() {
-        String isViewPreviousFlow = (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");            
+        String isViewPreviousFlow = (String) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("isViewPreviousFlow");
         this.currentPredictGroups = cSMQBean.getDefaultMedDRAReleaseGroup();
-        if("Y".equals(isViewPreviousFlow)){
+        if ("Y".equals(isViewPreviousFlow)) {
             userBean.setCurrentMenuPath("Previous Version Impact");
         } else {
             userBean.setCurrentMenuPath("View Version Impact");
         }
-        
         userBean.setCurrentMenu("VIEW_VERSION_IMPACT");
         this.mode = CSMQBean.MODE_VIEW_VERSION_IMPACT;
         this.updateParam = CSMQBean.DML_NONE;
@@ -1626,44 +1550,8 @@ public class NMQWizardBean implements Serializable {
         
         return null;
         }
-    private int saveInfNotes (String noteName, String content, String currentFilterDictionaryShortName, String currentPredictGroups, String currentDictContentID, String currentTermLevel, String userName, String userRole, String extension) {
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("saveInfNotes");
-        int retVal = 1;
 
-        ob.getParamsMap().put("noteName", noteName);
-        ob.getParamsMap().put("content", content);
-        ob.getParamsMap().put("currentFilterDictionaryShortName", currentFilterDictionaryShortName);
-        ob.getParamsMap().put("currentPredictGroups", currentPredictGroups);
-        ob.getParamsMap().put("currentDictContentID", currentDictContentID);
-        ob.getParamsMap().put("currentTermLevel", currentTermLevel);
-        ob.getParamsMap().put("userName", userName);
-        ob.getParamsMap().put("userRole", userRole);
-        ob.getParamsMap().put("extension", extension);
-        String retCode = (String)ob.execute();
-        if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-            retVal = 0;
-        }
-        return retVal;
-    }
-    private int saveIAInfNotes(String noteName, String content, String currentDictContentID, String currentTermLevel, String userName, String userRole) {
-        int retVal = 1;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("saveIAInfNotes");
-
-        ob.getParamsMap().put("noteName", noteName);
-        ob.getParamsMap().put("content", content);
-        ob.getParamsMap().put("currentDictContentID", currentDictContentID);
-        ob.getParamsMap().put("currentTermLevel", currentTermLevel);
-        ob.getParamsMap().put("userName", userName);
-        ob.getParamsMap().put("userRole", userRole);
-        String retCode = (String)ob.execute();
-        if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-            retVal = 0;
-        }
-        return retVal;
-    }
- public void setProductListAsString(String productListAsString) {
+    public void setProductListAsString(String productListAsString) {
         this.productListAsString = productListAsString;
     }
 
@@ -1692,4 +1580,79 @@ public class NMQWizardBean implements Serializable {
         return renderProduct;
     }
 
+    public void setCurrentReleaseGroup(String currentReleaseGroup) {
+        this.currentReleaseGroup = currentReleaseGroup;
+    }
+
+    public String getCurrentReleaseGroup() {
+        return currentReleaseGroup;
+    }
+
+    public String showWarningPopup() {
+        Boolean isDetailsChanged = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.isDetailsChanged}");
+        if(isDetailsChanged != null && isDetailsChanged){
+            ADFUtils.showPopup(getAddDetailsWarningPopup());
+            return null;
+        }
+        return "CANCEL";
+    }
+
+    public void setAddDetailsWarningPopup(RichPopup addDetailsWarningPopup) {
+        this.addDetailsWarningPopup = addDetailsWarningPopup;
+    }
+
+    public RichPopup getAddDetailsWarningPopup() {
+        return addDetailsWarningPopup;
+    }
+
+    public String showInfoNotesWarningPopup() {
+        Boolean isNotesChanged = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.isNotesChanged}");
+        if(isNotesChanged != null && isNotesChanged){
+            ADFUtils.showPopup(getInfoNotesWarningPopup());
+            return null;
+        }
+        return "CANCEL";
+    }
+
+    public void setInfoNotesWarningPopup(RichPopup infoNotesWarningPopup) {
+        this.infoNotesWarningPopup = infoNotesWarningPopup;
+    }
+
+    public RichPopup getInfoNotesWarningPopup() {
+        return infoNotesWarningPopup;
+    }
+
+    public String showRelationsWarningPopup() {
+        Object relationIcon = ADFUtils.evaluateEL("#{pageFlowScope.TermHierarchyBean.iconMQChanged}");
+        if(relationIcon == null){
+            return "CANCEL";
+        }
+        else{
+            RichImage img = (RichImage)relationIcon;
+            if(img.isVisible()){
+                ADFUtils.showPopup(getAddRelationsWarningPopup());
+                return null;
+            }
+            else{
+                return "CANCEL";
+            }
+        }
+    }
+
+    public void notesChanged(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isNotesChanged}", Boolean.TRUE);
+    }
+
+    public String yesWarning() {
+        saveAllInfNotes();
+        return "CANCEL";
+    }
+
+    public void setAddRelationsWarningPopup(RichPopup addRelationsWarningPopup) {
+        this.addRelationsWarningPopup = addRelationsWarningPopup;
+    }
+
+    public RichPopup getAddRelationsWarningPopup() {
+        return addRelationsWarningPopup;
+    }
 }

@@ -1,38 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.2.1.0.31" id="addInformativeNotesPageDef"
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.64.36" id="addInformativeNotesPageDef"
                 Package="create">
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
   </executables>
-  <bindings>
-    <methodAction id="saveInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveInfNotes_CQTAppModuleDataControl_dataProvider_saveInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="extension" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="saveIAInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIAInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIAInfNotes_CQTAppModuleDataControl_dataProvider_saveIAInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-    </methodAction>
-    <action id="Commit" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="true" Action="commitTransaction"/>
-    <action id="Rollback" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="false"
-            Action="rollbackTransaction"/>
-  </bindings>
+  <bindings/>
 </pageDefinition>

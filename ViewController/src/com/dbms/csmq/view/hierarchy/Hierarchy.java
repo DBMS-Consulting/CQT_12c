@@ -13,11 +13,6 @@ import com.dbms.csmq.UserBean;
 
 import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.data.RichTreeTable;
-import oracle.adf.view.rich.component.rich.layout.RichToolbar;
-import oracle.adf.view.rich.component.rich.output.RichImage;
-import oracle.adf.view.rich.component.rich.output.RichOutputFormatted;
-import oracle.adf.view.rich.component.rich.output.RichOutputText;
-import oracle.adf.view.rich.context.AdfFacesContext;
 
 
 public abstract class Hierarchy {
@@ -78,7 +73,7 @@ public abstract class Hierarchy {
     protected void setDerivedRelations(GenericTreeNode genericTreeNode) {
         
         GenericTreeNode parent = genericTreeNode.getParentNode();
-        if (parent.isIsRoot()) return;  // we only do this for grandchildren or greater
+        if (parent == null || parent.isIsRoot()) return;  // we only do this for grandchildren or greater
         
         if (parent.getLevelName().equals(CSMQBean.SOC)) {
             if (genericTreeNode.getLevelName().equals(CSMQBean.HLGT)) {
@@ -208,7 +203,48 @@ public abstract class Hierarchy {
         return root;
     }
     
-    
+    public GenericTreeNode copyNode(GenericTreeNode node){
+        GenericTreeNode copyNode = new GenericTreeNode();
+        copyNode.setApprovedFlag(node.getApprovedFlag());
+        copyNode.setDeletable(node.isDeletable());
+        copyNode.setDescription(node.getDescription());
+        copyNode.setDictContentAltCode(node.getDictContentAltCode());
+        copyNode.setDictContentCode(node.getDictContentCode());
+        copyNode.setDictContentId(node.getDictContentId());
+        copyNode.setDictShortName(node.getDictShortName());
+        copyNode.setEditable(node.isEditable());
+        //copyNode.setEndTS(node.getEndTS());
+        copyNode.setFormattedScope(node.getFormattedScope());
+        copyNode.setHasScope(node.isHasScope());
+        copyNode.setIcon(node.getIcon());
+        copyNode.setIsDirectRelation(node.isIsDirectRelation());
+        copyNode.setIsExpanded(node.isIsExpanded());
+        copyNode.setIsRoot(node.isIsRoot());
+        copyNode.setLevel(node.getLevel());
+        copyNode.setLevelName(node.getLevelName());
+        copyNode.setMarkedForDeletion(node.isMarkedForDeletion());
+        copyNode.setMqType(node.getMqType());
+        copyNode.setNodeSelected(node.isNodeSelected());
+        copyNode.setParent(node.getParent());
+        copyNode.setParentNode(node.getParentNode());
+        copyNode.setPath(node.getPath());
+        copyNode.setPredictGroupId(node.getPredictGroupId());
+        copyNode.setPrikey(node.getPrikey());
+        copyNode.setPrimaryLink(node.isPrimaryLink());
+        copyNode.setQueryLevel(node.getQueryLevel());
+        copyNode.setRendered(node.isRendered());
+        copyNode.setScopeName(node.getScopeName());
+        copyNode.setShowHasChildrenButton(node.isShowHasChildrenButton());
+        copyNode.setSortField(node.getSortField());
+        copyNode.setStatus(node.getStatus());
+        copyNode.setStyle(node.getStyle());
+        copyNode.setTerm(node.getTerm());
+        copyNode.setTermCategory(node.getTermCategory());
+        copyNode.setTermLevel(node.getTermLevel());
+        copyNode.setTermScope(node.getTermScope());
+        copyNode.setTermWeight(node.getTermWeight());
+        return copyNode;
+    }
     
 
 

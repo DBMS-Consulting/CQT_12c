@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<!---->
+<ViewObject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ProductSearchTransVO"
+  Version="11.1.2.64.36"
+  BindingStyle="OracleName"
+  CustomQuery="true"
+  PageIterMode="Full"
+  UseGlueCode="false">
+  <DesignTime>
+    <Attr Name="_isExpertMode" Value="true"/>
+  </DesignTime>
+  <Properties>
+    <SchemaBasedProperties>
+      <LABEL
+        ResId="com.dbms.csmq.model.product.ProductSearchTransVO_LABEL"/>
+    </SchemaBasedProperties>
+  </Properties>
+  <ViewAccessor
+    Name="ProductListVA"
+    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="NMQExtentionListVA"
+    ViewObjectName="com.dbms.csmq.model.NMQ.NMQExtentionListVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ProductScopeVA"
+    ViewObjectName="com.dbms.csmq.model.product.ProductScopeVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ProductTypeVA"
+    ViewObjectName="com.dbms.csmq.model.product.ProductTypeVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ProductOperatorVA"
+    ViewObjectName="com.dbms.csmq.model.product.ProductOperatorVO"
+    RowLevelBinds="true"/>
+  <ViewAccessor
+    Name="ProductDummyVA"
+    ViewObjectName="com.dbms.csmq.model.product.ProductDummyVO"
+    RowLevelBinds="true"/>
+  <ListBinding
+    Name="Product"
+    ListVOName="ProductListVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnValue"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="ShortVal"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="LongValue"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="Extension"
+    ListVOName="NMQExtentionListVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnValue"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="RefCodelistValueShortVal"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="LongValue"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="Scope"
+    ListVOName="ProductScopeVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnValue"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Value"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ColumnName"
+    ListVOName="ProductTypeVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnName"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Value"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Meaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_OperatorValue"
+    ListVOName="ProductOperatorVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="OperatorValue"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="Value"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_ColumnValue"
+    ListVOName="ProductDummyVA"
+    ListRangeSize="-1"
+    NullValueFlag="start"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="ColumnValue"/>
+    </AttrArray>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="ColumnVal"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="ColumnMeaning"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <SQLQuery><![CDATA[select '' as column_name, '' as column_value, '' as operator_value from dual]]></SQLQuery>
+  <ViewAttribute
+    Name="ColumnName"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.math.BigDecimal"
+    ColumnType="NUMBER"
+    AliasName="COLUMN_NAME"
+    Expression="COLUMN_NAME"
+    SQLType="CHAR"
+    LOVName="LOV_ColumnName">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+        <AUTOSUBMIT
+          Value="true"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="ColumnValue"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="CHAR"
+    AliasName="COLUMN_VALUE"
+    Expression="COLUMN_VALUE"
+    SQLType="CHAR"
+    LOVName="LOV_ColumnValue"
+    LOVFinder="LovSwither">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="OperatorValue"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="32"
+    Type="java.lang.String"
+    ColumnType="CHAR"
+    AliasName="OPERATOR_VALUE"
+    Expression="OPERATOR_VALUE"
+    SQLType="CHAR"
+    LOVName="LOV_OperatorValue">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="LovSwither"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR">
+    <RecalcCondition><![CDATA[true]]></RecalcCondition>
+    <TransientExpression><![CDATA[if(ColumnName != null && 1 == (ColumnName))
+return "Product";
+else if(ColumnName != null && 2 == (ColumnName))
+return "Scope";
+else if(ColumnName != null && 3 == (ColumnName))
+return "Extension";
+else
+return "LOV_ColumnValue";]]></TransientExpression>
+    <Dependencies>
+      <Item
+        Value="ColumnName"/>
+    </Dependencies>
+    <Properties>
+      <SchemaBasedProperties>
+        <AUTOSUBMIT
+          Value="true"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
+  <ResourceBundle>
+    <PropertiesBundle
+      PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
+  </ResourceBundle>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="ColumnName"/>
+    <Item Value="ColumnValue"/>
+    <Item Value="OperatorValue"/>
+    <Item Value="LovSwither"/>
+  </AttrArray>
+</ViewObject>

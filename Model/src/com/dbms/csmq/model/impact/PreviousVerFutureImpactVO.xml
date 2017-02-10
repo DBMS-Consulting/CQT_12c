@@ -4,13 +4,13 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="PreviousVerFutureImpactVO"
-  Version="12.1.3.10.8"
-  InheritPersonalization="merge"
+  Version="11.1.2.64.36"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Partial"
   FetchMode="FETCH_ALL"
-  FetchSize="100">
+  FetchSize="100"
+  UseGlueCode="false">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
@@ -24,6 +24,10 @@
     Name="bindDictContentId"
     Kind="where"
     Type="java.lang.Long"/>
+  <Variable
+    Name="bindImpactDisplayProperty"
+    Kind="where"
+    Type="java.lang.String"/>
   <SQLQuery><![CDATA[select root_dict_name,    
 root_level_name,    
 root_level_extension,    
@@ -70,9 +74,10 @@ gui_hierarchy_impact_flag,
 gui_nmat_impact_desc,    
 gui_nmat_display_property    
 from table (    
-    nmat_dict_impact_utils.get_upg_hierarchy    
+    NMAT_POST_VER_IMPACT_UTILS.GET_POST_UPGRADE_HIERARCHY    
                     (pContentID => :bindDictContentId)    
-)]]></SQLQuery>
+)
+where rel_nmat_display_property != :bindImpactDisplayProperty]]></SQLQuery>
   <ViewAttribute
     Name="RootDictName"
     IsUpdateable="false"

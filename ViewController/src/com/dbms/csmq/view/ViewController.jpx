@@ -14,6 +14,7 @@
     <Attr Name="_appModuleNames0" Value="com.dbms.csmq.model.product.ProductModule"/>
     <Attr Name="_appModuleNames1" Value="com.dbms.csmq.model.NMQ.NMQModule"/>
     <Attr Name="_appModuleNames2" Value="com.dbms.csmq.model.designee.DesigneeModule"/>
+    <Attr Name="_appModuleNames3" Value="com.dbms.csmq.model.publish.PublishModule"/>
   </DesignTime>
   <Containee
     Name="designee"
@@ -38,6 +39,16 @@
   <Containee
     Name="product"
     PackageName="com.dbms.csmq.model.product"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_LocationURL" Value="../../Model/src/"/>
+      <Attr Name="_VO" Value="true"/>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="publish"
+    PackageName="com.dbms.csmq.model.publish"
     ObjectType="JboPackage">
     <DesignTime>
       <Attr Name="_LocationURL" Value="../../Model/src/"/>

@@ -39,23 +39,6 @@
       <property
          name="x">278.36523</property>
    </View>
-   <View
-      id="View4">
-      <property
-         name="activityId">activate</property>
-      <property
-         name="page">/workflow/activate.jspx</property>
-      <property
-         name="description">&lt;html>&lt;p>&lt;b>activate&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
-      <property
-         name="trainStop">true</property>
-      <property
-         name="exceptionHandler">false</property>
-      <property
-         name="y">83.5</property>
-      <property
-         name="x">604.2637</property>
-   </View>
    <MethodCall
       id="MethodCall5">
       <property
@@ -109,24 +92,6 @@
       <property
          name="sdm:polyPoints">R50,319.36523,163.10632,412.74707,117.57471,L50</property>
    </TrainFlow>
-   <TrainFlow
-      islink="true"
-      id="TrainFlow9"
-      from="View7"
-      to="View4">
-      <property
-         name="sdm:polyPoints">R46,494.74707,114.07471,563.2637,83.149414,L50</property>
-   </TrainFlow>
-   <ControlFlowCase
-      islink="true"
-      id="ControlFlowCase10"
-      from="View4"
-      to="MethodCall5">
-      <property
-         name="fromOutcome">CANCEL</property>
-      <property
-         name="sdm:polyPoints">R50,645.2637,83.149414,704.2637,137.0249,L46</property>
-   </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase11"
@@ -165,6 +130,41 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R54,494.74707,121.07471,702.71497,144.0249,L54</property>
+         name="sdm:polyPoints">R50,494.74707,117.57471,702.9908,144.0249,L54</property>
+   </ControlFlowCase>
+   <View
+      id="View15">
+      <property
+         name="activityId">publishedMQList</property>
+      <property
+         name="page">/workflow/publishedMQList.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>publishedMQList&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="trainStop">true</property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">-9.402344</property>
+      <property
+         name="x">564.0</property>
+   </View>
+   <TrainFlow
+      islink="true"
+      id="TrainFlow16"
+      from="View7"
+      to="View15">
+      <property
+         name="sdm:polyPoints">T50,453.74707,63.574707,523.0,-9.75293,L50</property>
+   </TrainFlow>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase17"
+      from="View15"
+      to="MethodCall5">
+      <property
+         name="fromOutcome">CANCEL</property>
+      <property
+         name="sdm:polyPoints">B50,564.0,44.24707,704.2637,137.0249,L46</property>
    </ControlFlowCase>
 </SDM>

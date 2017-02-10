@@ -6,13 +6,6 @@
         <af:document title="NMAT" id="d1">
             <af:form id="f1">
                 <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
-                    <f:facet name="header">
-                        <af:group id="g2">
-                            <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
-                                      binding="#{ImpactAnalysisUIBean.cntrlTrain}" rendered="true"/>
-                            <af:spacer width="10" height="10" id="s1"/>
-                        </af:group>
-                    </f:facet>
                     <f:facet name="main">
                         <af:group id="g1">
                             <af:popup autoCancel="enabled" id="p4">
@@ -464,17 +457,16 @@
                                         <f:facet name="menus">
                                             <af:menu text="Filter and Sort" id="m2" detachable="true"
                                                      binding="#{ImpactAnalysisUIBean.cntrlExistingMenu}">
-                                                <af:panelFormLayout id="pfl2a" inlineStyle="height:97px;">
+                                                <af:panelFormLayout id="pfl2a">
                                                     <af:selectBooleanCheckbox label="Show Impacted Only"
                                                                               id="paramMedDRASIO" autoSubmit="true"
-                                                                              valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
-                                                                              selected="false"
+                                                                              value="#{pageFlowScope.ImpactAnalysisBean.showPrevVerCurrentImpactedOnly}"
                                                                               binding="#{ImpactAnalysisUIBean.cntrlShowImpactedFilterExisting}"/>
-                                                    <af:selectBooleanCheckbox label="Show Primary Only"
+                                                    <!--<af:selectBooleanCheckbox label="Show Primary Only"
                                                                               id="paramMedDRASPO" autoSubmit="true"
                                                                               valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
-                                                                              binding="#{ImpactAnalysisUIBean.cntrlShowPrimaryFilterExisting}"/>
-                                                    <af:selectOneChoice label="Sort" id="paramMedDRASort"
+                                                                              binding="#{ImpactAnalysisUIBean.cntrlShowPrimaryFilterExisting}"/>-->
+                                                    <!--<af:selectOneChoice label="Sort" id="paramMedDRASort"
                                                                         autoSubmit="true" readOnly="true"
                                                                         valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
                                                                         valuePassThru="true" value="SCOPE"
@@ -483,9 +475,9 @@
                                                         <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME"
                                                                        id="si21"/>
                                                         <af:selectItem label="Scope" value="SCOPE" id="si20"/>
-                                                    </af:selectOneChoice>
+                                                    </af:selectOneChoice>-->
                                                     <af:commandToolbarButton text="Refresh" id="ctb10"
-                                                                             actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshMedDRATree}"
+                                                                             actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshPreviousVerCurrentTree}"
                                                                              icon="/image/hierarchy/REFRESH.png"/>
                                                 </af:panelFormLayout>
                                             </af:menu>
@@ -512,7 +504,7 @@
                                         <af:treeTable value="#{pageFlowScope.PreviousVerCurrentImpactHierarchyBean.treemodel}"
                                                       var="node" rowSelection="multiple" id="hTable" width="504"
                                                       binding="#{pageFlowScope.ImpactAnalysisBean.medDRATree}"
-                                                      columnStretching="column:column1" height="400" inlineStyle="height:400px;"
+                                                      columnStretching="column:column1" inlineStyle="height:400px;"
                                                       initiallyExpanded="false" fetchSize="20">
                                             <f:facet name="nodeStamp">
                                                 <af:column id="column1" headerText="#{node.term}" width="200"
@@ -537,7 +529,7 @@
                                                     </af:panelGroupLayout>
                                                     <f:facet name="header">
                                                         <af:group id="g3">
-                                                            <af:outputText value="Existing #{applicationScope.CSMQBean.customMQName}/SMQ"
+                                                            <af:outputText value="Previous #{applicationScope.CSMQBean.customMQName}/SMQ"
                                                                            id="ot17"
                                                                            inlineStyle="font-size:12px; vertical-align:middle;"/>
                                                         </af:group>
@@ -589,7 +581,7 @@
                                                       var="node" rowSelection="single" id="fTable" width="664"
                                                       binding="#{pageFlowScope.ImpactAnalysisBean.futureTree}"
                                                       columnStretching="column:c1" inlineStyle="height:400px;"
-                                                      initiallyExpanded="false" fetchSize="20"  height="400">
+                                                      initiallyExpanded="false" fetchSize="20">
                                             <f:facet name="nodeStamp">
                                                 <af:column id="c1"
                                                            headerText="#{bindings.Term.inputValue}#{pageFlowScope.NMQWizardBean.currentTermName}"
@@ -613,7 +605,7 @@
                                                     </af:panelGroupLayout>
                                                     <f:facet name="header">
                                                         <af:group id="g6">
-                                                            <af:outputText value="Future #{applicationScope.CSMQBean.customMQName}/SMQ"
+                                                            <af:outputText value="Current #{applicationScope.CSMQBean.customMQName}/SMQ"
                                                                            id="ot15" inlineStyle="font-size:12px;"/>
                                                         </af:group>
                                                     </f:facet>
@@ -634,14 +626,15 @@
                                                 </af:column>
                                                 <af:column id="c3" headerText="Scope" width="75" sortable="true"
                                                            filterable="true">
-                                                    <af:selectOneChoice id="soc3" value="#{node.formattedScope}"
+                                                    <!--<af:selectOneChoice id="soc3" value="#{node.formattedScope}"
                                                                         valuePassThru="true" readOnly="true">
                                                         <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ"
                                                                        value="0" id="si7"/>
                                                         <af:selectItem label="Broad" value="1" id="si13s"/>
                                                         <af:selectItem label="Narrow" value="2" id="si13d"/>
                                                         <af:selectItem label="Child Narrow" value="3" id="si4"/>
-                                                    </af:selectOneChoice>
+                                                    </af:selectOneChoice>-->
+                                                    <af:outputText value="#{node.scopeName}" id="ot4"/>   
                                                 </af:column>
                                                 <af:column id="c4" headerText="Category" width="45" sortable="true"
                                                            filterable="true">
@@ -691,13 +684,11 @@
                                                     <af:panelFormLayout id="pfl2">
                                                         <af:selectBooleanCheckbox label="Show Impacted Only"
                                                                                   id="paramFutureSIO" autoSubmit="true"
-                                                                                  valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
-                                                                                  selected="false"
-                                                                                  value="#{pageFlowScope.ImpactAnalysisBean.futureShowImpacted}"/>
-                                                        <af:selectBooleanCheckbox label="Show Primary Only"
+                                                                                  value="#{pageFlowScope.ImpactAnalysisBean.showPrevVerFutureImpactedOnly}"/>
+                                                        <!--<af:selectBooleanCheckbox label="Show Primary Only"
                                                                                   id="paramFutureSPO" autoSubmit="true"
-                                                                                  valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"/>
-                                                        <af:selectOneChoice label="Sort" id="paramFutureSort"
+                                                                                  valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"/>-->
+                                                        <!--<af:selectOneChoice label="Sort" id="paramFutureSort"
                                                                             autoSubmit="true"
                                                                             valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
                                                                             valuePassThru="true" value="SCOPE">
@@ -705,9 +696,9 @@
                                                             <af:selectItem label="Level"
                                                                            value="DEF_LEVEL_REF_SHORT_NAME" id="si41"/>
                                                             <af:selectItem label="Scope" value="SCOPE" id="si22"/>
-                                                        </af:selectOneChoice>
+                                                        </af:selectOneChoice>-->
                                                         <af:commandToolbarButton text="Refresh" id="ctb11"
-                                                                                 actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshFutureTree}"
+                                                                                 actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshPreviousVerFutureTree}"
                                                                                  icon="/image/hierarchy/REFRESH.png"/>
                                                     </af:panelFormLayout>
                                                 </af:toolbar>
@@ -721,7 +712,7 @@
                                             <af:commandToolbarButton text="Export" id="ctb11a"
                                                                      icon="/image/hierarchy/EXCEL.png"
                                                                      binding="#{ImpactAnalysisUIBean.cntrlExportButton}">
-                                                <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactExport}"
+                                                <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactPOIExport}"
                                                                                contentType="application/x-download"
                                                                                filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
                                             </af:commandToolbarButton>
@@ -749,22 +740,9 @@
                     <f:attribute name="currentPage" value="Previous Version Impact"/>
                     <f:facet name="pageBottom">
                         <af:panelGroupLayout id="pgl26" layout="horizontal" inlineStyle="padding:3px;">
-                            <af:spacer width="10" height="10" id="s21"/>
-                            <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}"
-                                               id="tbb1" binding="#{NMQWizardUIBean.cntrlTrainButtons}"/>
                             <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
                                               action="CANCEL" immediate="true"
                                               shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
-                            <af:spacer width="20" height="10" id="s19"/>
-                            <af:inputText label="Dictionary" id="it1aw"
-                                          value="#{bindings.Description.inputValue} v#{bindings.Version.inputValue}"
-                                          readOnly="true" disabled="true" columns="200"/>
-                            <af:spacer width="10" height="10" id="s20"/>
-                            <af:inputText label="#{RenderingRulesBean.wizardDetailsTermName}" id="it3"
-                                          value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
-                                          disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}"
-                                          columns="75"
-                                          partialTriggers="TBL_MQ_N TBL_MQ_Y TBL_NMQ_N TBL_NMQ_Y T_CMQ_N T_CMQ_Y"/>
                         </af:panelGroupLayout>
                     </f:facet>
                 </af:pageTemplate>

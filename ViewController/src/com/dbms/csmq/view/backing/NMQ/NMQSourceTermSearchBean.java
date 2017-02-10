@@ -243,6 +243,12 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
 //        }
 //        vo.setNamedWhereClauseParam("activationGroup", activationGroup);
         CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + activationGroup);
+        if("NMATSMQ".equalsIgnoreCase(getParamDictionary()) || "MEDSMQ".equalsIgnoreCase(getParamDictionary())){
+            vo.setWhereClause("MQSTATUS <> 'I'");
+        }
+        else{
+            vo.setWhereClause(null);
+        }
         vo.executeQuery();
         
         
@@ -568,7 +574,6 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
         }
 
     public DnDAction onTreeDrop(DropEvent dropEvent) {
-        CSMQBean.logger.info(userBean.getCaller() + " onTreeDrop...");
         termHierarchyBean.showStatus(CSMQBean.MQ_MODIFIED);
         return processDragAndDropEvent(dropEvent, termHierarchyBean.getSourceTree(), termHierarchyBean.getTargetTree(), termHierarchyBean.getTreemodel(), Integer.parseInt(getParamScope()));
     }
@@ -605,7 +610,7 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
                 }
             else {
                 this.showMedDRASelItems = false;
-                this.showNMQSelItems = false;
+                this.showNMQSelItems = false;//NITISH
                 this.showSMQSelItems = true;
                 controlLevel.setValue("MQ1");
                 }
@@ -826,7 +831,6 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
     
     
     public DnDAction onMultiTreeDrop(DropEvent dropEvent) {
-        CSMQBean.logger.info(userBean.getCaller() + " onMultiTreeDrop...");
         RichTreeTable source = multiHierarchySourceTree;
         if (dropEvent.getDragClientId().equals("pt1:t5")) source = controlMultiResultsTable;
  

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
           xmlns:f="http://java.sun.com/jsf/core"
-          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich" xmlns:c="http://java.sun.com/jsp/jstl/core">
+  <c:set var="viewcontrollerBundle" value="#{adfBundle['viewcontroller.create.wizardSearchBundle']}"/>
   <jsp:directive.page contentType="text/html;charset=UTF-8"/>
   <f:view>
     <af:document id="d1">
@@ -13,7 +14,7 @@
             <af:group id="g2">
                 <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
                           binding="#{pageFlowScope.NMQWizardSearchBean.cntrlTrain}"/>
-                <af:spacer width="10" height="10" id="s1"/>
+                <af:spacer width="10" height="10" id="s1"/>                
             </af:group>
           </f:facet>
           <f:facet name="main">
@@ -130,6 +131,7 @@
                           <af:selectItem label="No" value="N" id="si1"/>
                           <af:selectItem label="Yes - Narrow" value="Y_NARROW" id="si13"/>
                           <af:selectItem label="Yes - Broad" value="Y_BROAD" id="si14"/>
+                          <af:selectItem label="Yes - All" value="Y_BROAD,Y_NARROW" id="si33"/>
                         </af:selectOneChoice>
                         <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
                                              
@@ -211,6 +213,14 @@
                     <af:commandButton text="Maintain Designees" id="cb1" rendered="#{RenderingRulesBean.wizardSearchRenderMaintainDesingees}">
                       <af:showPopupBehavior popupId="p1" triggerType="action"/>
                     </af:commandButton>
+                    <af:spacer width="10" height="10" id="s12"/>
+                    <af:commandButton text="Product Search" id="cb3">
+                      <af:showPopupBehavior popupId="p3" triggerType="action"/>
+                    </af:commandButton>
+                    <af:spacer width="10" height="10" id="s13"/>
+                    <af:commandButton text="Group Search" id="cb4">
+                      <af:showPopupBehavior popupId="p4" triggerType="action"/>
+                    </af:commandButton>
                   </af:panelGroupLayout>
                   <af:popup childCreation="deferred" autoCancel="disabled" id="p1" contentDelivery="lazyUncached">
                     <af:dialog id="d2" title="Maintain Designees" type="okCancel" contentWidth="500"
@@ -230,6 +240,137 @@
                       </af:panelGroupLayout>
                     </af:dialog>
                 </af:popup>
+                  <af:popup childCreation="deferred" autoCancel="disabled" id="p3"
+                            binding="#{pageFlowScope.NMQWizardSearchBean.productSearchPopup}">
+                    <af:dialog id="d4" type="none" title="Product Search">
+                      <f:facet name="buttonBar">
+                        <af:panelGroupLayout id="pgl14" layout="horizontal" halign="end">
+                          <af:commandButton text="Ok" id="cb5"
+                                            actionListener="#{pageFlowScope.NMQWizardSearchBean.onOkProductPopup}"/>
+                          <af:commandButton text="Cancel" id="cb6"
+                                            actionListener="#{pageFlowScope.NMQWizardSearchBean.onCancelProductPopup}"/>
+                        </af:panelGroupLayout>
+                      </f:facet>
+                      <af:panelCollection id="pc1" featuresOff="viewMenu detach">
+                        <f:facet name="menus"/>
+                        <f:facet name="toolbar">
+                          <af:toolbar id="t3">
+                            <af:commandButton text="Add" id="cb7"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.addProductSearchRow}"
+                                              icon="/image/add.png" partialSubmit="true"/>
+                            <af:spacer width="10" height="10" id="s14"/>
+                            <af:commandButton text="Delete" id="cb8"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.deleteSearchRow}"
+                                              icon="/image/DELETE.png" partialSubmit="true"/>
+                          </af:toolbar>
+                        </f:facet>
+                        <f:facet name="statusbar"/>
+                        <af:table var="row" rowBandingInterval="0" id="t4" columnStretching="column:c30"
+                                  value="#{pageFlowScope.NMQWizardSearchBean.productSearchRows}" rowSelection="single"
+                                  selectionListener="#{pageFlowScope.NMQWizardSearchBean.productSearchSelection}"
+                                  binding="#{pageFlowScope.NMQWizardSearchBean.productSearchBinding}" varStatus="vs">
+                          <af:column sortable="false" headerText="Column" id="c29">
+                            <af:selectOneChoice value="#{row.columnName}"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.productTypeVC}"
+                                                autoSubmit="true" id="ot26">
+                                    <f:selectItems id="si143"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.columnNameLOV}"/>
+                            </af:selectOneChoice>
+                          </af:column>
+                          <af:column sortable="false" headerText="Select" id="c30" partialTriggers="ot26">
+                            <af:switcher id="s15" facetName="#{row.columnName}">
+                              <f:facet name="Product">
+                                <af:selectOneChoice value="#{row.productValue}" partialTriggers="ot26" id="ot27">
+                                  <f:selectItems id="si1243"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.productValueLOV}"/>
+                                </af:selectOneChoice>
+                              </f:facet>
+                              <f:facet name="Scope">
+                              <af:selectOneChoice value="#{row.scopeValue}" partialTriggers="ot26" id="ot247">
+                                  <f:selectItems id="si113"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.scopeValueLOV}"/>
+                                </af:selectOneChoice>
+                              </f:facet>
+                              <f:facet name="Extension">
+                              <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="ot26" id="ot274">
+                                  <f:selectItems id="s123"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.extensionValueLOV}"/>
+                                </af:selectOneChoice>
+                              </f:facet>
+                            </af:switcher>
+                          </af:column>
+                          <af:column sortable="false" headerText="Operator" id="c31" rendered="false">
+                            <af:selectOneChoice value="#{row.operator}" id="ot28" partialTriggers="ot26"
+                                                disabled="#{((vs.index+1) ge pageFlowScope.NMQWizardSearchBean.productRowsSize) or (row.columnName eq 'Scope') or (row.columnName eq 'Extension')}">
+                             <f:selectItems id="si123" value="#{pageFlowScope.NMQWizardSearchBean.operatorLOV}"/>
+                            </af:selectOneChoice>
+                          </af:column>
+                        </af:table>
+                      </af:panelCollection>
+                    </af:dialog>
+                  </af:popup>
+                  <af:popup childCreation="deferred" autoCancel="disabled" id="p4"
+                            binding="#{pageFlowScope.NMQWizardSearchBean.groupSearchPopup}">
+                    <af:dialog id="d5" type="none" title="Group Search">
+                      <f:facet name="buttonBar">
+                        <af:panelGroupLayout id="pgl15" layout="horizontal" halign="end">
+                          <af:commandButton text="Ok" id="cb9"
+                                            actionListener="#{pageFlowScope.NMQWizardSearchBean.okGroupPopup}"/>
+                          <af:commandButton text="Cancel" id="cb10"
+                                            actionListener="#{pageFlowScope.NMQWizardSearchBean.cancelGroupPopup}"/>
+                        </af:panelGroupLayout>
+                      </f:facet>
+                      <af:panelCollection id="pc2" featuresOff="viewMenu detach">
+                        <f:facet name="menus"/>
+                        <f:facet name="toolbar">
+                          <af:toolbar id="t5">
+                            <af:commandButton text="Add" id="cb11"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.addGroupSearchRow}"
+                                              icon="/image/add.png" partialSubmit="true"/>
+                            <af:spacer width="10" height="10" id="s17"/>
+                            <af:commandButton text="Delete" id="cb12"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.deleteGroupSearchRow}"
+                                              icon="/image/DELETE.png" partialSubmit="true"/>
+                          </af:toolbar>
+                        </f:facet>
+                        <f:facet name="statusbar"/>
+                        <af:table var="row" rowBandingInterval="0" id="t6" columnStretching="column:c33"
+                                  value="#{pageFlowScope.NMQWizardSearchBean.groupSearchRows}" rowSelection="single"
+                                  selectionListener="#{pageFlowScope.NMQWizardSearchBean.groupSearchSelection}"
+                                  binding="#{pageFlowScope.NMQWizardSearchBean.groupSearchBinding}" varStatus="vs">
+                          <af:column sortable="false" headerText="Column" id="c32">
+                            <af:selectOneChoice value="#{row.columnName}"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.groupTypeVC}"
+                                                autoSubmit="true" id="soc9">
+                                    <f:selectItems id="si2143"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.groupColumnNameLOV}"/>
+                            </af:selectOneChoice>
+                          </af:column>
+                          <af:column sortable="false" headerText="Select" id="c33" partialTriggers="soc9">
+                            <af:switcher id="s16" facetName="#{row.columnName}">
+                              <f:facet name="Group">
+                                <af:selectOneChoice value="#{row.groupValue}" partialTriggers="soc9" id="soc11">
+                                  <f:selectItems id="si43"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.groupValueLOV}"/>
+                                </af:selectOneChoice>
+                              </f:facet>
+                              <f:facet name="Extension">
+                              <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="soc9" id="soc13">
+                                  <f:selectItems id="si45"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.groupExtensionValueLOV}"/>
+                                </af:selectOneChoice>
+                              </f:facet>
+                            </af:switcher>
+                          </af:column>
+                          <af:column sortable="false" headerText="Operator" id="c34" rendered="false">
+                            <af:selectOneChoice value="#{row.operator}" id="soc14" partialTriggers="soc9" disabled="#{row.columnName ne 'Group' or ((vs.index+1) ge pageFlowScope.NMQWizardSearchBean.groupRowsSize)}">
+                             <f:selectItems id="si46" value="#{pageFlowScope.NMQWizardSearchBean.groupOperatorLOV}"/>
+                            </af:selectOneChoice>
+                          </af:column>
+                        </af:table>
+                      </af:panelCollection>
+                    </af:dialog>
+                  </af:popup>
                 </af:panelGroupLayout>
                 <af:panelGroupLayout id="pgl1" layout="horizontal" inlineStyle="width:1144px; height:250px;">
                   <af:spacer width="10" height="10" id="s4"/>
@@ -240,7 +381,7 @@
                             selectionListener="#{pageFlowScope.NMQWizardSearchBean.onTableNodeSelection}" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlSearchResults}" contentDelivery="immediate" filterVisible="true" autoHeightRows="-1" inlineStyle="height:230px;"
                             persist="ALL">
                     <af:column sortProperty="Mqterm" sortable="true" headerText="Term" id="c20" width="165" filterable="true">
-                      <af:outputText value="#{row.Mqterm}" id="ot16"/>
+                      <af:outputText value="#{row.Mqterm}" id="ot16" styleClass="#{pageFlowScope.NMQWizardSearchBean.historyFlow and row.ContentId eq pageFlowScope.NMQWizardBean.currentDictContentID ? 'HistoricView' : ''}"/>
                     </af:column>
                     <af:column sortProperty="ApprFlag" sortable="false"
                                headerText="Approved" id="c6" width="45"
@@ -345,18 +486,35 @@
                                width="45" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}">
                     <af:outputText value="#{row.Extension}" id="ot24"/>
                     </af:column>
-                  </af:table>
+                  
+                    <af:column id="c24" headerText="History" sortable="false"
+                               width="40" rendered="#{pageFlowScope.NMQWizardBean.mode eq '5' and !pageFlowScope.NMQWizardSearchBean.MEDDraSearch}">
+                      <af:commandImageLink icon="/image/history.png" id="cil1">
+                            <af:showPopupBehavior popupId="::p2" triggerType="action"/>
+                      </af:commandImageLink>
+                    </af:column></af:table>
                 </af:panelGroupLayout>
                 <f:facet name="toolbar">
                   <af:panelGroupLayout id="pgl12" layout="horizontal">
-                    <af:button text="Export" id="b1" icon="/image/EXCEL.png">
+                    <af:commandButton text="Export Search" id="b1" icon="/image/EXCEL.png">
                       <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                      filename="SearchReport.xls"
                                                      method="#{pageFlowScope.NMQWizardSearchBean.downloadSearchReport}"/>
-                    </af:button>
+                    </af:commandButton>
                     <af:spacer width="10" height="10" id="s11"/>
                   </af:panelGroupLayout>
                 </f:facet>
+                <af:popup childCreation="deferred" autoCancel="disabled" id="p2" contentDelivery="lazyUncached">
+                    <af:dialog id="d3" title="History As of Date(Required for History)" type="okCancel" contentWidth="200"
+                               dialogListener="#{pageFlowScope.NMQWizardSearchBean.onTermHistoryDialogListener}">
+                      <af:panelGroupLayout id="pgl13" layout="horizontal">
+                          <af:inputDate label="History As of Date" required="true" showRequired="false" simple="true"
+                                        value="#{pageFlowScope.NMQWizardSearchBean.historyInputDate}"  id="id1">
+                            <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                          </af:inputDate>
+                    </af:panelGroupLayout>
+                    </af:dialog>
+                </af:popup>
               </af:panelBox>
               
             </af:group>

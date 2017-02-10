@@ -31,7 +31,11 @@
               RefreshCondition=" #{!adfFacesContext.initialRender}"/>
     <iterator Binds="LastMVUpdateViewObj1" RangeSize="25" DataControl="ImpactModuleDataControl" id="LastMVUpdateViewObj1Iterator"
               RefreshCondition=" #{!adfFacesContext.initialRender}"/>
-    
+    <iterator Binds="TermHistoryHierarchyVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+              id="TermHistoryHierarchyVO1Iterator"/>
+    <iterator Binds="TermDetailsVO1" RangeSize="10" DataControl="SearchModuleDataControl" id="TermDetailsVO1Iterator"/>
+    <!--iterator Binds="TermHierarchyDetailsVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+              id="TermHierarchyDetailsVO1Iterator"/-->
   </executables>
   <bindings>
     <tree IterBinding="SmallTreeVO1Iterator" id="SmallTreeVO1">
@@ -149,73 +153,125 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <methodAction id="saveDetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveDetails"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveDetails_CQTAppModuleDataControl_dataProvider_saveDetails_result">
-      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="tempName" NDType="java.lang.String"/>
-      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="currentScope" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
-      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
-      <NamedData NDName="updateParam" NDType="java.lang.String"/>
-      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="currentPendingStatus" NDType="java.lang.String"/>
-      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
+    <tree IterBinding="TermHistoryHierarchyVO1Iterator" id="TermHistoryHierarchyVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.TermHistoryHierarchyVO" Name="TermHistoryHierarchyVO10">
+        <AttrNames>
+          <Item Value="RootDictName"/>
+          <Item Value="DtlsDictContentCode"/>
+          <Item Value="DtlsDictContentId"/>
+          <Item Value="DtlsDictName"/>
+          <Item Value="DtlsLevelExtension"/>
+          <Item Value="DtlsLevelName"/>
+          <Item Value="DtlsTerm"/>
+          <Item Value="DtlsTermSubtype"/>
+          <Item Value="DtlsTermUpper"/>
+          <Item Value="MstrDictContentCode"/>
+          <Item Value="MstrDictContentId"/>
+          <Item Value="MstrDictName"/>
+          <Item Value="MstrLevelExtension"/>
+          <Item Value="MstrLevelName"/>
+          <Item Value="MstrTerm"/>
+          <Item Value="MstrTermUpper"/>
+          <Item Value="RelDepthFromRoot"/>
+          <Item Value="RelDictRelationId"/>
+          <Item Value="RootDictContentCode"/>
+          <Item Value="RootDictContentId"/>
+          <Item Value="RootLevelExtension"/>
+          <Item Value="RootLevelName"/>
+          <Item Value="RootTerm"/>
+          <Item Value="RootTermUpper"/>
+          <Item Value="DictVersionAsOfDate"/>
+          <Item Value="DtlsDictContentEntryTs"/>
+          <Item Value="DtlsEndTs"/>
+          <Item Value="DtlsNmatEndTs"/>
+          <Item Value="HistoryAsOfDate"/>
+          <Item Value="MstrDictContentEntryTs"/>
+          <Item Value="MstrEndTs"/>
+          <Item Value="MstrNmatEndTs"/>
+          <Item Value="MstrTermSubtype"/>
+          <Item Value="RelDictRelationEntryTs"/>
+          <Item Value="RelEndTs"/>
+          <Item Value="RelNmatEndTs"/>
+          <Item Value="RelRelationCategory"/>
+          <Item Value="RelRelationScope"/>
+          <Item Value="RelRelationSubtype"/>
+          <Item Value="RelRelationWeight"/>
+          <Item Value="RootDictContentEntryTs"/>
+          <Item Value="RootEndTs"/>
+          <Item Value="RootNmatEndTs"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="loadHistoricTermHierarchyInformation" InstanceName="data.SearchModuleDataControl.dataProvider"
+                  DataControl="SearchModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadHistoricTermHierarchyInformation" IsViewObjectMethod="false">
+      <NamedData NDName="dictContentId" NDType="java.math.BigDecimal"/>
+      <NamedData NDName="effectiveDTStr" NDType="java.lang.String"/>
     </methodAction>
-    <methodAction id="saveIADetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIADetails"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIADetails_CQTAppModuleDataControl_dataProvider_saveIADetails_result">
-      <NamedData NDName="tempName" NDType="java.lang.String"/>
-      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="currentScope" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
-      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
-      <NamedData NDName="updateParam" NDType="java.lang.String"/>
-      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
+    <tree IterBinding="TermDetailsVO1Iterator" id="TermDetailsVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.TermDetailsVO" Name="TermDetailsVO10">
+        <AttrNames>
+          <Item Value="DictionaryName"/>
+          <Item Value="Category"/>
+          <Item Value="Designee"/>
+          <Item Value="DictContentCode"/>
+          <Item Value="DictContentId"/>
+          <Item Value="DmlStatement"/>
+          <Item Value="FirstActivationBy"/>
+          <Item Value="FirstActivationTs"/>
+          <Item Value="GroupName"/>
+          <Item Value="LastActivationBy"/>
+          <Item Value="LastActivationTs"/>
+          <Item Value="LevelExtension"/>
+          <Item Value="LevelName"/>
+          <Item Value="MqgroupExpanded"/>
+          <Item Value="MqproductExpanded"/>
+          <Item Value="SmqAlg"/>
+          <Item Value="SmqDesc"/>
+          <Item Value="SmqNote"/>
+          <Item Value="SmqSrc"/>
+          <Item Value="State"/>
+          <Item Value="Status"/>
+          <Item Value="Term"/>
+          <Item Value="Value1"/>
+          <Item Value="Value2"/>
+          <Item Value="Value3"/>
+          <Item Value="Value4"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <!--tree IterBinding="TermHierarchyDetailsVO1Iterator" id="TermHierarchyDetailsVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.TermHierarchyDetailsVO" Name="TermHierarchyDetailsVO10">
+        <AttrNames>
+          <Item Value="RootTerm"/>
+          <Item Value="DtlsDictContentCode"/>
+          <Item Value="DtlsDictContentId"/>
+          <Item Value="DtlsDictName"/>
+          <Item Value="DtlsLevelExtension"/>
+          <Item Value="DtlsLevelName"/>
+          <Item Value="DtlsTerm"/>
+          <Item Value="DtlsTermSubtype"/>
+          <Item Value="DtlsTermUpper"/>
+          <Item Value="MstrDictContentId"/>
+          <Item Value="RelDictRelationId"/>
+          <Item Value="RelRelationCategory"/>
+          <Item Value="RelRelationScope"/>
+          <Item Value="RelRelationSubtype"/>
+          <Item Value="RelRelationWeight"/>
+          <Item Value="RootDictContentCode"/>
+          <Item Value="RootLevelName"/>
+          <Item Value="RelDepthFromRoot"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree-->
+    <methodAction id="loadMQDetailedDetailedTermHierarchyInformation"
+                  InstanceName="data.SearchModuleDataControl.dataProvider" DataControl="SearchModuleDataControl"
+                  RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadMQDetailedDetailedTermHierarchyInformation" IsViewObjectMethod="false">
+      <NamedData NDName="dictContentId" NDType="java.math.BigDecimal"/>
+      <NamedData NDName="tMSRecordStatus" NDType="java.lang.String"/>
+      <NamedData NDName="activationGroup" NDType="java.lang.String"/>
     </methodAction>
-    <methodAction id="saveInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveInfNotes_CQTAppModuleDataControl_dataProvider_saveInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="extension" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="saveIAInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIAInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIAInfNotes_CQTAppModuleDataControl_dataProvider_saveIAInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-    </methodAction>
-    <action id="Commit" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="true" Action="commitTransaction"/>
-    <action id="Rollback" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="false"
-            Action="rollbackTransaction"/>
   </bindings>
 </pageDefinition>
 

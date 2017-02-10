@@ -10,12 +10,15 @@ import com.dbms.util.Utils;
 
 import java.io.OutputStream;
 
+import java.math.BigDecimal;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -25,6 +28,7 @@ import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 
 import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -34,6 +38,7 @@ import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichColumn;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputDate;
@@ -42,6 +47,7 @@ import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichPanelBox;
 import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
+import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.nav.RichTrain;
 import oracle.adf.view.rich.component.rich.output.RichSpacer;
 import oracle.adf.view.rich.component.rich.output.RichStatusIndicator;
@@ -67,6 +73,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 public class NMQWizardSearchBean  {
 
     private RichSelectOneChoice ctrlReleaseStatus;
+    private Integer productRowsSize;
+    private Integer groupRowsSize;
     private RichInputDate ctrlStartDate;
     private RichInputDate ctrlEndDate;
     private RichSelectManyChoice ctrlState;
@@ -91,7 +99,19 @@ public class NMQWizardSearchBean  {
     private RichSelectOneChoice ctrlCriticalEvent;
     private RichSelectOneChoice ctrlQuery;
     private RichPanelBox cntrlSearchPanel;
-
+    private ArrayList<ProductSearchPojo> productSearchRows = new ArrayList<ProductSearchPojo>();
+    private ArrayList<SelectItem> columnNameLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> columnValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> operatorLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> productValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> scopeValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> extensionValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<GroupSearchPojo> groupSearchRows = new ArrayList<GroupSearchPojo>();
+    private ArrayList<SelectItem> groupSearchColumnNameLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> groupValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> groupExtensionValueLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> groupOperatorLOV = new ArrayList<SelectItem>();
+    private ArrayList<SelectItem> groupColumnNameLOV = new ArrayList<SelectItem>();
     //SEARCH PARAMS
     private String paramDictName = null;
     private String paramStartDate = null;
@@ -200,6 +220,15 @@ public class NMQWizardSearchBean  {
     private String paramLevel = CSMQBean.FILTER_LEVEL_ONE;;
     private RichSelectOneChoice controlMQLevel;
     private List<String> modifiedDesigneeList = new ArrayList<String>();
+    
+    private Date historyInputDate;
+    private Date historyDate;
+    private boolean historyFlow = false;
+    private RichTable productSearchBinding;
+    private RichTable groupSearchBinding;
+    private RichCommandButton searchBtnBinding;
+    private RichPopup productSearchPopup;
+    private RichPopup groupSearchPopup;
 
     public void setCtrlDictionaryTypeSearch(RichSelectOneChoice dictionaryTypeSearch) {
         this.ctrlDictionaryTypeSearch = dictionaryTypeSearch;
@@ -510,6 +539,7 @@ public class NMQWizardSearchBean  {
         DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
         DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
         ViewObject vo = dciterb.getViewObject();
+        vo.setWhereClause(null);
         
         vo.setNamedWhereClauseParam("startDate", getParamStartDate());
         vo.setNamedWhereClauseParam("endDate", getParamEndDate());
@@ -663,42 +693,43 @@ public class NMQWizardSearchBean  {
         }
 
 
-    public void initForImpactAnalysis (String mqCode, String dictContentID, String releaseGroups) {
+    public void initForImpactAnalysis(String mqCode, String dictContentID, String releaseGroups) {
         try {
-           // used for impact analysis 
-           this.IASearch = true;
-           this.currentMqcode = mqCode;
-           this.paramMQCode = mqCode;
-           this.paramQueryType = CSMQBean.SMQ_SEARCH;
-           this.currentDictContentID = dictContentID;
-           this.paramState = CSMQBean.WILDCARD;
-           this.currentDictionary = CSMQBean.defaultFilterDictionaryShortName;
-           this.paramDictName = CSMQBean.defaultFilterDictionaryShortName;
-           this.paramReleaseGroup = releaseGroups;
-           setUIDefaults(); 
-           
-           doSearch(null);  // run the search with the params above - these come from the IA search
-           // get the results - there should just be one row
-           BindingContext bc = BindingContext.getCurrent();
-           DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
-           DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
+            // used for impact analysis
+            this.IASearch = true;
+            this.currentMqcode = mqCode;
+            this.paramMQCode = mqCode;
+            this.paramQueryType = CSMQBean.SMQ_SEARCH;
+            this.currentDictContentID = dictContentID;
+            this.paramState = CSMQBean.WILDCARD;
+            this.currentDictionary = CSMQBean.defaultFilterDictionaryShortName;
+            this.paramDictName = CSMQBean.defaultFilterDictionaryShortName;
+            this.paramReleaseGroup = releaseGroups;
+            setUIDefaults();
 
-           Enumeration rows = dciterb.getRowSetIterator().enumerateRowsInRange();
-           if (rows == null || !rows.hasMoreElements()) return;
-           
-           Row row = (Row)rows.nextElement();
-           
-           
-           processSearchResults(row);
-           this.getInfNotes();  
-           //nMQWizardBean.setMode(mode);
-           nMQWizardBean.setCurrentTermName(currentTermName);
-           nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
-           nMQWizardBean.getDictionaryInfo(); // GET BASE DICT INFO FROM FILTER
-       } catch (Exception e) {
+            doSearch(null); // run the search with the params above - these come from the IA search
+            // get the results - there should just be one row
+            BindingContext bc = BindingContext.getCurrent();
+            DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+            DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
+
+            Enumeration rows = dciterb.getRowSetIterator().enumerateRowsInRange();
+            if (rows == null || !rows.hasMoreElements())
+                return;
+
+            Row row = (Row)rows.nextElement();
+
+
+            processSearchResults(row);
+            this.getInfNotes();
+            //nMQWizardBean.setMode(mode);
+            nMQWizardBean.setCurrentTermName(currentTermName);
+            nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
+            nMQWizardBean.getDictionaryInfo(); // GET BASE DICT INFO FROM FILTER
+        } catch (Exception e) {
             // TODO: Add catch code
             e.printStackTrace();
-        }       
+        }
     }
     
     
@@ -1233,7 +1264,12 @@ public class NMQWizardSearchBean  {
         // ???? AdfFacesContext.getCurrentInstance().partialUpdateNotify(termHierarchyBean.getTargetTree());
         
         //clearSearch("SimpleSearch1Iterator");
-       
+        setHistoryDate(null);
+        historyFlow = false;
+        
+        AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+        
         CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE COMPLETE ****");
     }
 
@@ -1398,6 +1434,7 @@ public class NMQWizardSearchBean  {
         CSMQBean.logger.info(userBean.getCaller() + " Extension:" + currentExtension);
         
         String designeeStr = Utils.getAsString(row, "Designee");
+        CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
         List <String> designeeList = new ArrayList <String> ();
         if (null != designeeStr){
             CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
@@ -1416,6 +1453,7 @@ public class NMQWizardSearchBean  {
         nMQWizardBean.setCurrentMQCRTEV(currentCriticalEvent);
         nMQWizardBean.setCurrentMQGROUP(currentMqgroups);
         //nMQWizardBean.setCurrentPredictGroups(currentReleaseGroup);  //<--test
+        nMQWizardBean.setCurrentReleaseGroup(currentReleaseGroup);
         nMQWizardBean.setCurrentProduct(currentMqproduct);
         nMQWizardBean.setCurrentScope(currentMqscp);
         nMQWizardBean.setCurrentMQStatus(currentMqstatus);
@@ -1646,6 +1684,9 @@ public class NMQWizardSearchBean  {
             AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlSearchPanel);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlSearchPanel);
             
+            clearSearchResults();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
             //AdfFacesContext.getCurrentInstance().addPartialTarget(controlMQLevel);
             //AdfFacesContext.getCurrentInstance().partialUpdateNotify(controlMQLevel);
                 
@@ -1655,6 +1696,50 @@ public class NMQWizardSearchBean  {
             e.printStackTrace();
             }
         }
+    
+    private void clearSearchResults(){
+        nMQWizardBean.clearDetails();
+        
+        // FIX FOR WHEN A USER CANCELS AND COMES BACK IN
+        if (searchIterator.length() == 0) setUIDefaults ();
+        
+        
+        nMQWizardBean.getProductList().clear();
+        nMQWizardBean.getMQGroupList().clear();
+        if (termHierarchyBean != null)
+        termHierarchyBean.showStatus(CSMQBean.MQ_INIT);
+        nMQWizardBean.setTreeAccessed(false); //reset the tree
+        //nMQWizardBean.clearDetails();  UI MOVE?
+        
+        String activationGroup = getParamReleaseGroup();
+        String queryLevel = getParamLevel();
+        if (IASearch){
+            CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING IA SEARCH **");
+            activationGroup = CSMQBean.WILDCARD;
+        } else {
+            CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING SEARCH **");
+        }
+        
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchIterator);
+        ViewObject vo = dciterb.getViewObject();
+        vo.executeEmptyRowSet();
+        if (ctrlSearchResults != null) {  // if we are calling this from IA, we won't need this
+            CSMQBean.logger.info(userBean.getCaller() + " ctrlSearchResults is not null :: ");
+            ctrlSearchResults.setEmptyText("No data to display.");
+            AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+            //clear the selected row
+            RowKeySet rks= ctrlSearchResults.getSelectedRowKeys();
+            rks.clear();
+        
+            //CLEAR OLD TRESS
+            NMQSourceTermSearchBean nMQSourceTermSearchBean = (NMQSourceTermSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
+            nMQSourceTermSearchBean.clearTree();
+            nMQWizardBean.clearRelations();
+        }
+    }
 
     public void releaseGroupChange(ValueChangeEvent valueChangeEvent) {
         //this.currentReleaseGroup = ctrlReleaseGroupSearch.getValue().toString();
@@ -2203,14 +2288,7 @@ public class NMQWizardSearchBean  {
                designeeListString = this.getModifiedDesigneeListAsString();
                 CSMQBean.logger.info(userBean.getCaller() + "designee updated :" + designeeListString);
                 CSMQBean.logger.info(userBean.getCaller() + "CurrentDictContentID :" + getCurrentDictContentID());
-               //isUpated = NMQUtils.updateMQDesignee(this.getCurrentDictContentID(), designeeListString);
-               DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-               OperationBinding ob = bc.getOperationBinding("updateMQDesignee");
-
-               ob.getParamsMap().put("dictContentID", this.getCurrentDictContentID());
-               ob.getParamsMap().put("designee", designeeListString);
-               isUpated = (Boolean)ob.execute();
-
+               isUpated = NMQUtils.updateMQDesignee(this.getCurrentDictContentID(), designeeListString);
                if (isUpated){
                    // close the pop up dialog
                    nMQWizardBean.setDesigneeList(this.getModifiedDesigneeList());
@@ -2222,6 +2300,15 @@ public class NMQWizardSearchBean  {
         } else {
             CSMQBean.logger.info(userBean.getCaller() + "No designee selected");// keep the previous one as it is.
         }
+    }
+    
+    public java.util.Date convertDomainDateToUtilDate(oracle.jbo.domain.Date domainDate) {
+    java.util.Date date = null;
+    if (domainDate != null) {
+    java.sql.Date sqldate = domainDate.dateValue();
+    date = new Date(sqldate.getTime());
+    }
+    return date;
     }
    
     public String getModifiedDesigneeListAsString() {
@@ -2239,173 +2326,1074 @@ public class NMQWizardSearchBean  {
         
         return modifiedDesigneeListAsString;
     }
-    private Hashtable <String, String> getActivationInfo (String dictContentID, String dictionaryID) {
-        Hashtable <String, String> activationInfo = null;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("getActivationInfo");
-        ob.getParamsMap().put("dictContentID", currentDictContentID);
-        ob.getParamsMap().put("dictionaryID", currentDictionary);
-        activationInfo = (Hashtable <String, String>)ob.execute();
-        return activationInfo;
-    }
 
     public void downloadSearchReport(FacesContext facesContext, OutputStream outputStream) {
-        try {
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet worksheet = workbook.createSheet("Search Report");
-            HSSFRow excelrow = null;
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet worksheet = workbook.createSheet("Search Report");
+                HSSFRow excelrow = null;
 
-            int i = 0;
-            int colCount = 0;
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            HSSFCell cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Search Criteria");
+                int i = 0;
+                int colCount = 0;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Search Criteria");
 
-            i++;
-            i++;
+                i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Dictionary");
-            HSSFCell cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamDictName());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Dictionary");
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamDictName());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Extenstion");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamExtension());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Extenstion");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamExtension()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamExtension());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Release Status");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamReleaseStatus());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Release Status");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamReleaseStatus());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Approved");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamApproved());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Approved");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamApproved()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamApproved());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Level");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamLevel());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Level");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamLevel());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Critical Event");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamMQCriticalEvent());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Critical Event");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQCriticalEvent()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamMQCriticalEvent());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Product");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamProductList());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Product");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamProductList()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamProductList());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Status");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamActivityStatus());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Status");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamActivityStatus());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Group");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamMQGroupList());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Group");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQGroupList()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamMQGroupList());
 
-            i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Scope");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(getParamMQScope());
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Scope");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQScope()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamMQScope());
 
-            i++;
-            i++;
+                i++;
+                i++;
 
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Search Results Table");
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Search Results Table");
 
-            i++;
-            i++;
+                i++;
+                i++;
 
-            int k = i;
+                int k = i;
 
-            BindingContext bc = BindingContext.getCurrent();
-            DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
-            DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("SimpleSearch1Iterator");
+                BindingContext bc = BindingContext.getCurrent();
+                DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+                DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("SimpleSearch1Iterator");
 
 
-            RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+                RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
 
-            while (rs.hasNext()) {
-                Row row = rs.next();
-                //print header on first row in excel
-                if (i == k) {
-                    excelrow = (HSSFRow) worksheet.createRow((short) i);
-                    short j = 0;
-                    for (String colName : row.getAttributeNames()) {
-                        cellA1 = excelrow.createCell((short) j);
-                        cellA1.setCellValue(colName);
-                        j++;
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+//                        short j = 0;
+//                        for (String colName : row.getAttributeNames()) {
+//                            cellA1 = excelrow.createCell((short) j);
+//                            cellA1.setCellValue(colName);
+//                            j++;
+//
+//                        }
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("NAME");
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        cellA1.setCellValue("CODE");
+                        
+                        cellA1 = excelrow.createCell((short) 2);
+                        cellA1.setCellValue("EXTENSION");
 
+                        cellA1 = excelrow.createCell((short) 3);
+                        cellA1.setCellValue("LEVEL");
+
+                        cellA1 = excelrow.createCell((short) 4);
+                        cellA1.setCellValue("VERSION");
+
+                        cellA1 = excelrow.createCell((short) 5);
+                        cellA1.setCellValue("STATUS");
+
+                        cellA1 = excelrow.createCell((short) 6);
+                        cellA1.setCellValue("SCOPE");
+
+                        cellA1 = excelrow.createCell((short) 7);
+                        cellA1.setCellValue("ALGORITHM");
+
+                        cellA1 = excelrow.createCell((short) 8);
+                        cellA1.setCellValue("GROUP");
+
+                        cellA1 = excelrow.createCell((short) 9);
+                        cellA1.setCellValue("PRODUCT");
+
+                        cellA1 = excelrow.createCell((short) 10);
+                        cellA1.setCellValue("CRITICAL EVENT");
+
+                        cellA1 = excelrow.createCell((short) 11);
+                        cellA1.setCellValue("CUR/PEND");
+
+                        cellA1 = excelrow.createCell((short) 12);
+                        cellA1.setCellValue("CREATE DATE");
+
+                        cellA1 = excelrow.createCell((short) 13);
+                        cellA1.setCellValue("CREATED BY");
+
+                        cellA1 = excelrow.createCell((short) 14);
+                        cellA1.setCellValue("STATE");
+
+                        cellA1 = excelrow.createCell((short) 15);
+                        cellA1.setCellValue("DESIGNEE");
+                        
+                        
                     }
-                }
 
-                //print data from second row in excel
-                ++i;
-                short j = 0;
-                excelrow = worksheet.createRow((short) i);
-                for (String colName : row.getAttributeNames()) {
-                    HSSFCell cell = excelrow.createCell(j);
-                    if (row.getAttribute(colName) != null)
-                        cell.setCellValue(row.getAttribute(colName).toString());
-                    j++;
+                    //print data from second row in excel
+                    ++i;
+//                    short j = 0;
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    cell.setCellValue(row.getAttribute("Mqterm") + "");
+                    
+                    cell = excelrow.createCell(1);
+                    cell.setCellValue(row.getAttribute("Mqcode")+ "");
+                    
+                    cell = excelrow.createCell(2);
+                    cell.setCellValue(row.getAttribute("Extension")+ "");
+                    
+                    cell = excelrow.createCell(3);
+                    cell.setCellValue(row.getAttribute("LevelNm")+ "");
+                    
+                    cell = excelrow.createCell(4);
+                    cell.setCellValue(row.getAttribute("Version")+ "");
+                    
+                    cell = excelrow.createCell(5);
+                    cell.setCellValue(row.getAttribute("Mqstatus")+ "");
+                    
+                    cell = excelrow.createCell(6);
+                    cell.setCellValue(row.getAttribute("Mqscp")+ "");
+                    
+                    cell = excelrow.createCell(7);
+                    cell.setCellValue(row.getAttribute("Mqalgo") + "");
+                    
+                    cell = excelrow.createCell(8);
+                    cell.setCellValue((row.getAttribute("Mqgroup") == null ? "" : row.getAttribute("Mqgroup"))+ "");
+                    
+                    cell = excelrow.createCell(9);
+                    cell.setCellValue((row.getAttribute("Mqprodct") == null ? "" : row.getAttribute("Mqprodct")) + "");
+                    
+                    cell = excelrow.createCell(10);
+                    cell.setCellValue(row.getAttribute("Mqcrtev")+ "");
+                    
+                    cell = excelrow.createCell(11);
+                    cell.setCellValue(row.getAttribute("CurPendStatus")+ "");
+                    
+                    oracle.jbo.domain.Date date = (oracle.jbo.domain.Date)row.getAttribute("Dates");
+                    
+                    String dateFormatted = "";
+                    if(date != null){
+                        java.util.Date utilDate = convertDomainDateToUtilDate(date);
+                        dateFormatted = formatter.format(utilDate);
+                    }
+                    
+                    cell = excelrow.createCell(12);
+                    cell.setCellValue(dateFormatted);
+                    
+                    cell = excelrow.createCell(13);
+                    cell.setCellValue(row.getAttribute("Createdby")+ "");
+                    
+                    cell = excelrow.createCell(14);
+                    cell.setCellValue((row.getAttribute("State") == null ? "" : row.getAttribute("State"))+ "");
+                    
+                    cell = excelrow.createCell(15);
+                    cell.setCellValue((row.getAttribute("Designee") == null ? "" : row.getAttribute("Designee"))+ "");
+                    
+                    
+//                    for (String colName : row.getAttributeNames()) {
+//                        HSSFCell cell = excelrow.createCell(j);
+//                        if (row.getAttribute(colName) != null)
+//                            cell.setCellValue(row.getAttribute(colName).toString());
+//                        j++;
+//                    }
+//                    colCount = j;
                 }
-                colCount = j;
-            }
-            
-            i++;
-            i++;
-            excelrow = (HSSFRow) worksheet.createRow((short) i);
-            cellA1 = excelrow.createCell((short) 0);
-            cellA1.setCellValue("Row Count");
-            cellA2 = excelrow.createCell((short) 1);
-            cellA2.setCellValue(dcIter.getEstimatedRowCount());
-            
-            worksheet.createFreezePane(0, 1, 0, 1);
+                
+                i++;
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Row Count");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(dcIter.getEstimatedRowCount());
+                
+                worksheet.createFreezePane(0, 1, 0, 1);
 
-            for (int x = 0; x < colCount; x++) {
-                worksheet.autoSizeColumn(x);
+                for (int x = 0; x < colCount; x++) {
+                    worksheet.autoSizeColumn(x);
+                }
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            workbook.write(outputStream);
-            outputStream.flush();
+        }
+    
+    public void setHistoryDate(Date historyDate) {
+        this.historyDate = historyDate;
+    }
+
+    public Date getHistoryDate() {
+        return historyDate;
+    }
+
+    public void onTermHistoryDialogListener(DialogEvent dialogEvent) {
+        // Add event code here...
+        oracle.adf.view.rich.event.DialogEvent.Outcome outcome = dialogEvent.getOutcome();
+        if (outcome.ok == oracle.adf.view.rich.event.DialogEvent.Outcome.ok) {
+            historyDate = historyInputDate;
+            if (getHistoryDate() == null) {
+                FacesMessage msg =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "History As of Date", "History As of Date is required ");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                historyFlow = false;
+            } else {                
+                loadTermDetailsBasedonHistoryDate();
+                AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+                AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+            }
+        } else {
+            historyFlow = false;
+            CSMQBean.logger.info(userBean.getCaller() + "No designee selected"); // keep the previous one as it is.
+        }
+        historyInputDate = null;
+    }
+
+    private void loadTermDetailsBasedonHistoryDate() {
+        nMQWizardBean.setTreeAccessed(false);  //reset this to recreate the tree when the page loads
+        nMQWizardBean.clearDetails(); // hopefully this works
+        System.out.println("Start Exec loadTermDetailsBasedonHistoryDate() ");
+        execTermDetailsBasedonHistoryDate(new BigDecimal(getCurrentDictContentID()), getDateStr(getHistoryDate()));
+        populateHistoryTermDtls();
+        System.out.println("End of Exec loadTermDetailsBasedonHistoryDate() ");
+    }
+
+    private void populateHistoryTermDtls() {
+        System.out.println("Start Exec populateHistoryTermDtls() ");
+        BindingContext bc1 = BindingContext.getCurrent();
+        DCBindingContainer binding1 = (DCBindingContainer)bc1.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding1.get("TermHistoricInfoVO1Iterator");
+        Row row = dciterb.getCurrentRow();
+        
+        if(row == null){
+            FacesMessage msg =
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "History As of Date", "Term History Data is not available for the selected Date.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return;
+        }
+        
+        historyFlow = true;
+        CSMQBean.logger.info(userBean.getCaller() + " ***** processSearchResults  Mode ==" + nMQWizardBean.getMode());
+        currentTermName = Utils.getAsString(row, "Term");
+        CSMQBean.logger.info(userBean.getCaller() + " currentTermName:" + currentTermName);
+
+        currentMqlevel = Utils.getAsString(row, "LevelName");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqlevel:" + currentMqlevel);
+
+        currentMqcode = Utils.getAsString(row, "DictContentCode");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqcode:" + currentMqcode);
+
+        currentMqalgo = Utils.getAsString(row, "Value1");
+
+        if (currentMqalgo == null || currentMqalgo.length() < 1)
+            currentMqalgo = CSMQBean.DEFAULT_ALGORITHM;
+
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqalgo:" + currentMqalgo);
+
+        currentMqaltcode = Utils.getAsString(row, "DictContentAltCode");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqaltcode:" + currentMqaltcode);
+
+        currentDictionary = Utils.getAsString(row, "DictionaryName");
+        CSMQBean.logger.info(userBean.getCaller() + " currentDictionary:" + currentDictionary);
+
+        currentReleaseGroup = Utils.getAsString(row, "Value2"); //TODO
+        CSMQBean.logger.info(userBean.getCaller() + " currentReleaseGroup:" + currentReleaseGroup);
+
+        currentMqstatus = Utils.getAsString(row, "Status");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqstatus:" + currentMqstatus);
+
+        currentDictContentID = Utils.getAsString(row, "DictContentId");
+        CSMQBean.logger.info(userBean.getCaller() + " currentDictContentID:" + currentDictContentID);
+
+        currentApprovalFlag = Utils.getAsString(row, "ApprovedFlag");
+        CSMQBean.logger.info(userBean.getCaller() + " currentApprovalFlag:" + currentApprovalFlag);
+
+        currentVersion = Utils.getAsString(row, "DictVersionAsOfDate");
+        CSMQBean.logger.info(userBean.getCaller() + " currentVersion:" + currentVersion);
+
+        currentSubType = Utils.getAsString(row, "TermSubtype");
+        CSMQBean.logger.info(userBean.getCaller() + " currentSubType:" + currentSubType);
+
+        currentMqscp = Utils.getAsString(row, "Category");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqscp:" + currentMqscp);
+
+        currentMqgroups = Utils.getAsString(row, "MqgroupExpanded");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqgroups:" + currentMqgroups);
+
+        currentMqproduct = Utils.getAsString(row, "Value3");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqproduct:" + currentMqproduct);
+
+        currentCriticalEvent = Utils.getAsString(row, "Value4");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCriticalEvent:" + currentCriticalEvent);
+
+        //currentStatus = Utils.getAsString(row, "CurPendStatus");
+        CSMQBean.logger.info(userBean.getCaller() + " currentStatus:" + currentStatus);
+
+        currentState = "N/A";
+        CSMQBean.logger.info(userBean.getCaller() + " currentState:" + currentState);
+
+        requestedByDate = Utils.getAsDate(row, "FirstTmsEntryTs");
+        CSMQBean.logger.info(userBean.getCaller() + " requestedByDate:" + requestedByDate);
+
+        currentDateRequested = Utils.getAsDate(row, "FirstTmsEntryTs");
+        CSMQBean.logger.info(userBean.getCaller() + " currentDateRequested:" + currentDateRequested);
+
+        //currentReasonForRequest = Utils.getAsString(row, "ReasonForRequest");
+        CSMQBean.logger.info(userBean.getCaller() + " currentReasonForRequest:" + currentReasonForRequest);
+
+        //currentReasonForApproval = Utils.getAsString(row, "ReasonForApproval");
+        CSMQBean.logger.info(userBean.getCaller() + " currentReasonForApproval:" + currentReasonForApproval);
+
+        isApproved = Utils.getAsBoolean(row, "ApprovedFlag");
+        CSMQBean.logger.info(userBean.getCaller() + " isApproved:" + isApproved);
+
+        currentCutOffDate = Utils.getAsString(row, "NmatEndTs");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCutOffDate:" + currentCutOffDate);
+
+        currentUntilDate = Utils.getAsString(row, "NmatEndTs");
+        CSMQBean.logger.info(userBean.getCaller() + " currentUntilDate:" + currentUntilDate);
+
+        currentCreateDate = Utils.getAsString(row, "FirstTmsEntryTs");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCreateDate:" + currentCreateDate);
+
+        currentCreatedBy = Utils.getAsString(row, "CreatedBy");
+        CSMQBean.logger.info(userBean.getCaller() + " Createdby:" + currentCreatedBy);
+
+        currentExtension = Utils.getAsString(row, "LevelExtension");
+        CSMQBean.logger.info(userBean.getCaller() + " Extension:" + currentExtension);
+        
+        /*
+        String designeeStr = Utils.getAsString(row, "Value3");
+        CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
+        List<String> designeeList = new ArrayList<String>();
+        if (null != designeeStr) {
+            CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
+            designeeStr = designeeStr.replaceAll("\\[", "").replaceAll("\\]", "");
+            designeeList = Arrays.asList(designeeStr.split("\\s*,\\s*"));
+        }*/
+        
+        nMQWizardBean.setCurrentTermName(currentTermName);
+        nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
+
+        //UPDATE THE WIZARD WITH THE RESULTS
+        nMQWizardBean.setCurrentContentCode(currentMqcode);
+        nMQWizardBean.setCurrentDictContentID(currentDictContentID);
+        nMQWizardBean.setActiveDictionary(currentDictionary);        
+        nMQWizardBean.setActiveDictionaryVersion(Utils.getAsString(row, "DictVersionAsOfDate"));
+        nMQWizardBean.setCurrentMQALGO(currentMqalgo);
+        nMQWizardBean.setCurrentMQCRTEV(currentCriticalEvent);
+        nMQWizardBean.setCurrentMQGROUP(currentMqgroups);
+        //nMQWizardBean.setCurrentPredictGroups(currentReleaseGroup);  //<--test
+        nMQWizardBean.setCurrentProduct(currentMqproduct);
+        nMQWizardBean.setCurrentScope(currentMqscp);
+        nMQWizardBean.setCurrentMQStatus(currentMqstatus);
+        nMQWizardBean.setCurrentTermLevel(currentMqlevel);
+        nMQWizardBean.setCurrentStatus(currentStatus);
+        nMQWizardBean.setCurrentState(currentState);
+        nMQWizardBean.setCurrentDateRequested(currentDateRequested);
+        nMQWizardBean.setCurrentRequestedByDate(requestedByDate);
+        nMQWizardBean.setCurrentReasonForRequest(currentReasonForRequest);
+        nMQWizardBean.setCurrentReasonForApproval(currentReasonForApproval);
+        nMQWizardBean.setIsApproved(isApproved);
+        nMQWizardBean.setCurrentCutOffDate(currentCutOffDate);
+        nMQWizardBean.setCurrentCreateDate(currentCreateDate);
+        nMQWizardBean.setCurrentUntilDate(currentUntilDate);
+        nMQWizardBean.setCurrentVersion(currentVersion);
+        nMQWizardBean.setCurrentCreatedBy(currentCreatedBy);
+        nMQWizardBean.setCurrentExtension(currentExtension);
+        
+        oracle.jbo.domain.Date firstTmsEntryTs = Utils.getAsDate(row, "FirstTmsEntryTs");
+        nMQWizardBean.setCurrentInitialCreationDate(firstTmsEntryTs != null ? firstTmsEntryTs.toString() : null);
+        nMQWizardBean.setCurrentInitialCreationBy(Utils.getAsString(row, "FirstTmsEntryBy"));
+        oracle.jbo.domain.Date lastTmsEntryTs = Utils.getAsDate(row, "LastTmsEntryTs");
+        nMQWizardBean.setCurrentLastActivationDate(lastTmsEntryTs != null ? lastTmsEntryTs.toString() : null);
+        nMQWizardBean.setCurrentActivationBy(Utils.getAsString(row, "LastTmsEntryBy"));        
+        
+        // No need to load the designee list in case of copy existing.Default set as logged in user name already.
+        /*
+        if (nMQWizardBean.getMode() != cSMQBean.MODE_COPY_EXISTING) {
+            if (null == designeeList || designeeList.size() == 0) {
+                designeeList = getDesignees(currentDictContentID);
+            }
+            nMQWizardBean.setDesigneeList(designeeList);
+            //List<String> designee = nMQWizardBean.getDesigneeList();
+            CSMQBean.logger.info(userBean.getCaller() + " designee::" + designeeList);
+            this.setModifiedDesigneeList(designeeList);
+        }*/
+        nMQWizardBean.setDesigneeList(new ArrayList<String>());
+        
+        String mqProductExpanded = Utils.getAsString(row, "Value3"); //MqproductExpanded
+        CSMQBean.logger.info(userBean.getCaller() + " mqProductExpanded:" + mqProductExpanded);
+        if (mqProductExpanded != null) {
+            mqProductExpanded = mqProductExpanded.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+            Collections.addAll(nMQWizardBean.getProductList(), mqProductExpanded.split("%"));
+        }
+
+        if (currentMqgroups != null) {
+            currentMqgroups = currentMqgroups.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+            Collections.addAll(nMQWizardBean.getMQGroupList(), currentMqgroups.split("%"));
+        }
+        nMQWizardBean.setIsNMQ(this.currentExtension.equalsIgnoreCase("NMQ"));
+        nMQWizardBean.setIsSMQ(this.currentExtension.equalsIgnoreCase("SMQ"));
+
+        String relGroup = cSMQBean.getDefaultDraftReleaseGroup();
+        if (this.currentState != null && this.currentState.equals(CSMQBean.STATE_PUBLISHED))
+            relGroup = cSMQBean.defaultPublishReleaseGroup;
+        if (this.currentState != null && this.currentState.equals(CSMQBean.IA_STATE_PUBLISHED))
+            relGroup = cSMQBean.defaultMedDRAReleaseGroup;
+
+        String tStatus = CSMQBean.CURRENT_IF_PENDING_NULL;
+        if (this.currentStatus != null && this.currentStatus.equals(CSMQBean.CURRENT_RELEASE_STATUS))
+            tStatus = CSMQBean.CURRENT_RELEASE_STATUS;
+
+        //override for IA
+        if (nMQWizardBean.getMode() == CSMQBean.MODE_IMPACT_ASSESSMENT ||
+            nMQWizardBean.getMode() == CSMQBean.MODE_VIEW_VERSION_IMPACT) {
+            tStatus = CSMQBean.CURRENT_IF_PENDING_NULL_IA;
+        }
+
+        this.currentInfNoteDescription = Utils.getAsString(row, "SmqDesc");
+        this.currentInfNoteSource = Utils.getAsString(row, "SmqSrc");
+        this.currentInfNoteNotes = Utils.getAsString(row, "SmqNote");
+
+        nMQWizardBean.setCurrentInfNoteDescription(this.currentInfNoteDescription);
+        nMQWizardBean.setCurrentInfNoteNotes(this.currentInfNoteNotes);
+        nMQWizardBean.setCurrentInfNoteSource(this.currentInfNoteSource);
+
+        System.out.println("End of Exec populateHistoryTermDtls() ");
+    }
+
+    private void execTermDetailsBasedonHistoryDate(BigDecimal dictContentId, String effectiveDTStr) {
+        System.out.println("Start Exec execTermDetailsBasedonHistoryDate() dictContentId=" + dictContentId +
+                           ";; effectiveDTStr=" + effectiveDTStr);
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("loadHistoricTermInformation");
+        ob.getParamsMap().put("dictContentId", dictContentId);
+        ob.getParamsMap().put("effectiveDTStr", effectiveDTStr);
+        ob.execute();
+        System.out.println("End of Exec execTermDetailsBasedonHistoryDate() ");
+    }
+
+    private String getDateStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        String dateStr = null;
+        try {
+            if (date == null) {
+                date = new Date(System.currentTimeMillis());
+            }
+            dateStr = sdf.format(date);
         } catch (Exception e) {
+            // TODO: Add catch code
             e.printStackTrace();
         }
+        System.out.println(dateStr);
+        return dateStr;
+    }
+
+    public void setHistoryFlow(boolean historyFlow) {
+        this.historyFlow = historyFlow;
+    }
+
+    public boolean isHistoryFlow() {
+        return historyFlow;
+    }
+
+    public void setHistoryInputDate(Date historyInputDate) {
+        this.historyInputDate = historyInputDate;
+    }
+
+    public Date getHistoryInputDate() {
+        return historyInputDate;
+    }
+    
+    public String getHistoryInputDateStr() {
+        return getDateStr(getHistoryDate());
+    }
+
+    public void setProductSearchRows(ArrayList<ProductSearchPojo> productSearchRows) {
+        this.productSearchRows = productSearchRows;
+    }
+
+    public ArrayList<ProductSearchPojo> getProductSearchRows() {
+        return productSearchRows;
+    }
+    
+    public void addProductSearchRow(ActionEvent e){
+        ProductSearchPojo row = new ProductSearchPojo();
+        productSearchRows.add(row);
+        ADFUtils.addPartialTarget(productSearchBinding);
+    }
+    
+    public void deleteSearchRow(ActionEvent e){
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        if(row != null){
+            String colName = row.getColumnName();
+            if(colName != null && "Scope".equalsIgnoreCase(colName)){
+                ADFUtils.setEL("#{pageFlowScope.scopeSelected}", Boolean.FALSE);
+            }
+            else if(colName != null && "Extension".equalsIgnoreCase(colName)){
+                ADFUtils.setEL("#{pageFlowScope.extensionSelected}", Boolean.FALSE);
+            }
+            removeSearchRow(row);
+            ADFUtils.addPartialTarget(productSearchBinding);  
+        }   
+        else
+            ADFUtils.showFacesMessage("Select a row to delete", FacesMessage.SEVERITY_ERROR);
+    } 
+    
+    private void removeSearchRow(ProductSearchPojo row){
+        productSearchRows.remove(row);
+    }
+
+    public void productSearchSelection(SelectionEvent selectionEvent) {
+        //Get table from selectionEvent
+        RichTable richTable = (RichTable)selectionEvent.getSource();
+        //Cast to the List that populates table
+        ProductSearchPojo row = (ProductSearchPojo)richTable.getSelectedRowData();
+        //Get the attributes (column) from list
+        ADFUtils.setEL("#{pageFlowScope.productCurrentRow}", row);
+    }
+
+    public void setProductSearchBinding(RichTable productSearchBinding) {
+        this.productSearchBinding = productSearchBinding;
+    }
+
+    public RichTable getProductSearchBinding() {
+        return productSearchBinding;
+    }
+
+    public void setColumnNameLOV(ArrayList<SelectItem> columnNameLOV) {
+        this.columnNameLOV = columnNameLOV;
+    }
+
+    public ArrayList<SelectItem> getColumnNameLOV() {
+        if(columnNameLOV == null || columnNameLOV.size() == 0){
+            SelectItem item1 = new SelectItem("Product", "Product");
+            SelectItem item2 = new SelectItem("Scope", "Scope");
+            SelectItem item3 = new SelectItem("Extension", "Extension");
+            columnNameLOV.add(item1);
+            columnNameLOV.add(item2);
+            columnNameLOV.add(item3);
+        }
+        return columnNameLOV;
+    }
+
+    public void setColumnValueLOV(ArrayList<SelectItem> columnValueLOV) {
+        this.columnValueLOV = columnValueLOV;
+    }
+
+    public ArrayList<SelectItem> getColumnValueLOV() {
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        columnValueLOV.clear();
+        if(row != null){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Product")){
+                Row[] rows = ADFUtils.findIterator("ViewObj_ProductList1Iterator").getViewObject().getAllRowsInRange();
+                SelectItem item1 = null;
+                for(Row extRow : rows){
+                    item1 = new SelectItem((String)extRow.getAttribute("ShortVal"), (String)extRow.getAttribute("LongValue"));
+                    columnValueLOV.add(item1);
+                }
+            }
+            else if(row.getColumnName()!=null && row.getColumnName().equals("Scope")){
+                Row[] rows = ADFUtils.findIterator("ProductScopeVO1Iterator").getViewObject().getAllRowsInRange();
+                SelectItem item1 = null;
+                for(Row extRow : rows){
+                    item1 = new SelectItem((String)extRow.getAttribute("Value"), (String)extRow.getAttribute("Meaning"));
+                    columnValueLOV.add(item1);
+                }
+            }
+            else if(row.getColumnName()!=null && row.getColumnName().equals("Extension")){
+                Row[] rows = ADFUtils.findIterator("NMQExtentionListVO1Iterator1").getViewObject().getAllRowsInRange();
+                SelectItem item1 = null;
+                for(Row extRow : rows){
+                    item1 = new SelectItem((String)extRow.getAttribute("RefCodelistValueShortVal"), (String)extRow.getAttribute("LongValue"));
+                    columnValueLOV.add(item1);
+                }
+            }
+        }
+        return columnValueLOV;
+    }
+
+    public void setOperatorLOV(ArrayList<SelectItem> operatorLOV) {
+        this.operatorLOV = operatorLOV;
+    }
+
+    public ArrayList<SelectItem> getOperatorLOV() {
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        operatorLOV.clear();
+        if(row != null){
+//            if(row.getColumnName()!= null && !row.getColumnName().equals("Product")){
+//                SelectItem item1 = new SelectItem("AND", "AND");
+//                operatorLOV.add(item1);
+//            }
+//            else{
+                SelectItem item1 = new SelectItem("AND", "AND");
+                SelectItem item2 = new SelectItem("OR", "OR");
+                operatorLOV.add(item1);
+                operatorLOV.add(item2);
+//            }
+        }
+        else{
+            return null;
+        }
+        return operatorLOV;
+    }
+
+    public void productTypeVC(ValueChangeEvent valueChangeEvent) {
+        if(valueChangeEvent.getNewValue()!= valueChangeEvent.getOldValue()){
+            if(valueChangeEvent.getNewValue() != null && "Scope".equals(valueChangeEvent.getNewValue())){
+                ADFUtils.setEL("#{pageFlowScope.scopeSelected}", Boolean.TRUE);
+            }
+            else if(valueChangeEvent.getNewValue() != null && "Extension".equals(valueChangeEvent.getNewValue())){
+                ADFUtils.setEL("#{pageFlowScope.extensionSelected}", Boolean.TRUE);
+            }
+            if(valueChangeEvent.getOldValue() != null && "Scope".equals(valueChangeEvent.getOldValue())){
+                ADFUtils.setEL("#{pageFlowScope.scopeSelected}", Boolean.FALSE);
+            }
+            else if(valueChangeEvent.getOldValue() != null && "Extension".equals(valueChangeEvent.getOldValue())){
+                ADFUtils.setEL("#{pageFlowScope.extensionSelected}", Boolean.FALSE);
+            }
+        }
+    }
+
+    public void setProductValueLOV(ArrayList<SelectItem> productValueLOV) {
+        this.productValueLOV = productValueLOV;
+    }
+
+    public ArrayList<SelectItem> getProductValueLOV() {
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        if(row != null && productValueLOV.size() == 0){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Product")){
+                Row[] rows = ADFUtils.findIterator("ViewObj_ProductList1Iterator").getViewObject().getAllRowsInRange();
+                for(Row extRow : rows){
+                    SelectItem item1 = new SelectItem((String)extRow.getAttribute("ShortVal"), (String)extRow.getAttribute("LongValue"));
+                    productValueLOV.add(item1);
+                }
+            }
+        }
+        return productValueLOV;
+    }
+
+    public void setScopeValueLOV(ArrayList<SelectItem> scopeValueLOV) {
+        this.scopeValueLOV = scopeValueLOV;
+    }
+
+    public ArrayList<SelectItem> getScopeValueLOV() {
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        if(row != null && scopeValueLOV.size() == 0){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Scope")){
+                RowSetIterator rs =  ADFUtils.findIterator("ProductScopeVO1Iterator").getViewObject().createRowSetIterator(null);
+                while(rs.hasNext()){
+                    Row extRow = rs.next();
+                    SelectItem item1 = new SelectItem((String)extRow.getAttribute("Value"), (String)extRow.getAttribute("Meaning"));
+                    scopeValueLOV.add(item1);
+                }
+            }
+        }
+        return scopeValueLOV;
+    }
+
+    public void setExtensionValueLOV(ArrayList<SelectItem> extensionValueLOV) {
+        this.extensionValueLOV = extensionValueLOV;
+    }
+
+    public ArrayList<SelectItem> getExtensionValueLOV() {
+        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        if(row != null && extensionValueLOV.size() == 0){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Extension")){
+                RowSetIterator rs =  ADFUtils.findIterator("NMQExtentionListVO1Iterator1").getViewObject().createRowSetIterator(null);
+                while(rs.hasNext()){
+                    Row extRow = rs.next();
+                    SelectItem item1 = new SelectItem((String)extRow.getAttribute("RefCodelistValueShortVal"), (String)extRow.getAttribute("LongValue"));
+                    extensionValueLOV.add(item1);
+                }
+            }
+        }
+        return extensionValueLOV;
+    }
+    
+    public void addGroupSearchRow(ActionEvent e){
+        GroupSearchPojo row = new GroupSearchPojo();
+        groupSearchRows.add(row);
+        ADFUtils.addPartialTarget(groupSearchBinding);
+    }
+    
+    public void deleteGroupSearchRow(ActionEvent e){
+        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
+        if(row != null){
+            String colName = row.getColumnName();
+            if(colName != null && "Extension".equalsIgnoreCase(colName)){
+                ADFUtils.setEL("#{pageFlowScope.groupExtensionSelected}", Boolean.FALSE);
+            }
+            removeGroupSearchRow(row);
+            ADFUtils.addPartialTarget(groupSearchBinding);  
+        }   
+        else
+            ADFUtils.showFacesMessage("Select a row to delete", FacesMessage.SEVERITY_ERROR);
+    } 
+    
+    private void removeGroupSearchRow(GroupSearchPojo row){
+        groupSearchRows.remove(row);
+    }
+
+    public void groupSearchSelection(SelectionEvent selectionEvent) {
+        //Get table from selectionEvent
+        RichTable richTable = (RichTable)selectionEvent.getSource();
+        //Cast to the List that populates table
+        GroupSearchPojo row = (GroupSearchPojo)richTable.getSelectedRowData();
+        //Get the attributes (column) from list
+        ADFUtils.setEL("#{pageFlowScope.groupCurrentRow}", row);
+    }
+
+    public void setGroupSearchBinding(RichTable groupSearchBinding) {
+        this.groupSearchBinding = groupSearchBinding;
+    }
+
+    public RichTable getGroupSearchBinding() {
+        return groupSearchBinding;
+    }
+    
+    public void groupTypeVC(ValueChangeEvent valueChangeEvent) {
+        if(valueChangeEvent.getNewValue()!= valueChangeEvent.getOldValue()){
+            if(valueChangeEvent.getNewValue() != null && "Extension".equals(valueChangeEvent.getNewValue())){
+                ADFUtils.setEL("#{pageFlowScope.groupExtensionSelected}", Boolean.TRUE);
+            }
+        }
+    }
+
+    public void setGroupSearchRows(ArrayList<GroupSearchPojo> groupSearchRows) {
+        this.groupSearchRows = groupSearchRows;
+    }
+
+    public ArrayList<GroupSearchPojo> getGroupSearchRows() {
+        return groupSearchRows;
+    }
+
+    public void setGroupSearchColumnNameLOV(ArrayList<SelectItem> groupSearchColumnNameLOV) {
+        this.groupSearchColumnNameLOV = groupSearchColumnNameLOV;
+    }
+
+    public ArrayList<SelectItem> getGroupSearchColumnNameLOV() {
+        return groupSearchColumnNameLOV;
+    }
+
+    public void setGroupValueLOV(ArrayList<SelectItem> groupValueLOV) {
+        this.groupValueLOV = groupValueLOV;
+    }
+    
+    public ArrayList<SelectItem> getGroupColumnNameLOV() {
+        if(groupColumnNameLOV == null || groupColumnNameLOV.size() ==0){
+            SelectItem item1 = new SelectItem("Group", "Group");
+            SelectItem item2 = new SelectItem("Extension", "Extension");
+            groupColumnNameLOV.add(item1);
+            groupColumnNameLOV.add(item2);
+        }
+        return groupColumnNameLOV;
+    }
+
+    public ArrayList<SelectItem> getGroupValueLOV() {
+        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
+        if(row != null && groupValueLOV.size() == 0){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Group")){
+                Row[] rows = ADFUtils.findIterator("MQGroupsVO1Iterator").getViewObject().getAllRowsInRange();
+                for(Row extRow : rows){
+                    SelectItem item1 = new SelectItem((String)extRow.getAttribute("ShortVal"), (String)extRow.getAttribute("LongValue"));
+                    groupValueLOV.add(item1);
+                }
+            }
+        }
+        return groupValueLOV;
+    }
+
+    public void setGroupExtensionValueLOV(ArrayList<SelectItem> groupExtensionValueLOV) {
+        this.groupExtensionValueLOV = groupExtensionValueLOV;
+    }
+
+    public ArrayList<SelectItem> getGroupExtensionValueLOV() {
+        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
+        if(row != null && groupExtensionValueLOV.size() == 0){
+            if(row.getColumnName()!=null && row.getColumnName().equals("Extension")){
+                RowSetIterator rs =  ADFUtils.findIterator("NMQExtentionListVO1Iterator1").getViewObject().createRowSetIterator(null);
+                while(rs.hasNext()){
+                    Row extRow = rs.next();
+                    SelectItem item1 = new SelectItem((String)extRow.getAttribute("RefCodelistValueShortVal"), (String)extRow.getAttribute("LongValue"));
+                    groupExtensionValueLOV.add(item1);
+                }
+                SelectItem item2 = new SelectItem("SMQ", "SMQ");
+                groupExtensionValueLOV.add(item2);
+            }
+        }
+        return groupExtensionValueLOV;
+    }
+
+    public void setGroupOperatorLOV(ArrayList<SelectItem> groupOperatorLOV) {
+        this.groupOperatorLOV = groupOperatorLOV;
+    }
+
+    public ArrayList<SelectItem> getGroupOperatorLOV() {
+        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
+        groupOperatorLOV.clear();
+        if(row != null){
+//            if(row.getColumnName()!= null && !row.getColumnName().equals("Group")){
+//                SelectItem item1 = new SelectItem("AND", "AND");
+//                groupOperatorLOV.add(item1);
+//            }
+//            else{
+                SelectItem item1 = new SelectItem("AND", "AND");
+                SelectItem item2 = new SelectItem("OR", "OR");
+                groupOperatorLOV.add(item1);
+                groupOperatorLOV.add(item2);
+//            }
+        }
+        else{
+            return null;
+        }
+        return groupOperatorLOV;
+    }
+
+    public void onCancelProductPopup(ActionEvent actionEvent) {
+        productSearchPopup.hide();
+    }
+
+    public void onOkProductPopup(ActionEvent actionEvent) {
+        doSearch(actionEvent);
+        String whereClause = prepareProductWhereClause();
+        ViewObject vo = ADFUtils.findIterator("SimpleSearch1Iterator").getViewObject();
+        vo.setWhereClause(whereClause);
+        vo.executeQuery();
+        productSearchPopup.hide();
+//        ADFUtils.closePopup("p3");
+//        ADFUtils.addPartialTarget(ctrlSearchResults);
+    }
+    
+    private String prepareProductWhereClause(){
+        String whereClause = "";
+        String productClause = "";
+        String extensionClause = "";
+        String scopeClause = "";
+        if(productSearchRows != null && productSearchRows.size() > 0){
+            for(ProductSearchPojo row : productSearchRows){
+                if(row.getColumnName() != null && "Extension".equalsIgnoreCase(row.getColumnName())){
+                    extensionClause = row.getExtensionValue();
+                }
+                else if(row.getColumnName() != null && "Scope".equalsIgnoreCase(row.getColumnName())){
+                    scopeClause = row.getScopeValue();
+                }
+                else if(row.getColumnName() != null && "Product".equalsIgnoreCase(row.getColumnName())){
+                    productClause = productClause + " Mqterm like '%" + row.getProductValue() + "%' OR";
+//                                    + (row.getOperator() == null ? "" : row.getOperator());
+                }
+            }
+            if(productClause != null && productClause.endsWith("AND")){
+                productClause = productClause.substring(0, productClause.length()-4);
+            }
+            else if(productClause != null && productClause.endsWith("OR")){
+                productClause = productClause.substring(0, productClause.length()-3);
+            }
+        }
+        if(!"".equals(productClause)){
+            whereClause = whereClause + "(" + productClause + ")";
+        }
+        if(!"".equals(extensionClause)){
+            if(!"".equals(whereClause)){
+                whereClause = whereClause + " AND Extension = '"+extensionClause+"'";
+            }
+            else{
+                whereClause = whereClause + " Extension = '"+extensionClause+"'";
+            }
+        }
+        if(!"".equals(scopeClause)){
+            if(!"".equals(whereClause)){
+                whereClause = whereClause + " AND Mqscp = '"+scopeClause+"'";
+            }
+            else{
+                whereClause = whereClause + " Mqscp = '"+scopeClause+"'";
+            }
+        }
+        
+        return whereClause;
+    }
+
+    public void setProductSearchPopup(RichPopup productSearchPopup) {
+        this.productSearchPopup = productSearchPopup;
+    }
+
+    public RichPopup getProductSearchPopup() {
+        return productSearchPopup;
+    }
+
+    public void okGroupPopup(ActionEvent actionEvent) {
+        doSearch(actionEvent);
+        String whereClause = prepareGroupWhereClause();
+        ViewObject vo = ADFUtils.findIterator("SimpleSearch1Iterator").getViewObject();
+        vo.setWhereClause(whereClause);
+        vo.executeQuery();
+//        groupSearchRows.clear();
+        groupSearchPopup.hide();
+    }
+
+    public void cancelGroupPopup(ActionEvent actionEvent) {
+//        groupSearchRows.clear();
+        groupSearchPopup.hide();
+    }
+
+    public void setGroupSearchPopup(RichPopup groupSearchPopup) {
+        this.groupSearchPopup = groupSearchPopup;
+    }
+
+    public RichPopup getGroupSearchPopup() {
+        return groupSearchPopup;
+    }
+    
+    private String prepareGroupWhereClause(){
+        String whereClause = "";
+        String groupClause = "";
+        String extensionClause = "";
+        if(groupSearchRows != null && groupSearchRows.size() > 0){
+            for(GroupSearchPojo row : groupSearchRows){
+                if(row.getColumnName() != null && "Extension".equalsIgnoreCase(row.getColumnName())){
+                    extensionClause = row.getExtensionValue();
+                }
+                else if(row.getColumnName() != null && "Group".equalsIgnoreCase(row.getColumnName())){
+                    groupClause = groupClause + " Mqgroup_F = '" + row.getGroupValue() + "' OR";
+//                                  + (row.getOperator() == null ? "" : row.getOperator());
+                }
+            }
+            if(groupClause != null && groupClause.endsWith("AND")){
+                groupClause = groupClause.substring(0, groupClause.length()-4);
+            }
+            else if(groupClause != null && groupClause.endsWith("OR")){
+                groupClause = groupClause.substring(0, groupClause.length()-3);
+            }
+        }
+        if(!"".equals(groupClause)){
+            whereClause = whereClause + "(" + groupClause + ")";
+        }
+        if(!"".equals(extensionClause)){
+            if(!"".equals(whereClause)){
+                whereClause = whereClause + " AND Extension = '"+extensionClause+"'";
+            }
+            else{
+                whereClause = whereClause + " Extension = '"+extensionClause+"'";
+            }
+        }
+        
+        return whereClause;
+    }
+
+    public void setProductRowsSize(Integer productRowsSize) {
+        this.productRowsSize = productRowsSize;
+    }
+
+    public Integer getProductRowsSize() {
+        productRowsSize  =  productSearchRows.size();
+        return productRowsSize;
+    }
+
+    public void setGroupColumnNameLOV(ArrayList<SelectItem> groupColumnNameLOV) {
+        this.groupColumnNameLOV = groupColumnNameLOV;
+    }
+
+    public void setGroupRowsSize(Integer groupRowsSize) {
+        this.groupRowsSize = groupRowsSize;
+    }
+
+    public Integer getGroupRowsSize() {
+        groupRowsSize  =  groupSearchRows.size();
+        return groupRowsSize;
     }
 }
 

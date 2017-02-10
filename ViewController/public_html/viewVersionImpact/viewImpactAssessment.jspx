@@ -502,16 +502,16 @@
                                 <f:facet name="menus">
                                 <af:menu text="Filter and Sort" id="m2" detachable="true"
                                          binding="#{ImpactAnalysisUIBean.cntrlExistingMenu}">
-                                    <af:panelFormLayout id="pfl2a" inlineStyle="height:97px;">
+                                    <af:panelFormLayout id="pfl2a">
                                             
-                                            <af:selectBooleanCheckbox label="Show Impacted Only" id="paramMedDRASIO" autoSubmit="true"
+                                            <af:selectBooleanCheckbox label="Show Impacted Only" id="paramMedDRASIO"
                                                                     valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
                                                                       selected="false"
                                                                       binding="#{ImpactAnalysisUIBean.cntrlShowImpactedFilterExisting}"/>
-                                            <af:selectBooleanCheckbox label="Show Primary Only" id="paramMedDRASPO" autoSubmit="true"
+                                            <!--<af:selectBooleanCheckbox label="Show Primary Only" id="paramMedDRASPO" autoSubmit="true"
                                                                     valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
-                                                                      binding="#{ImpactAnalysisUIBean.cntrlShowPrimaryFilterExisting}"/>
-                                            <af:selectOneChoice label="Sort"  id="paramMedDRASort"
+                                                                      binding="#{ImpactAnalysisUIBean.cntrlShowPrimaryFilterExisting}"/>-->
+                                            <!--<af:selectOneChoice label="Sort"  id="paramMedDRASort"
                                                                     autoSubmit="true" readOnly="true"
                                                                     valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.existingParamsChanged}"
                                                                     valuePassThru="true" value="SCOPE"
@@ -519,7 +519,7 @@
                                                     <af:selectItem label="Term Name" value="TERM" id="si18"/>
                                                     <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME" id="si21"/>
                                                     <af:selectItem label="Scope" value="SCOPE" id="si20"/>
-                                                </af:selectOneChoice>
+                                                </af:selectOneChoice>-->
                                         <af:commandToolbarButton text="Refresh" id="ctb10"
                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshMedDRATree}"
                                                                  icon="/image/hierarchy/REFRESH.png"/>
@@ -691,9 +691,9 @@
                                                                     valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
                                                                       selected="false"
                                                                       value="#{pageFlowScope.ImpactAnalysisBean.futureShowImpacted}"/>
-                                            <af:selectBooleanCheckbox label="Show Primary Only" id="paramFutureSPO" autoSubmit="true"
-                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"/>
-                                            <af:selectOneChoice label="Sort"  id="paramFutureSort"
+                                            <!--<af:selectBooleanCheckbox label="Show Primary Only" id="paramFutureSPO" autoSubmit="true"
+                                                                    valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"/>-->
+                                            <!--<af:selectOneChoice label="Sort"  id="paramFutureSort"
                                                                     autoSubmit="true"
                                                                     valueChangeListener="#{pageFlowScope.ImpactAnalysisBean.futureParamsChanged}"
                                                                     valuePassThru="true" value="SCOPE">
@@ -702,7 +702,7 @@
                                                     <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME"
                                                                    id="si41"/>
                                                     <af:selectItem label="Scope" value="SCOPE" id="si22"/>
-                                                </af:selectOneChoice>
+                                                </af:selectOneChoice>-->
                                                 
                                                 <af:commandToolbarButton text="Refresh" id="ctb11"
                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.refreshFutureTree}"

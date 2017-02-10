@@ -30,8 +30,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.ValidatorException;
 
-import javax.naming.NamingException;
-
 import javax.security.auth.Subject;
 import javax.security.auth.login.AccountExpiredException;
 import javax.security.auth.login.AccountLockedException;
@@ -243,39 +241,39 @@ public class UserBean {
         String sql = "select last_name, first_name from tms.tms_user_accounts where oa_account_name = ?";
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Connection conn = null;
-        //DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+        DBTransaction dBTransaction = DMLUtils.getDBTransaction();
         
-        //CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
+        CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
                
         System.out.println("***** : " + sql);
         try {
-            conn = DMLUtils.getConnectionFromDS();
-            stmt = conn.prepareCall(sql);
-            stmt.setString(1, username);
-            //cstmt.setString(1, username);
-            rs = stmt.executeQuery();
+            cstmt.setString(1, username);
+            rs = cstmt.executeQuery();
             if (rs.next()) {
                 this.lastName =  rs.getString("last_name");
                 this.firstName = rs.getString("first_name");
-            }
+                }
             
-        }catch (SQLException e) {
-                CSMQBean.logger.error("SQLException in setName: ", e);
-                e.printStackTrace();
-        } catch (NamingException ne) {
-            CSMQBean.logger.error("NamingException in setName: ", ne);
-            ne.printStackTrace();
-        } finally {
-            try {
-                rs.close();
-                stmt.close();
-                conn.close();
-            }catch (SQLException e1){
-                CSMQBean.logger.error("Error while closing connection in setName: ");
-                e1.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (null != rs){
+                try {
+                    rs.close();
+                } catch (SQLException sqe){
+                    CSMQBean.logger.info("error while closing result set..." + sqe);     
+                }
+            }
+            if (null != cstmt){
+                try {
+                    cstmt.close();
+                } catch (SQLException sqe){
+                    CSMQBean.logger.error("error while callable statment..." + sqe);     
+                }
             }
         }
+        
     }
 
 
@@ -354,16 +352,11 @@ public class UserBean {
 
     private int getPasswordExpiry() {
         int retVal = CSMQBean.NULL_PASSWORD_EXPIRATION;
-        String url = null;
-        Connection   conn = null;
-        CSMQBean cSMQBean = (CSMQBean)ADFContext.getCurrent().getApplicationScope().get("CSMQBean");
-        if (null != cSMQBean){
-            url = cSMQBean.getDbURL();
-        }
+        String url = DMLUtils.getJDBCURL();
         String prefix = "jdbc:oracle:thin:";
-        accessLogger.info("Jdbc URL ==> " + url);
-        //url = prefix + url.substring(url.indexOf("@"), url.length());
-        //accessLogger.info("URL ==> " + url);
+
+        url = prefix + url.substring(url.indexOf("@"), url.length());
+        Connection conn = null;
         try {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             //Connection conn[] = new Connection[1];

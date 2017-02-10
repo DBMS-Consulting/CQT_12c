@@ -20,7 +20,6 @@
               DataControl="MQGroupModuleDataControl" id="MQGroupsVO1Iterator"/>
     <iterator Binds="SmallTreeVO1" RangeSize="-1"
               DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
-              Refresh="renderModel"
               RefreshCondition="#{!adfFacesContext.initialRender}"/>
     <iterator Binds="ProductListByMQVO1" RangeSize="-1" DataControl="ProductModuleDataControl" id="ProductListByMQVO1Iterator"/>
     <invokeAction id="Invoke_EWP_ProductListByMQVO1Iterator" Binds="EWP_ProductListByMQVO1Iterator" Refresh="renderModel"/>
@@ -168,81 +167,5 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <methodAction id="saveDetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveDetails"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveDetails_CQTAppModuleDataControl_dataProvider_saveDetails_result">
-      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="tempName" NDType="java.lang.String"/>
-      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="currentScope" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
-      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
-      <NamedData NDName="updateParam" NDType="java.lang.String"/>
-      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="currentPendingStatus" NDType="java.lang.String"/>
-      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="saveIADetails" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIADetails"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIADetails_CQTAppModuleDataControl_dataProvider_saveIADetails_result">
-      <NamedData NDName="tempName" NDType="java.lang.String"/>
-      <NamedData NDName="currentProduct" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="currentScope" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQALGO" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQCRTEV" NDType="java.lang.String"/>
-      <NamedData NDName="currentMQGROUP" NDType="java.lang.String"/>
-      <NamedData NDName="currentContentCode" NDType="java.lang.String"/>
-      <NamedData NDName="updateParam" NDType="java.lang.String"/>
-      <NamedData NDName="currentRequestor" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="currentDesignee" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="saveInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveInfNotes_CQTAppModuleDataControl_dataProvider_saveInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentFilterDictionaryShortName" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-      <NamedData NDName="extension" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="saveIAInfNotes" RequiresUpdateModel="true" Action="invokeMethod" MethodName="saveIAInfNotes"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.saveIAInfNotes_CQTAppModuleDataControl_dataProvider_saveIAInfNotes_result">
-      <NamedData NDName="noteName" NDType="java.lang.String"/>
-      <NamedData NDName="content" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentTermLevel" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-      <NamedData NDName="userRole" NDType="java.lang.String"/>
-    </methodAction>
-    <methodAction id="copyAllRelations" RequiresUpdateModel="true" Action="invokeMethod" MethodName="copyAllRelations"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.copyAllRelations_CQTAppModuleDataControl_dataProvider_copyAllRelations_result">
-      <NamedData NDName="copiedDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentDictContentID" NDType="java.lang.String"/>
-      <NamedData NDName="currentPredictGroups" NDType="java.lang.String"/>
-      <NamedData NDName="userName" NDType="java.lang.String"/>
-    </methodAction>
-    <action id="Commit" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="true" Action="commitTransaction"/>
-    <action id="Rollback" DataControl="CQTAppModuleDataControl" RequiresUpdateModel="false"
-            Action="rollbackTransaction"/>
   </bindings>
 </pageDefinition>

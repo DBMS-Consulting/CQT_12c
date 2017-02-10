@@ -6,7 +6,6 @@ import com.dbms.util.dml.DMLUtils;
 import java.io.File;
 
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,10 +14,6 @@ import java.util.Date;
 import java.util.Hashtable;
 
 import javax.faces.model.SelectItem;
-
-import javax.naming.NamingException;
-
-import javax.naming.event.NamingExceptionEvent;
 
 import oracle.jbo.server.DBTransaction;
 
@@ -44,9 +39,9 @@ public class CSMQBean {
     String initialize = null;
     
     // ******** VERSION **********
-    public static final String APP_VERSION = "01.08.00";
-    public static final String APP_BUILD = "1";
-    public static final String APP_BUILD_DATE = "11-MAR-2016";
+    public static final String APP_VERSION = "01.09";
+    public static final String APP_BUILD = "00";
+    public static final String APP_BUILD_DATE = "21-SEP-2016";
     public static final String RESOURCE_BUNDLE_NAME = "NMAT";
     // ******** VERSION **********
 
@@ -279,8 +274,8 @@ public class CSMQBean {
     private void loadProperties() {
         logger.info ("*** LOADING PROPERTIES   ***");
         Boolean propsLoaded = loadPropsFromDB ();
-        //dbURL = DMLUtils.getJDBCURL();
-        logger.info("dbURL == > " + dbURL);
+        dbURL = DMLUtils.getJDBCURL();
+        
         if (!propsLoaded) {
             logger.info("!!!! UNABLE TO LOAD PROPERTIES !!!! ");
             return;
@@ -511,61 +506,31 @@ public class CSMQBean {
         properties.clear();
         
         String sql = "SELECT * FROM NMAT_PROPERTIES";
-        java.sql.Connection conn = null;
-//        DBTransaction dBTransaction = DMLUtils.getDBTransaction();
-//        CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+        CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
+        ResultSet rs;
+
+
         try {
-            conn = DMLUtils.getConnectionFromDS();
-            if (null != conn){
-                dbURL = conn.getMetaData().getURL();
-                pstmt = conn.prepareCall(sql);
-                rs = pstmt.executeQuery();
-                String p, v = null;
-                while (rs.next()) {
-                    p = rs.getString("PROP_NAME");
-                    v = rs.getString("PROP_VALUE") + "";
-                    
-                    logger.info ("*** " + p + "=" + v);
-                    properties.put(p,v);
-                }
-            }
-            
+            rs = cstmt.executeQuery();
         } catch (SQLException e) {
             return false;
         }
-        catch (NamingException e) {
-                    return false;
-        } finally {
-            if (rs != null) {
-                try {
-                    //Close the result set
-                    rs.close();
+
+
+        try {
+            String p, v = null;
+            while (rs.next()) {
+                p = rs.getString("PROP_NAME");
+                v = rs.getString("PROP_VALUE") + "";
+                
+                logger.info ("*** " + p + "=" + v);
+                properties.put(p,v);
                 }
-                catch (SQLException e) {
-                    CSMQBean.logger.error("ERROR", e);
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    // Close the statement
-                    pstmt.close();
-                }
-                catch (SQLException e) {
-                    CSMQBean.logger.error("ERROR", e);
-                }
-            }
-            if (conn != null) {
-                try {
-                    // Close the connection
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    CSMQBean.logger.error("ERROR", e);
-                }
-            }
+        } catch (SQLException e) {
+        return false;
         }
+        
         return true;
         
     }
@@ -739,6 +704,10 @@ public class CSMQBean {
     public String refreshProperties() {
         loadProperties();
         return null;
+    }
+
+    public void setDbURL(String dbURL) {
+        this.dbURL = dbURL;
     }
 
     public String getDbURL() {

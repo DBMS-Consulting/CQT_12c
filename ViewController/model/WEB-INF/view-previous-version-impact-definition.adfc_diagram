@@ -1,9 +1,14 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <SDM>
    <OverallProperties
-      id="OverallProperties1"/>
+      id="OverallProperties1">
+      <property
+         name="y">338.8075</property>
+      <property
+         name="x">91.5</property>
+   </OverallProperties>
    <MethodCall
-      id="MethodCall3">
+      id="MethodCall2">
       <property
          name="activityId">setMode</property>
       <property
@@ -13,12 +18,12 @@
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">72.5</property>
+         name="y">163.40515</property>
       <property
-         name="x">55.5</property>
+         name="x">95.5</property>
    </MethodCall>
    <View
-      id="View4">
+      id="View3">
       <property
          name="activityId">viewImpactAssessment</property>
       <property
@@ -26,73 +31,16 @@
       <property
          name="description">&lt;html>&lt;p>&lt;b>viewImpactAssessment&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="trainStop">false</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">68.94238</property>
+         name="y">163.45691</property>
       <property
-         name="x">266.68652</property>
+         name="x">285.68652</property>
    </View>
-   <ControlFlowCase
-      islink="true"
-      id="ControlFlowCase5"
-      from="MethodCall3"
-      to="View4">
-      <property
-         name="fromOutcome">*</property>
-      <property
-         name="sdm:polyPoints">R50,96.5,72.149414,225.68652,68.5918,L50</property>
-   </ControlFlowCase>
-   <View
-      id="View6">
-      <property
-         name="activityId">viewInformationNotes</property>
-      <property
-         name="page">/viewPreviousVersionImpact/viewInformationNotes.jspx</property>
-      <property
-         name="description">&lt;html>&lt;p>&lt;b>viewInformationNotes&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
-      <property
-         name="trainStop">true</property>
-      <property
-         name="exceptionHandler">false</property>
-      <property
-         name="y">68.69531</property>
-      <property
-         name="x">462.6914</property>
-   </View>
-   <View
-      id="View7">
-      <property
-         name="activityId">viewDetails</property>
-      <property
-         name="page">/viewPreviousVersionImpact/viewDetails.jspx</property>
-      <property
-         name="description">&lt;html>&lt;p>&lt;b>viewDetails&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
-      <property
-         name="trainStop">true</property>
-      <property
-         name="exceptionHandler">false</property>
-      <property
-         name="y">70.643555</property>
-      <property
-         name="x">645.5</property>
-   </View>
-   <MethodCall
-      id="MethodCall8">
-      <property
-         name="activityId">clearMenu</property>
-      <property
-         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
-      <property
-         name="exceptionHandler">false</property>
-      <property
-         name="y">-156.85645</property>
-      <property
-         name="x">465.0</property>
-   </MethodCall>
    <TaskFlowReturn
-      id="TaskFlowReturn9">
+      id="TaskFlowReturn4">
       <property
          name="activityId">cancelFlow</property>
       <property
@@ -102,64 +50,51 @@
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">-151.10352</property>
+         name="y">163.17432</property>
       <property
-         name="x">681.0</property>
+         name="x">667.25586</property>
    </TaskFlowReturn>
-   <TrainFlow
-      islink="true"
-      id="TrainFlow10"
-      from="View4"
-      to="View6">
+   <MethodCall
+      id="MethodCall7">
       <property
-         name="sdm:polyPoints">R50,307.68652,68.5918,421.6914,68.34473,L50</property>
-   </TrainFlow>
-   <TrainFlow
-      islink="true"
-      id="TrainFlow11"
-      from="View6"
-      to="View7">
+         name="activityId">clearMenu</property>
       <property
-         name="sdm:polyPoints">R50,503.6914,68.34473,604.5,70.29297,L50</property>
-   </TrainFlow>
+         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">162.47314</property>
+      <property
+         name="x">489.25586</property>
+   </MethodCall>
    <ControlFlowCase
       islink="true"
-      id="ControlFlowCase12"
-      from="View4"
-      to="MethodCall8">
+      id="ControlFlowCase11"
+      from="View3"
+      to="MethodCall7">
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">T50,266.68652,14.591797,458.0,-103.20703,B39</property>
+         name="sdm:polyPoints">R50,326.68652,163.10632,448.25586,162.12256,L50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase13"
-      from="View6"
-      to="MethodCall8">
+      from="MethodCall7"
+      to="TaskFlowReturn4">
       <property
-         name="fromOutcome">CANCEL</property>
+         name="fromOutcome">cancelFlow</property>
       <property
-         name="sdm:polyPoints">T50,462.6914,14.344727,465.0,-101.21747,B50</property>
+         name="sdm:polyPoints">R50,530.25586,162.12256,626.25586,162.82373,L50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase14"
-      from="View7"
-      to="MethodCall8">
+      from="MethodCall2"
+      to="View3">
       <property
-         name="fromOutcome">CANCEL</property>
+         name="fromOutcome">*</property>
       <property
-         name="sdm:polyPoints">T50,645.5,16.292969,472.0,-103.20703,B61</property>
-   </ControlFlowCase>
-   <ControlFlowCase
-      islink="true"
-      id="ControlFlowCase15"
-      from="MethodCall8"
-      to="TaskFlowReturn9">
-      <property
-         name="fromOutcome">cancelFlow</property>
-      <property
-         name="sdm:polyPoints">R50,506.0,-157.20703,640.0,-151.4541,L50</property>
+         name="sdm:polyPoints">R50,136.5,163.05457,244.68652,163.10632,L50</property>
    </ControlFlowCase>
 </SDM>

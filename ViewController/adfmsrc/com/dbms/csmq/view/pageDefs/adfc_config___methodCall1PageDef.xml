@@ -6,7 +6,7 @@
   <executables>
     <iterator Binds="SmallTreeVO1" RangeSize="25"
               DataControl="HierarchyModuleDataControl"
-              id="SmallTreeVO1Iterator" Refresh="renderModel"/>
+              id="SmallTreeVO1Iterator"/>
   </executables>
   <bindings>
     <action IterBinding="SmallTreeVO1Iterator" id="ExecuteWithParams"

@@ -10,7 +10,8 @@
   FetchMode="FETCH_AS_NEEDED"
   PageIterMode="Full"
   UseGlueCode="false"
-  OrderBy="MQTERM">
+  OrderBy="MQTERM"
+  FetchSize="50">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>

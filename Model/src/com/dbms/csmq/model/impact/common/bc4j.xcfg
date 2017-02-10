@@ -12,5 +12,5 @@
          <Security AppModuleJndiName="com.dbms.csmq.model.impact.ImpactModule"/>
          <Custom JDBCDataSource="jdbc/TMSDS"/>
       </AppModuleConfig>
-   </AppModuleConfigBag>
+   </AppModuleConfigBag>  
 </BC4JConfig>

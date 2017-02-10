@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.64.36" id="publishedMQListPageDef"
+                Package="workflow">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="PublishedMQVO1" RangeSize="25" DataControl="PublishModuleDataControl" id="PublishedMQVO1Iterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="PublishedMQVO1Iterator" id="PublishedMQVO1">
+      <nodeDefinition DefName="com.dbms.csmq.model.publish.PublishedMQVO" Name="PublishedMQVO10">
+        <AttrNames>
+          <Item Value="LevelName"/>
+          <Item Value="TmsCode"/>
+          <Item Value="TmsName"/>
+          <Item Value="ActivationGroup"/>
+          <Item Value="TmsCreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+  </bindings>
+</pageDefinition>

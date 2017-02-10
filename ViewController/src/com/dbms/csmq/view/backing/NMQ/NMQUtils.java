@@ -652,9 +652,11 @@ public class NMQUtils {
             } 
         catch (SQLException e) {
             String messageText;
-            if (e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR) > -1) {  // it's a name already in use error
-                messageText = "The name: " + tempName + " is already in use.  Please use another name";
-                }
+                CSMQBean.logger.error("error in save Details..."+e.getMessage()); 
+            if (e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR) > -1 || e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR_NEW) > -1) {  // it's a name already in use error
+                //messageText = "The name: " + tempName + " is already in use.  Please use another name";
+                messageText = "This MQ already exists.  Please modify the MQ name or use the MQ, which already exists by this name."; 
+            }
             else if (e.getMessage().indexOf(CSMQBean.INVALID_STATE_CHANGE_ERROR) > -1) {  // it's a name already in use error
                 messageText = tempName + " is Pending Impact Assessment and must be deleted in Impact Assessment to Update the Current NMQ.";
                 }
@@ -806,9 +808,11 @@ public class NMQUtils {
             } 
         catch (SQLException e) {
             String messageText;
-            if (e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR) > -1) {  // it's a name already in use error
-                messageText = "The name: " + tempName + " is already in use.  Please use another name";
-                }
+            CSMQBean.logger.error("error in save Details..."+e.getMessage()); 
+            if (e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR) > -1 || e.getMessage().indexOf(CSMQBean.NAME_IN_USE_ERROR_NEW) > -1) {  // it's a name already in use error
+            //messageText = "The name: " + tempName + " is already in use.  Please use another name";
+            messageText = "This MQ already exists.  Please modify the MQ name or use the MQ, which already exists by this name."; 
+            }
             else { // it's something else
                 messageText = "The following error occurred.  " + tempName + " was not " + action + " successfully.\n" + e.getMessage() ;
                 e.printStackTrace();

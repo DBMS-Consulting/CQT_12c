@@ -11,13 +11,12 @@
                     <f:attribute name="currentPage" value=" "/>
                     <f:attribute name="showBody" value="false"/>
                 </af:pageTemplate>
-               <af:popup childCreation="deferred" autoCancel="enabled" id="p1"
+                <af:popup childCreation="deferred" autoCancel="enabled" id="p1"
                           rendered="#{UserBean.showExpiryPopup and securityContext.authenticated}"
                           popupCanceledListener="#{UserBean.showExpiryPopupCancelled}">
                     <af:dialog id="d2" title="Password Expiry" type="cancel">
                         <af:panelGroupLayout id="pgl1">
-                            <af:outputText value="Your password will expire in #{UserBean.passwordExpiryDays} days."
-                                           id="ot1"/>
+                            <af:outputText value="Your password will expire in #{UserBean.passwordExpiryDays} days." id="ot1"/>
                         </af:panelGroupLayout>
                     </af:dialog>
                 </af:popup>

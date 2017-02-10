@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.10.8" id="viewImpactAssessmentPageDef"
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="11.1.2.64.36" id="viewImpactAssessmentPageDef"
                 Package="viewPreviousVersionImpact">
   <parameters/>
   <executables>
@@ -320,11 +320,23 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
-    <methodAction id="loadPrevVersionCurrentNFurteMQDetails" RequiresUpdateModel="true" Action="invokeMethod"
-                  MethodName="loadPrevVersionCurrentNFurteMQDetails" IsViewObjectMethod="false"
-                  DataControl="ImpactModuleDataControl" InstanceName="data.ImpactModuleDataControl.dataProvider"
-                  ReturnName="data.ImpactModuleDataControl.methodResults.loadPrevVersionCurrentNFurteMQDetails_ImpactModuleDataControl_dataProvider_loadPrevVersionCurrentNFurteMQDetails_result">
+    <methodAction id="loadPrevVersionCurrentMQDetails" InstanceName="data.ImpactModuleDataControl.dataProvider"
+                  DataControl="ImpactModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadPrevVersionCurrentMQDetails" IsViewObjectMethod="false">
       <NamedData NDName="dictContentId" NDType="java.lang.Long"/>
+      <NamedData NDName="showImpactedOnly" NDType="java.lang.Boolean"/>
+    </methodAction>
+    <methodAction id="loadPrevVersionCurrentNFurteMQDetails" InstanceName="data.ImpactModuleDataControl.dataProvider"
+                  DataControl="ImpactModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadPrevVersionCurrentNFurteMQDetails" IsViewObjectMethod="false">
+      <NamedData NDName="dictContentId" NDType="java.lang.Long"/>
+      <NamedData NDName="showImpactedOnly" NDType="java.lang.Boolean"/>
+    </methodAction>
+    <methodAction id="loadPrevVersionFurteMQDetails" InstanceName="data.ImpactModuleDataControl.dataProvider"
+                  DataControl="ImpactModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="loadPrevVersionFurteMQDetails" IsViewObjectMethod="false">
+      <NamedData NDName="dictContentId" NDType="java.lang.Long"/>
+      <NamedData NDName="showImpactedOnly" NDType="java.lang.Boolean"/>
     </methodAction>
   </bindings>
 </pageDefinition>

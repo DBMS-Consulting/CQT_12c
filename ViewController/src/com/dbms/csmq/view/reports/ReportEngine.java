@@ -65,9 +65,14 @@ public class ReportEngine {
         exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.FALSE);
         exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
         exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, outputStream);
-        exporterXLS.setParameter(JRXlsAbstractExporterParameter.SHEET_NAMES, new String[] {"Existing", "Future"});
-    
-    
+        
+        String impactFlowType = (String) parameters.get("I_FLOW_TYPE");     
+        CSMQBean.logger.info(caller + "impactFlowType: " +  impactFlowType);
+        if("VIEW_PREV_VER_IMPACT".equals(impactFlowType)){
+            exporterXLS.setParameter(JRXlsAbstractExporterParameter.SHEET_NAMES, new String[] {"Previous", "Current"});
+        } else {
+            exporterXLS.setParameter(JRXlsAbstractExporterParameter.SHEET_NAMES, new String[] {"Existing", "Future"});
+        }   
     
         exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE); 
         Connection conn = null;
@@ -159,6 +164,59 @@ public class ReportEngine {
                     }
                 }
             }
+    }
+    
+    public void exportMQDtlsAsExcelWorkbook(String[] reportNames, OutputStream outputStream, Map parameters,
+                                            String caller) {
+        CSMQBean.logger.info(caller + "Start exec exportMQDtlsAsExcelWorkbook() ");
+        String[] reportFiles = new String[reportNames.length];
+        int i = 0; //report count
+
+        parameters.put("REPORT_DIRECTORY", sourceDirectory);
+        CSMQBean.logger.info(caller + "REPORTS: " + reportNames);
+        CSMQBean.logger.info(caller + "REPORT_DIRECTORY: " + sourceDirectory);
+
+        ArrayList<JasperPrint> list = new ArrayList<JasperPrint>();
+        JRXlsExporter exporterXLS = new JRXlsExporter();
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.FALSE);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+        exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, outputStream);
+        exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+        Connection conn = null;
+        try {
+            InitialContext initialContext = new InitialContext();
+            DataSource ds =
+                (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
+            conn = ds.getConnection();
+
+            for (String reportName : reportNames) {
+                reportFiles[i] = sourceDirectory + reportName + ".jrxml";
+                CSMQBean.logger.info(caller + "RUNNING REPORT: " + reportFiles[i]);
+                InputStream is = new FileInputStream(new File(reportFiles[i]));
+                JasperDesign jasperDesign = JRXmlLoader.load(is);
+                JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+                JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                list.add(jasperPrint);
+                is.close();
+            }
+
+            exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT_LIST, list);
+            exporterXLS.exportReport();
+            //conn.close();
+            outputStream.close();
+        } catch (Exception e) {
+            CSMQBean.logger.info(caller + "ERROR RUNNING REPORT: " + reportFiles[i]);
+            e.printStackTrace();
+        } finally {
+            if (null != conn) {
+                try {
+                    conn.close();
+                } catch (SQLException sqe) {
+                    CSMQBean.logger.info(caller + "error while closing connection...");
+                }
+            }
+        }
+        CSMQBean.logger.info(caller + "End of exec exportMQDtlsAsExcelWorkbook() ");
     }
     
 }

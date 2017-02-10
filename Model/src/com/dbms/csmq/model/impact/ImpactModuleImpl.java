@@ -219,19 +219,36 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
     }
     
-    public void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId){
-        System.out.println("loadPrevVersionCurrentNFurteMQDetails() dictContentId --> " + dictContentId );
+    public void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId, Boolean showImpactedOnly){
+        System.out.println("loadPrevVersionCurrentNFurteMQDetails() dictContentId --> " + dictContentId +";; showImpactedOnly --> "+showImpactedOnly);
+        // Load CURRENT MQs based on dictContentCode 
+        loadPrevVersionCurrentMQDetails(dictContentId, showImpactedOnly);
+        // Load FUTURE MQs based on dictContentCode 
+        loadPrevVersionFurteMQDetails(dictContentId, showImpactedOnly);
+    }
+    
+    public void loadPrevVersionCurrentMQDetails(Long dictContentId, Boolean showImpactedOnly){
+        System.out.println("loadPrevVersionCurrentMQDetails() dictContentId --> " + dictContentId +";; showImpactedOnly --> "+showImpactedOnly);
         // Load CURRENT MQs based on dictContentCode 
         ViewObjectImpl previousVerCurrentImpactVO = getPreviousVerCurrentImpactVO1();
         previousVerCurrentImpactVO.setNamedWhereClauseParam("bindDictContentId", dictContentId);
+        // -1 mean show all
+        previousVerCurrentImpactVO.setNamedWhereClauseParam("bindImpactDisplayProperty", showImpactedOnly != null && showImpactedOnly ? "Impact_NMQ_0" : "-1");
         previousVerCurrentImpactVO.executeQuery();
-        System.out.println("loadPrevVersionCurrentNFurteMQDetails() CURRENT QUERY --> " + previousVerCurrentImpactVO.getQuery());
+        System.out.println("loadPrevVersionCurrentMQDetails() CURRENT QUERY --> " + previousVerCurrentImpactVO.getQuery());
+    }
+    
+    public void loadPrevVersionFurteMQDetails(Long dictContentId, Boolean showImpactedOnly){
+        System.out.println("loadPrevVersionFurteMQDetails() dictContentId --> " + dictContentId +";; showImpactedOnly --> "+showImpactedOnly);
         // Load FUTURE MQs based on dictContentCode 
         ViewObjectImpl previousVerFutureImpactVO1 = getPreviousVerFutureImpactVO1();
         previousVerFutureImpactVO1.setNamedWhereClauseParam("bindDictContentId", dictContentId);
+        // -1 mean show all
+        previousVerFutureImpactVO1.setNamedWhereClauseParam("bindImpactDisplayProperty", showImpactedOnly != null && showImpactedOnly ? "Impact_NMQ_0" : "-1");
         previousVerFutureImpactVO1.executeQuery();
-        System.out.println("loadPrevVersionCurrentNFurteMQDetails() FUTURE QUERY --> " + previousVerFutureImpactVO1.getQuery());
-    }
+        System.out.println("loadPrevVersionFurteMQDetails() previousVerFutureImpactVO1.getEstimatedRowCount()--> " + previousVerFutureImpactVO1.getEstimatedRowCount());
+        System.out.println("loadPrevVersionFurteMQDetails() FUTURE QUERY --> " + previousVerFutureImpactVO1.getQuery());        
+    }    
 
     /**
      * Container's getter for PreviousVerCurrentImpactVO1.

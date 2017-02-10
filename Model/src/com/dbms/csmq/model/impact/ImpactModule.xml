@@ -4,233 +4,244 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ImpactModule"
-  Version="12.1.3.10.8"
+  Version="11.1.2.64.36"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.impact.ImpactModuleImpl"
-  ComponentInterface="com.dbms.csmq.model.impact.common.ImpactModule">
-  <DesignTime>
-    <Attr Name="_isCodegen" Value="true"/>
-  </DesignTime>
-  <ViewUsage
-    Name="MedDRAImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.MedDRAImpactVO"/>
-  <ViewUsage
-    Name="NewPTsVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.NewPTsVO"/>
-  <ViewUsage
-    Name="DraftImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.DraftImpactVO"/>
-  <ViewUsage
-    Name="HistoricalImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.HistoricalImpactVO"/>
-  <ViewUsage
-    Name="CurrentImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.CurrentImpactVO"/>
-  <ViewUsage
-    Name="SOCsWithNewPTsVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.SOCsWithNewPTsVO"/>
-  <ViewUsage
-    Name="LastMVUpdateViewObj1"
-    ViewObjectName="com.dbms.csmq.model.impact.LastMVUpdateViewObj"/>
-  <ViewUsage
-    Name="ImpactSearchListVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO"/>
-  <ViewUsage
-    Name="ImpactSearchListVO_NMQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["Y"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
-      </PIMap>
-      
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="ImpactSearchListVO_MQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["Y"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
-      </PIMap>
-      
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="ImpactSearchListVO_MQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["N"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
-      </PIMap>
-      
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="ImpactSearchListVO_NMQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["N"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
-      </PIMap>
-     
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="ImpactSearchListVO_CMQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["Y"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="ImpactSearchListVO_CMQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression><![CDATA["N"]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_CMQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['CMQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_CMQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['CMQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_MQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['MQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_MQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['MQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_NMQ_N"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['N']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['NMQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO_NMQ_Y"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
-    <ParameterMap>
-      <PIMap Variable="showImpact">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['Y']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="mqType">
-        <TransientExpression
-          trustMode="untrusted"><![CDATA['NMQ']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
-  </ViewUsage>
-  <ViewUsage
-    Name="PreviousVerImpactSearchListVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO"/>
-  <ViewUsage
-    Name="PreviousVerCurrentImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerCurrentImpactVO"/>
-  <ViewUsage
-    Name="PreviousVerFutureImpactVO1"
-    ViewObjectName="com.dbms.csmq.model.impact.PreviousVerFutureImpactVO"/>
-  <ClientInterface
-    Name="__clientInterface">
-    <Method
-      Name="onPreviousVerImpactSearch"
-      MethodName="onPreviousVerImpactSearch">
-      <Return
-        Name="_return_type_"
-        Type="void"/>
-      <Parameter
-        Name="searchLevelStr"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="searchTermStr"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="searchCodeStr"
-        Type="java.lang.String"/>
-    </Method>
-    <Method
-      Name="loadPrevVersionCurrentNFurteMQDetails"
-      MethodName="loadPrevVersionCurrentNFurteMQDetails">
-      <Return
-        Name="_return_type_"
-        Type="void"/>
-      <Parameter
-        Name="dictContentId"
-        Type="java.lang.Long"/>
-    </Method>
-  </ClientInterface>
+  ComponentInterface="com.dbms.csmq.model.impact.common.ImpactModule"
+    ClientProxyName="com.dbms.csmq.model.impact.client.ImpactModuleClient">
+    <DesignTime>
+        <Attr Name="_isCodegen" Value="true"/>
+    </DesignTime>
+    <ViewUsage
+      Name="MedDRAImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.MedDRAImpactVO"/>
+    <ViewUsage
+      Name="NewPTsVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.NewPTsVO"/>
+    <ViewUsage
+      Name="DraftImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.DraftImpactVO"/>
+    <ViewUsage
+      Name="HistoricalImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.HistoricalImpactVO"/>
+    <ViewUsage
+      Name="CurrentImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.CurrentImpactVO"/>
+    <ViewUsage
+      Name="SOCsWithNewPTsVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.SOCsWithNewPTsVO"/>
+    <ViewUsage
+      Name="LastMVUpdateViewObj1"
+      ViewObjectName="com.dbms.csmq.model.impact.LastMVUpdateViewObj"/>
+    <ViewUsage
+      Name="ImpactSearchListVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO"/>
+    <ViewUsage
+      Name="ImpactSearchListVO_NMQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="ImpactSearchListVO_MQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="ImpactSearchListVO_MQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["N"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="ImpactSearchListVO_NMQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["N"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="ImpactSearchListVO_CMQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="ImpactSearchListVO_CMQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA["N"]]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_CMQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['N']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['CMQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_CMQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['Y']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['CMQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_MQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['N']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['MQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_MQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['Y']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['MQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_NMQ_N"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['N']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['NMQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO_NMQ_Y"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
+        <ParameterMap>
+            <PIMap Variable="showImpact">
+                <TransientExpression><![CDATA['Y']]></TransientExpression>
+            </PIMap>
+            <PIMap Variable="mqType">
+                <TransientExpression><![CDATA['NMQ']]></TransientExpression>
+            </PIMap>
+        </ParameterMap>
+    </ViewUsage>
+    <ViewUsage
+      Name="PreviousVerImpactSearchListVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO"/>
+    <ViewUsage
+      Name="PreviousVerCurrentImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerCurrentImpactVO"/>
+    <ViewUsage
+      Name="PreviousVerFutureImpactVO1"
+      ViewObjectName="com.dbms.csmq.model.impact.PreviousVerFutureImpactVO"/>
+    <ClientInterface
+      Name="__clientInterface">
+        <Method
+          Name="onPreviousVerImpactSearch"
+          MethodName="onPreviousVerImpactSearch">
+            <Return
+              Name="_return_type_"
+              Type="void"/>
+            <Parameter
+              Name="searchLevelStr"
+              Type="java.lang.String"/>
+            <Parameter
+              Name="searchTermStr"
+              Type="java.lang.String"/>
+            <Parameter
+              Name="searchCodeStr"
+              Type="java.lang.String"/>
+        </Method>
+        <Method
+            Name="loadPrevVersionCurrentMQDetails"
+            MethodName="loadPrevVersionCurrentMQDetails">
+            <Return
+                Type="void"/>
+            <Parameter
+                Name="dictContentId"
+                Type="java.lang.Long"/>
+            <Parameter
+                Name="showImpactedOnly"
+                Type="java.lang.Boolean"/>
+        </Method>
+        <Method
+            Name="loadPrevVersionCurrentNFurteMQDetails"
+            MethodName="loadPrevVersionCurrentNFurteMQDetails">
+            <Return
+                Type="void"/>
+            <Parameter
+                Name="dictContentId"
+                Type="java.lang.Long"/>
+            <Parameter
+                Name="showImpactedOnly"
+                Type="java.lang.Boolean"/>
+        </Method>
+        <Method
+            Name="loadPrevVersionFurteMQDetails"
+            MethodName="loadPrevVersionFurteMQDetails">
+            <Return
+                Type="void"/>
+            <Parameter
+                Name="dictContentId"
+                Type="java.lang.Long"/>
+            <Parameter
+                Name="showImpactedOnly"
+                Type="java.lang.Boolean"/>
+        </Method>
+    </ClientInterface>
 </AppModule>

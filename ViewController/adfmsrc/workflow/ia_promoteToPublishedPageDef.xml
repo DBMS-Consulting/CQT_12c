@@ -31,17 +31,5 @@
         <Item Value="Mqterm"/>
       </ListDisplayAttrNames>
     </list>
-    <methodAction id="changeState" RequiresUpdateModel="true" Action="invokeMethod" MethodName="changeState"
-                  IsViewObjectMethod="false" DataControl="CQTAppModuleDataControl"
-                  InstanceName="data.CQTAppModuleDataControl.dataProvider"
-                  ReturnName="data.CQTAppModuleDataControl.methodResults.changeState_CQTAppModuleDataControl_dataProvider_changeState_result">
-      <NamedData NDName="dictContentIDs" NDType="java.lang.String"/>
-      <NamedData NDName="state" NDType="java.lang.String"/>
-      <NamedData NDName="currentUser" NDType="java.lang.String"/>
-      <NamedData NDName="currentUserRole" NDType="java.lang.String"/>
-      <NamedData NDName="dueDate" NDType="oracle.jbo.domain.Date"/>
-      <NamedData NDName="comment" NDType="java.lang.String"/>
-      <NamedData NDName="activationGroup" NDType="java.lang.String"/>
-    </methodAction>
   </bindings>
 </pageDefinition>

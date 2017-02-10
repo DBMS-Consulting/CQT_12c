@@ -69,14 +69,20 @@
                                     </f:facet>
                                 </af:showDetailItem>
                                 <af:showDetailItem text="Lists" id="sdi2">
-                                    <af:panelGroupLayout id="pgl2" layout="horizontal" halign="end">
-                                        <af:button text="#{viewcontrollerBundle.EXPORT}" id="b1"
+                                <af:panelGroupLayout id="pgl2" layout="horizontal" halign="end">
+                                        <af:commandButton text="#{viewcontrollerBundle.EXPORT_PRODUCTS}" id="b1"
                                                    icon="/image/EXCEL.png" styleClass="AFStretchWidth">
                                             <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                                                                           filename="ProductsAndGroups.xls"
-                                                                           method="#{ReportBean.exportProductAndGroup}"/>
-                                        </af:button>
+                                                                           filename="Products.xls"
+                                                                           method="#{ReportBean.exportProducts}"/>
+                                        </af:commandButton>
                                         <af:spacer width="10" height="10" id="s1"/>
+                                        <af:commandButton text="#{viewcontrollerBundle.EXPORT_GROUPS}" id="b11"
+                                                   icon="/image/EXCEL.png" styleClass="AFStretchWidth">
+                                            <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                           filename="Groups.xls"
+                                                                           method="#{ReportBean.exportGroups}"/>
+                                        </af:commandButton>
                                     </af:panelGroupLayout>
                                     <af:panelGroupLayout id="pgl1" layout="horizontal" inlineStyle="width:589px; padding:2px; margin:2px;">
                                         <af:panelGroupLayout id="pgl3">
@@ -98,7 +104,6 @@
                                             </af:selectOneListbox>
                                         </af:panelGroupLayout>
                                     </af:panelGroupLayout>
-                                    <f:facet name="toolbar"/>
                                 </af:showDetailItem>
                             </af:panelTabbed>
                         </af:panelBorderLayout>

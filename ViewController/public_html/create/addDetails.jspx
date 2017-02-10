@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1" xmlns:f="http://java.sun.com/jsf/core"
-          xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <c:set var="viewcontrollerBundle" value="#{adfBundle['viewcontroller.create.addDetailsBundle']}"/>
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <f:view>
         <af:document id="d1" uncommittedDataWarning="on">
@@ -8,11 +9,21 @@
             <af:form id="f1">
                 <af:pageTemplate viewId="/CSMQ.jspx" value="#{bindings.pageTemplateBinding}" id="pt1">
                     <f:facet name="header">
-                        <af:group id="g2">
+                        <af:panelGroupLayout id="g2" layout="horizontal">
                             <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
                                       binding="#{NMQWizardUIBean.cntrlTrain}"/>
-                            <af:spacer width="10" height="10" id="s1"/>
-                        </af:group>
+                            <af:spacer width="200" height="10" id="s1"/>
+                            <af:panelGroupLayout id="pgl14" layout="horizontal" halign="center" styleClass="AFStretchWidth"
+                                                 rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}">  
+                              <af:outputText value="Historic View as of " id="ot26" 
+                                             inlineStyle="font-weight: bold;font-size: 16px;"/>
+                              <af:spacer width="5" height="10" id="s12"/>  
+                              <af:outputText value="#{pageFlowScope.NMQWizardSearchBean.historyDate}" id="ot27" 
+                                             inlineStyle="font-weight: bold;font-size: 16px;">                                 
+                                    <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                              </af:outputText>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
                     </f:facet>
                     <f:facet name="main">
                         <af:group id="g1">
@@ -46,12 +57,15 @@
                                                           required="#{RenderingRulesBean.wizardDetailsRenderSave}"
                                                           value="#{pageFlowScope.NMQWizardBean.currentTermName}" immediate="false"
                                                           readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQName}"
-                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"/>
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"
+                                                          autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:inputText label="Filter Dictionary" id="it4"
                                                           value="#{pageFlowScope.NMQWizardBean.currentFilterDictionaryShortName}"
                                                           columns="50" binding="#{NMQWizardUIBean.ctrlActiveDictionary}"
                                                           labelStyle="white-space:nowrap" readOnly="true" inlineStyle="color:Black;"
-                                                          contentStyle="color:#000000;"/>
+                                                          contentStyle="color:#000000;" autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:selectOneChoice label="Release Group" id="selectOneChoice2"
                                                                 binding="#{NMQWizardUIBean.controlReleaseGroup}" required="false"
                                                                 valueChangeListener="#{NMQWizardUIBean.releaseGroupChanged}"
@@ -69,19 +83,23 @@
                                                                       value="#{pageFlowScope.NMQWizardBean.isApproved}"
                                                                       contentStyle="color:#000000;"
                                                                       rendered="#{RenderingRulesBean.wizardDetailsRenderIsApproved}"
-                                                                      readOnly="true"/>
+                                                                      readOnly="true" autoSubmit="true"
+                                                                      valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:inputText label="Release Status" id="it11" value="#{pageFlowScope.NMQWizardBean.currentStatus}"
                                                           showRequired="true" readOnly="true" columns="20" rows="1" wrap="off"
                                                           binding="#{NMQWizardUIBean.controlMQStatus}"
                                                           rendered="#{RenderingRulesBean.wizardDetailsRenderNMQStatus}"
-                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"/>
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"
+                                                          autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
                                                                  binding="#{pageFlowScope.NMQWizardBean.productListControl}"
                                                                  requiredMessageDetail="An MQ Product is required."
+                                                                 rendered="#{!pageFlowScope.NMQWizardSearchBean.historyFlow}"
                                                                  valueChangeListener="#{pageFlowScope.NMQWizardBean.productListValueChange}"
                                                                  value="#{pageFlowScope.NMQWizardBean.productList}"
-                                                                 visible="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
                                                                  labelStyle="white-space:nowrap" selectAllVisible="false"
+                                                                  visible="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
                                                                  readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQProduct}"
                                                                  showRequired="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
                                                                  required="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}" contentStyle="color:#000000;width:130px;"
@@ -91,9 +109,14 @@
                                                 <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                                             var="row">
                                                     <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"/>
-                                                </af:forEach>
-                                                
-                                            </af:selectManyChoice>
+                                                </af:forEach>                                                
+                                            </af:selectManyChoice>   
+                                            <af:inputText label="Product" id="it1" value="#{pageFlowScope.NMQWizardBean.currentProduct}"
+                                                          readOnly="true" wrap="off"                                                          
+                                                          rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}"
+                                                          labelStyle="white-space:nowrap" contentStyle="color:#000000;"
+                                                          autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:selectManyChoice label="Designee" id="smc1" autoSubmit="true" valuePassThru="true"
                                                                  binding="#{pageFlowScope.NMQWizardBean.controlDesignee}"
                                                                  valueChangeListener="#{NMQWizardUIBean.designeeValueChange}"
@@ -124,17 +147,28 @@
                                                           readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQAlgorithm}"
                                                           rendered="#{RenderingRulesBean.wizardDetailsRenderNMQAlgorithm}"
                                                           showRequired="#{RenderingRulesBean.wizardDetailsRequireNMQAlgorithm}"
-                                                          contentStyle="color:#000000;" partialTriggers="soc4"/>
+                                                          contentStyle="color:#000000;" partialTriggers="soc4"
+                                                          autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
+                                            <af:selectOneChoice label="Status" id="smc6" helpTopicId="NMAT_HELP_ACTIVITY_STATUS" labelStyle="white-space:nowrap"
+                                                                value="#{pageFlowScope.NMQWizardBean.currentMQStatus}" autoSubmit="true" readOnly="true"
+                                                                valueChangeListener="#{NMQWizardUIBean.detailsChanged}">
+                                              <af:selectItem label="Active" value="A" id="si19a"/>
+                                              <af:selectItem label="Inactive" value="I" id="si16"/>  
+                                              <af:selectItem label="Pending" value="P" id="si27"/>
+                                            </af:selectOneChoice>
                                             <af:inputText value="#{pageFlowScope.NMQWizardBean.currentState}" label="State" id="it6"
                                                           readOnly="true" binding="#{NMQWizardUIBean.controlMQState}"
-                                                          contentStyle="color:#000000;"/>
+                                                          contentStyle="color:#000000;" autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                             <af:selectOneChoice label="Critical Event" id="soc3"
                                                                 binding="#{pageFlowScope.NMQWizardBean.controlCriticalEvent}"
                                                                 value="#{pageFlowScope.NMQWizardBean.currentMQCRTEV}"
                                                                 labelStyle="white-space:nowrap"
                                                                 readOnly="#{RenderingRulesBean.wizardDetailsDisableCriticalEvent}"
                                                                 rendered="#{RenderingRulesBean.wizardDetailsRenderCriticalEvent}"
-                                                                contentStyle="color:#000000;">
+                                                                contentStyle="color:#000000;" autoSubmit="true"
+                                                                valueChangeListener="#{NMQWizardUIBean.detailsChanged}">
                                                 <af:selectItem label="No" value="N" id="si22"/>
                                                 <af:selectItem label="Yes - Narrow" value="Y_NARROW" id="si21"/>
                                                 <af:selectItem label="Yes - Broad" value="Y_BROAD" id="si20"/>
@@ -144,7 +178,9 @@
                                                                 labelStyle="white-space:nowrap"
                                                                
                                                              
-                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQLevel}">
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQLevel}"
+                                                                autoSubmit="true"
+                                                                valueChangeListener="#{NMQWizardUIBean.detailsChanged}">
                                                 <!-- @author MTW
                         06/16/2014
                         @fsds NMAT-UC01.01 & NMAT-UC11.01
@@ -154,7 +190,7 @@
                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
                                                 <af:selectItem label="2" value="NMQ2" id="si14"
                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
-                                                <af:selectItem label="3" value="NMQ3" id="si16"
+                                                <af:selectItem label="3" value="NMQ3" id="si26"
                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
                                                 <af:selectItem label="4" value="NMQ4" id="si15"
                                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQSelItems}"/>
@@ -214,7 +250,9 @@
                                                           
                                                           readOnly="true" binding="#{NMQWizardUIBean.controlNMQCode}" columns="8" rows="1"
                                                           labelStyle="white-space:nowrap" contentStyle="color:#000000;"
-                                                          value="#{(RenderingRulesBean.wizardDetailsDisplayContentCode || pageFlowScope.NMQWizardBean.saved) ? pageFlowScope.NMQWizardBean.currentContentCode : null}"/>
+                                                          value="#{(RenderingRulesBean.wizardDetailsDisplayContentCode || pageFlowScope.NMQWizardBean.saved) ? pageFlowScope.NMQWizardBean.currentContentCode : null}"
+                                                          autoSubmit="true"
+                                                          valueChangeListener="#{NMQWizardUIBean.detailsChanged}"/>
                                         </af:panelFormLayout>
                                     </af:panelGroupLayout>
                                     <af:panelGroupLayout id="pgl6">
@@ -256,7 +294,8 @@
                             <af:spacer width="10" height="10" id="s6"/>
                             <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"
                                                binding="#{NMQWizardUIBean.cntrlTrainButtons}"/>
-                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL"
+                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
+                                              action="#{pageFlowScope.NMQWizardBean.showWarningPopup}"
                                               immediate="true" shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
                             <af:spacer width="20" height="10" id="s3"/>
                             <!-- @author MTW
@@ -269,6 +308,19 @@
                             <af:spacer width="10" height="10" id="s7"/>
                             <af:inputText label="Name:" id="it3" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
                                           binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"/>
+                            <af:popup childCreation="deferred" autoCancel="disabled" id="p1"
+                                      binding="#{pageFlowScope.NMQWizardBean.addDetailsWarningPopup}">
+                                <af:dialog id="d2" type="none" title="Confirmation">
+                                    <f:facet name="buttonBar">
+                                        <af:panelGroupLayout id="pgl7" layout="horizontal">
+                                            <af:commandButton text="Yes" id="cb2"
+                                                              action="#{NMQWizardUIBean.yesWarning}"/>
+                                            <af:commandButton text="No" id="cb3" action="CANCEL"/>
+                                        </af:panelGroupLayout>
+                                    </f:facet>
+                                    <af:outputText value="#{viewcontrollerBundle.CANCEL_MSG}" id="ot1"/>
+                                </af:dialog>
+                            </af:popup>
                         </af:panelGroupLayout>
                     </f:facet>
                     <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>

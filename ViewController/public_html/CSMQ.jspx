@@ -78,9 +78,14 @@
                 </af:panelFormLayout>
             </af:dialog>
         </af:popup>
-        
-        
-        
+        <af:popup childCreation="immediate" autoCancel="disabled" id="pt_p3" resetEditableValues="whenCanceled"
+                  binding="#{CQTPageTemplateBean.viewCurrentImpactWarningPopup}">
+            <af:dialog id="pt_d4" title="View Current Version Impact page access" type="ok" modal="false">
+                <f:facet name="buttonBar"/>
+                <af:outputText value="The View Version Impact page is only available while MedDRA Versioning data is pending.  Please use the View Previous Version Impact page instead."
+                               id="pt_ot7" noWrap="true"/>
+            </af:dialog>
+        </af:popup>        
         <af:panelStretchLayout topHeight="120px" id="pt_psl1" bottomHeight="30px">
             <f:facet name="top">
                 <af:panelGroupLayout layout="vertical" inlineStyle="padding:5.0px;" id="pt_pgl5">
@@ -88,8 +93,8 @@
                         <f:facet name="start">
                             <af:group id="pt_g1">
                                 <af:panelGroupLayout id="pt_pgl3" inlineStyle="height:45px;" layout="horizontal">
-                                    <!--<af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png">-->
-                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png">
+                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/CQT.png">
+                                    <!--af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png"-->
                                         <af:showPopupBehavior popupId="pt_p2" triggerType="click" align="overlap"/>
                                     </af:image>
                                 </af:panelGroupLayout>
@@ -197,9 +202,12 @@
                             <af:commandMenuItem text="Impact Assessment" id="pt_cmi10" action="MEDDRA_IMPACT_ASSESSMENT"
                                                 rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'MEDDRA_IMPACT_ASSESSMENT' ? 'bold' : 'normal'};"/>
+                            <!--<af:commandMenuItem text="View Version Impact" id="pt_cmi13" action="VIEW_VERSION_IMPACT"
+                                                inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_VERSION_IMPACT' ? 'bold' : 'normal'};"/>--> 
                             <af:menu text="View Version Impact" id="pt_m3"
                                      inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_CURRENT_VERSION_IMPACT' or UserBean.currentMenu eq 'VIEW_PREVIOUS_VERSION_IMPACT' ? 'bold' : 'normal'};">
-                                <af:commandMenuItem text="View Current Version Impact" id="pt_cmi13" action="VIEW_CURRENT_VERSION_IMPACT"
+                                <af:commandMenuItem text="View Current Version Impact" id="pt_cmi13"
+                                                    action="#{CQTPageTemplateBean.displayCurrentViewVersionImpact}"
                                                     inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_CURRENT_VERSION_IMPACT' ? 'bold' : 'normal'};"/> 
                                 <af:commandMenuItem text="View Previous Version Impact" id="pt_cmi14" action="VIEW_PREVIOUS_VERSION_IMPACT"
                                                     inlineStyle="font-weight:#{UserBean.currentMenu eq 'VIEW_PREVIOUS_VERSION_IMPACT' ? 'bold' : 'normal'};"/> 

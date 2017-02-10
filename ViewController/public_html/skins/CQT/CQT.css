@@ -234,4 +234,10 @@ color: #000000 !important;
 display: none;
 } 
 
+.HistoricView
+{
+  font-style: italic;
+  font-weight: bold;
+}
+
 

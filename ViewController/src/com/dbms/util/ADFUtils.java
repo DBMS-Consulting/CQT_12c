@@ -1,9 +1,20 @@
 package com.dbms.util;
 
 
+import com.sun.el.MethodExpressionImpl;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 import javax.faces.model.SelectItem;
 
 import oracle.adf.model.BindingContext;
@@ -27,14 +38,18 @@ import oracle.jbo.Key;
 import oracle.jbo.Row;
 import oracle.jbo.uicli.binding.JUCtrlValueBinding;
 
+import org.apache.myfaces.trinidad.context.RequestContext;
+import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
+import org.apache.myfaces.trinidad.util.Service;
+
 
 /**
  * A series of convenience functions for dealing with ADF Bindings.
  * Note: Updated for JDeveloper 11
- * 
+ *
  * @author Duncan Mills
  * @author Steve Muench
- * 
+ *
  * $Id: ADFUtils.java 2513 2007-09-20 20:39:13Z ralsmith $.
  */
 public class ADFUtils {
@@ -59,6 +74,18 @@ public class ADFUtils {
      */
     public static Object getBoundAttributeValue(String attributeName) {
         return findControlBinding(attributeName).getInputValue();
+    }
+    
+    public static void setEL(String el, Object val) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+        ExpressionFactory expressionFactory =
+            facesContext.getApplication().getExpressionFactory();
+        ValueExpression exp =
+            expressionFactory.createValueExpression(elContext, el,
+                                                    Object.class);
+
+        exp.setValue(elContext, val);
     }
 
     /**
@@ -484,4 +511,163 @@ public class ADFUtils {
             }
         }
     }
+    
+    /**
+     * Show popup.
+     *
+     * @param popupId the popup id
+     */
+    public static void showPopup(UIComponent popupId) {
+        showPopup(popupId.getClientId(getFacesContext()));
+    }
+    
+    /**
+     * Show popup.
+     *
+     * @param popupId the popup id
+     */
+    public static void showPopup(String popupId) {
+        FacesContext context = null;
+        ExtendedRenderKitService extRenderKitSrvc = null;
+        StringBuilder script = null;
+
+        context = FacesContext.getCurrentInstance();
+        extRenderKitSrvc =
+                Service.getRenderKitService(context, ExtendedRenderKitService.class);
+        script = new StringBuilder();
+        script.append("var popup = AdfPage.PAGE.findComponent('").append(popupId).append("'); ").append("popup.show();");
+        extRenderKitSrvc.addScript(context, script.toString());
+    }
+
+    /**
+     * Show popup.
+     *
+     * @param popupId the popup id
+     */
+    public static void closePopup(String popupId) {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        ExtendedRenderKitService extRenderKitSrvc =
+            Service.getRenderKitService(context,
+                                        ExtendedRenderKitService.class);
+        extRenderKitSrvc.addScript(context,
+                                   "AdfPage.PAGE.findComponent('" + popupId +
+                                   "').hide();");
+    }
+    
+    /**
+     * Programmatic evaluation of EL.
+     *
+     * @param el EL to evaluate
+     * @return Result of the evaluation
+     */
+    public static Object evaluateEL(String el) {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+        ExpressionFactory expressionFactory =
+            facesContext.getApplication().getExpressionFactory();
+        ValueExpression exp =
+            expressionFactory.createValueExpression(elContext, el,
+                                                    Object.class);
+
+        return exp.getValue(elContext);
+    }
+
+    /**
+     * Gets the faces context.
+     *
+     * @return the faces context
+     */
+    public static FacesContext getFacesContext() {
+        return FacesContext.getCurrentInstance();
+    }
+    
+    /**
+     * Programmatic invocation of a method that an EL evaluates to.
+     * The method must not take any parameters.
+     *
+     * @param el EL of the method to invoke
+     * @return Object that the method returns
+     */
+    public static Object invokeEL(String el) {
+
+        return invokeEL(el, new Class[0], new Object[0]);
+    }
+
+    /**
+     * Programmatic invocation of a method that an EL evaluates to.
+     *
+     * @param el EL of the method to invoke
+     * @param paramTypes Array of Class defining the types of the parameters
+     * @param params Array of Object defining the values of the parametrs
+     * @return Object that the method returns
+     */
+    public static Object invokeEL(String el, Class[] paramTypes,
+                                  Object[] params) {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+        ExpressionFactory expressionFactory =
+            facesContext.getApplication().getExpressionFactory();
+        MethodExpression exp =
+            expressionFactory.createMethodExpression(elContext, el,
+                                                     Object.class, paramTypes);
+
+        return exp.invoke(elContext, params);
+    }
+
+    public static Object invokeMethodExpressionEL(MethodExpressionImpl methodExpressionImpl,
+                                                  Object[] params) {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ELContext elctx = fc.getELContext();
+
+        return methodExpressionImpl.invoke(elctx, params);
+    }
+
+
+    public static Object invokeMethod(String expr, Class[] paramTypes,
+                                      Object[] params) {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        MethodBinding mb;
+        mb = fc.getApplication().createMethodBinding(expr, paramTypes);
+        return mb.invoke(fc, params);
+    }
+
+    public static Object invokeMethod(String expr, Class paramType,
+                                      Object param) {
+
+        return invokeMethod(expr, new Class[] { paramType },
+                            new Object[] { param });
+    }
+    
+    static public void addPartialTarget(UIComponent component) {
+
+        RequestContext adfContext;
+
+        adfContext = RequestContext.getCurrentInstance();
+        adfContext.addPartialTarget(component);
+
+    }
+    
+    /**
+     * This methods shows the message required on the UI with required severity
+     * @param msg -- Message to be shown on the UI.
+     */
+    public static void showFacesMessage(String msg,
+                                        FacesMessage.Severity severity) {
+        FacesMessage message = new FacesMessage(severity, msg, "");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public static void showFacesMessage(String msg,
+                                        FacesMessage.Severity severity,
+                                        UIComponent component) {
+        FacesMessage message = new FacesMessage(severity, msg, "");
+        FacesContext.getCurrentInstance().addMessage(component.getClientId(FacesContext.getCurrentInstance()),
+                                                     message);
+    }
+
 }

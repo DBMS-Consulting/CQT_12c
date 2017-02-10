@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="PublishModule"
-  Version="11.1.2.60.81"
+  Version="11.1.2.64.36"
   ClearCacheOnRollback="true">
   <ViewUsage
     Name="ViewObjTermsByState1"
@@ -15,4 +15,10 @@
   <ViewUsage
     Name="ViewObjActivationErrors_Relations1"
     ViewObjectName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Relations"/>
+  <ViewUsage
+    Name="PublishedIAMQVO1"
+    ViewObjectName="com.dbms.csmq.model.publish.PublishedIAMQVO"/>
+  <ViewUsage
+    Name="PublishedMQVO1"
+    ViewObjectName="com.dbms.csmq.model.publish.PublishedMQVO"/>
 </AppModule>

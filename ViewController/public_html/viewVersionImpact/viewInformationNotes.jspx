@@ -6,8 +6,7 @@
   <f:view>
     <af:document id="d1" uncommittedDataWarning="on">
       <af:form id="f1">
-        <af:pageTemplate viewId="/CSMQ.jspx"
-                         value="#{bindings.pageTemplateBinding}" id="pt1">
+        <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
           <f:facet name="header">
            <af:group id="g2">
               <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>

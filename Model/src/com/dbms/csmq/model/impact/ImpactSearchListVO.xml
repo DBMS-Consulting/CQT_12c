@@ -38,7 +38,7 @@
     DefaultValue="A"/>
   <SQLQuery><![CDATA[select nmq_smq_impact_contents.*, workflow_pkg.current_state(dict_content_id) workflow_state
 from nmq_smq_impact_contents 
-where dict_short_name = nvl(smq_codelist_pkg.smq_dict_name,'NMATSMQ')
+where dict_short_name = nvl(smq_codelist_pkg.smq_dict_name,(SELECT PROP_VALUE FROM NMAT_PROPERTIES where PROP_NAME = 'DEFAULT_FILTER_DICTIONARY_SHORT_NAME'))
 and impact_yn = :showImpact 
 and nmq_smq = :mqType
 and status = :mqStatus

@@ -13,7 +13,8 @@
   UseGlueCode="false"
   RowClass="com.dbms.csmq.model.product.ProductListVORowImpl"
   ComponentClass="com.dbms.csmq.model.product.ProductListVOImpl"
-  DefClass="com.dbms.csmq.model.product.ProductListVODefImpl">
+  DefClass="com.dbms.csmq.model.product.ProductListVODefImpl"
+  FetchSize="50">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
     <Attr Name="_codeGenFlag2" Value="Access|Def|Coll|Prog|VarAccess"/>

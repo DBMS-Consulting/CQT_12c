@@ -3,6 +3,8 @@
    <OverallProperties
       id="OverallProperties1">
       <property
+         name="linkStyle">Direct</property>
+      <property
          name="y">83.5</property>
       <property
          name="x">1288.1259</property>
@@ -14,9 +16,9 @@
       <property
          name="page">/index.jspx</property>
       <property
-         name="description">&lt;html>&lt;p>&lt;b>home&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
-      <property
          name="thumbnailExpanded">false</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>home&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
          name="exceptionHandler">false</property>
       <property
@@ -56,15 +58,6 @@
       <property
          name="x">679.125</property>
    </TaskFlowCall>
-   <WildcardControlFlowRule
-      id="WildcardControlFlowRule40">
-      <property
-         name="activityId">*</property>
-      <property
-         name="y">84.0</property>
-      <property
-         name="x">1441.1434</property>
-   </WildcardControlFlowRule>
    <View
       id="View41">
       <property
@@ -215,122 +208,122 @@
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase52"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="View46">
       <property
          name="fromOutcome">ADMIN</property>
       <property
-         name="sdm:polyPoints">R39,1482.356,77.149414,2672.2568,196.85059,T50</property>
+         name="sdm:polyPoints">L97,2894.0,-102.98392,2672.2568,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase53"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="View36">
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">L23,1400.4963,66.649414,70.5,196.85059,T50</property>
+         name="sdm:polyPoints">L10,2879.4214,-158.45059,70.5,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase54"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall44">
       <property
          name="fromOutcome">UPDATE_SMQ</property>
       <property
-         name="sdm:polyPoints">R50,1481.8751,84.149414,2423.204,250.85059,L50</property>
+         name="sdm:polyPoints">L90,2891.1223,-107.25059,2464.204,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase57"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="View49">
       <property
          name="fromOutcome">HISTORICAL_IMPACT_ASSESSMENT</property>
       <property
-         name="sdm:polyPoints">R28,1482.6951,70.149414,2824.29,196.85059,T39</property>
+         name="sdm:polyPoints">B50,2930.0,-90.350586,2872.29,250.85059,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase58"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall43">
       <property
          name="fromOutcome">COPY_NMQ</property>
       <property
-         name="sdm:polyPoints">R72,1479.4423,98.149414,1721.7021,250.85059,L50</property>
+         name="sdm:polyPoints">L63,2884.9536,-124.31725,1803.7021,250.85059,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase59"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall42">
       <property
          name="fromOutcome">MEDDRA_IMPACT_ASSESSMENT</property>
       <property
-         name="sdm:polyPoints">B57,1444.6434,126.649414,1530.9805,196.85059,T50</property>
+         name="sdm:polyPoints">L57,2883.876,-128.58392,1571.9805,250.85059,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase60"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall47">
       <property
          name="fromOutcome">CREATE_NEW_NMQ</property>
       <property
-         name="sdm:polyPoints">L77,1405.1434,101.649414,1295.2568,196.85059,T50</property>
+         name="sdm:polyPoints">L43,2882.2837,-137.11725,1295.2568,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase61"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall34">
       <property
          name="fromOutcome">REPORTS</property>
       <property
-         name="sdm:polyPoints">B43,1437.6434,126.649414,1304.3594,417.79883,T50</property>
+         name="sdm:polyPoints">L70,2886.185,-120.05058,1345.3594,471.79883,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase62"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall51">
       <property
          name="fromOutcome">NON_IMPACT_PUBLISH</property>
       <property
-         name="sdm:polyPoints">L66,1403.1407,94.649414,958.1914,280.1494,R50</property>
+         name="sdm:polyPoints">L50,2883.0144,-132.85059,958.1914,280.1494,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase63"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall39">
       <property
          name="fromOutcome">IMPACT_PUBLISH</property>
       <property
-         name="sdm:polyPoints">L55,1402.0321,87.649414,720.125,250.85059,R50</property>
+         name="sdm:polyPoints">L30,2880.9033,-145.65059,720.125,250.85059,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase64"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall48">
       <property
          name="fromOutcome">UPDATE_NMQ</property>
       <property
-         name="sdm:polyPoints">L34,1400.8856,73.649414,424.3789,196.85059,T50</property>
+         name="sdm:polyPoints">L23,2880.342,-149.91725,424.3789,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase65"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="View37">
       <property
          name="fromOutcome">HOME</property>
       <property
-         name="sdm:polyPoints">L45,1401.3628,80.649414,257.5,250.85059,R50</property>
+         name="sdm:polyPoints">L17,2879.8691,-154.18391,216.5,196.85059,T50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -340,7 +333,7 @@
       <property
          name="fromOutcome">SHOW_HISTORICAL_IMPACT</property>
       <property
-         name="sdm:polyPoints">T50,2831.29,193.5627,2827.79,137.35443,B44</property>
+         name="sdm:polyPoints">T44,2827.79,196.85059,2827.79,137.14941,B44</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -350,7 +343,7 @@
       <property
          name="fromOutcome">SEARCH</property>
       <property
-         name="sdm:polyPoints">B56,2834.79,137.14941,2838.29,193.34903,T61</property>
+         name="sdm:polyPoints">B56,2834.79,137.14941,2834.79,196.85059,T56</property>
    </ControlFlowCase>
    <TaskFlowCall
       id="TaskFlowCall35">
@@ -372,22 +365,22 @@
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase35"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="TaskFlowCall35">
       <property
          name="fromOutcome">BROWSE_SEARCH</property>
       <property
-         name="sdm:polyPoints">R61,1481.0072,91.149414,2042.0342,277.34473,T50</property>
+         name="sdm:polyPoints">L83,2889.116,-111.51726,2083.0342,331.34473,R50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
       id="ControlFlowCase39"
-      from="WildcardControlFlowRule40"
+      from="WildcardControlFlowRule52"
       to="View40">
       <property
          name="fromOutcome">DIFF</property>
       <property
-         name="sdm:polyPoints">R83,1477.1434,105.149414,1764.5,351.74707,T50</property>
+         name="sdm:polyPoints">L77,2887.5269,-115.78392,1764.5,351.74707,T50</property>
    </ControlFlowCase>
    <View
       id="View40">
@@ -438,18 +431,8 @@
       <property
          name="x">2161.0</property>
    </TaskFlowCall>
-   <ControlFlowCase
-      islink="true"
-      id="ControlFlowCase38"
-      from="WildcardControlFlowRule40"
-      to="TaskFlowCall37">
-      <property
-         name="fromOutcome">VIEW_CURRENT_VERSION_IMPACT</property>
-      <property
-         name="sdm:polyPoints">R23,1478.3468,66.649414,2120.0,-1.1552734,L50</property>
-   </ControlFlowCase>
    <TaskFlowCall
-      id="TaskFlowCall38">
+      id="TaskFlowCall46">
       <property
          name="taskFlowId">view-previous-version-impact-definition</property>
       <property
@@ -461,18 +444,37 @@
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">-160.55176</property>
+         name="y">-149.85059</property>
       <property
-         name="x">1864.7051</property>
+         name="x">1590.7051</property>
    </TaskFlowCall>
    <ControlFlowCase
       islink="true"
-      id="ControlFlowCase40"
-      from="WildcardControlFlowRule40"
-      to="TaskFlowCall38">
+      id="ControlFlowCase51"
+      from="WildcardControlFlowRule52"
+      to="TaskFlowCall37">
+      <property
+         name="fromOutcome">VIEW_CURRENT_VERSION_IMPACT</property>
+      <property
+         name="sdm:polyPoints">L37,2881.5708,-141.38393,2202.0,-1.1552734,R50</property>
+   </ControlFlowCase>
+   <WildcardControlFlowRule
+      id="WildcardControlFlowRule52">
+      <property
+         name="activityId">*</property>
+      <property
+         name="y">-133.0</property>
+      <property
+         name="x">2930.0</property>
+   </WildcardControlFlowRule>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase55"
+      from="WildcardControlFlowRule52"
+      to="TaskFlowCall46">
       <property
          name="fromOutcome">VIEW_PREVIOUS_VERSION_IMPACT</property>
       <property
-         name="sdm:polyPoints">R12,1477.1434,59.649414,1823.7051,-160.90234,L50</property>
+         name="sdm:polyPoints">L3,2879.1846,-162.71725,1631.7051,-150.20117,R50</property>
    </ControlFlowCase>
 </SDM>

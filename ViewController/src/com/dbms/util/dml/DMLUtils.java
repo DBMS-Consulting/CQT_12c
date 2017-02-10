@@ -9,15 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import javax.sql.DataSource;
-
 import oracle.adf.model.BindingContext;
 
 import oracle.binding.DataControl;
+
+import oracle.jbo.ApplicationModule;
 import oracle.jbo.JboException;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.DBTransaction;
@@ -33,47 +29,31 @@ public class DMLUtils {
      * The method below is implemented from a Singleton Object for utilitarian purposes.
      */
     public static synchronized DBTransaction getDBTransaction() {
-       ApplicationModuleImpl am = null;
-       am = ((ApplicationModuleImpl)ADFUtils.getApplicationModuleForDataControl("CQTAppModuleDataControl"));
-       if (null == am){
-           System.out.println("Failed to get AM Instance from ADFUtils method.");
-           BindingContext bc = BindingContext.getCurrent();
-           DataControl dc = bc.findDataControl("CQTAppModuleDataControl");
-           am = ((ApplicationModuleImpl)dc.getDataProvider());
-           System.out.println("Got AM Instance from ADFUtils getDataProvider method.");
-       }
-       DBTransaction dBTransaction = am.getDBTransaction();
-       return dBTransaction;
+        BindingContext   bc = BindingContext.getCurrent();
+        DataControl dc = bc.findDataControl("NMQModuleDataControl");
+        if(dc != null){
+            ADFUtils.setEL("#{sessionScope.bcContext}", dc);
+        }
+        dc = (DataControl) ADFUtils.evaluateEL("#{sessionScope.bcContext}");
+        ApplicationModuleImpl am = ((ApplicationModuleImpl)(ApplicationModule)dc.getDataProvider());
+        DBTransaction dBTransaction = am.getDBTransaction();
+        return dBTransaction;
     }
 
 
     public static String getJDBCURL() {
 
-//        DBTransaction transaction = getDBTransaction();
-//        PreparedStatement preparedStatement = transaction.createPreparedStatement("commit;", 0);
-        Connection conn = null;
+        DBTransaction transaction = getDBTransaction();
+        PreparedStatement preparedStatement = transaction.createPreparedStatement("commit;", 0);
+        Connection conn;
         String retVal = "";
         try {
-            if (null != conn){
-                conn = getConnectionFromDS();
-                retVal= conn.getMetaData().getURL();
+            conn = preparedStatement.getConnection();
+            retVal= conn.getMetaData().getURL();
             }
-        }
         catch (SQLException e) {
             e.printStackTrace();
-        } catch (NamingException e) {
-            e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try {
-                    // Close the connection
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    CSMQBean.logger.error("ERROR", e);
-                }
             }
-        }
         return retVal;
         
         }
@@ -110,26 +90,5 @@ public class DMLUtils {
             }
         }
     }
-    /**Method to get Connection using JDBC DataSource Name
-         * @param dsName
-         * @return
-         * @throws NamingException
-         * @throws SQLException
-         */
-        public static final Connection getConnectionFromDS() throws NamingException, SQLException {
-            Connection con = null;
-            DataSource datasource = null;
-
-            Context initialContext = new InitialContext();
-            if (initialContext == null) {
-            }
-            datasource = (DataSource) initialContext.lookup("jdbc/TMSDS");
-            if (datasource != null) {
-                con = datasource.getConnection();
-            } else {
-                System.out.println("Failed to Find JDBC DataSource.");
-            }
-            return con;
-        }
 
 }

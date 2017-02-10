@@ -15,22 +15,22 @@
              -->
             <af:popup id="confirmDemoteToDraft">
                 <af:dialog title="Confirm Demote to Pending A" dialogListener="#{pageFlowScope.ImpactAnalysisBean.demoteToPendingIA}" id="d5">
-                    <af:activeOutputText value="Are you sure you want to demote this #{applicationScope.CSMQBean.customMQName} to draft?" id="aot4"/>
+                    <af:activeOutputText value="Are you sure you want to demote this MedDRA Query to draft?" id="aot4"/>
                 </af:dialog>
             </af:popup>
             <af:popup id="confirmReviewed">
                 <af:dialog title="Confirm Reviewed" dialogListener="#{pageFlowScope.ImpactAnalysisBean.reviewed}" id="d6">
-                    <af:activeOutputText value="Are you sure you want to confirm this #{applicationScope.CSMQBean.customMQName} as reviewed?" id="aot5"/>
+                    <af:activeOutputText value="Are you sure you want to confirm this MedDRA Query as reviewed?" id="aot5"/>
                 </af:dialog>
             </af:popup>
             <af:popup id="confirmApproved">
                 <af:dialog title="Confirm Approve" dialogListener="#{pageFlowScope.ImpactAnalysisBean.approve}" id="d7">
-                    <af:activeOutputText value="Are you sure you want to approve this #{applicationScope.CSMQBean.customMQName}?" id="aot6"/>
+                    <af:activeOutputText value="Are you sure you want to approve this MedDRA Query?" id="aot6"/>
                 </af:dialog>
             </af:popup>
             <af:popup id="confirmDelete">
                 <af:dialog title="Confirm Delete" dialogListener="#{pageFlowScope.ImpactAnalysisBean.delete}" id="d2">
-                    <af:activeOutputText value="Are you sure you want to delete this #{applicationScope.CSMQBean.customMQName}?" id="aot1"/>
+                    <af:activeOutputText value="Are you sure you want to delete this MedDRA Query?" id="aot1"/>
                 </af:dialog>
             </af:popup>
            
@@ -109,7 +109,7 @@
                                                                 value="BASE"
                                                                 binding="#{pageFlowScope.NMQSourceTermSearchBean.controlDictionaryType}">
                                                 <af:selectItem label="MedDRA" value="BASE" id="si1"/>
-                                                <af:selectItem label="Filter" value="FILTER" id="si13"/>
+                                                <af:selectItem label="MQ" value="FILTER" id="si13"/>
                                             </af:selectOneChoice>
                                             <af:selectOneChoice id="soc4" label="Level" partialTriggers="soc1"
                                                                 binding="#{pageFlowScope.NMQSourceTermSearchBean.controlLevel}"
@@ -119,13 +119,13 @@
                                                                             <af:selectItem label="SMQ 3" value="MQ3" id="si26" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
                                                                             <af:selectItem label="SMQ 4" value="MQ4" id="si27" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
                                                                             <af:selectItem label="SMQ 5" value="MQ5" id="si28" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
-                                                                            
-                                                                            <af:selectItem label="Custom 1" value="NMQ1" id="si29" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
-                                                                            <af:selectItem label="Custom 2" value="NMQ2" id="si31" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
-                                                                            <af:selectItem label="Custom 3" value="NMQ3" id="si32" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
-                                                                            <af:selectItem label="Custom 4" value="NMQ4" id="si30" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems  or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
-                                                                            <af:selectItem label="Custom 5" value="NMQ5" id="si34" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
-                                                                            
+                                                                            <af:selectItem label="All SMQs" value="MQ%" id="si281" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                                            <af:selectItem label="NMQ/CMQ1 1" value="NMQ1" id="si29" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                                                            <af:selectItem label="NMQ 2" value="NMQ2" id="si31" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                                                            <af:selectItem label="NMQ 3" value="NMQ3" id="si32" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                                                            <af:selectItem label="NMQ 4" value="NMQ4" id="si30" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems  or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                                                            <af:selectItem label="NMQ 5" value="NMQ5" id="si34" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
+                                                                             <af:selectItem label="All NMQ/CMQs" value="NMQ%" id="si341" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems or ( !pageFlowScope.NMQSourceTermSearchBean.meddraSearch and pageFlowScope.ImpactAnalysisBean.mqType eq 'NMQ')}"/>
                                                                             <af:selectItem label="SOC" value="SOC" id="si35" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
                                                                             <af:selectItem label="HLGT" value="HLGT" id="si36" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
                                                                             <af:selectItem label="HLT" value="HLT" id="si37" rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
@@ -381,7 +381,7 @@
                                                 <af:column headerText="ID" id="c45" rendered="false">
                                                     <af:outputText value="#{row.DictContentId}" id="ot47">
                                                         <af:convertNumber groupingUsed="false"
-                                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                                                          pattern="#{bindings.ImpactSearchListVO_NMQ_Y.hints.DictContentId.format}"/>
                                                     </af:outputText>
                                                 </af:column>
                                             </af:table>
@@ -415,7 +415,7 @@
                                                 <af:column headerText="ID" id="c33" rendered="false">
                                                     <af:outputText value="#{row.DictContentId}" id="ot35">
                                                         <af:convertNumber groupingUsed="false"
-                                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                                                          pattern="#{bindings.ImpactSearchListVO_MQ_Y.hints.DictContentId.format}"/>
                                                     </af:outputText>
                                                 </af:column>
                                             </af:table>
@@ -517,7 +517,7 @@
                                                 <af:column headerText="ID" id="c39" rendered="false">
                                                     <af:outputText value="#{row.DictContentId}" id="ot41">
                                                         <af:convertNumber groupingUsed="false"
-                                                                          pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                                                          pattern="#{bindings.ImpactSearchListVO_NMQ_N.hints.DictContentId.format}"/>
                                                     </af:outputText>
                                                 </af:column>
                                             </af:table>
@@ -550,7 +550,7 @@
                                             </af:column>
                                             <af:column  headerText="ID" id="c13" rendered="false">
                                                 <af:outputText value="#{row.DictContentId}" id="ot10">
-                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.ImpactSearchListVO1.hints.DictContentId.format}"/>
+                                                    <af:convertNumber groupingUsed="false" pattern="#{bindings.ImpactSearchListVO_MQ_N.hints.DictContentId.format}"/>
                                                 </af:outputText>
                                             </af:column>
                                             </af:table>

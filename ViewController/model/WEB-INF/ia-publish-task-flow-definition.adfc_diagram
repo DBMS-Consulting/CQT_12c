@@ -157,4 +157,39 @@
       <property
          name="sdm:polyPoints">T50,453.74707,243.9253,563.2637,163.34097,L54</property>
    </ControlFlowCase>
+   <View
+      id="View14">
+      <property
+         name="activityId">iaPublishedMQs</property>
+      <property
+         name="page">/workflow/iaPublishedMQs.jspx</property>
+      <property
+         name="description">&lt;html>&lt;p>&lt;b>iaPublishedMQs&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
+      <property
+         name="trainStop">true</property>
+      <property
+         name="exceptionHandler">false</property>
+      <property
+         name="y">244.59766</property>
+      <property
+         name="x">282.0</property>
+   </View>
+   <TrainFlow
+      islink="true"
+      id="TrainFlow15"
+      from="View3"
+      to="View14">
+      <property
+         name="sdm:polyPoints">L54,412.74707,128.72412,282.0,190.94824,T50</property>
+   </TrainFlow>
+   <ControlFlowCase
+      islink="true"
+      id="ControlFlowCase16"
+      from="View14"
+      to="MethodCall4">
+      <property
+         name="fromOutcome">CANCEL</property>
+      <property
+         name="sdm:polyPoints">R48,L51</property>
+   </ControlFlowCase>
 </SDM>

@@ -7,10 +7,20 @@
             <af:form id="f1">
                 <af:pageTemplate viewId="/CSMQ.jspx" id="pt1" value="#{bindings.pt1}">
                     <f:facet name="header">
-                        <af:group id="g2">
+                        <af:panelGroupLayout id="g2" layout="horizontal">
                             <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
-                            <af:spacer width="10" height="10" id="s1"/>
-                        </af:group>
+                            <af:spacer width="200" height="10" id="s1"/>
+                            <af:panelGroupLayout id="pgl14" layout="horizontal" halign="center" styleClass="AFStretchWidth"
+                                                 rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}">  
+                              <af:outputText value="Historic View as of " id="ot26" 
+                                             inlineStyle="font-weight: bold;font-size: 16px;"/>
+                              <af:spacer width="5" height="10" id="s12"/>  
+                              <af:outputText value="#{pageFlowScope.NMQWizardSearchBean.historyDate}" id="ot27" 
+                                             inlineStyle="font-weight: bold;font-size: 16px;">                                 
+                                    <af:convertDateTime pattern="dd-MMM-yyyy"/>
+                              </af:outputText>
+                            </af:panelGroupLayout>
+                        </af:panelGroupLayout>
                     </f:facet>
                     <f:facet name="main">
                         <af:group id="g1">
@@ -42,9 +52,15 @@
                                                                          icon="/image/database_save.png"/>
                                                 <af:commandToolbarButton text="Export" id="ctb11a" disabled="false"
                                                                          icon="/image/hierarchy/EXCEL.png">
-                                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.export}"
+                                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.exportRelations}"
                                                                                    contentType="application/x-download"
                                                                                    filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
+                                                </af:commandToolbarButton>
+                                                <af:commandToolbarButton text="MQ Detailed Report" id="ctb1"
+                                                                         icon="/image/hierarchy/EXCEL.png">
+                                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.downloadMQDetailedReport}"
+                                                                                   contentType="application/x-download"
+                                                                                   filename="#{pageFlowScope.HierarchyExportBean.mqDtlReportExcelFileName}"/>
                                                 </af:commandToolbarButton>
                                                 <af:commandToolbarButton text="Hierarchy Search" id="cb6" icon="/image/tree.png"
                                                                          rendered="#{RenderingRulesBean.wizardRelationsRenderSave}">
@@ -55,10 +71,10 @@
                                         <af:treeTable value="#{pageFlowScope.TermHierarchyBean.treemodel}" var="node" rowSelection="single"
                                                       id="tableLeft" width="1185" binding="#{pageFlowScope.TermHierarchyBean.targetTree}"
                                                       columnStretching="column:c1" inlineStyle=" margin:2px;" initiallyExpanded="false"
-                                                      fetchSize="20" autoHeightRows="-1" contentDelivery="immediate">
+                                                      fetchSize="20" autoHeightRows="-1">
                                             <f:facet name="nodeStamp">
                                                 <af:column id="c1"
-                                                           headerText="#{pageFlowScope.NMQWizardBean.currentTermName}"
+                                                           headerText="#{bindings.Term.inputValue}#{pageFlowScope.NMQWizardBean.currentTermName}"
                                                            width="180" sortable="true" filterable="true" inlineStyle="height:18px;"
                                                            noWrap="false">
                                                     <af:panelGroupLayout id="pgl3" halign="left">
@@ -228,15 +244,19 @@
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
                                                             <af:selectItem label="SMQ 5" value="MQ5" id="si45"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
+                                                            <af:selectItem label="All SMQs" value="MQ%" id="si1"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showSMQSelItems}"/>
                                                             <af:selectItem label="NMQ/CMQ 1" value="NMQ1" id="si46"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
-                                                            <af:selectItem label="NMQ/CMQ 2" value="NMQ2" id="si49"
+                                                            <af:selectItem label="NMQ 2" value="NMQ2" id="si49"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
-                                                            <af:selectItem label="NMQ/CMQ 3" value="NMQ3" id="si47"
+                                                            <af:selectItem label="NMQ 3" value="NMQ3" id="si47"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
-                                                            <af:selectItem label="NMQ/CMQ 4" value="NMQ4" id="si52"
+                                                            <af:selectItem label="NMQ 4" value="NMQ4" id="si52"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
-                                                            <af:selectItem label="NMQ/CMQ 5" value="NMQ5" id="si50"
+                                                            <af:selectItem label="NMQ 5" value="NMQ5" id="si50"
+                                                                           rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
+                                                             <af:selectItem label="All NMQ/CMQs" value="NMQ%" id="si2"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showNMQSelItems}"/>
                                                             <af:selectItem label="SOC" value="SOC" id="si51"
                                                                            rendered="#{pageFlowScope.NMQSourceTermSearchBean.showMedDRASelItems}"/>
@@ -376,7 +396,8 @@
                                                         <af:column headerText="Hierarchy Details" id="c15" width="572">
                                                             <af:column id="c26" headerText="Code" width="50" sortable="true"
                                                                        filterable="true">
-                                                                <af:outputText value="#{node.dictContentCode}" id="ot26"/>
+                                                                <af:outputText value="#{node.dictContentCode}"
+                                                                               id="ot7"/>
                                                             </af:column>
                                                             <af:column id="c18" headerText="Level" width="50" sortable="true"
                                                                        filterable="true">
@@ -401,7 +422,8 @@
                         <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
                             <af:spacer width="10" height="10" id="s6"/>
                             <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
-                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can" action="CANCEL"
+                            <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
+                                              action="#{pageFlowScope.NMQWizardBean.showRelationsWarningPopup}"
                                               immediate="true" shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
                             <af:spacer width="20" height="10" id="s5"/>
                             <!--@author MTW
@@ -418,6 +440,21 @@
               -->
                             <af:inputText label="Name:" id="it3" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
                                           disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"/>
+                            <af:popup childCreation="deferred" autoCancel="disabled" id="p2"
+                                      binding="#{pageFlowScope.NMQWizardBean.addRelationsWarningPopup}">
+                                <af:dialog id="d4" title="Confirmation" type="none">
+                                    <f:facet name="buttonBar">
+                                        <af:panelGroupLayout id="pgl6" layout="horizontal">
+                                            <af:commandButton text="Yes" id="cb4"
+                                                              actionListener="#{pageFlowScope.NMQSourceTermSearchBean.updateRelations}"
+                                                              action="CANCEL"/>
+                                            <af:spacer width="10" height="10" id="s2"/>
+                                            <af:commandButton text="No" id="cb5" action="CANCEL"/>
+                                        </af:panelGroupLayout>
+                                    </f:facet>
+                                    <af:outputText value="The data you have modified has not been saved and will be lost unless you save.  Would you like to save the data?" id="ot9"/>
+                                </af:dialog>
+                            </af:popup>
                         </af:panelGroupLayout>
                     </f:facet>
                     <f:attribute name="currentPage" value="Create New #{applicationScope.CSMQBean.customMQName} Wizard"/>

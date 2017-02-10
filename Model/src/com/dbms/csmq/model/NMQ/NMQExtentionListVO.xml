@@ -10,7 +10,8 @@
   PageIterMode="Full"
   UseGlueCode="false"
   RowClass="com.dbms.csmq.model.NMQ.NMQExtentionListVORowImpl"
-  ComponentClass="com.dbms.csmq.model.NMQ.NMQExtentionListVOImpl">
+  ComponentClass="com.dbms.csmq.model.NMQ.NMQExtentionListVOImpl"
+  RangeSize="25">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>

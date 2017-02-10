@@ -9,14 +9,14 @@
               id="releaseGroupsSearch1Iterator"/>
     <invokeAction Binds="EWP_releaseGroupsSearch1Iterator"
                   id="Execute_EWP_releaseGroupsSearch1Iterator"
-                  Refresh="renderModel"/>
+                  />
     <iterator Binds="DictionaryVO1" RangeSize="25"
               DataControl="DictionaryModuleDataControl"
               id="DictionaryVO1Iterator"/>
     <iterator Binds="SimpleSearch1" RangeSize="25"
               DataControl="SearchModuleDataControl" id="SimpleSearch1Iterator"/>
     <invokeAction Binds="EWP_SimpleSearch1" id="Execute_EWP_SimpleSearch1"
-                  Refresh="renderModel"/>
+                  />
     <iterator Binds="InfNotesVO1" RangeSize="10"
               DataControl="InfNotesModuleDataControl" id="InfNotesVO1Iterator"/>
     <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"/>

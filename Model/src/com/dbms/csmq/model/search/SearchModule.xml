@@ -5,7 +5,13 @@
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="SearchModule"
   Version="11.1.2.64.36"
-  ClearCacheOnRollback="true">
+  ClearCacheOnRollback="true"
+  ComponentClass="com.dbms.csmq.model.search.SearchModuleImpl"
+  ComponentInterface="com.dbms.csmq.model.search.common.SearchModule"
+  ClientProxyName="com.dbms.csmq.model.search.client.SearchModuleClient">
+  <DesignTime>
+    <Attr Name="_isCodegen" Value="true"/>
+  </DesignTime>
   <ViewUsage
     Name="SimpleSearch1"
     ViewObjectName="com.dbms.csmq.model.search.SimpleSearch"/>
@@ -27,4 +33,57 @@
   <ViewUsage
     Name="HierarchySourceTermSearchFixVO1"
     ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchFixVO"/>
+  <ViewUsage
+    Name="TermHistoricInfoVO1"
+    ViewObjectName="com.dbms.csmq.model.search.TermHistoricInfoVO"/>
+  <ViewUsage
+    Name="TermHistoryHierarchyVO1"
+    ViewObjectName="com.dbms.csmq.model.search.TermHistoryHierarchyVO"/>
+  <ViewUsage
+    Name="TermDetailsVO1"
+    ViewObjectName="com.dbms.csmq.model.search.TermDetailsVO"/>
+  <ViewUsage
+    Name="TermHierarchyDetailsVO1"
+    ViewObjectName="com.dbms.csmq.model.search.TermHierarchyDetailsVO"/>
+  <ClientInterface>
+    <Method
+      Name="loadHistoricTermInformation"
+      MethodName="loadHistoricTermInformation">
+      <Return
+        Type="void"/>
+      <Parameter
+        Name="dictContentId"
+        Type="java.math.BigDecimal"/>
+      <Parameter
+        Name="effectiveDTStr"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="loadHistoricTermHierarchyInformation"
+      MethodName="loadHistoricTermHierarchyInformation">
+      <Return
+        Type="void"/>
+      <Parameter
+        Name="dictContentId"
+        Type="java.math.BigDecimal"/>
+      <Parameter
+        Name="effectiveDTStr"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="loadMQDetailedDetailedTermHierarchyInformation"
+      MethodName="loadMQDetailedDetailedTermHierarchyInformation">
+      <Return
+        Type="void"/>
+      <Parameter
+        Name="dictContentId"
+        Type="java.math.BigDecimal"/>
+      <Parameter
+        Name="tMSRecordStatus"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="activationGroup"
+        Type="java.lang.String"/>
+    </Method>
+  </ClientInterface>
 </AppModule>

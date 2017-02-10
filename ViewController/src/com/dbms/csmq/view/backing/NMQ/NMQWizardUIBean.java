@@ -8,9 +8,11 @@ import com.dbms.csmq.view.hierarchy.TermHierarchyBean;
 
 import com.dbms.util.ADFUtils;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UISelectItems;
@@ -19,11 +21,14 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.ValueChangeEvent;
 
-import oracle.adf.model.binding.DCBindingContainer;
+import javax.faces.model.SelectItem;
+
 import oracle.adf.view.rich.component.rich.input.RichInputDate;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectBooleanCheckbox;
+import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
+import oracle.adf.view.rich.component.rich.layout.RichPanelFormLayout;
 import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
@@ -32,8 +37,6 @@ import oracle.adf.view.rich.component.rich.nav.RichTrainButtonBar;
 import oracle.adf.view.rich.component.rich.output.RichOutputFormatted;
 import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.event.DialogEvent;
-
-import oracle.binding.OperationBinding;
 
 import oracle.jbo.domain.Date;
 
@@ -119,7 +122,7 @@ public class NMQWizardUIBean {
      * 
      */
     public void designeeValueChange(ValueChangeEvent valueChangeEvent) {
-        
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         nMQWizardBean.setDesigneeList((List<String>)valueChangeEvent.getNewValue());
         
     }
@@ -253,7 +256,7 @@ public class NMQWizardUIBean {
 
 
     public boolean saveDetails() {
-
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.FALSE);
         setCurrentDetailValuesFromUI();
         this.controlMQLevel.setDisabled(true);
         boolean retVal = nMQWizardBean.saveDetails();
@@ -348,9 +351,11 @@ public class NMQWizardUIBean {
     public String updateRelations() {
         
     System.out.println("************* REFRESHING RELATIONS ****************");
-        CSMQBean.logger.info(userBean.getCaller() + " ************* REFRESHING RELATIONS ****************");
+        
         nMQWizardBean.updateRelations();
-        CSMQBean.logger.info(userBean.getCaller() + " After updateRelations...");
+
+        
+
         boolean scope = false;
         if (nMQWizardBean.getCurrentScope() != null)
             scope = nMQWizardBean.getCurrentScope().equals(CSMQBean.HAS_SCOPE);
@@ -374,11 +379,13 @@ public class NMQWizardUIBean {
     public void releaseGroupChanged(ValueChangeEvent valueChangeEvent) {
         if (valueChangeEvent.getNewValue() == null)
             return;
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         CSMQBean.logger.info(userBean.getCaller() + " releaseGroupChanged:" + valueChangeEvent);
         nMQWizardBean.setCurrentPredictGroups(String.valueOf(controlReleaseGroup.getValue()));
     }
 
     public void nmqGroupChanged(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         CSMQBean.logger.info(userBean.getCaller() + " nmqGroupChanged:" + valueChangeEvent);
         nMQWizardBean.setCurrentMQGROUP(String.valueOf(nMQWizardBean.getControlMQGroup().getValue()));
     }
@@ -465,102 +472,46 @@ public class NMQWizardUIBean {
     }
 
     public void reactivate(DialogEvent dialogEvent) {
-//        if (NMQUtils.activate(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentContentCode(),
-//                              userBean.getUserRole(), userBean.getCurrentUser())) {
-            FacesMessage msg;
-            DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-            OperationBinding ob = bc.getOperationBinding("activate");
-            ob.getParamsMap().put("dictContentID", nMQWizardBean.getCurrentDictContentID());
-            ob.getParamsMap().put("mQCode", nMQWizardBean.getCurrentContentCode());
-            ob.getParamsMap().put("draftRelGroup", CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP"));
-            ob.getParamsMap().put("status", CSMQBean.ACTIVE_ACTIVITY_STATUS);
-            ob.getParamsMap().put("userRole", userBean.getUserRole());
-            ob.getParamsMap().put("userName", userBean.getCurrentUser());
-            String retVal = (String) ob.execute();
-            if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query Ractivated Successfully", null);
-                nMQWizardBean.setCurrentMQStatus(CSMQBean.ACTIVE_ACTIVITY_STATUS);
-                nMQWizardBean.setCurrentStatus(CSMQBean.PENDING_RELEASE_STATUS);
-                nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
-                AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmDetailsPanel);
-                AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmDetailsPanel);
-                AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmToolbar);
-                AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmToolbar);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                    String messageText = CSMQBean.getProperty("ACTIVATE_DURING_IMPACT_ANALYSYS");
-                    msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.FAILURE)) {
-                    msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to Activate MedDRA Query", "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-        
-    }
-
-    public void retire(DialogEvent dialogEvent) {
-//        if (NMQUtils.retire(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentContentCode(),
-//                            userBean.getUserRole(), userBean.getCurrentUser())) {
-            FacesMessage msg;
-            DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-            OperationBinding ob = bc.getOperationBinding("retire");
-            ob.getParamsMap().put("dictContentID", nMQWizardBean.getCurrentDictContentID());
-            ob.getParamsMap().put("mQCode", nMQWizardBean.getCurrentContentCode());
-            ob.getParamsMap().put("defDraftRelGroup", CSMQBean.getProperty("DEFAULT_DRAFT_RELEASE_GROUP"));
-            ob.getParamsMap().put("userRole", userBean.getUserRole());
-            ob.getParamsMap().put("userName", userBean.getCurrentUser());
-            String retVal = (String)ob.execute();
-            if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query Retired Successfully", null);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                nMQWizardBean.setCurrentMQStatus(CSMQBean.INACTIVE_ACTIVITY_STATUS);
-                nMQWizardBean.setCurrentStatus(CSMQBean.PENDING_RELEASE_STATUS);
-                nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
-                AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmDetailsPanel);
-                AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmDetailsPanel);
-                AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmToolbar);
-                AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmToolbar);
-            } else if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                String messageText = CSMQBean.getProperty("DELETE_DURING_IMPACT_ANALYSYS");
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else if (null != retVal && retVal.equalsIgnoreCase(CSMQBean.FAILURE)) {
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to Retire MedDRA Query", "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
-    }
-
-    public void delete(DialogEvent dialogEvent) {
-        
-        FacesMessage msg;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("delete");
-        ob.getParamsMap().put("dictContentID", nMQWizardBean.getCurrentDictContentID());
-        ob.getParamsMap().put("predictGroupName", nMQWizardBean.getCurrentPredictGroups());
-
-        Boolean retVal = (Boolean) ob.execute();
-        //if (NMQUtils.delete(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentPredictGroups())) {
-        if (retVal.booleanValue()) {
-            nMQWizardBean.setActionDelete(true);
-            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query Deleted Successfully", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg); 
+        if (NMQUtils.activate(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentContentCode(),
+                              userBean.getUserRole(), userBean.getCurrentUser())) {
+            nMQWizardBean.setCurrentMQStatus(CSMQBean.ACTIVE_ACTIVITY_STATUS);
+            nMQWizardBean.setCurrentStatus(CSMQBean.PENDING_RELEASE_STATUS);
+            nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
             AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmDetailsPanel);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmDetailsPanel);
             AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmToolbar);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmToolbar);
-        } else {
-            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to Delete MedDRA Query", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg); 
+        }
+    }
+
+    public void retire(DialogEvent dialogEvent) {
+        if (NMQUtils.retire(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentContentCode(),
+                            userBean.getUserRole(), userBean.getCurrentUser())) {
+            nMQWizardBean.setCurrentMQStatus(CSMQBean.INACTIVE_ACTIVITY_STATUS);
+            nMQWizardBean.setCurrentStatus(CSMQBean.PENDING_RELEASE_STATUS);
+            nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmDetailsPanel);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmDetailsPanel);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmToolbar);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmToolbar);
+        }
+    }
+
+    public void delete(DialogEvent dialogEvent) {
+        if (NMQUtils.delete(nMQWizardBean.getCurrentDictContentID(), nMQWizardBean.getCurrentPredictGroups())) {
+            nMQWizardBean.setActionDelete(true);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmDetailsPanel);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmDetailsPanel);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlConfirmToolbar);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlConfirmToolbar);
         }
     }
 
     public void demoteToDraft(DialogEvent dialogEvent) {
-        HashMap result = this.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_DRAFT, userBean.getCurrentUser(),
+        Hashtable result =
+            NMQUtils.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_DRAFT, userBean.getCurrentUser(),
                                  userBean.getUserRole(), nMQWizardBean.getCurrentRequestedByDate(), null,
                                  cSMQBean.getDefaultDraftReleaseGroup());
-//            NMQUtils.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_DRAFT, userBean.getCurrentUser(),
-//                                 userBean.getUserRole(), nMQWizardBean.getCurrentRequestedByDate(), null,
-//                                 cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
             nMQWizardBean.setCurrentPredictGroups(cSMQBean.getDefaultDraftReleaseGroup());
             nMQWizardBean.setCurrentState((String)result.get("STATE"));
@@ -573,8 +524,8 @@ public class NMQWizardUIBean {
     }
 
     public void confirmReviewed(DialogEvent dialogEvent) {
-        HashMap result =
-            this.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REVIEWED, userBean.getCurrentUser(),
+        Hashtable result =
+            NMQUtils.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REVIEWED, userBean.getCurrentUser(),
                                  userBean.getUserRole(), nMQWizardBean.getCurrentRequestedByDate(), null,
                                  cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
@@ -589,8 +540,8 @@ public class NMQWizardUIBean {
     }
 
     public void approve(DialogEvent dialogEvent) {
-        HashMap result =
-            this.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_APPROVED, userBean.getCurrentUser(),
+        Hashtable result =
+            NMQUtils.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_APPROVED, userBean.getCurrentUser(),
                                  userBean.getUserRole(), nMQWizardBean.getCurrentRequestedByDate(), null,
                                  cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
@@ -612,8 +563,8 @@ public class NMQWizardUIBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
         }
-        HashMap result =
-            this.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REQUESTED, userBean.getCurrentUser(),
+        Hashtable result =
+            NMQUtils.changeState(nMQWizardBean.getCurrentDictContentID(), CSMQBean.STATE_REQUESTED, userBean.getCurrentUser(),
                                  userBean.getUserRole(), nMQWizardBean.getCurrentRequestedByDate(),
                                  nMQWizardBean.getCurrentReasonForRequest(), cSMQBean.getDefaultDraftReleaseGroup());
         if (result != null) {
@@ -720,6 +671,7 @@ public class NMQWizardUIBean {
     }
 
     public void scopeChanged(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         String newVal = valueChangeEvent.getNewValue().toString();
         //nMQWizardBean.setHierarchyParamScope(newVal);
         nMQWizardBean.setCurrentScope(newVal.toString());
@@ -754,7 +706,6 @@ public class NMQWizardUIBean {
     }
 
     public void addRelationsPageLoad(PhaseEvent phaseEvent) {
-        CSMQBean.logger.info("*** addRelationsPageLoad***");
         if (!nMQWizardBean.isTreeAccessed()) {
             updateRelations();
             nMQWizardBean.setTreeAccessed(true);
@@ -796,6 +747,7 @@ public class NMQWizardUIBean {
     }
 
     public void extensionChanged(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
         valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
         String newExt = valueChangeEvent.getNewValue().toString();
         nMQWizardBean.setIsNMQ(newExt.equals("NMQ"));
@@ -819,8 +771,7 @@ public class NMQWizardUIBean {
         } else {
             nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
         }
-		
-		if (nMQWizardBean.getCurrentExtension().equals(CSMQBean.SMQ_NAME)){
+        if (nMQWizardBean.getCurrentExtension().equals(CSMQBean.SMQ_NAME)){
             nMQWizardBean.setRenderProduct(Boolean.FALSE);
             nMQWizardBean.getProductList().clear();
             nMQWizardBean.getProductListControl().resetValue();
@@ -867,51 +818,13 @@ public class NMQWizardUIBean {
     public UISelectItems getCntrlProductSelectItems() {
         return cntrlProductSelectItems;
     }
-    private HashMap changeState(String dictContentIDs, String state, String currentUser, String currentUserRole, oracle.jbo.domain.Date dueDate, String comment, String activationGroup){
-        HashMap retVal;
-        FacesMessage msg;
-        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("changeState");
-        ob.getParamsMap().put("dictContentIDs", dictContentIDs);
-        ob.getParamsMap().put("state", state);
-        ob.getParamsMap().put("currentUser",currentUser);
-        ob.getParamsMap().put("currentUserRole", currentUserRole);
-        ob.getParamsMap().put("dueDate", dueDate);
-        ob.getParamsMap().put("comment", comment);
-        ob.getParamsMap().put("activationGroup", activationGroup);
 
-        retVal = (HashMap)ob.execute();
-        if (null != retVal){
-            String retCode = (String) retVal.get("RETURN_CODE");
-            if (null != retCode && retCode.equalsIgnoreCase(CSMQBean.SUCCESS)){
-                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Successfully to " + state, null);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } else {
-                String messageText = "";
-                if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_ERROR)) {  
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_PROMOTION_SEQUENCE_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_PROMOTION_SEQUENCE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.PROMOTION_DEPENDENCY_ERROR)) {
-                    messageText = CSMQBean.getProperty("PROMOTION_DEPENDENCY_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_ERROR)) {
-                    messageText =  CSMQBean.getProperty("INVALID_STATE_CHANGE_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.MUST_BE_NMQ_OR_SMQ_ERROR)) {
-                    messageText = CSMQBean.getProperty("MUST_BE_NMQ_OR_SMQ_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.GENERIC_ACTIVATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("GENERIC_ACTIVATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.DATABASE_CONFIGURATION_ERROR)) {
-                    messageText = CSMQBean.getProperty("DATABASE_CONFIGURATION_ERROR");
-                } else if (retCode.equalsIgnoreCase(CSMQBean.INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR)) {
-                    messageText = CSMQBean.getProperty("INVALID_STATE_CHANGE_FROM_PENDING_TO_DRAFT_ERROR");
-                } else { // it's something else
-                    messageText = "Error occurred during state change to " + state;
-                }
-                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, messageText, "");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                return null;
-            }
-        }
-        return retVal;
+    public void detailsChanged(ValueChangeEvent valueChangeEvent) {
+        ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
+    }
+
+    public String yesWarning() {
+        saveDetails();
+        return "CANCEL";
     }
 }

@@ -5,11 +5,16 @@ import com.dbms.csmq.CSMQBean;
 import com.dbms.csmq.UserBean;
 import com.dbms.csmq.view.backing.NMQ.NMQWizardBean;
 
+import com.dbms.csmq.view.backing.NMQ.NMQWizardSearchBean;
+import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
+
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +40,12 @@ import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.component.rich.output.RichOutputFormatted;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
+import oracle.binding.OperationBinding;
+
 import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
+
+import oracle.jbo.domain.Number;
 
 import org.apache.myfaces.trinidad.model.ChildPropertyTreeModel;
 import org.apache.myfaces.trinidad.model.ModelUtils;
@@ -45,13 +54,11 @@ import org.apache.myfaces.trinidad.model.RowKeySetTreeImpl;
 import org.apache.myfaces.trinidad.model.TreeModel;
 
 
-public class TermHierarchyBean extends Hierarchy implements Serializable  {
-    @SuppressWarnings("compatibility:-5641190044367024989")
-    private static final long serialVersionUID = -5160463785431600064L;
+public class TermHierarchyBean extends Hierarchy {
 
-    private transient TreeModel treemodel;
+    private TreeModel treemodel;
     //private GenericTreeNode root;
-    private transient Enumeration rows;
+    private Enumeration rows;
     private HashMap parentNodesByLevel;
     private boolean editable;
     private String queryLevel;
@@ -60,15 +67,15 @@ public class TermHierarchyBean extends Hierarchy implements Serializable  {
     private String dictionaryVersionSearchCriteria = "";
     private String levelSearchCriteria = "";
     private String termSearchCriteria = "";
-    private transient RichSelectOneChoice dictionaryVersion;
-    private transient RichSelectOneChoice levelList;
-    private transient RichInputText term;
+    private RichSelectOneChoice dictionaryVersion;
+    private RichSelectOneChoice levelList;
+    private RichInputText term;
     
     private String currentDictionary;
     private boolean hasScope = false;
     NMQWizardBean nMQWizardBean;
-    private transient RichTreeTable targetTree;
-    private transient RichTreeTable sourceTree;
+    private RichTreeTable targetTree;
+    private RichTreeTable sourceTree;
     String ignorePredict;
     private boolean exportAllowed = true;
     
@@ -141,19 +148,27 @@ public class TermHierarchyBean extends Hierarchy implements Serializable  {
         
         }
     
-    
     private boolean createTree() {
-        CSMQBean.logger.info("Term Hierarchy Bean ==>In createTree: ");
+        NMQWizardSearchBean nMQWizardSearchBean = (NMQWizardSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
+        System.out.println("TermHierarchyBean.java createTree() nMQWizardSearchBean.isHistoryFlow() =" + nMQWizardSearchBean.isHistoryFlow());
+        if(nMQWizardSearchBean.isHistoryFlow()){
+            return createHistoryHierarchyTree(nMQWizardSearchBean.getHistoryDate());
+        } else {
+            return createRegularHierarchyTree();
+        }
+    }
+    
+    private boolean createRegularHierarchyTree() {
+        
         BindingContext bc = BindingContext.getCurrent();
         DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
         DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("SmallTreeVO1Iterator");
+        
         rows = dciterb.getRowSetIterator().enumerateRowsInRange();
-        if (!rows.hasMoreElements()){
-            CSMQBean.logger.info("In createTree: no data..");
-            return false; // there's no data - bail
-        }       
+        if (!rows.hasMoreElements()) return false; // there's no data - bail
+               
         Row row = (Row)rows.nextElement();
-        CSMQBean.logger.info("In createTree: set root node properties..");
+
         root = new GenericTreeNode();
         root.setIsRoot(true);
         root.setTerm(Utils.getAsString(row,"Term"));
@@ -224,7 +239,6 @@ public class TermHierarchyBean extends Hierarchy implements Serializable  {
         root.setIsExpanded(true);
         
         populateTreeNodes(root);
-        CSMQBean.logger.info("createTree==> after populate tree nodes");
         //clean up the hashmap
         parentNodesByLevel = null;
         return true;
@@ -634,5 +648,233 @@ public class TermHierarchyBean extends Hierarchy implements Serializable  {
 
     public boolean isExportAllowed() {
         return exportAllowed;
+    }
+
+    private boolean createHistoryHierarchyTree(Date historyDate) {
+        execTermDHierarchyBasedonHistoryDate(new BigDecimal(nMQWizardBean.getCurrentDictContentID()),
+                                             getDateStr(historyDate));        
+        return populateHistoryHierarchyTree();
+    }
+    
+    private boolean populateHistoryHierarchyTree() {
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("TermHistoryHierarchyVO1Iterator");
+
+        rows = dciterb.getRowSetIterator().enumerateRowsInRange();
+
+        if (rows == null || (rows != null && !rows.hasMoreElements()) ) {
+            return false;
+        }
+
+        Row row = (Row)rows.nextElement();
+        root = new GenericTreeNode();
+        root.setIsRoot(true);
+        root.setTerm(Utils.getAsString(row, "RootTerm"));
+        root.setPrikey(Utils.getAsString(row, "RootDictContentId"));
+        root.setParent(null);
+        String rootLevelName = Utils.getAsString(row, "RootLevelName");
+        root.setLevelName(rootLevelName);
+        root.setQueryLevel(rootLevelName);
+        Number level = null;
+        String levelNumberStr = null;
+        try {
+            levelNumberStr = rootLevelName.substring(rootLevelName.length() - 1);
+            level = new Number(levelNumberStr);
+        } catch (Exception e) {
+        }
+        root.setLevel(level);
+        root.setDictShortName(Utils.getAsString(row, "RootDictName"));
+        root.setDictContentId(Utils.getAsString(row, "RootDictContentId"));
+        root.setDictContentCode(Utils.getAsString(row, "RootDictContentCode"));
+        root.setApprovedFlag("A");
+        root.setDictContentAltCode(Utils.getAsString(row, "RootDictContentCode"));
+        root.setStatus("A"); //TODO
+        root.setPredictGroupId(null);
+        root.setPath("0");
+        root.setTermCategory(""); //TODO
+        root.setTermLevel(levelNumberStr);
+        root.setTermScope(null);
+        root.setTermWeight(""); //TODO
+        root.setPath(""); //TODO
+        root.setFormattedScope("0"); //TODO
+        root.setHasScope(hasScope);
+
+        if (root.getLevelName().contains(CSMQBean.NMQ)) {
+            root.setMqType(CSMQBean.NMQ);
+            root.setEditable(true);
+            this.editable = true;
+        } else if (root.getLevelName().contains(CSMQBean.CMQ)) {
+            root.setMqType(CSMQBean.CMQ);
+            root.setEditable(true);
+            this.editable = true;
+        } else {
+            root.setMqType(CSMQBean.SMQ);
+            root.setEditable(false);
+            this.editable = false;
+        }
+        root.setScopeName("Full " + root.getMqType() + "/SMQ");        
+
+        root.setShowHasChildrenButton(false); //don't show it for the root
+        parentNodesByLevel.put(root.getDictContentId(), root);
+        CSMQBean.logger.info(userBean.getCaller() + " ADDING ROOT: " + root.toString() + ";EDITABLE=" + this.editable);
+
+        populateTreeNode(row);
+        while (rows.hasMoreElements()) {
+            row = (Row)rows.nextElement();
+            populateTreeNode(row);
+        }
+        hasScope = false;
+        //clean up the hashmap
+        parentNodesByLevel = null;
+        return true;
+    }
+
+    private void execTermDHierarchyBasedonHistoryDate(BigDecimal dictContentId, String effectiveDTStr) {
+        System.out.println("Start Exec execTermDHierarchyBasedonHistoryDate() dictContentId=" + dictContentId +
+                           ";; effectiveDTStr=" + effectiveDTStr);
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("loadHistoricTermHierarchyInformation");
+        ob.getParamsMap().put("dictContentId", dictContentId);
+        ob.getParamsMap().put("effectiveDTStr", effectiveDTStr);
+        ob.execute();
+        System.out.println("End of Exec execTermDHierarchyBasedonHistoryDate() ");
+    }
+
+    private String getDateStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+        String dateStr = null;
+        try {
+            if (date == null) {
+                date = new Date(System.currentTimeMillis());
+            }
+            dateStr = sdf.format(date);
+        } catch (Exception e) {
+            // TODO: Add catch code
+            e.printStackTrace();
+        }
+        System.out.println(dateStr);
+        return dateStr;
+    }
+
+    private void populateTreeNode(Row row) {
+        //store node and level
+        GenericTreeNode termNode = new GenericTreeNode();
+        termNode.setTerm(Utils.getAsString(row, "DtlsTerm"));
+
+        termNode.setPrikey(Utils.getAsString(row, "DtlsDictContentId"));
+        termNode.setParent(Utils.getAsString(row, "MstrDictContentId"));
+        termNode.setLevelName(Utils.getAsString(row, "DtlsLevelName"));
+        //termNode.setLevel(Utils.getAsNumber(row, "Level"));
+        termNode.setDictShortName(Utils.getAsString(row, "DtlsDictName"));
+        termNode.setDictContentId(Utils.getAsString(row, "DtlsDictContentId"));
+        termNode.setDictContentCode(Utils.getAsString(row, "DtlsDictContentCode"));
+        termNode.setApprovedFlag("A");
+        termNode.setDictContentAltCode(Utils.getAsString(row, "DtlsDictContentCode"));
+        termNode.setStatus(Utils.getAsString(row, "RelRelationScope")); //TODO
+        //termNode.setPredictGroupId(Utils.getAsNumber(row, "PredictGroupId"));
+        termNode.setPath(Utils.getAsString(row, "RelDepthFromRoot"));
+        termNode.setTermCategory(Utils.getAsString(row, "RelRelationCategory"));
+        termNode.setTermLevel(Utils.getAsString(row, "DtlsLevelName"));
+        termNode.setTermScope(Utils.getAsNumber(row, "RelRelationScope"));
+        termNode.setTermWeight(Utils.getAsString(row, "RelRelationWeight"));
+        termNode.setHasScope(this.hasScope);
+        termNode.setEditable(this.editable);
+
+        GenericTreeNode parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
+
+        if (parentNode == null) {
+            populateTreeNodeFromMaster(row);
+            parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
+        }
+
+        if (parentNode != null) {
+            parentNode.getChildren().add(termNode); // add to the parent
+            termNode.setParentNode(parentNode); // set the parent for the child
+            if (parentNode.isIsRoot())
+                termNode.setDeletable(true); //it's a child of the root - it can be deleted
+            if (root.equals(parentNode))
+                termNode.setIsDirectRelation(true); // it's a direct relation
+
+            termNode.setMqType(parentNode.getMqType()); // set the query type the same as the parent
+        }
+        
+        //REMOVE LLTs FROM THTE ROOT
+        if (parentNode != null && parentNode.isIsRoot() && termNode.getLevelName().equals("LLT")) {
+            termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+            CSMQBean.logger.info(userBean.getCaller() + " REMOVING LLT " + termNode);
+        }
+
+        setDerivedRelations(termNode);
+        String relScope = Utils.getAsString(row, "RelRelationScope");
+        if (relScope.contains("BROAD")) {
+            termNode.setScopeName("Broad");
+            termNode.setFormattedScope("1");
+        } else if (relScope.contains("NARROW")) {
+            termNode.setScopeName("Narrow");
+            termNode.setFormattedScope("2");
+        }
+
+        CSMQBean.logger.info(userBean.getCaller() + " CURRENT ADDING NODE: " + termNode);
+
+        if (termNode != null)
+            parentNodesByLevel.put(termNode.getDictContentId(), termNode);
+    }
+
+    private void populateTreeNodeFromMaster(Row row) {
+        //store node and level
+        GenericTreeNode termNode = new GenericTreeNode();
+        termNode.setTerm(Utils.getAsString(row, "MstrTerm"));
+
+        termNode.setPrikey(Utils.getAsString(row, "MstrDictContentId"));
+        termNode.setParent(Utils.getAsString(row, "RootDictContentId"));
+        termNode.setLevelName(Utils.getAsString(row, "MstrLevelName"));
+        //termNode.setLevel(Utils.getAsNumber(row, "Level"));
+        termNode.setDictShortName(Utils.getAsString(row, "MstrDictName"));
+        termNode.setDictContentId(Utils.getAsString(row, "MstrDictContentId"));
+        termNode.setDictContentCode(Utils.getAsString(row, "MstrDictContentCode"));
+        termNode.setApprovedFlag("A");
+        termNode.setDictContentAltCode(Utils.getAsString(row, "MstrDictContentCode"));
+        termNode.setStatus(Utils.getAsString(row, "RelRelationScope")); //TODO
+        //termNode.setPredictGroupId(Utils.getAsNumber(row, "PredictGroupId"));
+        termNode.setPath(Utils.getAsString(row, "RelDepthFromRoot"));
+        termNode.setTermCategory(Utils.getAsString(row, "RelRelationCategory"));
+        termNode.setTermLevel(Utils.getAsString(row, "MstrLevelName"));
+        termNode.setTermScope(Utils.getAsNumber(row, "RelRelationScope"));
+        termNode.setTermWeight(Utils.getAsString(row, "RelRelationWeight"));
+        termNode.setHasScope(this.hasScope);
+        termNode.setEditable(this.editable); 
+
+        GenericTreeNode parentNode = (GenericTreeNode)parentNodesByLevel.get(termNode.getParent());
+
+        if (parentNode != null) {
+            parentNode.getChildren().add(termNode); // add to the parent
+            termNode.setParentNode(parentNode); // set the parent for the child
+            if (parentNode.isIsRoot())
+                termNode.setDeletable(true); //it's a child of the root - it can be deleted
+            if (root.equals(parentNode))
+                termNode.setIsDirectRelation(true); // it's a direct relation
+
+            termNode.setMqType(parentNode.getMqType()); // set the query type the same as the parent
+        }       
+        //REMOVE LLTs FROM THTE ROOT
+        if (parentNode != null && parentNode.isIsRoot() && termNode.getLevelName().equals("LLT")) {
+            termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+            CSMQBean.logger.info(userBean.getCaller() + " REMOVING LLT " + termNode);
+        }
+        setDerivedRelations(termNode);
+        String relScope = Utils.getAsString(row, "RelRelationScope");
+        if (relScope.contains("BROAD")) {
+            termNode.setScopeName("Broad");
+            termNode.setFormattedScope("1");
+        } else if (relScope.contains("NARROW")) {
+            termNode.setScopeName("Narrow");
+            termNode.setFormattedScope("2");
+        }
+
+        CSMQBean.logger.info(userBean.getCaller() + " CURRENT ADDING NODE: " + termNode);
+
+        if (termNode != null)
+            parentNodesByLevel.put(termNode.getDictContentId(), termNode);
     }
 }

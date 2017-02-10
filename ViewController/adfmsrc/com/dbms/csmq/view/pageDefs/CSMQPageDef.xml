@@ -6,5 +6,10 @@
   <executables>
     <variableIterator id="variables"/>
   </executables>
-  <bindings/>
+  <bindings>
+    <methodAction id="isUpgradePending" InstanceName="data.NMQModuleDataControl.dataProvider"
+                  DataControl="NMQModuleDataControl" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="isUpgradePending" IsViewObjectMethod="false"
+                  ReturnName="data.NMQModuleDataControl.methodResults.isUpgradePending_NMQModuleDataControl_dataProvider_isUpgradePending_result"/>
+  </bindings>
 </pageDefinition>

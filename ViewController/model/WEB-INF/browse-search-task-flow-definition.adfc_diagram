@@ -3,120 +3,120 @@
    <OverallProperties
       id="OverallProperties1">
       <property
-         name="x">91.5</property>
-      <property
          name="y">266.5</property>
+      <property
+         name="x">91.5</property>
    </OverallProperties>
    <MethodCall
       id="MethodCall2">
       <property
          name="activityId">clearMenu</property>
       <property
-         name="x">876.27344</property>
-      <property
          name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
+      <property
+         name="exceptionHandler">false</property>
       <property
          name="y">126.133255</property>
       <property
-         name="exceptionHandler">false</property>
+         name="x">876.27344</property>
    </MethodCall>
    <View
       id="View3">
       <property
          name="activityId">addInformativeNotes</property>
       <property
-         name="x">560.3623</property>
+         name="page">/create/addInformativeNotes.jspx</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addInformativeNotes&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="y">168.51773</property>
-      <property
-         name="page">/create/addInformativeNotes.jspx</property>
+         name="trainStop">true</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="trainStop">true</property>
+         name="y">168.51773</property>
+      <property
+         name="x">560.3623</property>
    </View>
    <MethodCall
       id="MethodCall4">
       <property
          name="activityId">setMode</property>
       <property
-         name="x">91.5</property>
-      <property
          name="start">true</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>setMode&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
+         name="exceptionHandler">false</property>
+      <property
          name="y">98.79883</property>
       <property
-         name="exceptionHandler">false</property>
+         name="x">91.5</property>
    </MethodCall>
    <View
       id="View5">
       <property
          name="activityId">search</property>
       <property
-         name="x">253.5</property>
+         name="page">/create/wizardSearch.jspx</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>search&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="y">91.149414</property>
-      <property
-         name="page">/create/wizardSearch.jspx</property>
+         name="trainStop">true</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="trainStop">true</property>
+         name="y">91.149414</property>
+      <property
+         name="x">253.5</property>
    </View>
    <View
       id="View6">
       <property
          name="activityId">addDetails</property>
       <property
-         name="x">394.5</property>
+         name="page">/create/addDetails.jspx</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addDetails&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="y">136.68103</property>
-      <property
-         name="page">/create/addDetails.jspx</property>
+         name="trainStop">true</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="trainStop">true</property>
+         name="y">136.68103</property>
+      <property
+         name="x">394.5</property>
    </View>
    <View
       id="View7">
       <property
          name="activityId">addRelations</property>
       <property
-         name="x">729.749</property>
+         name="page">/create/addRelations.jspx</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addRelations&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="y">266.24185</property>
-      <property
-         name="page">/create/addRelations.jspx</property>
+         name="trainStop">true</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="trainStop">true</property>
+         name="y">266.24185</property>
+      <property
+         name="x">729.749</property>
    </View>
    <TaskFlowReturn
       id="TaskFlowReturn8">
       <property
          name="activityId">cancelFlow</property>
       <property
-         name="x">1033.2734</property>
+         name="finish">true</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>cancelFlow&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Return&lt;/p>&lt;p>Outcome:  cancelFlow&lt;/p></property>
       <property
+         name="exceptionHandler">false</property>
+      <property
          name="y">126.4321</property>
       <property
-         name="finish">true</property>
-      <property
-         name="exceptionHandler">false</property>
+         name="x">1033.2734</property>
    </TaskFlowReturn>
    <TrainFlow
       islink="true"
