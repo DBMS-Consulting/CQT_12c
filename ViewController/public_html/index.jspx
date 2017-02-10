@@ -10,6 +10,13 @@
                     <f:facet name="header"/>
                     <f:attribute name="currentPage" value=" "/>
                     <f:attribute name="showBody" value="false"/>
+                    <f:facet name="pageBottom">
+                        <af:panelGroupLayout id="pgl2" layout="vertical" halign="center">
+                            <af:inputText label="Dictionary Version:" id="it1aw"
+                                          value="#{pageFlowScope.NMQWizardBean.activeDictionary} v#{pageFlowScope.NMQWizardBean.activeDictionaryVersion}"
+                                          readOnly="false" disabled="true" columns="200"/>
+                        </af:panelGroupLayout>
+                    </f:facet>
                 </af:pageTemplate>
                 <af:popup childCreation="deferred" autoCancel="enabled" id="p1"
                           rendered="#{UserBean.showExpiryPopup and securityContext.authenticated}"
