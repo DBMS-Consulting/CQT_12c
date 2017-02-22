@@ -2403,10 +2403,18 @@ public class NMQWizardSearchBean  {
                 cellA1 = excelrow.createCell((short) 0);
                 cellA1.setCellValue("Product");
                 cellA2 = excelrow.createCell((short) 1);
-                if("%".equals(getParamProductList()))
-                    cellA2.setCellValue("All");
-                else
+                if("%".equals(getParamProductList())){
+                    String clause = (String)ADFUtils.evaluateEL("#{pageFlowScope.productClause}");
+                    if(clause != null){
+                        cellA2.setCellValue(clause);
+                    }
+                    else{
+                        cellA2.setCellValue("All");
+                    }
+                }
+                else{
                     cellA2.setCellValue(getParamProductList());
+                }
 
                 i++;
 
@@ -2422,8 +2430,15 @@ public class NMQWizardSearchBean  {
                 cellA1 = excelrow.createCell((short) 0);
                 cellA1.setCellValue("Group");
                 cellA2 = excelrow.createCell((short) 1);
-                if("%".equals(getParamMQGroupList()))
-                    cellA2.setCellValue("All");
+                if("%".equals(getParamMQGroupList())){
+                    String clause = (String)ADFUtils.evaluateEL("#{pageFlowScope.groupClause}");
+                    if(clause != null){
+                        cellA2.setCellValue(clause);
+                    }
+                    else{
+                        cellA2.setCellValue("All");
+                    }
+                }
                 else
                     cellA2.setCellValue(getParamMQGroupList());
 
@@ -3212,8 +3227,11 @@ public class NMQWizardSearchBean  {
                     SelectItem item1 = new SelectItem((String)extRow.getAttribute("RefCodelistValueShortVal"), (String)extRow.getAttribute("LongValue"));
                     groupExtensionValueLOV.add(item1);
                 }
-                SelectItem item2 = new SelectItem("SMQ", "SMQ");
-                groupExtensionValueLOV.add(item2);
+                Boolean rendered = (Boolean)ADFUtils.evaluateEL("#{RenderingRulesBean.wizardSearchRenderSMQSelectItem}");
+                if(rendered != null && rendered){
+                    SelectItem item2 = new SelectItem("SMQ", "SMQ");
+                    groupExtensionValueLOV.add(item2);
+                }
             }
         }
         return groupExtensionValueLOV;
@@ -3264,6 +3282,7 @@ public class NMQWizardSearchBean  {
         String productClause = "";
         String extensionClause = "";
         String scopeClause = "";
+        String productClauseForExport = "";
         if(productSearchRows != null && productSearchRows.size() > 0){
             for(ProductSearchPojo row : productSearchRows){
                 if(row.getColumnName() != null && "Extension".equalsIgnoreCase(row.getColumnName())){
@@ -3275,6 +3294,7 @@ public class NMQWizardSearchBean  {
                 else if(row.getColumnName() != null && "Product".equalsIgnoreCase(row.getColumnName())){
                     productClause = productClause + " Mqterm like '%" + row.getProductValue() + "%' OR";
 //                                    + (row.getOperator() == null ? "" : row.getOperator());
+                    productClauseForExport = productClauseForExport + row.getProductValue() + " OR ";
                 }
             }
             if(productClause != null && productClause.endsWith("AND")){
@@ -3282,6 +3302,8 @@ public class NMQWizardSearchBean  {
             }
             else if(productClause != null && productClause.endsWith("OR")){
                 productClause = productClause.substring(0, productClause.length()-3);
+                productClauseForExport = productClauseForExport.substring(0, productClauseForExport.length()-4);
+                ADFUtils.setEL("#{pageFlowScope.productClause}", productClauseForExport);
             }
         }
         if(!"".equals(productClause)){
@@ -3342,6 +3364,7 @@ public class NMQWizardSearchBean  {
         String whereClause = "";
         String groupClause = "";
         String extensionClause = "";
+        String groupClauseForExport = "";
         if(groupSearchRows != null && groupSearchRows.size() > 0){
             for(GroupSearchPojo row : groupSearchRows){
                 if(row.getColumnName() != null && "Extension".equalsIgnoreCase(row.getColumnName())){
@@ -3350,6 +3373,7 @@ public class NMQWizardSearchBean  {
                 else if(row.getColumnName() != null && "Group".equalsIgnoreCase(row.getColumnName())){
                     groupClause = groupClause + " Mqgroup_F = '" + row.getGroupValue() + "' OR";
 //                                  + (row.getOperator() == null ? "" : row.getOperator());
+                     groupClauseForExport = groupClauseForExport + row.getGroupValue() + " OR ";
                 }
             }
             if(groupClause != null && groupClause.endsWith("AND")){
@@ -3357,6 +3381,8 @@ public class NMQWizardSearchBean  {
             }
             else if(groupClause != null && groupClause.endsWith("OR")){
                 groupClause = groupClause.substring(0, groupClause.length()-3);
+                groupClauseForExport = groupClauseForExport.substring(0, groupClauseForExport.length()-4);
+                ADFUtils.setEL("#{pageFlowScope.groupClause}", groupClauseForExport);
             }
         }
         if(!"".equals(groupClause)){

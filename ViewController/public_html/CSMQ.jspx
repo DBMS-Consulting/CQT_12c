@@ -89,11 +89,11 @@
         <af:panelStretchLayout topHeight="120px" id="pt_psl1" bottomHeight="30px">
             <f:facet name="top">
                 <af:panelGroupLayout layout="vertical" inlineStyle="padding:5.0px;" id="pt_pgl5">
-                    <af:panelBorderLayout id="pt_pbl1" inlineStyle="height:80;" styleClass="ADFStretchWidth">
+                    <af:panelBorderLayout id="pt_pbl1" inlineStyle="height:80px;" styleClass="ADFStretchWidth">
                         <f:facet name="start">
                             <af:group id="pt_g1">
                                 <af:panelGroupLayout id="pt_pgl3" inlineStyle="height:45px;" layout="horizontal">
-                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/CQT.png">
+                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/nmat_logo.png">
                                     <!--af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png"-->
                                         <af:showPopupBehavior popupId="pt_p2" triggerType="click" align="overlap"/>
                                     </af:image>
@@ -230,7 +230,8 @@
                 </af:panelGroupLayout>
             </f:facet>
             <f:facet name="center">
-                <af:panelGroupLayout layout="scroll" xmlns:af="http://xmlns.oracle.com/adf/faces/rich" id="pt_pgl7">
+                <af:panelGroupLayout layout="scroll" xmlns:af="http://xmlns.oracle.com/adf/faces/rich" id="pt_pgl7"
+                inlineStyle="min-height:475px;">
                     <af:panelBorderLayout id="pt_ph1">
                         <af:facetRef facetName="main"/>
                         <f:facet name="start"/>

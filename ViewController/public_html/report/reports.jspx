@@ -36,7 +36,7 @@
                                         </af:inputDate>
                                         <af:selectOneChoice label="Format" id="soc3" value="XLS" valuePassThru="true"
                                                             binding="#{ReportBean.cntrlFormatList}" autoSubmit="true" immediate="true"
-                                                            partialTriggers="soc1">
+                                                            partialTriggers="soc1" disabled="true">
                                             <af:selectItem label="Excel" value="XLS" id="si5"/>
                                             <af:selectItem label="PDF" value="PDF" id="si6"/>
                                         </af:selectOneChoice>
