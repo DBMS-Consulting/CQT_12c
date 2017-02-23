@@ -790,9 +790,10 @@ public class HierarchyExportBean {
             cstmt.setInt(3, dictContentId.intValue());
             cstmt.setString(4, activationGroup);
             cstmt.execute();
-            //ARRAY array_to_pass = cstmt.getARRAY(1);
-            oracle.sql.ARRAY array_to_pass = ((weblogic.jdbc.wrapper.Array)(cstmt).getObject(1)).unwrap(ARRAY.class);
-            elements = array_to_pass.getOracleArray();
+            ARRAY array_to_pass = cstmt.getARRAY(1);
+            elements = array_to_pass.getOracleArray();;
+//            oracle.sql.ARRAY array_to_pass = ((weblogic.jdbc.wrapper.Array)(cstmt).getObject(1)).unwrap(ARRAY.class);
+//            elements = array_to_pass.getOracleArray();
 
             if (elements != null && elements.length > 0) {
                 Map<java.math.BigDecimal, String> levelNameMap = new HashMap<java.math.BigDecimal, String>();

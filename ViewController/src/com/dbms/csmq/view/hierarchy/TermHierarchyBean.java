@@ -163,7 +163,8 @@ public class TermHierarchyBean extends Hierarchy {
         BindingContext bc = BindingContext.getCurrent();
         DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
         DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("SmallTreeVO1Iterator");
-        
+//        dciterb.setRangeSize(-1);
+//        dciterb.getViewObject().executeQuery();
         rows = dciterb.getRowSetIterator().enumerateRowsInRange();
         if (!rows.hasMoreElements()) return false; // there's no data - bail
                

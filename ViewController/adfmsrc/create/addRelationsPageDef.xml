@@ -10,8 +10,7 @@
               DataControl="DictionaryModuleDataControl"
               id="DictionaryVO1Iterator" RefreshCondition=" #{!adfFacesContext.initialRender}"/>
     <iterator Binds="SmallTreeVO1" RangeSize="-1"
-              DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"
-              RefreshCondition=" #{!adfFacesContext.initialRender}"/>
+              DataControl="HierarchyModuleDataControl" id="SmallTreeVO1Iterator"/>
     <iterator Binds="SourceTreeVO1" RangeSize="-1"
               DataControl="HierarchyModuleDataControl"
               id="SourceTreeVO1Iterator" RefreshCondition=" #{!adfFacesContext.initialRender}"/>

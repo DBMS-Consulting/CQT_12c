@@ -3304,6 +3304,7 @@ public class NMQWizardSearchBean  {
                 productClause = productClause.substring(0, productClause.length()-3);
                 productClauseForExport = productClauseForExport.substring(0, productClauseForExport.length()-4);
                 ADFUtils.setEL("#{pageFlowScope.productClause}", productClauseForExport);
+                ADFUtils.setEL("#{pageFlowScope.groupClause}", null);
             }
         }
         if(!"".equals(productClause)){
@@ -3383,6 +3384,7 @@ public class NMQWizardSearchBean  {
                 groupClause = groupClause.substring(0, groupClause.length()-3);
                 groupClauseForExport = groupClauseForExport.substring(0, groupClauseForExport.length()-4);
                 ADFUtils.setEL("#{pageFlowScope.groupClause}", groupClauseForExport);
+                ADFUtils.setEL("#{pageFlowScope.productClause}", null);
             }
         }
         if(!"".equals(groupClause)){
