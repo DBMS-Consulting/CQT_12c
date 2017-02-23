@@ -371,10 +371,12 @@
                                                     <af:treeTable value="#{pageFlowScope.TermHierarchySourceBean.treemodel}" var="node"
                                                                   rowSelection="multiple" id="hierSrc"
                                                                   binding="#{pageFlowScope.NMQSourceTermSearchBean.multiHierarchySourceTree}"
-                                                                  columnStretching="column:c8" inlineStyle="height:303px;"
+                                                                  columnStretching="column:c8"
                                                                   initiallyExpanded="false" fetchSize="-1"
                                                                   visible="#{pageFlowScope.NMQSourceTermSearchBean.showHierarchyChildTree}"
-                                                                  partialTriggers=":::cb1 :::t5:cb2">
+                                                                  partialTriggers=":::cb1 :::t5:cb2"
+                                                                  inlineStyle="height:300px !important;"
+                                                                  autoHeightRows="15">
                                                         <f:facet name="nodeStamp">
                                                             <af:column id="c8" headerText="#{node.term}" width="200" noWrap="false">
                                                                 <af:panelGroupLayout id="pgl5" halign="left">
