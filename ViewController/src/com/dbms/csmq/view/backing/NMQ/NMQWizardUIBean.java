@@ -31,6 +31,7 @@ import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichPanelFormLayout;
 import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
+import oracle.adf.view.rich.component.rich.nav.RichButton;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.nav.RichTrain;
 import oracle.adf.view.rich.component.rich.nav.RichTrainButtonBar;
@@ -257,6 +258,7 @@ public class NMQWizardUIBean {
 
     public boolean saveDetails() {
         ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.FALSE);
+        ADFUtils.setEL("#{pageFlowScope.detailsFromTrain}", Boolean.FALSE);
         setCurrentDetailValuesFromUI();
         this.controlMQLevel.setDisabled(true);
         boolean retVal = nMQWizardBean.saveDetails();
@@ -821,10 +823,5 @@ public class NMQWizardUIBean {
 
     public void detailsChanged(ValueChangeEvent valueChangeEvent) {
         ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
-    }
-
-    public String yesWarning() {
-        saveDetails();
-        return "CANCEL";
     }
 }

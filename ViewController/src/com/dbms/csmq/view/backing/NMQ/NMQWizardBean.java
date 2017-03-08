@@ -36,6 +36,7 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
+import oracle.adf.view.rich.component.rich.nav.RichButton;
 import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
 
@@ -831,6 +832,7 @@ public class NMQWizardBean {
         
     public String saveAllInfNotes() {
         ADFUtils.setEL("#{pageFlowScope.isNotesChanged}", Boolean.FALSE);
+        ADFUtils.setEL("#{pageFlowScope.notesFromTrain}", Boolean.FALSE);
         String action = (mode == CSMQBean.MODE_INSERT_NEW) ? "Inserted" : "Updated";
         int errorCount = 0;
         
@@ -1644,8 +1646,19 @@ public class NMQWizardBean {
     }
 
     public String yesWarning() {
-        saveAllInfNotes();
-        return "CANCEL";
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.notesFromTrain}");
+        if(fromTrain != null && fromTrain){
+            saveAllInfNotes();
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getInfoNotesWarningPopup().hide();
+            return null;
+        }
+        else{
+            saveAllInfNotes();
+            return "CANCEL";
+        }
     }
 
     public void setAddRelationsWarningPopup(RichPopup addRelationsWarningPopup) {
@@ -1654,5 +1667,83 @@ public class NMQWizardBean {
 
     public RichPopup getAddRelationsWarningPopup() {
         return addRelationsWarningPopup;
+    }
+
+    public String onYesWarningAction() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.relationsFromTrain}");
+        if(fromTrain != null && fromTrain){
+            ADFUtils.setEL("#{pageFlowScope.relationsFromTrain}", Boolean.FALSE);
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getAddRelationsWarningPopup().hide();
+            return null;
+        }
+        else{
+            return "CANCEL";
+        }
+    }
+
+    public String noWarning() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.notesFromTrain}");
+        if(fromTrain != null && fromTrain){
+            ADFUtils.setEL("#{pageFlowScope.notesFromTrain}", Boolean.FALSE);
+            ADFUtils.setEL("#{pageFlowScope.isNotesChanged}", Boolean.FALSE);
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getInfoNotesWarningPopup().hide();
+            return null;
+        }
+        else{
+            return "CANCEL";
+        }
+    }
+
+    public String onNoRelationsWarning() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.relationsFromTrain}");
+        if(fromTrain != null && fromTrain){
+            ADFUtils.setEL("#{pageFlowScope.relationsFromTrain}", Boolean.FALSE);
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getAddRelationsWarningPopup().hide();
+            return null;
+        }
+        else{
+            return "CANCEL";
+        }
+    }
+    
+    public String yesWarningDetails() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.detailsFromTrain}");
+        if(fromTrain != null && fromTrain){
+            saveDetails();
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getAddDetailsWarningPopup().hide();
+            return null;
+        }
+        else{
+            saveDetails();
+            return "CANCEL";
+        }
+    }
+
+    public String noWarningDetails() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.detailsFromTrain}");
+        if(fromTrain != null && fromTrain){
+            ADFUtils.setEL("#{pageFlowScope.detailsFromTrain}", Boolean.FALSE);
+            ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.FALSE);
+            RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+            ActionEvent ae = new ActionEvent(button);
+            ae.queue();
+            getAddDetailsWarningPopup().hide();
+            return null;
+        }
+        else{
+            return "CANCEL";
+        }
     }
 }

@@ -78,6 +78,21 @@
       <managed-bean-class>com.dbms.csmq.view.hierarchy.HierarchySearchResultsBean</managed-bean-class>
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__25">
+      <managed-bean-name>TrainHandlerBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.train.TrainHandlerBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+      <managed-property id="__26">
+        <property-name>trainHandlerBeanHelper</property-name>
+        <property-class>com.dbms.csmq.view.train.TrainHandlerBeanHelper</property-class>
+        <value>#{viewScope.TrainHandlerBeanHelper}</value>
+      </managed-property>
+    </managed-bean>
+    <managed-bean id="__27">
+      <managed-bean-name>TrainHandlerBeanHelper</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.train.TrainHandlerBeanHelper</managed-bean-class>
+      <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <view id="impactAssessment">
       <page>/impact/impactAssessment.jspx</page>
       <train-stop>

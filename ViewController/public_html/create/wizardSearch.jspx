@@ -214,8 +214,9 @@
                       <af:showPopupBehavior popupId="p1" triggerType="action"/>
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s12"/>
-                    <af:commandButton text="Product Search" id="cb3">
-                      <af:showPopupBehavior popupId="p3" triggerType="action"/>
+                    <af:commandButton text="Product Search" id="cb3"
+                                      actionListener="#{pageFlowScope.NMQWizardSearchBean.showProductSearchPopup}">
+                      <!--<af:showPopupBehavior popupId="p3" triggerType="action"/>-->
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s13"/>
                     <af:commandButton text="Group Search" id="cb4">
@@ -254,7 +255,7 @@
                       <af:panelCollection id="pc1" featuresOff="viewMenu detach">
                         <f:facet name="menus"/>
                         <f:facet name="toolbar">
-                          <af:toolbar id="t3">
+                          <af:toolbar id="t3" styleClass="AFStretchWidth">
                             <af:commandButton text="Add" id="cb7"
                                               actionListener="#{pageFlowScope.NMQWizardSearchBean.addProductSearchRow}"
                                               icon="/image/add.png" partialSubmit="true"/>
@@ -262,6 +263,10 @@
                             <af:commandButton text="Delete" id="cb8"
                                               actionListener="#{pageFlowScope.NMQWizardSearchBean.deleteSearchRow}"
                                               icon="/image/DELETE.png" partialSubmit="true"/>
+                            <af:spacer width="10" height="10" id="s19"/>
+                            <af:commandButton text="Reset" id="b2" icon="/image/DELETE.png"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.clearProductSearchRows}"
+                                              partialSubmit="true"/>
                           </af:toolbar>
                         </f:facet>
                         <f:facet name="statusbar"/>
@@ -269,7 +274,7 @@
                                   value="#{pageFlowScope.NMQWizardSearchBean.productSearchRows}" rowSelection="single"
                                   selectionListener="#{pageFlowScope.NMQWizardSearchBean.productSearchSelection}"
                                   binding="#{pageFlowScope.NMQWizardSearchBean.productSearchBinding}" varStatus="vs">
-                          <af:column sortable="false" headerText="Column" id="c29">
+                          <af:column sortable="false" headerText="Column" id="c29" visible="false">
                             <af:selectOneChoice value="#{row.columnName}"
                                                 valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.productTypeVC}"
                                                 autoSubmit="true" id="ot26">
@@ -277,30 +282,34 @@
                                                  value="#{pageFlowScope.NMQWizardSearchBean.columnNameLOV}"/>
                             </af:selectOneChoice>
                           </af:column>
-                          <af:column sortable="false" headerText="Select" id="c30" partialTriggers="ot26">
-                            <af:switcher id="s15" facetName="#{row.columnName}">
-                              <f:facet name="Product">
-                                <af:selectOneChoice value="#{row.productValue}" partialTriggers="ot26" id="ot27">
-                                  <f:selectItems id="si1243"
-                                                 value="#{pageFlowScope.NMQWizardSearchBean.productValueLOV}"/>
-                                </af:selectOneChoice>
-                              </f:facet>
-                              <f:facet name="Scope">
-                              <af:selectOneChoice value="#{row.scopeValue}" partialTriggers="ot26" id="ot247">
-                                  <f:selectItems id="si113"
-                                                 value="#{pageFlowScope.NMQWizardSearchBean.scopeValueLOV}"/>
-                                </af:selectOneChoice>
-                              </f:facet>
-                              <f:facet name="Extension">
-                              <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="ot26" id="ot274">
-                                  <f:selectItems id="s123"
-                                                 value="#{pageFlowScope.NMQWizardSearchBean.extensionValueLOV}"/>
-                                </af:selectOneChoice>
-                              </f:facet>
-                            </af:switcher>
+                          <af:column sortable="false" headerText="Select" id="c30" partialTriggers="ot26" width="200">
+                            <af:panelGroupLayout id="pgl16" layout="horizontal">
+                              <af:selectOneChoice value="#{row.productValue}" partialTriggers="ot26 ::cb7" id="ot27">
+                                <f:selectItems id="si1243"
+                                               value="#{pageFlowScope.NMQWizardSearchBean.productValueLOV}"/>
+                              </af:selectOneChoice>
+                              <af:switcher id="s15" facetName="#{row.columnName}" rendered="false">
+                                <f:facet name="Product"/>
+                                <f:facet name="Scope">
+                                  <af:selectOneChoice value="#{row.scopeValue}" partialTriggers="ot26" id="ot247">
+                                    <f:selectItems id="si113"
+                                                   value="#{pageFlowScope.NMQWizardSearchBean.scopeValueLOV}"/>
+                                  </af:selectOneChoice>
+                                </f:facet>
+                                <f:facet name="Extension">
+                                  <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="ot26" id="ot274">
+                                    <f:selectItems id="s123"
+                                                   value="#{pageFlowScope.NMQWizardSearchBean.extensionValueLOV}"/>
+                                  </af:selectOneChoice>
+                                </f:facet>
+                              </af:switcher>
+                              <af:spacer width="10" height="10" id="s18"/>
+                              <af:outputText value="OR" id="ot28"
+                                             visible="#{(vs.index+1) lt pageFlowScope.NMQWizardSearchBean.productRowsSize}"/>
+                            </af:panelGroupLayout>
                           </af:column>
                           <af:column sortable="false" headerText="Operator" id="c31" rendered="false">
-                            <af:selectOneChoice value="#{row.operator}" id="ot28" partialTriggers="ot26"
+                            <af:selectOneChoice value="#{row.operator}" id="soc6" partialTriggers="ot26"
                                                 disabled="#{((vs.index+1) ge pageFlowScope.NMQWizardSearchBean.productRowsSize) or (row.columnName eq 'Scope') or (row.columnName eq 'Extension')}">
                              <f:selectItems id="si123" value="#{pageFlowScope.NMQWizardSearchBean.operatorLOV}"/>
                             </af:selectOneChoice>
@@ -331,6 +340,10 @@
                             <af:commandButton text="Delete" id="cb12"
                                               actionListener="#{pageFlowScope.NMQWizardSearchBean.deleteGroupSearchRow}"
                                               icon="/image/DELETE.png" partialSubmit="true"/>
+                            <af:spacer width="10" height="10" id="s20"/>
+                            <af:commandButton text="Reset" id="b3"
+                                              icon="/image/DELETE.png" partialSubmit="true"
+                                              actionListener="#{pageFlowScope.NMQWizardSearchBean.clearGroupSearchRows}"/>
                           </af:toolbar>
                         </f:facet>
                         <f:facet name="statusbar"/>
@@ -338,7 +351,7 @@
                                   value="#{pageFlowScope.NMQWizardSearchBean.groupSearchRows}" rowSelection="single"
                                   selectionListener="#{pageFlowScope.NMQWizardSearchBean.groupSearchSelection}"
                                   binding="#{pageFlowScope.NMQWizardSearchBean.groupSearchBinding}" varStatus="vs">
-                          <af:column sortable="false" headerText="Column" id="c32">
+                          <af:column sortable="false" headerText="Column" id="c32" width="100" rendered="false">
                             <af:selectOneChoice value="#{row.columnName}"
                                                 valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.groupTypeVC}"
                                                 autoSubmit="true" id="soc9">
@@ -346,21 +359,24 @@
                                                  value="#{pageFlowScope.NMQWizardSearchBean.groupColumnNameLOV}"/>
                             </af:selectOneChoice>
                           </af:column>
-                          <af:column sortable="false" headerText="Select" id="c33" partialTriggers="soc9">
-                            <af:switcher id="s16" facetName="#{row.columnName}">
-                              <f:facet name="Group">
-                                <af:selectOneChoice value="#{row.groupValue}" partialTriggers="soc9" id="soc11">
-                                  <f:selectItems id="si43"
-                                                 value="#{pageFlowScope.NMQWizardSearchBean.groupValueLOV}"/>
-                                </af:selectOneChoice>
-                              </f:facet>
-                              <f:facet name="Extension">
-                              <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="soc9" id="soc13">
-                                  <f:selectItems id="si45"
-                                                 value="#{pageFlowScope.NMQWizardSearchBean.groupExtensionValueLOV}"/>
-                                </af:selectOneChoice>
-                              </f:facet>
-                            </af:switcher>
+                          <af:column sortable="false" headerText="Select" id="c33" partialTriggers="soc9" width="200">
+                            <af:panelGroupLayout id="pgl17" layout="horizontal">
+                              <af:selectOneChoice value="#{row.groupValue}" partialTriggers="soc9" id="soc11">
+                                <f:selectItems id="si43" value="#{pageFlowScope.NMQWizardSearchBean.groupValueLOV}"/>
+                              </af:selectOneChoice>
+                              <af:spacer width="10" height="10" id="s21"/>
+                              <af:switcher id="s16" facetName="#{row.columnName}" rendered="false">
+                                <f:facet name="Group"/>
+                                <f:facet name="Extension">
+                                  <af:selectOneChoice value="#{row.extensionValue}" partialTriggers="soc9" id="soc13">
+                                    <f:selectItems id="si45"
+                                                   value="#{pageFlowScope.NMQWizardSearchBean.groupExtensionValueLOV}"/>
+                                  </af:selectOneChoice>
+                                </f:facet>
+                              </af:switcher>
+                              <af:outputText value="OR" id="ot29"
+                                             visible="#{(vs.index+1) lt pageFlowScope.NMQWizardSearchBean.groupRowsSize}"/>
+                            </af:panelGroupLayout>
                           </af:column>
                           <af:column sortable="false" headerText="Operator" id="c34" rendered="false">
                             <af:selectOneChoice value="#{row.operator}" id="soc14" partialTriggers="soc9" disabled="#{row.columnName ne 'Group' or ((vs.index+1) ge pageFlowScope.NMQWizardSearchBean.groupRowsSize)}">

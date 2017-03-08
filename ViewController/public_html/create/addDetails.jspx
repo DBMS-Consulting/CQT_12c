@@ -11,7 +11,14 @@
                     <f:facet name="header">
                         <af:panelGroupLayout id="g2" layout="horizontal">
                             <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
-                                      binding="#{NMQWizardUIBean.cntrlTrain}"/>
+                                      binding="#{NMQWizardUIBean.cntrlTrain}" var="trainNode">
+                                <f:facet name="nodeStamp">
+                                    <af:commandNavigationItem text="#{trainNode.textAndAccessKey}" id="cni1"
+                                                              actionListener="#{TrainHandlerBean.onTrainStopSelect}">
+                                        <f:attribute name="trainStopNode" value="#{trainNode}"/>
+                                    </af:commandNavigationItem>
+                                </f:facet>
+                            </af:train>
                             <af:spacer width="200" height="10" id="s1"/>
                             <af:panelGroupLayout id="pgl14" layout="horizontal" halign="center" styleClass="AFStretchWidth"
                                                  rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}">  
@@ -23,15 +30,12 @@
                                     <af:convertDateTime pattern="dd-MMM-yyyy"/>
                               </af:outputText>
                             </af:panelGroupLayout>
+                            <af:button text="invisible" id="hiddenButton" action="#{TrainHandlerBean.onClickOKButton}"
+                                       visible="false"/>
                         </af:panelGroupLayout>
                     </f:facet>
                     <f:facet name="main">
                         <af:group id="g1">
-                        
-                         
-                        
-                        
-              
                             <af:panelBox id="pgl1" text="Details" showDisclosure="false"
                                          inlineStyle="height:158px; width:1195px; padding:5px;">
                                 <af:panelGroupLayout id="pgl3" layout="horizontal" valign="top">
@@ -291,9 +295,13 @@
                     </f:facet>
                     <f:facet name="pageBottom">
                         <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
-                            <af:spacer width="10" height="10" id="s6"/>
+                            <af:spacer width="5" height="10" id="s6"/>
+                            <af:button text="Back" id="b1" actionListener="#{TrainHandlerBean.onTrainButtonBarBack}"/>
+                            <af:spacer width="5" height="10" id="s2"/>
+                            <af:button text="Next" id="b2" actionListener="#{TrainHandlerBean.onTrainButtonBarNext}"/>
                             <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"
-                                               binding="#{NMQWizardUIBean.cntrlTrainButtons}"/>
+                                               binding="#{NMQWizardUIBean.cntrlTrainButtons}" visible="false"/>
+                            <af:spacer width="5" height="10" id="s4"/>
                             <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
                                               action="#{pageFlowScope.NMQWizardBean.showWarningPopup}"
                                               immediate="true" shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
@@ -308,14 +316,15 @@
                             <af:spacer width="10" height="10" id="s7"/>
                             <af:inputText label="Name:" id="it3" value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
                                           binding="#{NMQWizardUIBean.controlCurrentTermName}" columns="75"/>
-                            <af:popup childCreation="deferred" autoCancel="disabled" id="p1"
+                            <af:popup childCreation="deferred" autoCancel="disabled" id="addDetailsWarning"
                                       binding="#{pageFlowScope.NMQWizardBean.addDetailsWarningPopup}">
-                                <af:dialog id="d2" type="none" title="Confirmation">
+                                <af:dialog id="d2" type="none" title="Confirmation Add Details">
                                     <f:facet name="buttonBar">
                                         <af:panelGroupLayout id="pgl7" layout="horizontal">
                                             <af:commandButton text="Yes" id="cb2"
-                                                              action="#{NMQWizardUIBean.yesWarning}"/>
-                                            <af:commandButton text="No" id="cb3" action="CANCEL"/>
+                                                              action="#{pageFlowScope.NMQWizardBean.yesWarningDetails}"/>
+                                            <af:commandButton text="No" id="cb3"
+                                                              action="#{pageFlowScope.NMQWizardBean.noWarningDetails}"/>
                                         </af:panelGroupLayout>
                                     </f:facet>
                                     <af:outputText value="#{viewcontrollerBundle.CANCEL_MSG}" id="ot1"/>

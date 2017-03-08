@@ -461,6 +461,15 @@ public class NMQWizardSearchBean  {
    
     
     public void doSearch(ActionEvent actionEvent) {    
+        
+        if(actionEvent != null){
+            RichCommandButton button = (RichCommandButton) actionEvent.getComponent();
+            if(button != null && button.getText() != null && 
+               button.getText().equalsIgnoreCase("Search")){
+                clearProductSearchRows(actionEvent); 
+                clearGroupSearchRows(actionEvent);
+            }
+        }
             // 05-NOV-2013
             // Fix for dupes 
         nMQWizardBean.clearDetails();
@@ -2928,6 +2937,7 @@ public class NMQWizardSearchBean  {
     
     public void addProductSearchRow(ActionEvent e){
         ProductSearchPojo row = new ProductSearchPojo();
+        row.setColumnName("Product");
         productSearchRows.add(row);
         ADFUtils.addPartialTarget(productSearchBinding);
     }
@@ -3069,16 +3079,16 @@ public class NMQWizardSearchBean  {
     }
 
     public ArrayList<SelectItem> getProductValueLOV() {
-        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
-        if(row != null && productValueLOV.size() == 0){
-            if(row.getColumnName()!=null && row.getColumnName().equals("Product")){
+//        ProductSearchPojo row = (ProductSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.productCurrentRow}");
+        if(productValueLOV.size() == 0){
+//            if(row.getColumnName()!=null && row.getColumnName().equals("Product")){
                 Row[] rows = ADFUtils.findIterator("ViewObj_ProductList1Iterator").getViewObject().getAllRowsInRange();
                 for(Row extRow : rows){
                     SelectItem item1 = new SelectItem((String)extRow.getAttribute("ShortVal"), (String)extRow.getAttribute("LongValue"));
                     productValueLOV.add(item1);
                 }
             }
-        }
+//        }
         return productValueLOV;
     }
 
@@ -3122,6 +3132,8 @@ public class NMQWizardSearchBean  {
     
     public void addGroupSearchRow(ActionEvent e){
         GroupSearchPojo row = new GroupSearchPojo();
+        row.setColumnName("Group");
+        getGroupValueLOV();
         groupSearchRows.add(row);
         ADFUtils.addPartialTarget(groupSearchBinding);
     }
@@ -3200,15 +3212,15 @@ public class NMQWizardSearchBean  {
     }
 
     public ArrayList<SelectItem> getGroupValueLOV() {
-        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
-        if(row != null && groupValueLOV.size() == 0){
-            if(row.getColumnName()!=null && row.getColumnName().equals("Group")){
+//        GroupSearchPojo row = (GroupSearchPojo)ADFUtils.evaluateEL("#{pageFlowScope.groupCurrentRow}");
+        if(groupValueLOV.size() == 0){
+//            if(row.getColumnName()!=null && row.getColumnName().equals("Group")){
                 Row[] rows = ADFUtils.findIterator("MQGroupsVO1Iterator").getViewObject().getAllRowsInRange();
                 for(Row extRow : rows){
                     SelectItem item1 = new SelectItem((String)extRow.getAttribute("ShortVal"), (String)extRow.getAttribute("LongValue"));
                     groupValueLOV.add(item1);
                 }
-            }
+//            }
         }
         return groupValueLOV;
     }
@@ -3372,7 +3384,7 @@ public class NMQWizardSearchBean  {
                     extensionClause = row.getExtensionValue();
                 }
                 else if(row.getColumnName() != null && "Group".equalsIgnoreCase(row.getColumnName())){
-                    groupClause = groupClause + " Mqgroup_F = '" + row.getGroupValue() + "' OR";
+                    groupClause = groupClause + " Mqgroup_F like '%" + row.getGroupValue() + "%' OR";
 //                                  + (row.getOperator() == null ? "" : row.getOperator());
                      groupClauseForExport = groupClauseForExport + row.getGroupValue() + " OR ";
                 }
@@ -3422,6 +3434,25 @@ public class NMQWizardSearchBean  {
     public Integer getGroupRowsSize() {
         groupRowsSize  =  groupSearchRows.size();
         return groupRowsSize;
+    }
+
+    public void clearProductSearchRows(ActionEvent actionEvent) {
+        if(productSearchRows != null)
+            productSearchRows.clear();
+        if(productSearchBinding != null)
+        ADFUtils.addPartialTarget(productSearchBinding);
+    }
+    
+    public void clearGroupSearchRows(ActionEvent actionEvent) {
+        if(groupSearchRows != null)
+            groupSearchRows.clear();
+        if(groupSearchBinding != null)
+        ADFUtils.addPartialTarget(groupSearchBinding);
+    }
+
+    public void showProductSearchPopup(ActionEvent actionEvent) {
+        getProductValueLOV();
+        ADFUtils.showPopup(getProductSearchPopup());
     }
 }
 

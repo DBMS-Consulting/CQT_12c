@@ -11,8 +11,18 @@
                          value="#{bindings.pageTemplateBinding}" id="pt1">
           <f:facet name="header">
            <af:panelGroupLayout id="g2" layout="horizontal">
-              <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"/>
+              <af:train value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="t1"
+                var="trainNode">
+                <f:facet name="nodeStamp">
+                    <af:commandNavigationItem text="#{trainNode.textAndAccessKey}" id="cni1"
+                                              actionListener="#{TrainHandlerBean.onTrainStopSelect}">
+                        <f:attribute name="trainStopNode" value="#{trainNode}"/>
+                    </af:commandNavigationItem>
+                </f:facet>
+            </af:train>        
               <af:spacer width="200" height="10" id="s1"/>
+              <af:button text="invisible" id="hiddenButton" action="#{TrainHandlerBean.onClickOKButton}"
+                                       visible="false"/>
               <af:panelGroupLayout id="pgl14" layout="horizontal" halign="center" styleClass="AFStretchWidth"
                                      rendered="#{pageFlowScope.NMQWizardSearchBean.historyFlow}">  
                   <af:outputText value="Historic View as of " id="ot26" 
@@ -79,9 +89,13 @@
           </f:facet>
           <f:facet name="pageBottom">
             <af:panelGroupLayout id="pgl2" layout="horizontal" inlineStyle="padding:3px;">
-              
               <af:spacer width="10" height="10" id="s6"/>
-              <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"/>
+               <af:button text="Back" id="b1" actionListener="#{TrainHandlerBean.onTrainButtonBarBack}"/>
+                <af:spacer width="5" height="10" id="s5"/>
+                <af:button text="Next" id="b2" actionListener="#{TrainHandlerBean.onTrainButtonBarNext}"/>
+                 <af:trainButtonBar value="#{controllerContext.currentViewPort.taskFlowContext.trainModel}" id="tbb1"
+                 visible="false"/>
+                <af:spacer width="5" height="10" id="s4"/>
               <af:commandButton text="#{RenderingRulesBean.wizardDetailsCancelButtonText}" id="cb1can"
                                 action="#{pageFlowScope.NMQWizardBean.showInfoNotesWarningPopup}" immediate="true"
                                 shortDesc="#{RenderingRulesBean.wizardDetailsCancelButtonHoverText}"/>
@@ -90,19 +104,20 @@
                               value="#{pageFlowScope.NMQWizardBean.activeDictionary} v#{pageFlowScope.NMQWizardBean.activeDictionaryVersion}" readOnly="false"
                               disabled="true"
                                columns="200"/>
-              <af:spacer width="10" height="10" id="s4"/>
+              <af:spacer width="10" height="10" id="s7"/>
               <af:inputText label="Name" id="it3"
                             value="#{pageFlowScope.NMQWizardBean.currentTermName}" readOnly="true"
                             disabled="true" binding="#{NMQWizardUIBean.controlCurrentTermName}"
                             columns="75"/>
-              <af:popup childCreation="deferred" autoCancel="disabled" id="p1"
+              <af:popup childCreation="deferred" autoCancel="disabled" id="infoNotesWarning"
                         binding="#{pageFlowScope.NMQWizardBean.infoNotesWarningPopup}">
-                <af:dialog id="d2" type="none" title="Warning">
+                <af:dialog id="d2" type="none" title="Warning Info Notes">
                   <f:facet name="buttonBar">
                     <af:panelGroupLayout id="pgl4" layout="horizontal">
                       <af:commandButton text="#{viewcontrollerBundle.YES}" id="cb2"
                                         action="#{pageFlowScope.NMQWizardBean.yesWarning}"/>
-                      <af:commandButton text="#{viewcontrollerBundle.NO}" id="cb3" action="CANCEL"/>
+                      <af:commandButton text="#{viewcontrollerBundle.NO}" id="cb3"
+                                        action="#{pageFlowScope.NMQWizardBean.noWarning}"/>
                     </af:panelGroupLayout>
                   </f:facet>
                   <af:outputText value="The data you have modified has not been saved and will be lost unless you save.  Would you like to save the data?" id="ot1"/>

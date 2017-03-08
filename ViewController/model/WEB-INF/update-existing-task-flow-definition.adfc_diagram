@@ -3,152 +3,152 @@
    <OverallProperties
       id="OverallProperties1">
       <property
-         name="y">267.9442</property>
-      <property
          name="x">91.5</property>
+      <property
+         name="y">267.9442</property>
    </OverallProperties>
    <TaskFlowReturn
       id="TaskFlowReturn2">
       <property
          name="activityId">cancelFlow</property>
       <property
-         name="finish">true</property>
+         name="x">1221.2734</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>cancelFlow&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Return&lt;/p>&lt;p>Outcome:  cancelFlow&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">91.44824</property>
       <property
-         name="x">1221.2734</property>
+         name="finish">true</property>
+      <property
+         name="exceptionHandler">false</property>
    </TaskFlowReturn>
    <MethodCall
       id="MethodCall3">
       <property
          name="activityId">setMode</property>
       <property
+         name="x">91.5</property>
+      <property
          name="start">true</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>setMode&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">100.24306</property>
       <property
-         name="x">91.5</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <View
       id="View4">
       <property
          name="activityId">addRelations</property>
       <property
-         name="page">/create/addRelations.jspx</property>
+         name="x">730.749</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addRelations&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">194.41817</property>
+      <property
+         name="page">/create/addRelations.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">195.11934</property>
-      <property
-         name="x">730.749</property>
+         name="trainStop">true</property>
    </View>
    <View
       id="View5">
       <property
          name="activityId">addDetails</property>
       <property
-         name="page">/create/addDetails.jspx</property>
+         name="x">394.5</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addDetails&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">137.42409</property>
+      <property
+         name="page">/create/addDetails.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">138.12526</property>
-      <property
-         name="x">394.5</property>
+         name="trainStop">true</property>
    </View>
    <View
       id="View6">
       <property
          name="activityId">search</property>
       <property
-         name="page">/create/wizardSearch.jspx</property>
+         name="x">253.5</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>search&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">92.59364</property>
+      <property
+         name="page">/create/wizardSearch.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">92.59364</property>
-      <property
-         name="x">253.5</property>
+         name="trainStop">true</property>
    </View>
    <View
       id="View7">
       <property
          name="activityId">addInformativeNotes</property>
       <property
-         name="page">/create/addInformativeNotes.jspx</property>
+         name="x">560.3623</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>addInformativeNotes&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">169.96194</property>
+      <property
+         name="page">/create/addInformativeNotes.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">169.96194</property>
-      <property
-         name="x">560.3623</property>
+         name="trainStop">true</property>
    </View>
    <View
       id="View8">
       <property
          name="activityId">confirm</property>
       <property
-         name="page">/create/createConfirm.jspx</property>
+         name="x">876.27344</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>confirm&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">226.49185</property>
+      <property
+         name="page">/create/createConfirm.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">226.49185</property>
-      <property
-         name="x">876.27344</property>
+         name="trainStop">true</property>
    </View>
    <MethodCall
       id="MethodCall9">
       <property
          name="activityId">clearMenu</property>
       <property
-         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
+         name="x">1038.2734</property>
       <property
-         name="exceptionHandler">false</property>
+         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
          name="y">91.149414</property>
       <property
-         name="x">1038.2734</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <TaskFlowReturn
       id="TaskFlowReturn10">
       <property
          name="activityId">commitFlow</property>
       <property
-         name="finish">true</property>
+         name="x">1038.2734</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>commitFlow&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Return&lt;/p>&lt;p>Outcome:  commitFlow&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">279.1494</property>
       <property
-         name="x">1038.2734</property>
+         name="finish">true</property>
+      <property
+         name="exceptionHandler">false</property>
    </TaskFlowReturn>
    <TrainFlow
       islink="true"
@@ -156,7 +156,7 @@
       from="View6"
       to="View5">
       <property
-         name="sdm:polyPoints">R54,294.5,95.74306,353.5,137.77467,L50</property>
+         name="sdm:polyPoints">R54,294.5,95.74306,353.5,137.42409,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -164,7 +164,7 @@
       from="View5"
       to="View7">
       <property
-         name="sdm:polyPoints">R54,435.5,141.27467,519.3623,169.61136,L50</property>
+         name="sdm:polyPoints">R54,435.5,140.92409,519.3623,169.61136,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -172,7 +172,7 @@
       from="View7"
       to="View4">
       <property
-         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,194.76875,L50</property>
+         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,194.41817,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -180,7 +180,7 @@
       from="View4"
       to="View8">
       <property
-         name="sdm:polyPoints">R54,771.749,198.26875,835.27344,226.14127,L50</property>
+         name="sdm:polyPoints">R54,771.749,197.91817,835.27344,226.14127,L50</property>
    </TrainFlow>
    <ControlFlowCase
       islink="true"
@@ -200,7 +200,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,435.5,134.27467,994.15515,83.79883,L42</property>
+         name="sdm:polyPoints">R46,435.5,133.92409,994.15625,83.79883,L42</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -220,7 +220,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,771.749,191.26875,995.6685,97.79883,L58</property>
+         name="sdm:polyPoints">R46,771.749,190.91817,995.6709,97.79883,L58</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -230,7 +230,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,294.5,88.74306,993.9685,76.79883,L34</property>
+         name="sdm:polyPoints">R46,294.5,88.74306,993.97546,76.79883,L34</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"

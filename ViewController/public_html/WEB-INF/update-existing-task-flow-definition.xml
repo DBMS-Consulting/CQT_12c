@@ -74,6 +74,21 @@
       <managed-bean-class>com.dbms.csmq.view.hierarchy.HierarchySearchResultsBean</managed-bean-class>
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__87">
+      <managed-bean-name>TrainHandlerBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.train.TrainHandlerBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+      <managed-property id="__89">
+        <property-name>trainHandlerBeanHelper</property-name>
+        <property-class>com.dbms.csmq.view.train.TrainHandlerBeanHelper</property-class>
+        <value>#{viewScope.TrainHandlerBeanHelper}</value>
+      </managed-property>
+    </managed-bean>
+    <managed-bean id="__90">
+      <managed-bean-name>TrainHandlerBeanHelper</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.train.TrainHandlerBeanHelper</managed-bean-class>
+      <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <view id="search">
       <page id="__30">/create/wizardSearch.jspx</page>
       <train-stop id="__16">

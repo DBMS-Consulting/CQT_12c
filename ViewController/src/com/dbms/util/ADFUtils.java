@@ -4,6 +4,7 @@ package com.dbms.util;
 import com.sun.el.MethodExpressionImpl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.el.ELContext;
@@ -23,6 +24,8 @@ import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.model.binding.DCParameter;
 
 import oracle.adf.share.logging.ADFLogger;
+
+import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.binding.AttributeBinding;
 import oracle.binding.BindingContainer;
@@ -669,5 +672,58 @@ public class ADFUtils {
         FacesContext.getCurrentInstance().addMessage(component.getClientId(FacesContext.getCurrentInstance()),
                                                      message);
     }
+    
+    // Get the Component based on given UIComponent ID and refresh the component
+
+     public static void refreshComponent(String pComponentID) {
+         UIComponent component = findComponentInRoot(pComponentID);
+         refreshComponent(component);
+     }
+
+
+     // Get Faces Context, Get Root Component, Find the given Component From the root component
+
+     public static UIComponent findComponentInRoot(String pComponentID) {
+         UIComponent component = null;
+         FacesContext facesContext = FacesContext.getCurrentInstance();
+         if (facesContext != null) {
+             UIComponent root = facesContext.getViewRoot();
+             component = findComponent(root, pComponentID);
+         }
+         return component;
+     }
+
+
+     // Refresh the Component
+
+     private static void refreshComponent(UIComponent component) {
+         if (component != null) {
+             AdfFacesContext.getCurrentInstance().addPartialTarget(component);
+         }
+     }
+
+    // Get the specific  component from a root component tree.
+
+     private static UIComponent findComponent(UIComponent root, String id) {
+         if (id.equals(root.getId()))
+             return root;
+
+         UIComponent children = null;
+         UIComponent result = null;
+         Iterator childrens = root.getFacetsAndChildren();
+         while (childrens.hasNext() && (result == null)) {
+             children = (UIComponent)childrens.next();
+             if (id.equals(children.getId())) {
+                 result = children;
+                 break;
+             }
+             result = findComponent(children, id);
+             if (result != null) {
+                 break;
+             }
+         }
+         return result;
+     }
+
 
 }
