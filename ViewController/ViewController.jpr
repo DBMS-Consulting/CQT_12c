@@ -419,6 +419,10 @@
             <value n="id" v="Jasperreports-javaflow-5.1.0.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
+         <hash>
+            <value n="id" v="Commons-javaflow.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
       </list>
       <hash n="internalDefinitions">
          <list n="libraryDefinitions">
@@ -501,6 +505,15 @@
                <value n="deployedByDefault" v="true"/>
                <value n="description" v="Jasperreports-javaflow-5.1.0.jar"/>
                <value n="id" v="Jasperreports-javaflow-5.1.0.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="public_html/WEB-INF/lib/commons-javaflow.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="Commons-javaflow.jar"/>
+               <value n="id" v="Commons-javaflow.jar"/>
                <value n="locked" v="true"/>
             </hash>
          </list>
@@ -676,6 +689,10 @@
          </hash>
          <hash>
             <value n="id" v="Jasperreports-javaflow-5.1.0.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="Commons-javaflow.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
