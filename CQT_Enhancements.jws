@@ -102,6 +102,12 @@
                      <value n="pathInEar" v=""/>
                      <url n="sourceURL" path="ViewController/public_html/WEB-INF/lib/poi-3.7-20101029.jar"/>
                   </hash>
+                  <hash>
+                     <value n="adapterClass" v="oracle.jdevimpl.deploy.common.DataContainerNodeDependable"/>
+                     <url n="ownerURL" path="ViewController/ViewController.jpr"/>
+                     <value n="pathInEar" v=""/>
+                     <url n="sourceURL" path="ViewController/public_html/WEB-INF/lib/commons-javaflow.jar"/>
+                  </hash>
                </list>
             </hash>
             <url n="earURL" path="deploy/CQT.ear"/>
