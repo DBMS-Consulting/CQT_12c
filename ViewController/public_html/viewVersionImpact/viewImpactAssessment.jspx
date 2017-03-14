@@ -497,7 +497,7 @@
             </af:popup>
             <af:panelBox text="View Version Impact" id="pb1" showDisclosure="false"
                              inlineStyle="width:1250px; padding:5px; height:390px;">
-                    <af:panelGroupLayout id="pgl4" layout="horizontal" inlineStyle="height:355px; width:1230px; padding:5px;">
+                    <af:panelGroupLayout id="pgl4" layout="horizontal" inlineStyle="height:355px; width:1230px; padding:5px;" valign="top">
                         <af:panelCollection id="pc2" inlineStyle="height:345px; width:515px; padding:0px;">
                                 <f:facet name="menus">
                                 <af:menu text="Filter and Sort" id="m2" detachable="true"

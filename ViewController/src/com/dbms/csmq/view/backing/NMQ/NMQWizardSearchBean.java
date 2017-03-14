@@ -2393,7 +2393,10 @@ public class NMQWizardSearchBean  {
                 cellA1 = excelrow.createCell((short) 0);
                 cellA1.setCellValue("Level");
                 cellA2 = excelrow.createCell((short) 1);
-                cellA2.setCellValue(getParamLevel());
+                if("%".equals(getParamLevel()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamLevel());
 
                 i++;
 
