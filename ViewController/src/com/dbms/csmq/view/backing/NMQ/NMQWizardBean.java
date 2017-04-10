@@ -1715,6 +1715,13 @@ public class NMQWizardBean {
         }
     }
     
+    public void queueDetailAction(){
+        RichButton button = (RichButton) ADFUtils.findComponentInRoot("hiddenButton");
+        ActionEvent ae = new ActionEvent(button);
+        ae.queue();
+        getAddDetailsWarningPopup().hide();
+    }
+    
     public String yesWarningDetails() {
         Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.detailsFromTrain}");
         if(fromTrain != null && fromTrain){

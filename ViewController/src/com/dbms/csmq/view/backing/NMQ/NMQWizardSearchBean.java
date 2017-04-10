@@ -3444,6 +3444,7 @@ public class NMQWizardSearchBean  {
             productSearchRows.clear();
         if(productSearchBinding != null)
         ADFUtils.addPartialTarget(productSearchBinding);
+        ADFUtils.setEL("#{pageFlowScope.productClause}", null);
     }
     
     public void clearGroupSearchRows(ActionEvent actionEvent) {
@@ -3451,6 +3452,7 @@ public class NMQWizardSearchBean  {
             groupSearchRows.clear();
         if(groupSearchBinding != null)
         ADFUtils.addPartialTarget(groupSearchBinding);
+        ADFUtils.setEL("#{pageFlowScope.groupClause}", null);
     }
 
     public void showProductSearchPopup(ActionEvent actionEvent) {

@@ -322,7 +322,7 @@
                                     <f:facet name="buttonBar">
                                         <af:panelGroupLayout id="pgl7" layout="horizontal">
                                             <af:commandButton text="Yes" id="cb2"
-                                                              action="#{pageFlowScope.NMQWizardBean.yesWarningDetails}"/>
+                                                              action="#{NMQWizardUIBean.yesWarningDetails}"/>
                                             <af:commandButton text="No" id="cb3"
                                                               action="#{pageFlowScope.NMQWizardBean.noWarningDetails}"/>
                                         </af:panelGroupLayout>

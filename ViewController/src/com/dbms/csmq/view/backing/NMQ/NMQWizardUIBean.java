@@ -254,6 +254,19 @@ public class NMQWizardUIBean {
     public RichSelectOneChoice getControlMQScope() {
         return controlMQScope;
     }
+    
+    public String yesWarningDetails() {
+        Boolean fromTrain = (Boolean)ADFUtils.evaluateEL("#{pageFlowScope.detailsFromTrain}");
+        if(fromTrain != null && fromTrain){
+            saveDetails();
+            nMQWizardBean.queueDetailAction();
+            return null;
+        }
+        else{
+            saveDetails();
+            return "CANCEL";
+        }
+    }
 
 
     public boolean saveDetails() {
