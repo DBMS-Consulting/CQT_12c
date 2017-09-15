@@ -46,8 +46,14 @@
         <af:popup id="loginPU">
             <af:subform id="sf1" defaultCommand="cb1x4s">
                 <af:panelFormLayout id="pfl1x4s" inlineStyle="text-align:center; width:206px;">
-                    <af:inputText label="Username" id="it1x4s" value="#{UserBean.username}" columns="20"/>
-                    <af:inputText label="Password" id="it2x4s" secret="true" value="#{UserBean.password}" columns="20"/>
+                    <af:inputText label="Username" id="it1x4s" value="#{UserBean.username}" columns="20"
+                                  autoSubmit="true">
+                    <f:converter converterId="TrimEndSpaces"/>
+                    </af:inputText>
+                    <af:inputText label="Password" id="it2x4s" secret="true" value="#{UserBean.password}" columns="20"
+                                  autoSubmit="true">
+                    <f:converter converterId="TrimEndSpaces"/>
+                    </af:inputText>
                     <af:commandButton text="Login" id="cb1x4s" action="#{UserBean.doLogin}"/>
                 </af:panelFormLayout>
             </af:subform>

@@ -21,7 +21,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import javax.faces.convert.Converter;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.component.UIComponent;
@@ -710,4 +710,5 @@ public class UserBean {
         fullName = lastName + ", " + firstName;        
         return fullName;
     }
+
 }

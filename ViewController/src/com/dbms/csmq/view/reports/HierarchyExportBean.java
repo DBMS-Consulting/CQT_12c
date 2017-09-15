@@ -105,6 +105,7 @@ public class HierarchyExportBean {
     private String version;
     private String lastUpdate;
     String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
+    //String sourceDirectory = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image";
     private int rowCount = 0;
     private static final String MQ_DTL_REPORT_SQL = "{ ? = call nmat_tms_query_utils.get_tms_hierarchy(?,?,?) }";
 
@@ -184,7 +185,13 @@ public class HierarchyExportBean {
             }
 
             POIExportUtil.addEmptyRow(currentWorksheet, rowCount++);
+            if("Future".equalsIgnoreCase(worksheetName)){
+                Double doubleValue = new Double(version);
+                doubleValue = doubleValue + 1;
+                POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", (new Integer(doubleValue.intValue())).toString().concat(".0"), 3, 2);   
+            }else{
             POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", version, 3, 2);
+            }
             POIExportUtil.addFormRow(currentWorksheet, rowCount++, "Status:",
                                      "A".equals(nMQWizardBean.getCurrentMQStatus()) ? "Active" : "Inactive", 3, 2);
             POIExportUtil.addFormRow(currentWorksheet, rowCount++, "Scope (Yes/No):",
@@ -209,6 +216,7 @@ public class HierarchyExportBean {
                 currentWorksheet.autoSizeColumn(x);
             }
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
