@@ -33,9 +33,7 @@ import org.apache.log4j.Logger;
  */
 
 
-public class CSMQBean {
-
-  tmsURL      
+public class CSMQBean {      
     String initialize = null;
     
     // ******** VERSION **********

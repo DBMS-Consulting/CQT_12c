@@ -35,6 +35,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 public class ReportEngine {
     
     String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
+    //String sourceDirectory = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\JRXMLReport\\";
     String reportFile;
     
     JRPropertiesUtil jRPropertiesUtil;
@@ -82,6 +83,14 @@ public class ReportEngine {
             conn = ds.getConnection();
             
             for (String reportName : reportNames) {
+                if("HIERARCHY_EXPORT_IA_FUTURE".equalsIgnoreCase(reportName)){
+                    String version = (String)parameters.get("DICTIONARY_VERSION");
+                    Double doubleValue = new Double(version);
+                    doubleValue = doubleValue + 1;
+                    parameters.put("DICTIONARY_VERSION", (new Integer(doubleValue.intValue())).toString().concat(".0"));
+                System.out.println();
+                }
+                
                 reportFiles[i] = sourceDirectory + reportName + ".jrxml";
                 CSMQBean.logger.info(caller + "RUNNING REPORT: " +  reportFiles[i]);
                 InputStream is = new FileInputStream(new File(reportFiles[i]));
