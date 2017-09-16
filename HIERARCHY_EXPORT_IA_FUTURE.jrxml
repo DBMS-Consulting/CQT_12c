@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="hierarchyExport" language="groovy" printOrder="Horizontal" pageWidth="820" pageHeight="300" orientation="Landscape" columnWidth="820" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="5fc6440e-9b90-4d87-a193-aa4960f9fc63">
+	<style name="TermName">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 0)]]></conditionExpression>
+			<style isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1010"))]]></conditionExpression>
+			<style mode="Opaque" forecolor="#FFFFFF" backcolor="#000080" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1020"))]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#FF0000" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1030"))]]></conditionExpression>
+			<style mode="Opaque" forecolor="#808080" backcolor="#FFFFFF" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1040"))]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#FF8000" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1050"))]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#FF80C0" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1070"))]]></conditionExpression>
+			<style forecolor="#FFFFFF" backcolor="#008000" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1080"))]]></conditionExpression>
+			<style forecolor="#000000" backcolor="#C0C0C0" isBold="true"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[Boolean.valueOf($F{DISPLAY_ATTRIBUTE}.equals("1110"))]]></conditionExpression>
+			<style mode="Opaque" forecolor="#FFFFFF" backcolor="#400040" fill="Solid" pattern="" isBold="true"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="dataset1" uuid="1aa2c71a-0058-42bc-9223-3a1397ddc7c5"/>
+	<parameter name="I_DICT_CONTENT_ID" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[100248671]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_DIRECTORY" class="java.lang.String"/>
+	<parameter name="REPORT_TITLE" class="java.lang.String"/>
+	<parameter name="SHOW_FOOTER" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SHOW_LAST_PAGE_FOOTER" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ACTIVATION_GROUP" class="java.lang.String"/>
+	<parameter name="I_SORT_SIBLINGS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SCOPE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DICTIONARY_VERSION" class="java.lang.String"/>
+	<parameter name="DICTIONARY_TIMESTAMP" class="java.lang.String"/>
+	<parameter name="HAS_SCOPE" class="java.lang.String"/>
+	<parameter name="ACTIVITY_STATUS" class="java.lang.String"/>
+	<parameter name="INCLUDE_LLTS" class="java.lang.String"/>
+	<parameter name="CURRENT_DISPLAYED_TERMS" class="java.lang.String"/>
+	<parameter name="FUTURE_DISPLAYED_TERMS" class="java.lang.String"/>
+	<queryString language="plsql">
+		<![CDATA[{call hierarchy_pkg.get_hierarchy_rs(
+	o_result_cursor => $P{ORACLE_REF_CURSOR},
+	i_dict_content_id => $P{I_DICT_CONTENT_ID},
+	i_pad_spaces => 5,
+	i_left_right_side => 'R',
+	i_return_inserts => 'Y',
+	i_return_updates => 'Y',
+	i_return_deletes => 'N',
+	i_return_dict => 'Y',
+	i_perform_impact => 'Y',
+	i_as_of_date => SYSDATE,
+	i_return_llt => $P{INCLUDE_LLTS},
+	i_group_names => $P{ACTIVATION_GROUP},
+	i_sort_siblings => $P{I_SORT_SIBLINGS}
+	)}]]>
+	</queryString>
+	<field name="PADDED_TERM" class="java.lang.String"/>
+	<field name="DICT_CONTENT_ID" class="java.lang.String"/>
+	<field name="DICT_CONTENT_CODE" class="java.lang.String"/>
+	<field name="CONNECT_LEVEL" class="java.lang.Number"/>
+	<field name="DEF_LEVEL_REF_SHORT_NAME" class="java.lang.String"/>
+	<field name="DEF_DICTIONARY_SHORT_NAME" class="java.lang.String"/>
+	<field name="DICT_CONTENT_ALT_CODE" class="java.lang.String"/>
+	<field name="APPROVED_FLAG" class="java.lang.String"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="DEF_NAMED_REL_ID" class="java.lang.String"/>
+	<field name="COMMENT_TEXT" class="java.lang.String"/>
+	<field name="DICT_CONTENT_REF_ID" class="java.lang.String"/>
+	<field name="DISPLAY_ATTRIBUTE" class="java.lang.String"/>
+	<field name="TERM" class="java.lang.String"/>
+	<field name="FORMATTED_SCOPE" class="java.lang.Number"/>
+	<field name="DEF_LEVEL_SHORT_NAME" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="163" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="4" width="236" height="64" uuid="a553ebd6-2bcb-4fa1-8fa0-8ff47d10cfe9"/>
+				<imageExpression><![CDATA[$P{REPORT_DIRECTORY} +"/app_logo.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="68" width="400" height="26" uuid="8ccbf26e-5f27-4be2-b5d9-4570dce4828e"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_TITLE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="678" y="147" width="50" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="20e53737-21f3-4da1-aebc-73d510098c32">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="520" y="147" width="66" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="3c7f7795-f117-4928-995e-0e2e320c5d9c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="625" y="147" width="53" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="6dcc7a2c-6693-49fd-af9d-d588e9965115">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="586" y="147" width="39" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="f414ef39-8a18-4592-9011-f0e565ec388d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Level]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="728" y="147" width="91" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="77a6900b-958e-4d9e-b72b-c9a62acebbc7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Scope]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="" mode="Opaque" x="0" y="147" width="520" height="15" forecolor="#000000" backcolor="#C0C0C0" uuid="a699642d-f2a5-4bbe-9562-7ab4c775b686">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Term]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" mode="Opaque" x="0" y="94" width="400" height="13" uuid="db9cf013-2a09-46a5-b091-0e1dab99245e"/>
+				<textFieldExpression><![CDATA["MedDRA Dictionary Version: " + $P{DICTIONARY_VERSION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="107" width="400" height="13" uuid="86fb237a-9ba8-489d-8ccc-1518852856c9"/>
+				<textFieldExpression><![CDATA["Status: " + ($P{ACTIVITY_STATUS} == 'A' ? "Active" : "Inactive")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="672" y="61" width="142" height="14" forecolor="#000000" backcolor="#FF80C0" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Change in TERMSCP (SMQs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="103" width="142" height="14" forecolor="#FFFFFF" backcolor="#400040" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Other MQM Manual Additions ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="75" width="142" height="14" forecolor="#808080" backcolor="#FFFFFF" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Non-Current LLT (Future NMQs/SMQs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="672" y="75" width="142" height="14" forecolor="#FFFFFF" backcolor="#008000" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MQM Inserted/Added New PT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="61" width="142" height="14" forecolor="#FFFFFF" backcolor="#000080" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Impacted]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="672" y="89" width="142" height="14" forecolor="#000000" backcolor="#C0C0C0" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Renamed Terms]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="41" width="80" height="16" forecolor="#FFFFFF" backcolor="#000000" uuid="12753dd4-0675-448b-9441-0cdbe6c86524"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Legend]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="530" y="89" width="142" height="14" forecolor="#000000" backcolor="#FF8040" uuid="dcd6b144-522a-4864-bd0d-89708e9d2765">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MedDRA Inserted/Added Term/Relation]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="120" width="400" height="13" uuid="27386d94-0a5f-45c3-bce1-d17903f64835"/>
+				<textFieldExpression><![CDATA["Scope (Yes/No): " + ($P{HAS_SCOPE} == 'Y' ? "Yes" : "No")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="133" width="400" height="13" uuid="e2cbcc99-4518-4939-bbef-f49b101aba89"/>
+				<textFieldExpression><![CDATA["Report Date/Time: " + new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="16">
+			<textField isStretchWithOverflow="true">
+				<reportElement key="" style="TermName" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="520" height="15" uuid="7f37d593-4cf8-469e-ad29-5b0ed551a164">
+					<property name="net.sf.jasperreports.export.xls.pattern" value="true"/>
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="0"/>
+				<textElement>
+					<paragraph tabStopWidth="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 0) ?  $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 1) ? "    " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 2) ? "          " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 3) ? "                  " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 4) ? "                          " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 5) ? "                                  " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 6) ? "                                          " + $F{TERM} :
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 7) ? "                                                  " + $F{TERM} : 
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 8) ? "                                                          " + $F{TERM} : 
+Boolean.valueOf($F{CONNECT_LEVEL}.intValue() == 9) ? "                                                                  " + $F{TERM} : "??"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="520" y="0" width="66" height="15" uuid="a8495d68-9a57-470e-a587-d09a332613fe">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DICT_CONTENT_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="586" y="0" width="39" height="15" uuid="82b997de-c5d6-4d6d-a54f-29219789c827">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DEF_LEVEL_REF_SHORT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="728" y="0" width="91" height="15" uuid="baec73e4-747d-421e-959e-573a2b693848">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$F{CONNECT_LEVEL}.intValue() < 2]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[Boolean.valueOf($F{FORMATTED_SCOPE}.intValue() == 0) ? "Full NMQ/SMQ" :
+Boolean.valueOf($F{FORMATTED_SCOPE}.intValue() == 1) ? "Broad" :
+Boolean.valueOf($F{FORMATTED_SCOPE}.intValue() == 2) ? "Narrow" :
+Boolean.valueOf($F{FORMATTED_SCOPE}.intValue() == 3) ? "Child/Narrow" : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="678" y="0" width="50" height="15" uuid="5282286f-f89c-4efe-9850-f8eeac3cf85b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$F{CONNECT_LEVEL}.intValue() < 2]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{COMMENT_TEXT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="625" y="0" width="53" height="15" uuid="f2c744cf-3f6f-41d2-97f0-198486336c5d">
+					<printWhenExpression><![CDATA[$F{CONNECT_LEVEL}.intValue() < 2]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{STATUS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

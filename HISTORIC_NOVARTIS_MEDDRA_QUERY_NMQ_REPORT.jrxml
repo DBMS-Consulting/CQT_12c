@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MEDDRA_QUERY_NMQ_REPORT" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ed0a0ba7-5cb7-4404-9566-1196b38405af">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1"/>
+	<parameter name="proposed_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="requested_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="draft_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pending_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reviewed_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="approved_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="published_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="activated_yn" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Y"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="release_group" class="java.lang.String">
+		<defaultValueExpression><![CDATA["NULL"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="requestor" class="java.lang.String">
+		<defaultValueExpression><![CDATA["NULL"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="trans_start_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[01-NOV-2011]]></defaultValueExpression>
+	</parameter>
+	<parameter name="trans_end_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[01-NOV-2012]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORT_DIRECTORY" class="java.lang.String"/>
+	<parameter name="LAST_ACTIVATON_DATE" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[-- HISTORIC MEDDRA QUERY (NMQ)
+SELECT * FROM (
+SELECT dict_content_code,
+       term,
+       transaction_date,
+       description,
+       approval_reason,
+       SUBSTR(term,-4,3) extension
+FROM TABLE  (workflow_rpt_pkg.export_history (
+ i_proposed_yn       => 'N',
+  i_requested_yn      => 'N',
+  i_draft_yn          => 'N',
+  i_pending_yn        => 'N',
+  i_reviewed_yn       => 'N',
+  i_approved_yn       => 'Y',
+  i_published_yn      => 'Y',
+  i_activated_yn      => 'Y',
+  i_release_group    =>  NULL,
+  i_requestor        =>  NULL,
+  i_trans_start_date =>  trunc($P{trans_start_date}),
+  i_trans_end_date =>  trunc($P{trans_end_date})))
+WHERE RELEASE_STATUS = 'CURRENT'  )
+WHERE extension <> 'null' AND extension <> '_VT'
+
+ORDER BY approval_reason, extension, term]]>
+	</queryString>
+	<field name="DICT_CONTENT_CODE" class="java.lang.String"/>
+	<field name="TERM" class="java.lang.String"/>
+	<field name="TRANSACTION_DATE" class="java.sql.Timestamp"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<field name="APPROVAL_REASON" class="java.lang.String"/>
+	<field name="EXTENSION" class="java.lang.String"/>
+	<group name="Reason" keepTogether="true">
+		<groupExpression><![CDATA[$F{APPROVAL_REASON}]]></groupExpression>
+		<groupHeader>
+			<band height="25">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="7323650d-dc31-4968-bc0f-0e7f0cd0c7a1">
+						<printWhenExpression><![CDATA[!$F{APPROVAL_REASON}.equalsIgnoreCase( "NULL" )]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{APPROVAL_REASON}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Extension" keepTogether="true">
+		<groupExpression><![CDATA[$F{EXTENSION}]]></groupExpression>
+		<groupHeader>
+			<band height="25">
+				<printWhenExpression><![CDATA[!$F{APPROVAL_REASON}.equalsIgnoreCase( "NULL" ) || !$F{APPROVAL_REASON}.equalsIgnoreCase( "_VT" )
+]]></printWhenExpression>
+				<textField>
+					<reportElement x="12" y="0" width="100" height="20" uuid="1f96fa0e-8003-4d74-8184-dad51f8fd0ac">
+						<printWhenExpression><![CDATA[!$F{APPROVAL_REASON}.equalsIgnoreCase( "NULL" ) || !$F{APPROVAL_REASON}.equalsIgnoreCase( "_VT" ) ]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EXTENSION}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="13" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="123" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="60" width="552" height="22" uuid="32172f30-9007-4c1a-8c89-88f7151408b7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MedDRA Query Report]]></text>
+			</staticText>
+			<image>
+				<reportElement x="3" y="0" width="236" height="60" uuid="db7ced25-028e-4010-aa9c-1bbc5f7e94af"/>
+				<imageExpression><![CDATA[$P{REPORT_DIRECTORY} +"/app_logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="3" y="82" width="552" height="30" uuid="fdc1e3e8-1ee0-48b2-9f4d-85849d620b28"/>
+				<text><![CDATA[The following changes have occurred in the MedDRA Query dictionary in the Terminology Management System (TMS) ]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="80" y="94" width="60" height="18" uuid="2437a806-c9dc-47bc-930a-77fe593e7fa1">
+					<printWhenExpression><![CDATA[$P{trans_start_date} != null && $P{trans_end_date} != null]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{trans_start_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="170" y="94" width="60" height="18" uuid="259e62cc-9b04-4ba9-8765-d7666796dbc9">
+					<printWhenExpression><![CDATA[$P{trans_start_date} != null && $P{trans_end_date} != null]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{trans_end_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="94" width="30" height="18" uuid="4e40e2bc-8bd8-4d19-b1e5-b777f6ac329a">
+					<printWhenExpression><![CDATA[$P{trans_start_date} != null && $P{trans_end_date} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[and]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="94" width="49" height="18" uuid="f13d4c5d-d37e-49a7-b94b-eadcf04e90cf">
+					<printWhenExpression><![CDATA[$P{trans_start_date} != null && $P{trans_end_date} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[between ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="0" width="100" height="20" uuid="56387c16-2535-42ae-967d-6aa31ee5e711"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NMQ Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="0" width="242" height="20" uuid="443f2102-2f19-4155-badc-4eeed85c9e94"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NMQ Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="83" height="20" uuid="b3ff9cb5-aa77-4476-970d-5aa65ee1701d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Published Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{DICT_CONTENT_CODE}.equalsIgnoreCase( "NULL" )]]></printWhenExpression>
+			<textField>
+				<reportElement x="20" y="0" width="103" height="20" isRemoveLineWhenBlank="true" uuid="4797225e-c98a-4719-83f9-5541079ea7ef">
+					<printWhenExpression><![CDATA[!$F{DICT_CONTENT_CODE}.equalsIgnoreCase( "NULL" )]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DICT_CONTENT_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="123" y="0" width="239" height="20" uuid="97153698-dcaf-478d-a3c2-cd73807ae461"/>
+				<textFieldExpression><![CDATA[$F{TERM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement x="362" y="0" width="83" height="20" uuid="3119c5af-5eca-414e-a3c7-920c4568ec1c"/>
+				<textFieldExpression><![CDATA[$F{TRANSACTION_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="34" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="209" y="0" width="80" height="20" uuid="445a451a-1e89-4fd8-b565-20cfa60db1ea"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="289" y="0" width="40" height="20" uuid="3700f398-bb9a-4972-b77b-965a406ce346"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="3" y="0" width="552" height="20" uuid="8f27a47a-7c39-461b-bab0-916ceece5ab2"/>
+				<text></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
