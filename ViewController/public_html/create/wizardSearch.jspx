@@ -397,7 +397,10 @@
                             selectionListener="#{pageFlowScope.NMQWizardSearchBean.onTableNodeSelection}" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlSearchResults}" contentDelivery="immediate" filterVisible="true" autoHeightRows="-1" inlineStyle="height:230px;"
                             persist="ALL">
                     <af:column sortProperty="Mqterm" sortable="true" headerText="Term" id="c20" width="165" filterable="true">
-                      <af:outputText value="#{row.Mqterm}" id="ot16" styleClass="#{pageFlowScope.NMQWizardSearchBean.historyFlow and row.ContentId eq pageFlowScope.NMQWizardBean.currentDictContentID ? 'HistoricView' : ''}"/>
+                      <af:outputText value="#{row.Mqterm}" id="ot16" styleClass="#{pageFlowScope.NMQWizardSearchBean.historyFlow and row.ContentId eq pageFlowScope.NMQWizardBean.currentDictContentID ? 'HistoricView' : ''}"/>                    
+                    </af:column>
+                    <af:column headerText="" id="c26" width="12">
+                       <af:image source="/image/flag.png" id="i1" visible="#{row.PublishedInLastMonth eq 'Y'}"/>
                     </af:column>
                     <af:column sortProperty="ApprFlag" sortable="false"
                                headerText="Approved" id="c6" width="45"
@@ -508,7 +511,8 @@
                       <af:commandImageLink icon="/image/history.png" id="cil1">
                             <af:showPopupBehavior popupId="::p2" triggerType="action"/>
                       </af:commandImageLink>
-                    </af:column></af:table>
+                    </af:column>
+                  </af:table>
                 </af:panelGroupLayout>
                 <f:facet name="toolbar">
                   <af:panelGroupLayout id="pgl12" layout="horizontal">

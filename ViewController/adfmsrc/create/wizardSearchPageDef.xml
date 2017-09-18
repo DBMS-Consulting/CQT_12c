@@ -125,6 +125,7 @@
           <Item Value="State"/>
           <Item Value="Extension"/>
           <Item Value="Querylevel"/>
+          <Item Value="PublishedInLastMonth"/>
         </AttrNames>
       </nodeDefinition>
     </tree>

@@ -4,12 +4,11 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="SimpleSearch"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   FetchMode="FETCH_AS_NEEDED"
   PageIterMode="Full"
-  UseGlueCode="false"
   OrderBy="MQTERM"
   FetchSize="50">
   <DesignTime>
@@ -131,37 +130,76 @@
     Name="product"
     Kind="where"
     Type="java.lang.String"/>
-  <SQLQuery><![CDATA[SELECT * FROM (
-SELECT DISTINCT CONTENT_ID || '.' || to_char(DATES, 'yyyymmddhh24miss') PRIKEY, 
-        REGEXP_SUBSTR(mqlevel,'\d{1}') querylevel,
-        SUBSTR(mqterm,-4,3) extension,
-	replace(MQGROUP, '|', ',') MQGROUP_F, results.* 
-	FROM table( NMAT_UI_pkg.f_search_result(
-	pContentId => null,
-        psDictionaryName => :dictShortName, 
-	psTerm => :term,
-	pStartDate => :startDate, 
-	pEndDate => :endDate, 
-	pMQStatus => :activityStatus, 
-	pCurrPendStatus => :releaseStatus, 
-	pRelGroup => :activationGroup,
-	PMQGroup => :MQGroup,
-        pProduct => :product, 
-	pMQCode => :MQCode, 
-	pMQCrtlEvt => :MQCriticalEvent,
-	pUniqueIdOnly => :uniqueIDsOnly, 
-	pFilterForUser => :filterForUser,
-	pCurrentUser => UPPER(:currentUser),
-        pNarrowScpOnlyMq => :showNarrowScpOnly,
-        pMQSCP => :MQScope,
-        pState => :pState,
-        pUserRole => UPPER(:pUserRole),
-        pLevel => :mqType,
-        pMode => :pMode,
-        pApprove => :pApprove,
-        psVirtualDictionaryName => :psVirtualDictionaryName      
-	)) results 
-WHERE 1 = :killSwitch)
+  <SQLQuery><![CDATA[SELECT PRIKEY,    
+QUERYLEVEL,  
+EXTENSION,  
+MQGROUP_F,  
+DICT_NM,  
+LEVEL_NM,  
+DOMAIN_NM,  
+APPR_FLAG,  
+TERM_SUBTYPE,  
+CONTENT_ID,  
+VERSION,  
+MQTRANSID,  
+MQLEVEL,  
+MQCODE,  
+MQTERM,  
+MQSTATUS,  
+MQSCP,  
+MQALGO,  
+MQGROUP,  
+MQPRODCT,  
+MQCRTEV,  
+MQALTCODE,  
+CUR_PEND_STATUS,  
+DATES,  
+CREATEDBY,  
+GROUPNAME,  
+STATE,  
+DUE_DATE,  
+REASON_FOR_REQUEST,  
+REASON_FOR_APPROVAL,  
+CUT_OFF_DATE,  
+DESIGNEE,
+(SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
+    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id
+UNION ALL
+SELECT 'N'
+FROM DUAL
+WHERE NOT EXISTS (SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
+    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id))  AS PUBLISHED_IN_LAST_MONTH
+FROM (    
+SELECT DISTINCT CONTENT_ID || '.' || to_char(DATES, 'yyyymmddhh24miss') PRIKEY,     
+        REGEXP_SUBSTR(mqlevel,'\d{1}') querylevel,    
+        SUBSTR(mqterm,-4,3) extension,    
+	replace(MQGROUP, '|', ',') MQGROUP_F, results.*     
+	FROM table( NMAT_UI_pkg.f_search_result(    
+	pContentId => null,    
+        psDictionaryName => :dictShortName,     
+	psTerm => :term,    
+	pStartDate => :startDate,     
+	pEndDate => :endDate,     
+	pMQStatus => :activityStatus,     
+	pCurrPendStatus => :releaseStatus,     
+	pRelGroup => :activationGroup,    
+	PMQGroup => :MQGroup,    
+        pProduct => :product,     
+	pMQCode => :MQCode,     
+	pMQCrtlEvt => :MQCriticalEvent,    
+	pUniqueIdOnly => :uniqueIDsOnly,     
+	pFilterForUser => :filterForUser,    
+	pCurrentUser => UPPER(:currentUser),    
+        pNarrowScpOnlyMq => :showNarrowScpOnly,    
+        pMQSCP => :MQScope,    
+        pState => :pState,    
+        pUserRole => UPPER(:pUserRole),    
+        pLevel => :mqType,    
+        pMode => :pMode,    
+        pApprove => :pApprove,    
+        psVirtualDictionaryName => :psVirtualDictionaryName          
+	)) results     
+WHERE 1 = :killSwitch)    
 WHERE (to_char(QUERYLEVEL) LIKE :queryLevel OR to_char(MQLEVEL) LIKE :queryLevel) AND EXTENSION LIKE :extension]]></SQLQuery>
   <ViewAttribute
     Name="Prikey"
@@ -643,8 +681,23 @@ WHERE (to_char(QUERYLEVEL) LIKE :queryLevel OR to_char(MQLEVEL) LIKE :queryLevel
       <Attr Name="_DisplaySize" Value="200"/>
     </DesignTime>
   </ViewAttribute>
- 
-  
+  <ViewAttribute
+    Name="PublishedInLastMonth"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="255"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="VIEW_ATTR"
+    SQLType="VARCHAR"
+    Expression="SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
+    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id
+UNION ALL
+SELECT 'N'
+FROM DUAL
+WHERE NOT EXISTS (SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
+    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id)"/>
   <ViewAttribute
     Name="NmatCreatedt"
     IsUpdateable="false"
