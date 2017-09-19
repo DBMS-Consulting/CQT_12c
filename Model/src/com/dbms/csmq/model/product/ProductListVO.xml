@@ -26,7 +26,7 @@
     RowLevelBinds="true"/>
   <SQLQuery><![CDATA[Select ref_codelist_value_short_val short_val, long_value 
 from rxc.reference_codelist_values where ref_codelist_name = 'NMQ_PRODUCT_LIST'
-and active_flag ='Y' AND ref_codelist_value_short_val <> 'STANDARD']]></SQLQuery>
+and active_flag ='Y']]></SQLQuery>
   <ViewAttribute
     Name="ShortVal"
     IsUpdateable="false"
