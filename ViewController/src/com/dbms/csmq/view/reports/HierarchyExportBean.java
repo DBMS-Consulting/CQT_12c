@@ -640,12 +640,13 @@ public class HierarchyExportBean {
             POIExportUtil.addImageRow(worksheet, rowCount++);
             worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
+            //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
-            POIExportUtil.addHeaderTextRow(worksheet, rowCount++, nMQWizardBean.getCurrentTermName(), 6);
+            POIExportUtil.addHeaderTextRow1(worksheet, rowCount++, nMQWizardBean.getCurrentTermName(), 6);
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -653,10 +654,12 @@ public class HierarchyExportBean {
                                      (String)termDtlRow.getAttribute("DictionaryName"), 3, 3);
             POIExportUtil.addFormRow(worksheet, rowCount++, "Release Group:",
                                      (String)termDtlRow.getAttribute("GroupName"), 3, 3);
-            POIExportUtil.addFormRow(worksheet, rowCount++, "Term:", (String)termDtlRow.getAttribute("Term"), 3, 3);
-            POIExportUtil.addFormRow(worksheet, rowCount++, "Product List:", (String)termDtlRow.getAttribute("Value3"),
-                                     3, 3);
-            POIExportUtil.addFormRow(worksheet, rowCount++, "Product List (Expanded):",
+            //POIExportUtil.addFormRow(worksheet, rowCount++, "Term:", (String)termDtlRow.getAttribute("Term"), 3, 3);
+            POIExportUtil.addFormRow(workbook, worksheet, rowCount++, "Term:", (String)termDtlRow.getAttribute("Term"), 3, 3);
+            POIExportUtil.addFormRow(worksheet, rowCount++, "Product List:", (String)termDtlRow.getAttribute("Value3"), 3, 3);
+//            POIExportUtil.addFormRow(worksheet, rowCount++, "Product List (Expanded):",
+//                                     (String)termDtlRow.getAttribute("MqproductExpanded"), 3, 3);
+            POIExportUtil.addFormRow(workbook,worksheet, rowCount++, "Product List (Expanded):",
                                      (String)termDtlRow.getAttribute("MqproductExpanded"), 3, 3);
             POIExportUtil.addFormRow(worksheet, rowCount++, "Designee: ", (String)termDtlRow.getAttribute("Designee"),
                                      3, 3);
@@ -672,7 +675,9 @@ public class HierarchyExportBean {
                                      (String)termDtlRow.getAttribute("Value4"), 3, 3);
             POIExportUtil.addFormRow(worksheet, rowCount++, "Query Group:", (String)termDtlRow.getAttribute("Value2"),
                                      3, 3);
-            POIExportUtil.addFormRow(worksheet, rowCount++, "Query Group (Expanded):",
+//            POIExportUtil.addFormRow(worksheet, rowCount++, "Query Group (Expanded):",
+//                                     (String)termDtlRow.getAttribute("MqgroupExpanded"), 3, 3);
+            POIExportUtil.addFormRow(workbook, worksheet, rowCount++, "Query Group (Expanded):",
                                      (String)termDtlRow.getAttribute("MqgroupExpanded"), 3, 3);
             POIExportUtil.addFormRow(worksheet, rowCount++, "Status:", (String)termDtlRow.getAttribute("Status"), 3,
                                      3);
@@ -827,6 +832,7 @@ public class HierarchyExportBean {
                             scopeFlag ? getLevelName(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
                                                      (java.math.BigDecimal)element[18]) : "";
                     java.math.BigDecimal relDepthFromRoot = (java.math.BigDecimal)element[54]; // rel_depth_from_root
+                    if(!"Broad".equalsIgnoreCase(valArr[5]))
                     POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,
                                                             relDepthFromRoot.intValue() + 1);
                 }
