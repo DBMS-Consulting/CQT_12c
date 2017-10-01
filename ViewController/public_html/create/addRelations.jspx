@@ -373,8 +373,13 @@
                                                         <af:toolbar id="t4">
                                                             <af:commandToolbarButton text="Refresh" id="ctb4"
                                                                                      actionListener="#{pageFlowScope.NMQSourceTermSearchBean.loadHierachy}"
-                                                                                     icon="/image/hierarchy/REFRESH.png" disabled="false"
-                                                                                     />
+                                                                                     icon="/image/hierarchy/REFRESH.png" disabled="false"/>
+                                                    <af:commandToolbarButton text="Export" id="ctb3" disabled="false"
+                                                                         icon="/image/hierarchy/EXCEL.png">
+                                                    <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.heirarchySearchexportRelations}"
+                                                                                   contentType="application/x-download"
+                                                                                   filename="#{pageFlowScope.HierarchyExportBean.hierarSrchReportExcelFileName}"/>
+                                                </af:commandToolbarButton>
                                                         </af:toolbar>
                                                     </f:facet>
                                                     <f:facet name="statusbar"/>

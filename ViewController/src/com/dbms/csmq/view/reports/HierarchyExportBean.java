@@ -11,6 +11,7 @@ import com.dbms.csmq.view.backing.impact.ImpactAnalysisBean;
 import com.dbms.csmq.view.backing.impact.ImpactAnalysisUIBean;
 import com.dbms.csmq.view.hierarchy.GenericTreeNode;
 import com.dbms.csmq.view.hierarchy.TermHierarchyBean;
+import com.dbms.csmq.view.hierarchy.TermHierarchySourceBean;
 import com.dbms.csmq.view.impact.PreviousVerCurrentImpactHierarchyBean;
 import com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean;
 import com.dbms.util.ADFUtils;
@@ -94,6 +95,7 @@ public class HierarchyExportBean {
     private String generatedReport;
     private String excelFileName;
     private String mqDtlReportExcelFileName;
+    private String hierarSrchReportExcelFileName;
     //private String existingFuture = "FUTURE";
     private RichPopup cntrlExportHierarchyPopup;
     private String defaultMedDRAGroupName;
@@ -274,6 +276,15 @@ public class HierarchyExportBean {
             exportRelationJasperReport(facesContext, outputStream);
         }
     }
+    
+    public void heirarchySearchexportRelations(FacesContext facesContext, OutputStream outputStream) {
+        NMQWizardSearchBean nMQWizardSearchBean =
+            (NMQWizardSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
+        System.out.println("exportRelations() nMQWizardSearchBean.isHistoryFlow() =" +
+                           nMQWizardSearchBean.isHistoryFlow());
+            heirarchySearchExportHistoryTermRelationsPOI(facesContext, outputStream);
+
+    }
 
     public void exportRelationJasperReport(FacesContext facesContext, OutputStream outputStream) {
         //SmallTreeVO1Iterator
@@ -307,6 +318,7 @@ public class HierarchyExportBean {
             POIExportUtil.addImageRow(worksheet, rowCount++);
             worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
+            //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -345,6 +357,94 @@ public class HierarchyExportBean {
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             String[] headerArr = { "Term", "Code", "Level", "Category", "Weight", "Scope" };
             int[] colSpan = { 3, 1, 1, 1, 1, 1 };
+            POIExportUtil.addHierarchyTableHeaderRow(worksheet, rowCount++, headerArr, colSpan);
+
+            boolean scopeFlag = true;
+            if ("No".equalsIgnoreCase(nMQWizardBean.getCurrentScope()) ||
+                "N".equalsIgnoreCase(nMQWizardBean.getCurrentScope())) {
+                scopeFlag = false;
+            }
+
+            generateHierarchyRow(worksheet, root, colSpan, new Integer("0"), scopeFlag);
+
+            worksheet.createFreezePane(0, 1, 0, 1);
+
+            for (int x = 0; x < 8; x++) {
+                worksheet.autoSizeColumn(x);
+            }
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CSMQBean.logger.info(userBean.getCaller() + "End of exec exportHistoryTermRelationsPOI() ");
+    }
+    
+    public void heirarchySearchExportHistoryTermRelationsPOI(FacesContext facesContext, OutputStream outputStream) {
+        CSMQBean.logger.info(userBean.getCaller() + "Start exec exportHistoryTermRelationsPOI() ");
+        CSMQBean.logger.info(userBean.getCaller() + " user: " + userBean.getUsername());
+        CSMQBean.logger.info(userBean.getCaller() + " I_DICT_CONTENT_ID: " + nMQWizardBean.getCurrentDictContentID());
+        CSMQBean.logger.info(userBean.getCaller() + " CurrentStatus: " + nMQWizardBean.getCurrentStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " getCurrentReleaseGroup: " +
+                             nMQWizardBean.getCurrentReleaseGroup());
+        loadMQDetailedDetailedTermHierarchyInformation(new BigDecimal(nMQWizardBean.getCurrentDictContentID()),
+                                                       nMQWizardBean.getCurrentStatus(),
+                                                       nMQWizardBean.getCurrentReleaseGroup());
+        try {
+            TermHierarchySourceBean termHierarchyBean =
+                (TermHierarchySourceBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("TermHierarchySourceBean");
+            GenericTreeNode root = termHierarchyBean.getRoot();
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Existing");
+            rowCount = 0;
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
+            String logoPath = sourceDirectory + "/app_logo.png";
+            //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
+            POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addHeaderTextRow(worksheet, rowCount++, root.getTerm(), 6);
+            
+
+            // GET DICT VERSIONS
+            try {
+                BindingContainer bindings = BindingContext.getCurrent().getCurrentBindingsEntry();
+                AttributeBinding attr = (AttributeBinding)bindings.getControlBinding("Version");
+                version = (String)attr.getInputValue();
+            } catch (Exception e) {
+                // TODO: Add catch code
+                e.printStackTrace();
+            }
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            NMQWizardSearchBean nMQWizardSearchBean =
+                (NMQWizardSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
+//            if (nMQWizardSearchBean != null) {
+//                POIExportUtil.addSimpleTextRow(worksheet, rowCount++,
+//                                               "Historic View as of  " + nMQWizardSearchBean.getHistoryInputDateStr(),
+//                                               5);
+//            }
+//            POIExportUtil.addFormRow(worksheet, rowCount++, "MedDRA Dictionary Version:",
+//                                     root.get.getActiveDictionaryVersion(), 2, 2);
+//            POIExportUtil.addFormRow(worksheet, rowCount++, "Status:",
+//                                     "A".equals(root.getStatus()) ? "Active" : "Inactive", 2, 2);
+//            POIExportUtil.addFormRow(worksheet, rowCount++, "Scope (Yes/No):",
+//                                     "Y".equals(root.getScopeName()) ? "Yes" : "No", 2, 2);
+            POIExportUtil.addFormRow(worksheet, rowCount++, "Report Date/Time:",
+                                     new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())),
+                                     2, 2);
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            String[] headerArr = { "Term", "Code", "Level", "Scope" };
+            int[] colSpan = { 3, 1, 1, 1 };
             POIExportUtil.addHierarchyTableHeaderRow(worksheet, rowCount++, headerArr, colSpan);
 
             boolean scopeFlag = true;
@@ -1037,5 +1137,18 @@ public class HierarchyExportBean {
     public String getMqDtlReportExcelFileName() {
         mqDtlReportExcelFileName = this.getReportTitle() + "_MQ_Detailed_Report.xls";
         return mqDtlReportExcelFileName;
+    }
+
+    public void setHierarSrchReportExcelFileName(String hierarSrchReportExcelFileName) {
+        this.hierarSrchReportExcelFileName = hierarSrchReportExcelFileName;
+    }
+
+    public String getHierarSrchReportExcelFileName() {
+        TermHierarchySourceBean termHierarchyBean =
+            (TermHierarchySourceBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("TermHierarchySourceBean");
+        if(termHierarchyBean != null && termHierarchyBean.getRoot() != null && termHierarchyBean.getRoot().getTerm() != null){
+        hierarSrchReportExcelFileName = termHierarchyBean.getRoot().getTerm() + "_Export.xls";
+        }
+        return hierarSrchReportExcelFileName;
     }
 }
