@@ -284,7 +284,54 @@
                                       popupFetchListener="#{pageFlowScope.ImpactAnalysisBean.impactSearchResultsPopUp}">
                                 <af:dialog type="cancel" closeIconVisible="true" title="Impact Search" id="d8" stretchChildren="none" modal="true"
                                            resize="off">
-                                    <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;">
+                                    <af:panelGroupLayout id="pgl6" layout="vertical">
+                                            <af:selectManyChoice label="Product" id="smc31" autoSubmit="true"
+                                                                 valuePassThru="true"
+                                                                 value="#{pageFlowScope.ImpactAnalysisBean.productList}"
+                                                                 labelStyle="white-space:nowrap"
+                                                                 selectAllVisible="false" contentStyle="color:#000000;">
+                                                <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                                            var="row">
+                                                    <f:selectItem id="groups1" itemLabel="#{row.longValue}"
+                                                                  itemValue="#{row.shortVal}"/>
+                                                </af:forEach>
+                                            </af:selectManyChoice>
+                                            <af:spacer width="10" height="10" id="s181"/>
+                                            <af:panelGroupLayout id="pgl8" layout="horizontal">
+                                                <af:selectOneChoice id="soc61" label="State"
+                                                                    value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
+                                                                    autoSubmit="true">
+                                                    <af:selectItem label="ALL" value="%" id="si81"/>
+                                                    <af:selectItem label="Pending Impact Assessment"
+                                                                   value="Pending Impact Assessment" id="si461"/>
+                                                    <af:selectItem label="Reviewed IA" value="Reviewed IA" id="si421"/>
+                                                    <af:selectItem label="Approved IA" value="Approved IA" id="si431"/>
+                                                    <af:selectItem label="Published IA" value="Published IA" id="si441"/>
+                                                </af:selectOneChoice>
+                                                <af:spacer width="10" height="10" id="s161"/>
+                                                <af:selectOneChoice label="Status" id="smc61"
+                                                                    labelStyle="white-space:nowrap"
+                                                                    value="#{pageFlowScope.ImpactAnalysisBean.searchStatusStr}"
+                                                                    autoSubmit="true">
+                                                    <af:selectItem label="All" value="%" id="si191"/>
+                                                    <af:selectItem label="Active" value="A" id="si19a1"/>
+                                                    <af:selectItem label="Inactive" value="I" id="si41"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s41"/>
+                                            <af:panelGroupLayout id="pgl16" layout="horizontal">
+                                                <af:inputText label="Term " columns="35" id="it21"
+                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchTermStr}"/>
+                                                <af:spacer width="10" height="10" id="s71"/>
+                                                <af:inputText label="Code " columns="10" id="it51"
+                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchCodeStr}"/>
+                                                <af:spacer width="10" height="10" id="s141"/>
+                                                <af:commandButton text="Search" id="cb11" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchAction}"/>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s15"/>
+                                        </af:panelGroupLayout>
+                                    <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;" partialTriggers="cb11">
                                         <af:showDetailItem text="Impacted CMQs" id="sdi5" styleClass="AFStretchWidth"
                                                            disclosed="true">
                                             <af:table value="#{bindings.ImpactSearchListVO_CMQ_Y.collectionModel}"

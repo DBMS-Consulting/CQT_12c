@@ -37,6 +37,8 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTreeTable;
+import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
+import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
 import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
@@ -70,9 +72,9 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private RichTreeTable medDRATree;
     private RichTreeTable futureTree;
     private RichTreeTable hierarchySourceTree;
-    
-    
-    
+    private RichSelectManyChoice ctrlProducts;
+    private List <String> productList = new ArrayList <String>();
+    private RichSelectOneChoice ctrlNMQStatus;
     private String paramReleaseGroup;
     private String parentSOCcontentID;
     private String currentTermName;
@@ -108,6 +110,8 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private Object newPTDisclosedKeys;
     
     private String searchLevelStr = "%";
+    private String searchStateStr = "%";
+    private String searchStatusStr = "%";
     private String searchTermStr;
     private boolean showPrevVerCurrentImpactedOnly;
     private boolean showPrevVerFutureImpactedOnly;
@@ -1524,10 +1528,41 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
     public void onImpartSearchAction(ActionEvent actionEvent) {
         System.out.println("Start Exec onImpartSearchAction() ");
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSearch");
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSearch1");
         ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
         ob.getParamsMap().put("searchTermStr", getSearchTermStr());
         ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onCurrImpartSearchAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpactAssesmentSearchAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
         ob.execute();
         System.out.println("End of Exec onImpartSearchAction() ");
     }
@@ -1546,5 +1581,45 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
 
     public boolean isShowPrevVerFutureImpactedOnly() {
         return showPrevVerFutureImpactedOnly;
+    }
+
+    public void setCtrlProducts(RichSelectManyChoice ctrlProducts) {
+        this.ctrlProducts = ctrlProducts;
+    }
+
+    public RichSelectManyChoice getCtrlProducts() {
+        return ctrlProducts;
+    }
+
+    public void setProductList(List<String> productList) {
+        this.productList = productList;
+    }
+
+    public List<String> getProductList() {
+        return productList;
+    }
+
+    public void setCtrlNMQStatus(RichSelectOneChoice ctrlNMQStatus) {
+        this.ctrlNMQStatus = ctrlNMQStatus;
+    }
+
+    public RichSelectOneChoice getCtrlNMQStatus() {
+        return ctrlNMQStatus;
+    }
+
+    public void setSearchStateStr(String searchStateStr) {
+        this.searchStateStr = searchStateStr;
+    }
+
+    public String getSearchStateStr() {
+        return searchStateStr;
+    }
+
+    public void setSearchStatusStr(String searchStatusStr) {
+        this.searchStatusStr = searchStatusStr;
+    }
+
+    public String getSearchStatusStr() {
+        return searchStatusStr;
     }
 }

@@ -4,7 +4,7 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="PreviousVerImpactSearchListVO"
-  Version="11.1.2.60.81"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full">
@@ -26,11 +26,6 @@
     Kind="where"
     Type="java.lang.String"/>
   <Variable
-    Name="mqStatus"
-    Kind="where"
-    Type="java.lang.String"
-    DefaultValue="A"/>
-  <Variable
     Name="bindLevelNumber"
     Kind="viewcriteria"
     Type="java.lang.String"/>
@@ -42,15 +37,22 @@
     Name="bindCode"
     Kind="viewcriteria"
     Type="java.lang.String"/>
-  <SQLQuery><![CDATA[select GUI_IMPACT_FLAG IMPACT_YN, LEVEL_EXTENSION NMQ_SMQ, DICT_CONTENT_ID, GROUP_ID PREDICT_GROUP_ID, DICT_CONTENT_ENTRY_TS,        
-       DEF_DICTIONARY_ID, DICTIONARY_NAME DICT_SHORT_NAME, DEF_LEVEL_ID, LEVEL_NAME DEF_LEVELS_SHORT_NAME, DEF_DOMAIN_ID,        
-       APPROVED_FLAG, LAST_ACTIVATION_TS END_TS, TERM_TYPE, TERM_SUBTYPE, TRANSACTION_ID ACTIVATION_ID, TERM_UPPER,       
-       TERM, TRANSACTION_ID, STATUS, CATEGORY, DICT_CONTENT_CODE, DICT_CONTENT_ALT_CODE, VALUE_1, VALUE_2, VALUE_3, VALUE_4, COMMENT_TEXT, GUI_IMPACT_FLAG IMPACT_STATUS,       
-	   GROUP_NAME RELEASE_GROUP, LAST_ACTIVATION_TS LAST_REFRESH_DATE, workflow_pkg.current_state(dict_content_id) WORKFLOW_STATE,        
-	   GUI_IMPACT_FLAG MODIFIED_BY, GUI_IMPACT_FLAG CREATED_BY, GUI_IMPACT_FLAG TERM_LANGUAGE, DICT_CONTENT_ID DEF_SEARCH_ID, DICT_CONTENT_ID TERM_SCOPE_ID, substr(LEVEL_NAME, -1) LEVEL_NUMBER           
-FROM TABLE(NMAT_POST_VER_IMPACT_UTILS.GET_PRE_UPGRADE_TERMS(pImpactedFlag => :showImpact, pLevelExtension => :mqType      ))       
-where DICTIONARY_NAME = nvl(smq_codelist_pkg.smq_dict_name, (SELECT PROP_VALUE FROM NMAT_PROPERTIES where PROP_NAME = 'DEFAULT_FILTER_DICTIONARY_SHORT_NAME'))       
-and status = :mqStatus]]></SQLQuery>
+  <Variable
+    Name="bindStatus"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindState"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[select GUI_IMPACT_FLAG IMPACT_YN, LEVEL_EXTENSION NMQ_SMQ, DICT_CONTENT_ID, GROUP_ID PREDICT_GROUP_ID, DICT_CONTENT_ENTRY_TS,         
+       DEF_DICTIONARY_ID, DICTIONARY_NAME DICT_SHORT_NAME, DEF_LEVEL_ID, LEVEL_NAME DEF_LEVELS_SHORT_NAME, DEF_DOMAIN_ID,         
+       APPROVED_FLAG, LAST_ACTIVATION_TS END_TS, TERM_TYPE, TERM_SUBTYPE, TRANSACTION_ID ACTIVATION_ID, TERM_UPPER,        
+       TERM, TRANSACTION_ID, STATUS, CATEGORY, DICT_CONTENT_CODE, DICT_CONTENT_ALT_CODE, VALUE_1, VALUE_2, VALUE_3, VALUE_4, COMMENT_TEXT, GUI_IMPACT_FLAG IMPACT_STATUS,        
+	   GROUP_NAME RELEASE_GROUP, LAST_ACTIVATION_TS LAST_REFRESH_DATE, workflow_pkg.current_state(dict_content_id) WORKFLOW_STATE,         
+	   GUI_IMPACT_FLAG MODIFIED_BY, GUI_IMPACT_FLAG CREATED_BY, GUI_IMPACT_FLAG TERM_LANGUAGE, DICT_CONTENT_ID DEF_SEARCH_ID, DICT_CONTENT_ID TERM_SCOPE_ID, substr(LEVEL_NAME, -1) LEVEL_NUMBER            
+FROM TABLE(NMAT_POST_VER_IMPACT_UTILS.GET_PRE_UPGRADE_TERMS(pImpactedFlag => :showImpact, pLevelExtension => :mqType      ))        
+where DICTIONARY_NAME = nvl(smq_codelist_pkg.smq_dict_name, (SELECT PROP_VALUE FROM NMAT_PROPERTIES where PROP_NAME = 'DEFAULT_FILTER_DICTIONARY_SHORT_NAME'))]]></SQLQuery>
   <ViewAttribute
     Name="ImpactYn"
     IsUpdateable="false"
@@ -564,7 +566,7 @@ and status = :mqStatus]]></SQLQuery>
     Name="PreviousVerImpactSearchListVOCriteria"
     ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO"
     Conjunction="AND">
-    <Properties>
+    <Properties Name="_Props">
       <CustomProperties>
         <Property
           Name="displayOperators"
@@ -595,11 +597,27 @@ and status = :mqStatus]]></SQLQuery>
         IsBindVarValue="true"
         Required="Optional"/>
       <ViewCriteriaItem
+        Name="Status"
+        ViewAttribute="Status"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindStatus"
+        IsBindVarValue="true"
+        Required="Optional"/>
+      <ViewCriteriaItem
         Name="DictContentCode"
         ViewAttribute="DictContentCode"
         Operator="STARTSWITH"
         Conjunction="AND"
         Value=":bindCode"
+        IsBindVarValue="true"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="WorkflowState"
+        ViewAttribute="WorkflowState"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindState"
         IsBindVarValue="true"
         Required="Optional"/>
       <ViewCriteriaItem

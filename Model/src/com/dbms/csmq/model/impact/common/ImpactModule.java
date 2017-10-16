@@ -13,5 +13,11 @@ public interface ImpactModule extends ApplicationModule {
     void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId, Boolean showImpactedOnly);
 
     void loadPrevVersionFurteMQDetails(Long dictContentId, Boolean showImpactedOnly);
+
+    void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                   String state, String searchProduct);
+
+    void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                  String state, String searchProduct);
 }
 

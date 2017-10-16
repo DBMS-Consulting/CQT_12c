@@ -241,15 +241,39 @@
                                            stretchChildren="none" modal="true" resize="off">
                                     <af:panelGroupLayout id="pgl1" layout="vertical">
                                         <af:panelGroupLayout id="pgl6" layout="vertical">
-                                            <af:selectOneChoice id="soc6" label="Level"
-                                                                value="#{pageFlowScope.ImpactAnalysisBean.searchLevelStr}">
-                                                <af:selectItem label="ALL" value="%" id="si8"/>
-                                                <af:selectItem label="1" value="1" id="si46"/>
-                                                <af:selectItem label="2" value="2" id="si42"/>
-                                                <af:selectItem label="3" value="3" id="si43"/>
-                                                <af:selectItem label="4" value="4" id="si44"/>
-                                                <af:selectItem label="5" value="5" id="si45"/>
-                                            </af:selectOneChoice>
+                                            <af:selectManyChoice label="Product" id="smc3" autoSubmit="true"
+                                                                 valuePassThru="true"
+                                                                 value="#{pageFlowScope.ImpactAnalysisBean.productList}"
+                                                                 labelStyle="white-space:nowrap"
+                                                                 selectAllVisible="false" contentStyle="color:#000000;">
+                                                <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                                            var="row">
+                                                    <f:selectItem id="groups" itemLabel="#{row.longValue}"
+                                                                  itemValue="#{row.shortVal}"/>
+                                                </af:forEach>
+                                            </af:selectManyChoice>
+                                            <af:spacer width="10" height="10" id="s1"/>
+                                            <af:panelGroupLayout id="pgl8" layout="horizontal">
+                                                <af:selectOneChoice id="soc6" label="State"
+                                                                    value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
+                                                                    autoSubmit="true">
+                                                    <af:selectItem label="ALL" value="%" id="si8"/>
+                                                    <af:selectItem label="Pending Impact Assessment"
+                                                                   value="Pending Impact Assessment" id="si46"/>
+                                                    <af:selectItem label="Reviewed IA" value="Reviewed IA" id="si42"/>
+                                                    <af:selectItem label="Approved IA" value="Approved IA" id="si43"/>
+                                                    <af:selectItem label="Published IA" value="Published IA" id="si44"/>
+                                                </af:selectOneChoice>
+                                                <af:spacer width="10" height="10" id="s16"/>
+                                                <af:selectOneChoice label="Status" id="smc6"
+                                                                    labelStyle="white-space:nowrap"
+                                                                    value="#{pageFlowScope.ImpactAnalysisBean.searchStatusStr}"
+                                                                    autoSubmit="true">
+                                                    <af:selectItem label="All" value="%" id="si19"/>
+                                                    <af:selectItem label="Active" value="A" id="si19a"/>
+                                                    <af:selectItem label="Inactive" value="I" id="si4"/>
+                                                </af:selectOneChoice>
+                                            </af:panelGroupLayout>
                                             <af:spacer width="10" height="10" id="s4"/>
                                             <af:panelGroupLayout id="pgl5" layout="horizontal">
                                                 <af:inputText label="Term " columns="35" id="it2"

@@ -134,9 +134,7 @@
                           <af:selectItem label="Yes - All" value="Y_BROAD,Y_NARROW" id="si33"/>
                         </af:selectOneChoice>
                         <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
-                                             
                                              binding="#{pageFlowScope.NMQWizardSearchBean.ctrlProducts}"
-                                       
                                              value="#{pageFlowScope.NMQWizardSearchBean.productList}"
                                               labelStyle="white-space:nowrap"
                                              selectAllVisible="false" 

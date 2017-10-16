@@ -23,27 +23,58 @@ public class ImpactModuleClient extends ApplicationModuleImpl implements ImpactM
         return;
     }
 
+
     public void loadPrevVersionCurrentMQDetails(Long dictContentId, Boolean showImpactedOnly) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadPrevVersionCurrentMQDetails",new String [] {"java.lang.Long","java.lang.Boolean"},new Object[] {dictContentId, showImpactedOnly});
+            this.riInvokeExportedMethod(this, "loadPrevVersionCurrentMQDetails",
+                                        new String[] { "java.lang.Long", "java.lang.Boolean" },
+                                        new Object[] { dictContentId, showImpactedOnly });
         return;
     }
 
     public void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId, Boolean showImpactedOnly) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadPrevVersionCurrentNFurteMQDetails",new String [] {"java.lang.Long","java.lang.Boolean"},new Object[] {dictContentId, showImpactedOnly});
+            this.riInvokeExportedMethod(this, "loadPrevVersionCurrentNFurteMQDetails",
+                                        new String[] { "java.lang.Long", "java.lang.Boolean" },
+                                        new Object[] { dictContentId, showImpactedOnly });
         return;
     }
 
     public void loadPrevVersionFurteMQDetails(Long dictContentId, Boolean showImpactedOnly) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadPrevVersionFurteMQDetails",new String [] {"java.lang.Long","java.lang.Boolean"},new Object[] {dictContentId, showImpactedOnly});
+            this.riInvokeExportedMethod(this, "loadPrevVersionFurteMQDetails",
+                                        new String[] { "java.lang.Long", "java.lang.Boolean" },
+                                        new Object[] { dictContentId, showImpactedOnly });
+        return;
+    }
+
+    public void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                         String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
         return;
     }
 
     public void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"onPreviousVerImpactSearch",new String [] {"java.lang.String","java.lang.String","java.lang.String"},new Object[] {searchLevelStr, searchTermStr, searchCodeStr});
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr });
+        return;
+    }
+
+    public void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                          String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
         return;
     }
 }

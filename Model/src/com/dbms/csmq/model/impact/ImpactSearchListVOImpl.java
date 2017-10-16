@@ -48,18 +48,66 @@ public class ImpactSearchListVOImpl extends ViewObjectImpl {
 
 
     /**
-     * Returns the bind variable value for mqStatus.
-     * @return bind variable value for mqStatus
+     * Returns the variable value for bindTerm.
+     * @return variable value for bindTerm
      */
-    public String getmqStatus() {
-        return (String)getNamedWhereClauseParam("mqStatus");
+    public String getbindTerm() {
+        return (String) ensureVariableManager().getVariableValue("bindTerm");
     }
 
     /**
-     * Sets <code>value</code> for bind variable mqStatus.
-     * @param value value to bind as mqStatus
+     * Sets <code>value</code> for variable bindTerm.
+     * @param value value to bind as bindTerm
      */
-    public void setmqStatus(String value) {
-        setNamedWhereClauseParam("mqStatus", value);
+    public void setbindTerm(String value) {
+        ensureVariableManager().setVariableValue("bindTerm", value);
+    }
+
+    /**
+     * Returns the variable value for bindStatus.
+     * @return variable value for bindStatus
+     */
+    public String getbindStatus() {
+        return (String) ensureVariableManager().getVariableValue("bindStatus");
+    }
+
+    /**
+     * Sets <code>value</code> for variable bindStatus.
+     * @param value value to bind as bindStatus
+     */
+    public void setbindStatus(String value) {
+        ensureVariableManager().setVariableValue("bindStatus", value);
+    }
+
+    /**
+     * Returns the variable value for bindCode.
+     * @return variable value for bindCode
+     */
+    public String getbindCode() {
+        return (String) ensureVariableManager().getVariableValue("bindCode");
+    }
+
+    /**
+     * Sets <code>value</code> for variable bindCode.
+     * @param value value to bind as bindCode
+     */
+    public void setbindCode(String value) {
+        ensureVariableManager().setVariableValue("bindCode", value);
+    }
+
+    /**
+     * Returns the variable value for bindState.
+     * @return variable value for bindState
+     */
+    public String getbindState() {
+        return (String) ensureVariableManager().getVariableValue("bindState");
+    }
+
+    /**
+     * Sets <code>value</code> for variable bindState.
+     * @param value value to bind as bindState
+     */
+    public void setbindState(String value) {
+        ensureVariableManager().setVariableValue("bindState", value);
     }
 }

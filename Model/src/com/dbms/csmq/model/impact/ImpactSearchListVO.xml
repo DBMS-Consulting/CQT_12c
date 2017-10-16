@@ -4,12 +4,11 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ImpactSearchListVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   RowClass="com.dbms.csmq.model.impact.ImpactSearchListVORowImpl"
   ComponentClass="com.dbms.csmq.model.impact.ImpactSearchListVOImpl"
-  UseGlueCode="false"
   Passivate="All"
   PageIterMode="Partial">
   <DesignTime>
@@ -32,16 +31,26 @@
     Kind="where"
     Type="java.lang.String"/>
   <Variable
-    Name="mqStatus"
-    Kind="where"
-    Type="java.lang.String"
-    DefaultValue="A"/>
-  <SQLQuery><![CDATA[select nmq_smq_impact_contents.*, workflow_pkg.current_state(dict_content_id) workflow_state
-from nmq_smq_impact_contents 
-where dict_short_name = nvl(smq_codelist_pkg.smq_dict_name,(SELECT PROP_VALUE FROM NMAT_PROPERTIES where PROP_NAME = 'DEFAULT_FILTER_DICTIONARY_SHORT_NAME'))
-and impact_yn = :showImpact 
-and nmq_smq = :mqType
-and status = :mqStatus
+    Name="bindTerm"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindStatus"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindCode"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindState"
+    Kind="viewcriteria"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[select nmq_smq_impact_contents.*, workflow_pkg.current_state(dict_content_id) workflow_state 
+from nmq_smq_impact_contents  
+where dict_short_name = nvl(smq_codelist_pkg.smq_dict_name,(SELECT PROP_VALUE FROM NMAT_PROPERTIES where PROP_NAME = 'DEFAULT_FILTER_DICTIONARY_SHORT_NAME')) 
+and impact_yn = :showImpact  
+and nmq_smq = :mqType 
 ORDER BY term]]></SQLQuery>
   <ViewAttribute
     Name="ImpactYn"
@@ -541,6 +550,66 @@ ORDER BY term]]></SQLQuery>
       <Attr Name="_DisplaySize" Value="3"/>
     </DesignTime>
   </ViewAttribute>
+  <ViewCriteria
+    Name="CurrentVerImpactSearchListVOCriteria"
+    ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO"
+    Conjunction="AND">
+    <Properties Name="_Props">
+      <CustomProperties>
+        <Property
+          Name="autoExecute"
+          Value="false"/>
+        <Property
+          Name="mode"
+          Value="Basic"/>
+        <Property
+          Name="allowConjunctionOverride"
+          Value="true"/>
+        <Property
+          Name="showInList"
+          Value="true"/>
+        <Property
+          Name="displayOperators"
+          Value="InAdvancedMode"/>
+      </CustomProperties>
+    </Properties>
+    <ViewCriteriaRow
+      Name="ImpactSearchListVOCriteria_row_0"
+      UpperColumns="1">
+      <ViewCriteriaItem
+        Name="Term"
+        ViewAttribute="Term"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindTerm"
+        IsBindVarValue="true"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="Status"
+        ViewAttribute="Status"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindStatus"
+        IsBindVarValue="true"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="DictContentCode"
+        ViewAttribute="DictContentCode"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindCode"
+        IsBindVarValue="true"
+        Required="Optional"/>
+      <ViewCriteriaItem
+        Name="WorkflowState"
+        ViewAttribute="WorkflowState"
+        Operator="STARTSWITH"
+        Conjunction="AND"
+        Value=":bindState"
+        IsBindVarValue="true"
+        Required="Optional"/>
+    </ViewCriteriaRow>
+  </ViewCriteria>
   <AttrArray Name="KeyAttributes">
     <Item Value="DictContentId"/>
     <Item Value="EndTs"/>

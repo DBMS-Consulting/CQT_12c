@@ -58,6 +58,8 @@
               id="ImpactSearchListVO_CMQ_NIterator" ChangeEventPolicy="none"/>
     <iterator id="designeeListByMQVO1Iterator" Binds="designeeListByMQVO1" DataControl="DesigneeModuleDataControl"
               RangeSize="-1"/>
+    <iterator id="ViewObj_ProductList1Iterator" Binds="ViewObj_ProductList1" DataControl="ProductModuleDataControl"
+              RangeSize="25"/>
   </executables>
   <bindings>
   
@@ -306,6 +308,24 @@
         <Item Value="Term"/>
       </ListDisplayAttrNames>
     </list>
+    <list ListOperMode="multiSelect" IterBinding="ViewObj_ProductList1Iterator" id="ViewObj_ProductList1">
+      <AttrNames>
+        <Item Value="ShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+    <methodAction id="onCurrentVerImpactSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onCurrentVerImpactSearch" IsViewObjectMethod="false" DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onCurrentVerImpactSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
   </bindings>
 </pageDefinition>
 

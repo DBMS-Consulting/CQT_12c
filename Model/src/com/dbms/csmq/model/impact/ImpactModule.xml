@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ImpactModule"
-  Version="11.1.2.64.36"
+    Version="12.2.1.12.24"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.impact.ImpactModuleImpl"
   ComponentInterface="com.dbms.csmq.model.impact.common.ImpactModule"
@@ -41,10 +41,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["Y"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["NMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -53,10 +55,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["Y"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["SMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -65,10 +69,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["N"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["N"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["SMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["SMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -77,10 +83,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["N"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["N"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["NMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["NMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -89,10 +97,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["Y"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["Y"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["CMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -101,10 +111,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.ImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA["N"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["N"]]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA["CMQ"]]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA["CMQ"]]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -113,10 +125,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['N']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['N']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['CMQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['CMQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -125,10 +139,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['Y']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['Y']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['CMQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['CMQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -137,10 +153,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['N']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['N']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['MQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['MQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -149,10 +167,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['Y']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['Y']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['MQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['MQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -161,10 +181,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['N']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['N']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['NMQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['NMQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -173,10 +195,12 @@
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerImpactSearchListVO">
         <ParameterMap>
             <PIMap Variable="showImpact">
-                <TransientExpression><![CDATA['Y']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['Y']]></TransientExpression>
             </PIMap>
             <PIMap Variable="mqType">
-                <TransientExpression><![CDATA['NMQ']]></TransientExpression>
+                <TransientExpression
+                    Name="BindVariable"><![CDATA['NMQ']]></TransientExpression>
             </PIMap>
         </ParameterMap>
     </ViewUsage>
@@ -211,7 +235,8 @@
             Name="loadPrevVersionCurrentMQDetails"
             MethodName="loadPrevVersionCurrentMQDetails">
             <Return
-                Type="void"/>
+                Type="void"
+                Name="_return_type_"/>
             <Parameter
                 Name="dictContentId"
                 Type="java.lang.Long"/>
@@ -223,7 +248,8 @@
             Name="loadPrevVersionCurrentNFurteMQDetails"
             MethodName="loadPrevVersionCurrentNFurteMQDetails">
             <Return
-                Type="void"/>
+                Type="void"
+                Name="_return_type_"/>
             <Parameter
                 Name="dictContentId"
                 Type="java.lang.Long"/>
@@ -235,13 +261,64 @@
             Name="loadPrevVersionFurteMQDetails"
             MethodName="loadPrevVersionFurteMQDetails">
             <Return
-                Type="void"/>
+                Type="void"
+                Name="_return_type_"/>
             <Parameter
                 Name="dictContentId"
                 Type="java.lang.Long"/>
             <Parameter
                 Name="showImpactedOnly"
                 Type="java.lang.Boolean"/>
+        </Method>
+        <Method
+            Name="onPreviousVerImpactSearch1"
+            MethodName="onPreviousVerImpactSearch">
+            <Return
+                Name="_return_type_"
+                Type="void"/>
+            <Parameter
+                Name="searchLevelStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchTermStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchCodeStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="status"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="state"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchProduct"
+                Type="java.lang.String"/>
+        </Method>
+        <Method
+            Name="onCurrentVerImpactSearch"
+            MethodName="onCurrentVerImpactSearch">
+            <Return
+                Name="_return_type_"
+                Type="void"/>
+            <Parameter
+                Name="searchLevelStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchTermStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchCodeStr"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="status"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="state"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="searchProduct"
+                Type="java.lang.String"/>
         </Method>
     </ClientInterface>
 </AppModule>

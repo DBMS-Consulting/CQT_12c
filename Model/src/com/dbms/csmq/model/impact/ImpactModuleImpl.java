@@ -2,6 +2,10 @@ package com.dbms.csmq.model.impact;
 
 import com.dbms.csmq.model.impact.common.ImpactModule;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import oracle.jbo.ViewCriteria;
 import oracle.jbo.server.ApplicationModuleImpl;
 import oracle.jbo.server.ViewObjectImpl;
@@ -207,6 +211,42 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
                                   searchCodeStr);
         System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
+    
+    public void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct);
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
 
     private void exceutePrevImpactSearchVC(ViewObjectImpl previousVerImpactSearchListVO, String searchLevelStr,
                                            String searchTermStr, String searchCodeStr) {
@@ -217,6 +257,78 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         previousVerImpactSearchListVO.applyViewCriteria(vc);
         previousVerImpactSearchListVO.executeQuery();
         System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
+    }
+    
+    private void exceutePrevImpactSearchVC(ViewObjectImpl previousVerImpactSearchListVO, String searchLevelStr,
+                                           String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        boolean isProductSearched = false;
+        String productList = "";
+        if((searchProduct != null) && (!"[]".equalsIgnoreCase(searchProduct))){
+        int length = searchProduct.length();
+        String productString = searchProduct.substring(1, length-1);
+        List<String> list = Arrays.asList(productString.split("\\s*,\\s*"));
+        int count = 0;
+        int listCount = list.size();
+        for(String item : list){
+            count++;
+            isProductSearched = true;
+            if(listCount != count){
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%'");   
+            }
+        }
+        }
+        previousVerImpactSearchListVO.setWhereClause(null);
+        previousVerImpactSearchListVO.setWhereClauseParams(null);
+        if(isProductSearched){
+        previousVerImpactSearchListVO.setWhereClause(productList);
+        }
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        ViewCriteria vc = previousVerImpactSearchListVO.getViewCriteria("PreviousVerImpactSearchListVOCriteria");
+        previousVerImpactSearchListVO.applyViewCriteria(vc);
+        previousVerImpactSearchListVO.executeQuery();
+        System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
+    }
+    
+    private void exceuteCurrImpactSearchVC(ViewObjectImpl currentVerImpactSearchListVO, String searchLevelStr,
+                                           String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        boolean isProductSearched = false;
+        String productList = "";
+        if((searchProduct != null) && (!"[]".equalsIgnoreCase(searchProduct))){
+        int length = searchProduct.length();
+        String productString = searchProduct.substring(1, length-1);
+        List<String> list = Arrays.asList(productString.split("\\s*,\\s*"));
+        int count = 0;
+        int listCount = list.size();
+        for(String item : list){
+            count++;
+            isProductSearched = true;
+            if(listCount != count){
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%'");   
+            }
+        }
+        }
+        currentVerImpactSearchListVO.setWhereClause(null);
+        currentVerImpactSearchListVO.setWhereClauseParams(null);
+        if(isProductSearched){
+        currentVerImpactSearchListVO.setWhereClause(productList);
+        }
+        //currentVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        ViewCriteria vc = currentVerImpactSearchListVO.getViewCriteria("CurrentVerImpactSearchListVOCriteria");
+        currentVerImpactSearchListVO.applyViewCriteria(vc);
+        currentVerImpactSearchListVO.executeQuery();
+        System.out.println("exceutePrevImpactSearchVC() QUERY --> " + currentVerImpactSearchListVO.getQuery());
     }
     
     public void loadPrevVersionCurrentNFurteMQDetails(Long dictContentId, Boolean showImpactedOnly){

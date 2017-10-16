@@ -33,6 +33,8 @@
               id="PreviousVerCurrentImpactVO1Iterator"/>
     <iterator Binds="PreviousVerFutureImpactVO1" RangeSize="-1" DataControl="ImpactModuleDataControl"
               id="PreviousVerFutureImpactVO1Iterator"/>
+    <iterator Binds="ViewObj_ProductList1" RangeSize="10" DataControl="ProductModuleDataControl"
+              id="ViewObj_ProductList1Iterator"/>
   </executables>
   <bindings>
     <tree IterBinding="PreviousVerImpactSearchListVO_NMQ_NIterator" id="PreviousVerImpactSearchListVO_NMQ_N">
@@ -337,6 +339,34 @@
                   MethodName="loadPrevVersionFurteMQDetails" IsViewObjectMethod="false">
       <NamedData NDName="dictContentId" NDType="java.lang.Long"/>
       <NamedData NDName="showImpactedOnly" NDType="java.lang.Boolean"/>
+    </methodAction>
+    <!--<list ListOperMode="multiSelect" IterBinding="ViewObj_ProductList1Iterator" id="ViewObj_ProductList1">
+      <AttrNames>
+        <Item Value="ShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>-->
+    <list IterBinding="ViewObj_ProductList1Iterator" ListOperMode="multiSelect"
+          ListIter="ViewObj_ProductList1Iterator" id="ViewObj_ProductList1">
+      <AttrNames>
+        <Item Value="ShortVal"/>
+      </AttrNames>
+      <ListDisplayAttrNames>
+        <Item Value="LongValue"/>
+      </ListDisplayAttrNames>
+    </list>
+    <methodAction id="onPreviousVerImpactSearch1" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
     </methodAction>
   </bindings>
 </pageDefinition>
