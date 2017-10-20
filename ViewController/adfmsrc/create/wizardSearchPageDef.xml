@@ -49,6 +49,8 @@
               RangeSize="25"/>
     <iterator id="ProductTypeVO1Iterator" Binds="ProductTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
     <iterator id="GroupTypeVO1Iterator" Binds="GroupTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
+    <iterator id="HierarchySourceTermPTSearchIterator" Binds="HierarchySourceTermPTSearch"
+              DataControl="SearchModuleDataControl" RangeSize="25"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"

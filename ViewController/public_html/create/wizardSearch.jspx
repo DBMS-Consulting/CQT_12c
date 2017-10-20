@@ -69,6 +69,11 @@
                                             rendered="false">
                           <f:selectItems value="#{pageFlowScope.NMQWizardSearchBean.releaseGroupSelectItems}" id="si2a"/>
                         </af:selectOneChoice>
+                        <af:inputText label="PT Search " id="it51" helpTopicId="NMAT_HELP_TERM" wrap="off"
+                                  labelStyle="white-space:nowrap"
+                                  binding="#{pageFlowScope.NMQWizardSearchBean.ctrlPTSearch}" columns="40">
+                          <af:autoSuggestBehavior suggestItems="#{bindings.PtTerm.suggestItems}"/>
+                        </af:inputText>
                       </af:panelFormLayout>
                       <af:panelFormLayout id="pgl5" inlineStyle="height:25px;">
                         <af:selectOneChoice label="Release Status" id="smc1" showRequired="false" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlReleaseStatus}"

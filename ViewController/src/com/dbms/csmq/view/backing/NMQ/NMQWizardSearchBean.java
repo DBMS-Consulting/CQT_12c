@@ -229,6 +229,7 @@ public class NMQWizardSearchBean  {
     private RichCommandButton searchBtnBinding;
     private RichPopup productSearchPopup;
     private RichPopup groupSearchPopup;
+    private RichInputText ctrlPTSearch;
 
     public void setCtrlDictionaryTypeSearch(RichSelectOneChoice dictionaryTypeSearch) {
         this.ctrlDictionaryTypeSearch = dictionaryTypeSearch;
@@ -3458,6 +3459,14 @@ public class NMQWizardSearchBean  {
     public void showProductSearchPopup(ActionEvent actionEvent) {
         getProductValueLOV();
         ADFUtils.showPopup(getProductSearchPopup());
+    }
+
+    public void setCtrlPTSearch(RichInputText ctrlPTSearch) {
+        this.ctrlPTSearch = ctrlPTSearch;
+    }
+
+    public RichInputText getCtrlPTSearch() {
+        return ctrlPTSearch;
     }
 }
 

@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="SearchModule"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.search.SearchModuleImpl"
   ComponentInterface="com.dbms.csmq.model.search.common.SearchModule"
@@ -45,12 +45,75 @@
   <ViewUsage
     Name="TermHierarchyDetailsVO1"
     ViewObjectName="com.dbms.csmq.model.search.TermHierarchyDetailsVO"/>
-  <ClientInterface>
+  <ViewUsage
+    Name="HierarchySourceTermPTSearch"
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO">
+    <ParameterMap>
+      <PIMap Variable="psVirtualDictionaryName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[CURRENT]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="pUserRole">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[#{securityContext.userRoles}]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="dictShortName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[NMATMED]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="activityStatus">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[ALL]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="releaseStatus">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[ALL]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="levelName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[PT]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="uniqueIDsOnly">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[Y]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="filterForUser">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[N]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="killSwitch">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[1]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="showNarrowScpOnly">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[N]]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="currentUser">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA[#{securityContext.userName}]]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewUsage>
+<ClientInterface
+    Name="__clientInterface">
     <Method
       Name="loadHistoricTermInformation"
       MethodName="loadHistoricTermInformation">
       <Return
-        Type="void"/>
+        Type="void"
+        Name="_return_type_"/>
       <Parameter
         Name="dictContentId"
         Type="java.math.BigDecimal"/>
@@ -62,7 +125,8 @@
       Name="loadHistoricTermHierarchyInformation"
       MethodName="loadHistoricTermHierarchyInformation">
       <Return
-        Type="void"/>
+        Type="void"
+        Name="_return_type_"/>
       <Parameter
         Name="dictContentId"
         Type="java.math.BigDecimal"/>
@@ -74,7 +138,8 @@
       Name="loadMQDetailedDetailedTermHierarchyInformation"
       MethodName="loadMQDetailedDetailedTermHierarchyInformation">
       <Return
-        Type="void"/>
+        Type="void"
+        Name="_return_type_"/>
       <Parameter
         Name="dictContentId"
         Type="java.math.BigDecimal"/>

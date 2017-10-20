@@ -6,6 +6,8 @@ import com.dbms.csmq.UserBean;
 import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 
 import com.dbms.csmq.view.backing.NMQ.NMQWizardBean;
+import com.dbms.util.ADFUtils;
+import com.dbms.util.JSFUtils;
 import com.dbms.util.Utils;
 
 import java.io.FileInputStream;
@@ -50,7 +52,9 @@ import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.poi.hssf.usermodel.HSSFBorderFormatting;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -65,7 +69,8 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
-
+import java.util.Map;
+import java.util.HashMap;
 
 public class WorkflowBean {
 
@@ -674,4 +679,80 @@ public class WorkflowBean {
         e.printStackTrace();
         }
     }
+    
+    public void exportDealsDownload(FacesContext facesContext, OutputStream outputStream) {
+        try {
+
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Promote");
+
+            DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+            DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("ViewObjTermsByState1Iterator");
+            HSSFRow excelrow = null;
+            
+            excelrow = (HSSFRow) worksheet.createRow(0);
+            HSSFCell cellA9 = excelrow.createCell(0);
+            cellA9.setCellValue("List Of MedDRA Queries");
+            
+            excelrow = (HSSFRow) worksheet.createRow(2);
+            HSSFCell cellA7 = excelrow.createCell(0);
+            cellA7.setCellValue("Approved State");
+            
+            HSSFCell cellA8 = excelrow.createCell(1);
+            cellA8.setCellValue("Published State");
+            
+            
+            ViewObject view = dcIteratorBindings.getViewObject();
+            RowSetIterator rowIter = (RowSetIterator) view.createRowSetIterator(null); //creating secoundary Iterator
+            rowIter.reset();
+            Row dataRow;
+               
+            Map<String, String> allList = new HashMap<String, String>();
+            while (rowIter.hasNext()) {
+                dataRow = (Row) rowIter.next();       
+                allList.put(dataRow.getAttribute("DictNm").toString(), dataRow.getAttribute("Mqterm").toString());
+              
+            }
+           List<String> rightHandList = new ArrayList<String>();
+           List selectedItems = this.getSelectedTerms();
+            if(selectedItems.size()>0){
+                for(int k = 0 ; k<selectedItems.size();k++){
+                    String selectItem = (String)selectedItems.get(k);
+                    rightHandList.add(allList.get(selectItem));
+                    allList.remove(selectItem);
+                }
+
+            }
+            int i = 3;
+            for(String key : allList.keySet()){
+                excelrow = (HSSFRow) worksheet.createRow(i);
+                HSSFCell cellA3 = excelrow.createCell(0);
+                cellA3.setCellValue(allList.get(key));
+
+                i++;
+            }
+            
+            int j = 3;
+            for(String item : rightHandList){
+                excelrow = worksheet.getRow(j);
+                if(excelrow == null){
+                    excelrow = worksheet.createRow(i);
+                }
+                HSSFCell cellA6 = excelrow.createCell(1);
+                cellA6.setCellValue(item);
+                j++;
+            }
+            //worksheet.createFreezePane(0, 1, 0, 1);
+            worksheet.autoSizeColumn(0);
+            worksheet.autoSizeColumn(1);
+            workbook.write(outputStream);
+            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
