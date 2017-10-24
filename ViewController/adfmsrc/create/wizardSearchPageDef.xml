@@ -51,6 +51,9 @@
     <iterator id="GroupTypeVO1Iterator" Binds="GroupTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
     <iterator id="HierarchySourceTermPTSearchIterator" Binds="HierarchySourceTermPTSearch"
               DataControl="SearchModuleDataControl" RangeSize="25"/>
+    <searchRegion Criteria="HierarchySourceTermSearchVOCriteria"
+                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
+                  Binds="HierarchySourceTermPTSearchIterator" id="HierarchySourceTermSearchVOCriteriaQuery"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
@@ -259,5 +262,19 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <tree IterBinding="HierarchySourceTermPTSearchIterator" id="HierarchySourceTermPTSearch">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+                      Name="HierarchySourceTermPTSearch0">
+        <AttrNames>
+          <Item Value="Mqterm"/>
+          <Item Value="Mqcode"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="HierarchySourceTermPTSearchIterator" id="Mqterm">
+      <AttrNames>
+        <Item Value="Mqterm"/>
+      </AttrNames>
+    </attributeValues>
   </bindings>
 </pageDefinition>

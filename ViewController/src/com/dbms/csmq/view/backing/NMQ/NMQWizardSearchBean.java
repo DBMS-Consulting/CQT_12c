@@ -117,6 +117,7 @@ public class NMQWizardSearchBean  {
     private String paramStartDate = null;
     private String paramEndDate = null;
     private String paramTerm = null;
+    private String paramPtTerm = null;
     private String paramReleaseStatus = null;
     private String paramActivityStatus = null;
     private String paramState = null;
@@ -230,6 +231,7 @@ public class NMQWizardSearchBean  {
     private RichPopup productSearchPopup;
     private RichPopup groupSearchPopup;
     private RichInputText ctrlPTSearch;
+    private RichPopup ptSearchPopup;
 
     public void setCtrlDictionaryTypeSearch(RichSelectOneChoice dictionaryTypeSearch) {
         this.ctrlDictionaryTypeSearch = dictionaryTypeSearch;
@@ -554,8 +556,13 @@ public class NMQWizardSearchBean  {
         vo.setNamedWhereClauseParam("startDate", getParamStartDate());
         vo.setNamedWhereClauseParam("endDate", getParamEndDate());
         String paramTermVal = getParamTerm();
-        if (null != paramTermVal && !paramTermVal.isEmpty()){
+        if (null != paramTermVal && !paramTermVal.isEmpty() && "%".equalsIgnoreCase(paramTermVal)){
            paramTermVal = paramTermVal.replace("'","\''");
+        }else{
+            paramTermVal = getParamPtTerm();
+            if(null != paramTermVal && !paramTermVal.isEmpty()){
+                paramTermVal = paramTermVal.replace("'","\''"); 
+            }
         }
         vo.setNamedWhereClauseParam("term", paramTermVal);
         vo.setNamedWhereClauseParam("activityStatus", getParamActivityStatus());
@@ -911,6 +918,8 @@ public class NMQWizardSearchBean  {
         return paramTerm;
         
     }
+    
+
 
     public String getParamReleaseStatus() {
         if (IASearch) return paramReleaseStatus;
@@ -3467,6 +3476,26 @@ public class NMQWizardSearchBean  {
 
     public RichInputText getCtrlPTSearch() {
         return ctrlPTSearch;
+    }
+
+    public void setPtSearchPopup(RichPopup ptSearchPopup) {
+        this.ptSearchPopup = ptSearchPopup;
+    }
+
+    public RichPopup getPtSearchPopup() {
+        return ptSearchPopup;
+    }
+
+    public String hidePtSearchPopup() {
+        this.getPtSearchPopup().hide();
+        return null;
+    }
+
+    public String getParamPtTerm() {
+        paramPtTerm = cSMQBean.WILDCARD;
+        if (ctrlPTSearch != null && ctrlPTSearch.getValue() != null && !ctrlPTSearch.getValue().toString().equalsIgnoreCase("null") && ctrlPTSearch.getValue().toString().length() >0)
+            paramPtTerm = ctrlPTSearch.getValue().toString();
+        return paramPtTerm;
     }
 }
 

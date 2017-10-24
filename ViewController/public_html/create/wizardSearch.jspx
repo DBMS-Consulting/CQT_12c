@@ -24,178 +24,167 @@
                 <af:panelGroupLayout id="pgl9" layout="vertical" inlineStyle="width:1163px; height:110px;">
                   <af:panelGroupLayout id="pgl2a" layout="vertical" inlineStyle="width:1143px; height:80px;">
                     <af:panelGroupLayout id="pgl10" layout="horizontal" inlineStyle="height:41px; width:1128px;" valign="top" binding="#{pageFlowScope.NMQWizardSearchBean.cntrlParamPanel}">
-                      <af:panelFormLayout id="pgl4" inlineStyle="width:311px;" maxColumns="1" rows="2" labelWidth="120">
-                        <af:selectOneChoice id="soc2" autoSubmit="true" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlDictionaryListSearch}"
-                                            label="Dictionary"
-                                            helpTopicId="NMAT_HELP_TERMINOLOGY" 
-                                            valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.dictionaryChange}"
-                                            readOnly="#{RenderingRulesBean.wizardSearchDisableDictionary}"
-                                            value="#{pageFlowScope.NMQWizardBean.currentDictionary}"
-                                            labelStyle="white-space:nowrap" valuePassThru="true">
-                          <af:forEach items="#{bindings.DictionaryVO1.iteratorBinding.allRowsInRange}" var="row">
-                            <f:selectItem id="dicts" itemLabel="#{row.name}" itemValue="#{row.shortName}"/>
-                          </af:forEach>
-                        </af:selectOneChoice>
-                        
-                        
-                        <af:selectOneChoice id="soc5" autoSubmit="false"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.cntrlDictionaryVersion}"
-                                            label="Dictionary Version"
-                                            
-                                            labelStyle="white-space:nowrap" valuePassThru="true" immediate="false"
-                                            value="CURRENT" rendered="false">
-                          <f:selectItem id="si24" itemLabel="Current" itemValue="CURRENT"/>
-                          <af:forEach items="#{bindings.MedDRAVirtualDictionariesViewObj1Iterator.allRowsInRange}" var="row">
-                            <f:selectItem id="si25" itemLabel="#{row.name}" itemValue="#{row.shortName}"/>
-                          </af:forEach>
-                        </af:selectOneChoice>
-                        <af:selectOneChoice label="Extension" id="soc15" labelStyle="white-space:nowrap" valuePassThru="true"
-                                            autoSubmit="true" helpTopicId="NMAT_HELP_QUERY_TYPE"
-                                            rendered="#{RenderingRulesBean.wizardSearchRenderQueryType}"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.ctrlLevelList}"
-                                            value="#{pageFlowScope.NMQWizardSearchBean.paramExtension}"
-                                            valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.extensionChanged}"
-                                            disabled="#{RenderingRulesBean.wizardSearchDisableExtension}">
-                          
-                          <af:selectItem id="si29" label="SMQ" value="SMQ" rendered="#{RenderingRulesBean.wizardSearchRenderSMQSelectItem}" /> 
-                          <af:forEach items="#{bindings.NMQExtentionListVO1.allRowsInRange}" var="row">
-                            <af:selectItem id="si8" label="#{row.longValue}" value="#{row.refCodelistValueShortVal}"/>
-                          </af:forEach>
-                          <af:selectItem id="si30" label="ALL" value="%"/>
-                        </af:selectOneChoice>
-                        <af:selectOneChoice label="Release Group" id="smc4"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.ctrlReleaseGroupSearch}"
-                                            helpTopicId="NMAT_HELP_MQ_GROUP" labelStyle="white-space:nowrap" value="%" autoSubmit="true"
-                                            rendered="false">
-                          <f:selectItems value="#{pageFlowScope.NMQWizardSearchBean.releaseGroupSelectItems}" id="si2a"/>
-                        </af:selectOneChoice>
-                        <af:inputText label="PT Search " id="it51" helpTopicId="NMAT_HELP_TERM" wrap="off"
-                                  labelStyle="white-space:nowrap"
-                                  binding="#{pageFlowScope.NMQWizardSearchBean.ctrlPTSearch}" columns="40">
-                          <af:autoSuggestBehavior suggestItems="#{bindings.PtTerm.suggestItems}"/>
-                        </af:inputText>
-                      </af:panelFormLayout>
-                      <af:panelFormLayout id="pgl5" inlineStyle="height:25px;">
-                        <af:selectOneChoice label="Release Status" id="smc1" showRequired="false" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlReleaseStatus}"
-                                            helpTopicId="NMAT_HELP_RELEASE_STATUS" labelStyle="white-space:nowrap" value="CURRENT"
-                                            autoSubmit="true" 
-                                            valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.releaseStatusChanged}"
-                                            disabled="#{RenderingRulesBean.wizardSearchDisableReleaseStatus}">
-                          <af:selectItem label="All" value="ALL" id="si3"/>
-                          <af:selectItem label="Current" value="CURRENT" id="si3a"/>
-                          <af:selectItem label="Pending" value="PENDING" id="si2"/>
-                        </af:selectOneChoice>
-                        <af:selectOneChoice label="Approved" id="soc10"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.cntrlApproved}"
-                                            value="#{pageFlowScope.NMQWizardSearchBean.paramApproved}">
-                          <af:selectItem label="All" value="%" id="si21"/>
-                          <af:selectItem label="Yes" value="Y" id="si22"/>
-                          <af:selectItem label="No" value="N" id="si23a"/>
-                        </af:selectOneChoice>
-                        
-                        <af:selectOneChoice label="Level" id="soc1" binding="#{pageFlowScope.NMQWizardSearchBean.controlMQLevel}"
-                                            value="#{pageFlowScope.NMQWizardSearchBean.paramLevel}" labelStyle="white-space:nowrap"
-                                             
-                                            valuePassThru="true">
-                          <af:selectItem label="1" value="1" id="si20" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          <af:selectItem label="2" value="2" id="si36" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          <af:selectItem label="3" value="3" id="si37" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          <af:selectItem label="4" value="4" id="si23" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          <af:selectItem label="5" value="5" id="si34" rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          
-                            <af:selectItem label="SOC" value="SOC" id="si35" rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                            <af:selectItem label="HLGT" value="HLGT" id="si26" rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                            <af:selectItem label="HLT" value="HLT" id="si27" rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                            <af:selectItem label="PT" value="PT" id="si38" rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                            <af:selectItem label="LLT" value="LLT" id="si39" rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
-                          
-                          
-                          <af:selectItem label="All Levels" value="%" id="si28" />
-                          
-                        </af:selectOneChoice>
-                      </af:panelFormLayout>
-                      <af:panelFormLayout id="pgl7" maxColumns="1" rows="2">
-                        
-                        <!-- 
-                        <af:inputDate id="id1" columns="10" label="Last Update Date Starting Range" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlStartDate}" helpTopicId="NMAT_HELP_START_DATE"
-                                      labelStyle="white-space:nowrap">
-                          <af:convertDateTime pattern="dd-MMM-yyyy"/>
-                        </af:inputDate>
-                        <af:inputDate id="id2" columns="10" label="Last Update Date Ending Range" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlEndDate}" helpTopicId="NMAT_HELP_END_DATE"
-                                      labelStyle="white-space:nowrap">
-                          <af:convertDateTime pattern="dd-MMM-yyyy"/>
-                        </af:inputDate>
-                       
-                        <af:outputText value="#{bindings.Designee.inputValue}" shortDesc="#{bindings.Designee.hints.tooltip}" id="ot25"/> -->
-                        <af:selectOneChoice label="Critical event"
-                                            id="soc4" value="%" labelStyle="white-space:nowrap"
-                                            helpTopicId="NMAT_HELP_CRITICAL_EVENT"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.ctrlCriticalEvent}"
-                                            autoSubmit="true" >
-                          <af:selectItem label="All" id="si15" value="%"/>
-                          <af:selectItem label="No" value="N" id="si1"/>
-                          <af:selectItem label="Yes - Narrow" value="Y_NARROW" id="si13"/>
-                          <af:selectItem label="Yes - Broad" value="Y_BROAD" id="si14"/>
-                          <af:selectItem label="Yes - All" value="Y_BROAD,Y_NARROW" id="si33"/>
-                        </af:selectOneChoice>
-                        <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
-                                             binding="#{pageFlowScope.NMQWizardSearchBean.ctrlProducts}"
-                                             value="#{pageFlowScope.NMQWizardSearchBean.productList}"
-                                              labelStyle="white-space:nowrap"
-                                             selectAllVisible="false" 
-                                              contentStyle="color:#000000;">                  
-                          <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}" var="row">
-                            <f:selectItem id="groups" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
-                          </af:forEach>
-                        </af:selectManyChoice>
-                        <af:selectOneChoice label="Status" id="smc6" helpTopicId="NMAT_HELP_ACTIVITY_STATUS" labelStyle="white-space:nowrap"
-                                            value="A" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlNMQStatus}" autoSubmit="true"
-                                            rendered="#{RenderingRulesBean.wizardSearchRenderSMQStatus}">
-                          <af:selectItem label="All" value="ALL" id="si19"/>
-                          <af:selectItem label="Active" value="A" id="si19a"/>
-                          <af:selectItem label="Inactive" value="I" id="si16"/>
-                          <af:selectItem label="Pending" value="P" id="si18"/>
-                        </af:selectOneChoice>
-                      </af:panelFormLayout>
-                      <af:panelFormLayout id="pgl8" maxColumns="1" rows="2">
-                        <af:selectManyChoice label="State" id="smc2" required="false" showRequired="false" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlState}"
-                                             helpTopicId="NMAT_HELP_STATE" labelStyle="white-space:nowrap" valuePassThru="true" rendered="false"
-                                             partialTriggers="smc1">
-                         <af:selectItem label="Proposed" value="Proposed" id="si7"/>
-                            <af:selectItem label="Requested" value="Requested" id="si9"/>
-                            <af:selectItem label="Draft" value="Draft" id="si11"/>
-                            <af:selectItem label="Reviewed" value="Reviewed" id="si4"/>
-                            <af:selectItem label="Approved" value="Approved" id="si6"/>
-                            <af:selectItem label="Published" value="Published" id="si5"/>                      
-                        </af:selectManyChoice>
-                        <af:selectManyChoice value="#{pageFlowScope.NMQWizardSearchBean.MQGroupList}"
-                                             label="Group" id="smc5"
-                                             binding="#{pageFlowScope.NMQWizardSearchBean.ctrlMQGroups}" helpTopicId="NMAT_HELP_MQ_GROUP" labelStyle="white-space:nowrap"
-                                             valuePassThru="true"
-                                             rendered="#{RenderingRulesBean.wizardSearchRenderGroup}">
-                          <!--<f:selectItems value="#{bindings.MQGroupsVO1.items}" id="si12"/>-->
-                          <af:forEach items="#{bindings.MQGroupsVO1.iteratorBinding.allRowsInRange}" var="row">
-                            <f:selectItem id="si12" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
-                          </af:forEach>
-                        </af:selectManyChoice>
-                        <af:selectOneChoice label="Scope" id="soc3"
-                                            helpTopicId="NMAT_HELP_ACTIVITY_STATUS"
-                                            binding="#{pageFlowScope.NMQWizardSearchBean.ctrlMQScope}"
-                                            labelStyle="white-space:nowrap" value="%" autoSubmit="false"
-                                            
-                                            rendered="#{RenderingRulesBean.wizardDetailsRenderNMQScope}">
-                          <af:selectItem label="All" value="%" id="si13x"/>
-                          <af:selectItem label="Y" value="Y" id="si10"/>
-                          <af:selectItem label="N" value="N" id="si17"/>
-                                         
-                        </af:selectOneChoice>
-                      </af:panelFormLayout>
-                      <!--  <af:selectOneChoice label="Dictionary Type" id="soc1"
-                                        binding="#{pageFlowScope.NMQWizardSearchBean.dictionaryTypeSearch}" autoSubmit="true"
-                                        valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.dictionaryTypeChanged}" rendered="false">
-                      <af:selectItem label="Base" value="B" id="si1"/>
-                      <af:selectItem label="Filter" value="F" id="si13"/>
-                    </af:selectOneChoice> -->
+                      <af:panelGridLayout id="pgl18">
+                        <af:gridRow marginTop="5px" height="auto" id="gr1">
+                          <af:gridCell marginStart="5px" width="25%" id="gc1">
+                            <af:selectOneChoice id="soc2" autoSubmit="true"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlDictionaryListSearch}"
+                                                label="Dictionary" helpTopicId="NMAT_HELP_TERMINOLOGY"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.dictionaryChange}"
+                                                readOnly="#{RenderingRulesBean.wizardSearchDisableDictionary}"
+                                                value="#{pageFlowScope.NMQWizardBean.currentDictionary}"
+                                                labelStyle="white-space:nowrap" valuePassThru="true">
+                              <af:forEach items="#{bindings.DictionaryVO1.iteratorBinding.allRowsInRange}" var="row">
+                                <f:selectItem id="dicts" itemLabel="#{row.name}" itemValue="#{row.shortName}"/>
+                              </af:forEach>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc2">
+                            <af:selectOneChoice label="Release Status" id="smc1" showRequired="false"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlReleaseStatus}"
+                                                helpTopicId="NMAT_HELP_RELEASE_STATUS" labelStyle="white-space:nowrap"
+                                                value="CURRENT" autoSubmit="true"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.releaseStatusChanged}"
+                                                disabled="#{RenderingRulesBean.wizardSearchDisableReleaseStatus}">
+                              <af:selectItem label="All" value="ALL" id="si3"/>
+                              <af:selectItem label="Current" value="CURRENT" id="si3a"/>
+                              <af:selectItem label="Pending" value="PENDING" id="si2"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc3">
+                            <af:selectOneChoice label="Critical event" id="soc4" value="%"
+                                                labelStyle="white-space:nowrap" helpTopicId="NMAT_HELP_CRITICAL_EVENT"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlCriticalEvent}"
+                                                autoSubmit="true">
+                              <af:selectItem label="All" id="si15" value="%"/>
+                              <af:selectItem label="No" value="N" id="si1"/>
+                              <af:selectItem label="Yes - Narrow" value="Y_NARROW" id="si13"/>
+                              <af:selectItem label="Yes - Broad" value="Y_BROAD" id="si14"/>
+                              <af:selectItem label="Yes - All" value="Y_BROAD,Y_NARROW" id="si33"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" marginEnd="5px" id="gc4">
+                            <af:selectManyChoice value="#{pageFlowScope.NMQWizardSearchBean.MQGroupList}" label="Group"
+                                                 id="smc5" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlMQGroups}"
+                                                 helpTopicId="NMAT_HELP_MQ_GROUP" labelStyle="white-space:nowrap"
+                                                 valuePassThru="true"
+                                                 rendered="#{RenderingRulesBean.wizardSearchRenderGroup}">
+                              <!--<f:selectItems value="#{bindings.MQGroupsVO1.items}" id="si12"/>-->
+                              <af:forEach items="#{bindings.MQGroupsVO1.iteratorBinding.allRowsInRange}" var="row">
+                                <f:selectItem id="si12" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
+                              </af:forEach>
+                            </af:selectManyChoice>
+                          </af:gridCell>
+                        </af:gridRow>
+                        <af:gridRow marginTop="5px" height="auto" id="gr2">
+                          <af:gridCell marginStart="5px" width="25%" id="gc5">
+                            <af:selectOneChoice label="Extension" id="soc15" labelStyle="white-space:nowrap"
+                                                valuePassThru="true" autoSubmit="true"
+                                                helpTopicId="NMAT_HELP_QUERY_TYPE"
+                                                rendered="#{RenderingRulesBean.wizardSearchRenderQueryType}"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlLevelList}"
+                                                value="#{pageFlowScope.NMQWizardSearchBean.paramExtension}"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.extensionChanged}"
+                                                disabled="#{RenderingRulesBean.wizardSearchDisableExtension}">
+                              <af:selectItem id="si29" label="SMQ" value="SMQ"
+                                             rendered="#{RenderingRulesBean.wizardSearchRenderSMQSelectItem}"/>
+                              <af:forEach items="#{bindings.NMQExtentionListVO1.allRowsInRange}" var="row">
+                                <af:selectItem id="si8" label="#{row.longValue}"
+                                               value="#{row.refCodelistValueShortVal}"/>
+                              </af:forEach>
+                              <af:selectItem id="si30" label="ALL" value="%"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc6">
+                              <af:selectOneChoice label="Approved" id="soc10"
+                                                  binding="#{pageFlowScope.NMQWizardSearchBean.cntrlApproved}"
+                                                  value="#{pageFlowScope.NMQWizardSearchBean.paramApproved}"
+                                                  inlineStyle="margin-left: 25px;">
+                                <af:selectItem label="All" value="%" id="si21"/>
+                                <af:selectItem label="Yes" value="Y" id="si22"/>
+                                <af:selectItem label="No" value="N" id="si23a"/>
+                              </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc7">
+                            <af:selectManyChoice label="Product" id="smc3" autoSubmit="true" valuePassThru="true"
+                                                 binding="#{pageFlowScope.NMQWizardSearchBean.ctrlProducts}"
+                                                 value="#{pageFlowScope.NMQWizardSearchBean.productList}"
+                                                 labelStyle="white-space:nowrap" selectAllVisible="false"
+                                                 contentStyle="color:#000000;" inlineStyle="margin-left: 25px;">
+                              <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                          var="row">
+                                <f:selectItem id="groups" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
+                              </af:forEach>
+                            </af:selectManyChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" marginEnd="5px" id="gc8">
+                            <af:selectOneChoice label="Scope" id="soc3" helpTopicId="NMAT_HELP_ACTIVITY_STATUS"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlMQScope}"
+                                                labelStyle="white-space:nowrap" value="%" autoSubmit="false"
+                                                rendered="#{RenderingRulesBean.wizardDetailsRenderNMQScope}">
+                              <af:selectItem label="All" value="%" id="si13x"/>
+                              <af:selectItem label="Y" value="Y" id="si10"/>
+                              <af:selectItem label="N" value="N" id="si17"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                        </af:gridRow>
+                        <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr3">
+                          <af:gridCell marginStart="5px" width="25%" id="gc9">
+                            <af:panelGroupLayout id="pgl4" layout="horizontal">
+                              <af:inputText label="PT Search " id="it51" helpTopicId="NMAT_HELP_TERM" wrap="off"
+                                            labelStyle="white-space:nowrap" value="#{pageFlowScope.ptSearch}"
+                                            binding="#{pageFlowScope.NMQWizardSearchBean.ctrlPTSearch}" columns="30"
+                                            partialTriggers="b4"/>
+                              <af:link id="l1" icon="/image/SEARCH.gif">
+                                <af:showPopupBehavior popupId="p5"/>
+                              </af:link>
+                            </af:panelGroupLayout>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc10">
+                            <af:selectOneChoice label="Level" id="soc1"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.controlMQLevel}"
+                                                value="#{pageFlowScope.NMQWizardSearchBean.paramLevel}"
+                                                labelStyle="white-space:nowrap" valuePassThru="true"
+                                                inlineStyle="margin-left: 45px;">
+                              <af:selectItem label="1" value="1" id="si20"
+                                             rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="2" value="2" id="si36"
+                                             rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="3" value="3" id="si37"
+                                             rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="4" value="4" id="si23"
+                                             rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="5" value="5" id="si34"
+                                             rendered="#{!pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="SOC" value="SOC" id="si35"
+                                             rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="HLGT" value="HLGT" id="si26"
+                                             rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="HLT" value="HLT" id="si27"
+                                             rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="PT" value="PT" id="si38"
+                                             rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="LLT" value="LLT" id="si39"
+                                             rendered="#{pageFlowScope.NMQWizardSearchBean.MEDDraSearch}"/>
+                              <af:selectItem label="All Levels" value="%" id="si28"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" id="gc11">
+                            <af:selectOneChoice label="Status" id="smc6" helpTopicId="NMAT_HELP_ACTIVITY_STATUS"
+                                                labelStyle="white-space:nowrap" value="A"
+                                                binding="#{pageFlowScope.NMQWizardSearchBean.ctrlNMQStatus}"
+                                                autoSubmit="true"
+                                                rendered="#{RenderingRulesBean.wizardSearchRenderSMQStatus}"
+                                                inlineStyle="margin-left: 32px;">
+                              <af:selectItem label="All" value="ALL" id="si19"/>
+                              <af:selectItem label="Active" value="A" id="si19a"/>
+                              <af:selectItem label="Inactive" value="I" id="si16"/>
+                              <af:selectItem label="Pending" value="P" id="si18"/>
+                            </af:selectOneChoice>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" marginEnd="5px" id="gc12"/>
+                        </af:gridRow>
+                      </af:panelGridLayout>
                     </af:panelGroupLayout>
                   </af:panelGroupLayout>
                   <af:separator id="s5"/>
@@ -537,6 +526,42 @@
                           </af:inputDate>
                     </af:panelGroupLayout>
                     </af:dialog>
+                </af:popup>
+                <af:popup childCreation="deferred" autoCancel="disabled" id="p5"
+                          binding="#{pageFlowScope.NMQWizardSearchBean.ptSearchPopup}" contentDelivery="immediate">
+                  <af:dialog id="d6" title="PT Search" type="cancel" closeIconVisible="false">
+                    <f:facet name="buttonBar">
+                      <af:button text="Ok" id="b4" action="#{pageFlowScope.NMQWizardSearchBean.hidePtSearchPopup}">
+                        <af:setPropertyListener from="#{bindings.Mqterm.inputValue}" to="#{pageFlowScope.ptSearch}" type="action"/>
+                      </af:button>
+                    </f:facet>
+                    <af:query id="qryId1" headerText="Search" disclosed="true"
+                              value="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.queryDescriptor}"
+                              model="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.queryModel}"
+                              queryListener="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.processQuery}"
+                              queryOperationListener="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.processQueryOperation}"
+                              resultComponentId="::resId1" saveQueryMode="hidden" modeChangeVisible="false"/>
+                    <af:table value="#{bindings.HierarchySourceTermPTSearch.collectionModel}" var="row"
+                              rows="#{bindings.HierarchySourceTermPTSearch.rangeSize}"
+                              emptyText="#{bindings.HierarchySourceTermPTSearch.viewable ? 'No data to display.' : 'Access Denied.'}"
+                              rowBandingInterval="0"
+                              selectedRowKeys="#{bindings.HierarchySourceTermPTSearch.collectionModel.selectedRow}"
+                              selectionListener="#{bindings.HierarchySourceTermPTSearch.collectionModel.makeCurrent}"
+                              rowSelection="single" fetchSize="#{bindings.HierarchySourceTermPTSearch.rangeSize}"
+                              id="resId1" contentDelivery="immediate">
+                      <af:column headerText="Term" id="resId1c1"
+                                 width="250" minimumWidth="250">
+                        <af:outputText value="#{row.Mqterm}"
+                                       shortDesc="#{bindings.HierarchySourceTermPTSearch.hints.Mqterm.tooltip}"
+                                       id="ot30"/>
+                      </af:column>
+                      <af:column headerText="Content Code" id="resId1c2">
+                        <af:outputText value="#{row.Mqcode}"
+                                       shortDesc="#{bindings.HierarchySourceTermPTSearch.hints.Mqcode.tooltip}"
+                                       id="ot31"/>
+                      </af:column>
+                    </af:table>
+                  </af:dialog>
                 </af:popup>
               </af:panelBox>
               

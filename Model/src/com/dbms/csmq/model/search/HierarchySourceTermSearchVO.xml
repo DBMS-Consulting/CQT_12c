@@ -4,11 +4,10 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="HierarchySourceTermSearchVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
-  PageIterMode="Full"
-  UseGlueCode="false">
+  PageIterMode="Full">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
   </DesignTime>
@@ -22,113 +21,272 @@
     Name="dictShortName"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="term"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="startDate"
     Kind="where"
-    Type="java.lang.String"
-    DefaultValue="NULL"/>
+    Type="java.lang.String">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="endDate"
     Kind="where"
-    Type="java.lang.String"
-    DefaultValue="NULL"/>
+    Type="java.lang.String">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="activityStatus"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="releaseStatus"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="activationGroup"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="MQGroup"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="levelName"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="MQCode"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="MQCriticalEvent"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="NULL"/>
+    DefaultValue="NULL">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="uniqueIDsOnly"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="Y"/>
+    DefaultValue="Y">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="filterForUser"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="N"/>
+    DefaultValue="N">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="currentUser"
     Kind="where"
-    Type="java.lang.String"/>
+    Type="java.lang.String">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="killSwitch"
     Kind="where"
-    Type="java.lang.Integer"/>
+    Type="java.lang.Integer">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="showNarrowScpOnly"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="N"/>
+    DefaultValue="N">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="MQScope"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="%"/>
+    DefaultValue="%">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="pState"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="%"/>
+    DefaultValue="%">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="pUserRole"
     Kind="where"
-    Type="java.lang.String"/>
+    Type="java.lang.String">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="pMode"
     Kind="where"
-    Type="oracle.jbo.domain.Number"/>
+    Type="oracle.jbo.domain.Number">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="pApprove"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="%"/>
+    DefaultValue="%">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="psVirtualDictionaryName"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="CURRENT"/>
+    DefaultValue="CURRENT">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <Variable
     Name="product"
     Kind="where"
     Type="java.lang.String"
-    DefaultValue="%"/>
+    DefaultValue="%">
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYHINT
+          Value="Hide"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </Variable>
   <SQLQuery><![CDATA[SELECT DISTINCT rownum  rnum,
 
 CONTENT_ID || '.' || to_char(DATES, 'yyyymmddhh24miss') PRIKEY, 
@@ -386,6 +544,14 @@ ORDER BY MQTERM]]></SQLQuery>
     <DesignTime>
       <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <DISPLAYWIDTH
+          Value="50"/>
+        <LABEL
+          ResId="com.dbms.csmq.model.search.HierarchySourceTermSearchVO.Mqterm_LABEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="Mqstatus"
@@ -639,6 +805,40 @@ ORDER BY MQTERM]]></SQLQuery>
       <Attr Name="_DisplaySize" Value="200"/>
     </DesignTime>
   </ViewAttribute>
+  <ViewCriteria
+    Name="HierarchySourceTermSearchVOCriteria"
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+    Conjunction="AND">
+    <Properties Name="_Props">
+      <CustomProperties>
+        <Property
+          Name="autoExecute"
+          Value="false"/>
+        <Property
+          Name="mode"
+          Value="Basic"/>
+        <Property
+          Name="allowConjunctionOverride"
+          Value="false"/>
+        <Property
+          Name="showInList"
+          Value="true"/>
+        <Property
+          Name="displayOperators"
+          Value="InAdvancedMode"/>
+      </CustomProperties>
+    </Properties>
+    <ViewCriteriaRow
+      Name="HierarchySourceTermSearchVOCriteria_row_0"
+      UpperColumns="1">
+      <ViewCriteriaItem
+        Name="Mqterm"
+        ViewAttribute="Mqterm"
+        Operator="CONTAINS"
+        Conjunction="AND"
+        Required="Optional"/>
+    </ViewCriteriaRow>
+  </ViewCriteria>
   <AttrArray Name="KeyAttributes">
     <Item Value="Rnum"/>
   </AttrArray>

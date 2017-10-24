@@ -48,46 +48,41 @@
   <ViewUsage
     Name="HierarchySourceTermPTSearch"
     ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO">
-    <ParameterMap>
-      <PIMap Variable="psVirtualDictionaryName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[CURRENT]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="pUserRole">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[#{securityContext.userRoles}]]></TransientExpression>
-      </PIMap>
+     <ParameterMap>
       <PIMap Variable="dictShortName">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[NMATMED]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
       </PIMap>
       <PIMap Variable="activityStatus">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[ALL]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['ALL']]></TransientExpression>
       </PIMap>
       <PIMap Variable="releaseStatus">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[ALL]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['ALL']]></TransientExpression>
       </PIMap>
       <PIMap Variable="levelName">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[PT]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['PT']]></TransientExpression>
       </PIMap>
       <PIMap Variable="uniqueIDsOnly">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[Y]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['Y']]></TransientExpression>
       </PIMap>
       <PIMap Variable="filterForUser">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[N]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['N']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="currentUser">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['test_mqm']]></TransientExpression>
       </PIMap>
       <PIMap Variable="killSwitch">
         <TransientExpression
@@ -97,12 +92,42 @@
       <PIMap Variable="showNarrowScpOnly">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[N]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['N']]></TransientExpression>
       </PIMap>
-      <PIMap Variable="currentUser">
+      <PIMap Variable="pUserRole">
         <TransientExpression
           trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[#{securityContext.userName}]]></TransientExpression>
+          Name="ExpressionScript"><![CDATA['MQM']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="psVirtualDictionaryName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['CURRENT']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="MQGroup">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="term">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="activationGroup">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="MQCode">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="MQCriticalEvent">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
       </PIMap>
     </ParameterMap>
   </ViewUsage>
