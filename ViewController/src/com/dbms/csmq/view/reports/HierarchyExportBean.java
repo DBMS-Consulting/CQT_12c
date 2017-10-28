@@ -740,6 +740,7 @@ public class HierarchyExportBean {
             POIExportUtil.addImageRow(worksheet, rowCount++);
             worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
+            System.out.println("------------sourceDirectory-------------"+sourceDirectory);
             //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
 

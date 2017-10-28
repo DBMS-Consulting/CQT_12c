@@ -79,7 +79,7 @@ public class POIExportUtil {
     }
     
     private static int rowHeight(String value){
-        int upperCount = 0;
+        double upperCount = 0;
         int numberOfLines = 0;
         for(int i=0; i<value.length();i++){
             if(Character.isUpperCase(value.charAt(i))){
@@ -87,14 +87,14 @@ public class POIExportUtil {
             }
         }
         
-        int lengthOfWord = value.length();
-        int smallCount = lengthOfWord - upperCount;
-        numberOfLines = numberOfLines + ((int) Math.floor(smallCount/40));
-        numberOfLines = numberOfLines + ((int) Math.floor(smallCount/30));
+        double lengthOfWord = value.length();
+        double smallCount = lengthOfWord - upperCount;
+        numberOfLines = numberOfLines + ((int) Math.ceil(smallCount/40));
+        numberOfLines = numberOfLines + ((int) Math.ceil(upperCount/30));
         if(numberOfLines == 0){
           return 15;  
         }else{
-        return numberOfLines*10 + 10;
+        return numberOfLines*15 + 10;
         }
     }
 
@@ -161,10 +161,16 @@ public class POIExportUtil {
         for (int i = 1; i < colSpan; i++) {
             row.createCell((short)i);
         }
-
+        if(label.length() >0){
+        row.setHeightInPoints((label.length()/100)*15 + 15); 
+        HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
+        cellStyle.setWrapText(true);
+        labelCell.setCellStyle(cellStyle);
+        }
         rowCount++;
         worksheet.createRow((short)rowCount);
         worksheet.addMergedRegion(new CellRangeAddress(rowCount - 1, rowCount, 0, colSpan));
+
     }
 
     public static void addSimpleTextRow(HSSFSheet worksheet, int rowCount, String label, int colSpan) {
