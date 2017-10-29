@@ -285,6 +285,7 @@
                                 <af:dialog type="cancel" closeIconVisible="true" title="Impact Search" id="d8" stretchChildren="none" modal="true"
                                            resize="off">
                                     <af:panelGroupLayout id="pgl6" layout="vertical">
+                                    <af:panelGroupLayout id="pgl161" layout="horizontal">
                                             <af:selectManyChoice label="Product" id="smc31" autoSubmit="true"
                                                                  valuePassThru="true"
                                                                  value="#{pageFlowScope.ImpactAnalysisBean.productList}"
@@ -296,7 +297,13 @@
                                                                   itemValue="#{row.shortVal}"/>
                                                 </af:forEach>
                                             </af:selectManyChoice>
-                                            <af:spacer width="10" height="10" id="s181"/>
+                                            <af:spacer width="150" height="10" id="s18"/>
+                                                <af:commandButton text="Export Search" id="b11" icon="/image/EXCEL.png">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReport2}"/>
+                                                </af:commandButton>
+                                            </af:panelGroupLayout>
                                             <af:panelGroupLayout id="pgl8" layout="horizontal">
                                                 <af:selectOneChoice id="soc61" label="State"
                                                                     value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
@@ -900,7 +907,7 @@
                                                                 <af:selectItem label="Term Name" value="TERM"
                                                                                id="si40"/>
                                                                 <af:selectItem label="Level" value="DEF_LEVEL_REF_SHORT_NAME"
-                                                                               id="si41"/>
+                                                                               id="si42"/>
                                                                 <af:selectItem label="Scope" value="SCOPE" id="si22"/>
                                                             </af:selectOneChoice>
                                                             

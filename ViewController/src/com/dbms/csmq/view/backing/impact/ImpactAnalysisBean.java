@@ -17,6 +17,8 @@ import com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean;
 import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
+import java.io.OutputStream;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,11 +52,16 @@ import oracle.adf.view.rich.event.PopupFetchEvent;
 import oracle.binding.OperationBinding;
 
 import oracle.jbo.Row;
+import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 
 public class ImpactAnalysisBean extends HierarchyAccessor {
@@ -1621,5 +1628,131 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
 
     public String getSearchStatusStr() {
         return searchStatusStr;
+    }
+    
+    public void downloadSearchReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadSearchReport1(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReport2(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    private HSSFWorkbook createWorkBookTab(String sheetName, String tableName, String iteratorName, HSSFWorkbook workbook){
+
+        HSSFSheet worksheet = workbook.createSheet(sheetName);
+        HSSFRow excelrow = null;
+
+        int i = 0;
+        int colCount = 0;
+
+        excelrow = (HSSFRow) worksheet.createRow((short) i);
+        HSSFCell cellA1 = excelrow.createCell((short) 0);
+        cellA1.setCellValue(tableName);
+
+        i++;
+        i++;
+
+        int k = i;
+
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding dcIter = (DCIteratorBinding) binding.get(iteratorName);
+
+
+        RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+
+        while (rs.hasNext()) {
+            Row row = rs.next();
+            //print header on first row in excel
+            if (i == k) {
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Term");
+                
+                cellA1 = excelrow.createCell((short) 1);
+                cellA1.setCellValue("MQ Code");
+                
+                cellA1 = excelrow.createCell((short) 2);
+                cellA1.setCellValue("Status");                     
+                colCount = 3;
+            }
+
+            ++i;
+
+            excelrow = worksheet.createRow((short) i);
+            
+            HSSFCell cell = excelrow.createCell(0);
+            cell.setCellValue(row.getAttribute("Term") + "");
+            
+            cell = excelrow.createCell(1);
+            cell.setCellValue(row.getAttribute("DictContentCode")+ "");
+            
+            cell = excelrow.createCell(2);
+            cell.setCellValue(row.getAttribute("Status")+ "");
+
+        }
+        
+        i++;
+        i++;
+        excelrow = (HSSFRow) worksheet.createRow((short) i);
+        cellA1 = excelrow.createCell((short) 0);
+        cellA1.setCellValue("Row Count");
+        HSSFCell cellA2 = excelrow.createCell((short) 1);
+        cellA2.setCellValue(dcIter.getEstimatedRowCount());
+        
+        //worksheet.createFreezePane(0, 1, 0, 1);
+
+        for (int x = 0; x < colCount; x++) {
+            worksheet.autoSizeColumn(x);
+        }
+        if(colCount == 0){
+            worksheet.autoSizeColumn(0);
+        }
+        
+        return workbook;
     }
 }

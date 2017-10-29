@@ -241,18 +241,27 @@
                                            stretchChildren="none" modal="true" resize="off">
                                     <af:panelGroupLayout id="pgl1" layout="vertical">
                                         <af:panelGroupLayout id="pgl6" layout="vertical">
-                                            <af:selectManyChoice label="Product" id="smc3" autoSubmit="true"
-                                                                 valuePassThru="true"
-                                                                 value="#{pageFlowScope.ImpactAnalysisBean.productList}"
-                                                                 labelStyle="white-space:nowrap"
-                                                                 selectAllVisible="false" contentStyle="color:#000000;">
-                                                <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
-                                                            var="row">
-                                                    <f:selectItem id="groups" itemLabel="#{row.longValue}"
-                                                                  itemValue="#{row.shortVal}"/>
-                                                </af:forEach>
-                                            </af:selectManyChoice>
-                                            <af:spacer width="10" height="10" id="s1"/>
+                                            <af:panelGroupLayout id="pgl16" layout="horizontal">
+                                                <af:selectManyChoice label="Product" id="smc3" autoSubmit="true"
+                                                                     valuePassThru="true"
+                                                                     value="#{pageFlowScope.ImpactAnalysisBean.productList}"
+                                                                     labelStyle="white-space:nowrap"
+                                                                     selectAllVisible="false"
+                                                                     contentStyle="color:#000000;">
+                                                    <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                                                var="row">
+                                                        <f:selectItem id="groups" itemLabel="#{row.longValue}"
+                                                                      itemValue="#{row.shortVal}"/>
+                                                    </af:forEach>
+                                                </af:selectManyChoice>
+                                                <af:spacer width="150" height="10" id="s1"/>
+                                                <af:commandButton text="Export Search" id="b11" icon="/image/EXCEL.png">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReport}"/>
+                                                </af:commandButton>
+                                            </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s18"/>
                                             <af:panelGroupLayout id="pgl8" layout="horizontal">
                                                 <af:selectOneChoice id="soc6" label="State"
                                                                     value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
@@ -673,7 +682,7 @@
                                                         <af:selectItem label="C" value="C" id="si10"/>
                                                         <af:selectItem label="D" value="D" id="si11"/>
                                                         <af:selectItem label="E" value="E" id="si33"/>
-                                                        <af:selectItem label="F" value="F" id="si19"/>
+                                                        <af:selectItem label="F" value="F" id="si191"/>
                                                         <af:selectItem label="G" value="G" id="si12"/>
                                                         <af:selectItem label="H" value="H" id="si17"/>
                                                         <af:selectItem label="I" value="I" id="si24"/>

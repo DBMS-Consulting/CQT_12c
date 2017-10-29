@@ -215,6 +215,7 @@
                 <af:dialog type="cancel" closeIconVisible="true" title="Impact Search" id="d8" stretchChildren="none" modal="true"
                            resize="off">
                     <af:panelGroupLayout id="pgl6" layout="vertical">
+                    <af:panelGroupLayout id="pgl16" layout="horizontal">
                                             <af:selectManyChoice label="Product" id="smc3" autoSubmit="true"
                                                                  valuePassThru="true"
                                                                  value="#{pageFlowScope.ImpactAnalysisBean.productList}"
@@ -226,7 +227,13 @@
                                                                   itemValue="#{row.shortVal}"/>
                                                 </af:forEach>
                                             </af:selectManyChoice>
-                                            <af:spacer width="10" height="10" id="s18"/>
+                                            <af:spacer width="150" height="10" id="s18"/>
+                                                <af:commandButton text="Export Search" id="b11" icon="/image/EXCEL.png">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReport1}"/>
+                                                </af:commandButton>
+                                            </af:panelGroupLayout>
                                             <af:panelGroupLayout id="pgl8" layout="horizontal">
                                                 <af:selectOneChoice id="soc6" label="State"
                                                                     value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
@@ -690,7 +697,7 @@
                                                 <af:selectItem label="Full #{applicationScope.CSMQBean.customMQName}/SMQ" value="0" id="si7"/>
                                             <af:selectItem label="Broad" value="1" id="si13s"/>
                                             <af:selectItem label="Narrow" value="2" id="si13d"/>
-                                            <af:selectItem label="Child Narrow" value="3" id="si4"/>
+                                            <af:selectItem label="Child Narrow" value="3" id="si20"/>
                                             </af:selectOneChoice>
                                         </af:column>
                                         <af:column id="c4" headerText="Category" width="45" sortable="true" filterable="true">
@@ -702,7 +709,7 @@
                                                 <af:selectItem label="C" value="C" id="si10"/>
                                                 <af:selectItem label="D" value="D" id="si11"/>
                                                 <af:selectItem label="E" value="E" id="si33"/>
-                                                <af:selectItem label="F" value="F" id="si19"/>
+                                                <af:selectItem label="F" value="F" id="si18"/>
                                                 <af:selectItem label="G" value="G" id="si12"/>
                                                 <af:selectItem label="H" value="H" id="si17"/>
                                                 <af:selectItem label="I" value="I" id="si24"/>
