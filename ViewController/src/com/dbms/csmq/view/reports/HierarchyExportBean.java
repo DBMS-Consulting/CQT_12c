@@ -804,17 +804,17 @@ public class HierarchyExportBean {
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addDescHeaderTextRow(worksheet, rowCount++, "Description:", 4);
-            POIExportUtil.addSimpleDescTextRow(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqDesc"), 10);
+            POIExportUtil.addSimpleDescTextRow1(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqDesc"), 10);
             rowCount++;
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addDescHeaderTextRow(worksheet, rowCount++, "Source:", 4);
-            POIExportUtil.addSimpleDescTextRow(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqSrc"), 10);
+            POIExportUtil.addSimpleDescTextRow2(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqSrc"), 10);
             rowCount++;
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addDescHeaderTextRow(worksheet, rowCount++, "Note:", 4);
-            POIExportUtil.addSimpleDescTextRow(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqNote"), 10);
+            POIExportUtil.addSimpleDescTextRow2(worksheet, rowCount++, (String)termDtlRow.getAttribute("SmqNote"), 10);
             rowCount++;
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);

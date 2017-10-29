@@ -161,8 +161,41 @@ public class POIExportUtil {
         for (int i = 1; i < colSpan; i++) {
             row.createCell((short)i);
         }
+
+        rowCount++;
+        worksheet.createRow((short)rowCount);
+        worksheet.addMergedRegion(new CellRangeAddress(rowCount - 1, rowCount, 0, colSpan));
+
+    }
+    
+    public static void addSimpleDescTextRow1(HSSFSheet worksheet, int rowCount, String label, int colSpan) {
+        HSSFRow row = worksheet.createRow((short)rowCount);
+        HSSFCell labelCell = row.createCell((short)0);
+        labelCell.setCellValue(label);
+        for (int i = 1; i < colSpan; i++) {
+            row.createCell((short)i);
+        }
         if(label.length() >0){
-        row.setHeightInPoints((label.length()/100)*15 + 15); 
+        row.setHeightInPoints((label.length()/100)*13 + 15); 
+        HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
+        cellStyle.setWrapText(true);
+        labelCell.setCellStyle(cellStyle);
+        }
+        rowCount++;
+        worksheet.createRow((short)rowCount);
+        worksheet.addMergedRegion(new CellRangeAddress(rowCount - 1, rowCount, 0, colSpan));
+
+    }
+    
+    public static void addSimpleDescTextRow2(HSSFSheet worksheet, int rowCount, String label, int colSpan) {
+        HSSFRow row = worksheet.createRow((short)rowCount);
+        HSSFCell labelCell = row.createCell((short)0);
+        labelCell.setCellValue(label);
+        for (int i = 1; i < colSpan; i++) {
+            row.createCell((short)i);
+        }
+        if(label.length() >0){
+        row.setHeightInPoints((label.length()/100)*20 + 15); 
         HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
         cellStyle.setWrapText(true);
         labelCell.setCellStyle(cellStyle);
