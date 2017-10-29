@@ -556,7 +556,7 @@ public class NMQWizardSearchBean  {
         vo.setNamedWhereClauseParam("startDate", getParamStartDate());
         vo.setNamedWhereClauseParam("endDate", getParamEndDate());
         String paramTermVal = getParamTerm();
-        if (null != paramTermVal && !paramTermVal.isEmpty() && "%".equalsIgnoreCase(paramTermVal)){
+        if (null != paramTermVal && !paramTermVal.isEmpty() && !"%".equalsIgnoreCase(paramTermVal)){
            paramTermVal = paramTermVal.replace("'","\''");
         }else{
             paramTermVal = getParamPtTerm();
