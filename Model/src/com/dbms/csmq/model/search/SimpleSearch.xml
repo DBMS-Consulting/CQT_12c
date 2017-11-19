@@ -691,13 +691,16 @@ WHERE (to_char(QUERYLEVEL) LIKE :queryLevel OR to_char(MQLEVEL) LIKE :queryLevel
     ColumnType="VARCHAR2"
     AliasName="VIEW_ATTR"
     SQLType="VARCHAR"
-    Expression="SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
-    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id
-UNION ALL
-SELECT 'N'
-FROM DUAL
-WHERE NOT EXISTS (SELECT (case when (trunc(max(creation_TS)) > trunc(sysdate-30)) then 'Y' else 'N' end)
-    FROM NMQ_Track_state where dict_content_id = CONTENT_ID and (state = 'Published' or state = 'Published IA') group by dict_content_id)"/>
+    Expression="SELECT PUBLISHED_IN_LAST_MONTH FROM (SELECT decode(dict_content_id, null, 'N', 'Y') as PUBLISHED_IN_LAST_MONTH
+    FROM NMQ_Track_state where 
+    dict_content_id = CONTENT_ID
+    and (state = 'Published' or state = 'Published IA') 
+    AND ((creation_TS >= add_months(trunc(sysdate,'mm'),-1)) AND (creation_TS &lt; trunc(sysdate, 'mm')))
+    and rownum = 1
+    union all
+    SELECT 'N'
+    FROM DUAL) WHERE ROWNUM = 1"
+    IsQueriable="false"/>
   <ViewAttribute
     Name="NmatCreatedt"
     IsUpdateable="false"

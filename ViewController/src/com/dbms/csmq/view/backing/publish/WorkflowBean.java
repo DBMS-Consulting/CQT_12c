@@ -680,7 +680,7 @@ public class WorkflowBean {
         }
     }
     
-    public void exportDealsDownload(FacesContext facesContext, OutputStream outputStream) {
+    public void exportPromoteDownload(FacesContext facesContext, OutputStream outputStream) {
         try {
 
 
@@ -754,5 +754,79 @@ public class WorkflowBean {
         }
 
     }
+    
+    public void exportDemoteDownload(FacesContext facesContext, OutputStream outputStream) {
+        try {
 
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Demote");
+
+            DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+            DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("ViewObjTermsByState1Iterator");
+            HSSFRow excelrow = null;
+            
+            excelrow = (HSSFRow) worksheet.createRow(0);
+            HSSFCell cellA9 = excelrow.createCell(0);
+            cellA9.setCellValue("List Of MedDRA Queries");
+            
+            excelrow = (HSSFRow) worksheet.createRow(2);
+            HSSFCell cellA7 = excelrow.createCell(0);
+            cellA7.setCellValue("Approved IA State");
+            
+            HSSFCell cellA8 = excelrow.createCell(1);
+            cellA8.setCellValue("Published IA State");
+            
+            
+            ViewObject view = dcIteratorBindings.getViewObject();
+            RowSetIterator rowIter = (RowSetIterator) view.createRowSetIterator(null); //creating secoundary Iterator
+            rowIter.reset();
+            Row dataRow;
+               
+            Map<String, String> allList = new HashMap<String, String>();
+            while (rowIter.hasNext()) {
+                dataRow = (Row) rowIter.next();       
+                allList.put(dataRow.getAttribute("DictNm").toString(), dataRow.getAttribute("Mqterm").toString());
+              
+            }
+           List<String> rightHandList = new ArrayList<String>();
+           List selectedItems = this.getSelectedTerms();
+            if(selectedItems.size()>0){
+                for(int k = 0 ; k<selectedItems.size();k++){
+                    String selectItem = (String)selectedItems.get(k);
+                    rightHandList.add(allList.get(selectItem));
+                    allList.remove(selectItem);
+                }
+
+            }
+            int i = 3;
+            for(String key : allList.keySet()){
+                excelrow = (HSSFRow) worksheet.createRow(i);
+                HSSFCell cellA3 = excelrow.createCell(0);
+                cellA3.setCellValue(allList.get(key));
+
+                i++;
+            }
+            
+            int j = 3;
+            for(String item : rightHandList){
+                excelrow = worksheet.getRow(j);
+                if(excelrow == null){
+                    excelrow = worksheet.createRow(i);
+                }
+                HSSFCell cellA6 = excelrow.createCell(1);
+                cellA6.setCellValue(item);
+                j++;
+            }
+            //worksheet.createFreezePane(0, 1, 0, 1);
+            worksheet.autoSizeColumn(0);
+            worksheet.autoSizeColumn(1);
+            workbook.write(outputStream);
+            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

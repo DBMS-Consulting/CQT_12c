@@ -1947,6 +1947,40 @@ public class NMQWizardSearchBean  {
         AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlState);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlState);
     }
+    
+    public void releaseStatusChanged1(ValueChangeEvent valueChangeEvent) {
+        if (ctrlReleaseStatus != null)
+            currentMqstatus = ctrlReleaseStatus.getValue().toString();
+        
+        if (currentMqstatus.equals(CSMQBean.CURRENT_RELEASE_STATUS)) {
+            //ctrlReleaseGroupSearch.setRendered(false);
+            cntrlApprovedColumn.setRendered(true);
+            cntrlApproved.setDisabled(false);
+            //ctrlState.setRendered(false);
+            }
+        else if (currentMqstatus.equals(CSMQBean.PENDING_RELEASE_STATUS)) {
+            //ctrlReleaseGroupSearch.setRendered(false);
+            cntrlApprovedColumn.setRendered(true);
+            ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
+            cntrlApproved.setDisabled(true);
+            //ctrlState.setRendered(true);
+            }
+        else {
+            //ctrlReleaseGroupSearch.setRendered(true);
+            cntrlApprovedColumn.setRendered(false);
+            ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
+            cntrlApproved.setDisabled(true);
+            //ctrlState.setRendered(false);
+        }
+        AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlParamPanel);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlParamPanel);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlNMQStatus);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlNMQStatus);
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlState);
+        //AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlState);
+    }
 
     public void setSearchLabelPrefix(String searchLabelPrefix) {
         this.searchLabelPrefix = searchLabelPrefix;

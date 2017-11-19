@@ -17,7 +17,9 @@
     ViewObjectName="com.dbms.csmq.model.search.SimpleSearch"/>
   <ViewUsage
     Name="HierarchySourceTermSearchVO1"
-    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"/>
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+    FetchSize="1001"
+    RangeSize="1000"/>
   <ViewUsage
     Name="HierarchyViewObj1"
     ViewObjectName="com.dbms.csmq.model.search.HierarchyViewObj"/>

@@ -7,24 +7,27 @@
       <users>
         <user>
           <name>TEST_MQM</name>
-          <credentials>{903}XjQrFvHzUa+/frSn82+D5Df58uAQsLX/U/kRxRt87lo=</credentials>
+          <credentials>{903}odD7TesGzxUzDzaIUv4dRBYHjtSSkgBN</credentials>
+          <display-name></display-name>
         </user>
         <user>
           <name>TEST_USER</name>
-          <credentials>{903}GLrOUKmD+IsSisexlItJqxnCowggWh5Gvit4UVTfk2I=</credentials>
+          <credentials>{903}XC7pkJ/pvkxPshHv04NXJRJXenhR+kpO</credentials>
         </user>
         <user>
           <name>TEST_REQUESTOR</name>
-          <credentials>{903}+rE13czMJE804KshQXiXJkA6ircV15017/CqLiXSssE=</credentials>
+          <credentials>{903}OCZ0QlGjf7F4evVV4VKa4plN+oHEpQt+</credentials>
           <display-name></display-name>
         </user>
         <user>
           <name>tstruzik</name>
-          <credentials>{903}bdFyUXDNNNWzrntyC2dNe12uQxsRU7JBuY0IDteLhNA=</credentials>
+          <credentials>{903}05BrXle7r8mFcli3cLLrH10s6Nqbdf1M</credentials>
+          <display-name></display-name>
         </user>
         <user>
           <name>NMAT_REQUESTOR</name>
-          <credentials>{903}odNNWMZQHSkeHH5Fb74VIl1v5AO+JLVY</credentials>
+          <credentials>{903}hQLCZ6tD3L9RN84CwRIkljuAVJd1MygU</credentials>
+          <display-name></display-name>
         </user>
       </users>
       <roles>

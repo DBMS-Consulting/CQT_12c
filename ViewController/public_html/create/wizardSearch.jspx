@@ -44,7 +44,7 @@
                                                 binding="#{pageFlowScope.NMQWizardSearchBean.ctrlReleaseStatus}"
                                                 helpTopicId="NMAT_HELP_RELEASE_STATUS" labelStyle="white-space:nowrap"
                                                 value="CURRENT" autoSubmit="true"
-                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.releaseStatusChanged}"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.releaseStatusChanged1}"
                                                 disabled="#{RenderingRulesBean.wizardSearchDisableReleaseStatus}">
                               <af:selectItem label="All" value="ALL" id="si3"/>
                               <af:selectItem label="Current" value="CURRENT" id="si3a"/>

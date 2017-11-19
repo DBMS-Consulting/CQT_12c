@@ -153,6 +153,8 @@ public class UserBean {
         if (password == null || password.length() < 1) return null;
         
         Subject subject = null;
+        username = username.trim();
+        password = password.trim();
         String un = username;
         byte[] pw = password.getBytes();
         FacesContext ctx = FacesContext.getCurrentInstance();

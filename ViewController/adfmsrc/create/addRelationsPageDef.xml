@@ -17,7 +17,7 @@
     
     <iterator Binds="LevelsByDictionaryVO1" RangeSize="25" DataControl="DictionaryModuleDataControl" id="LevelsByDictionaryVO1Iterator"/>
     
-    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="-1" DataControl="SearchModuleDataControl"
+    <iterator Binds="HierarchySourceTermSearchVO1" RangeSize="1000" DataControl="SearchModuleDataControl"
               id="HierarchySourceTermSearchVO1Iterator"/>
     
     

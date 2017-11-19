@@ -375,7 +375,8 @@
                                                                                      actionListener="#{pageFlowScope.NMQSourceTermSearchBean.loadHierachy}"
                                                                                      icon="/image/hierarchy/REFRESH.png" disabled="false"/>
                                                     <af:commandToolbarButton text="Export" id="ctb3" disabled="false"
-                                                                         icon="/image/hierarchy/EXCEL.png">
+                                                                         icon="/image/hierarchy/EXCEL.png"
+                                                                             rendered="false">
                                                     <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.heirarchySearchexportRelations}"
                                                                                    contentType="application/x-download"
                                                                                    filename="#{pageFlowScope.HierarchyExportBean.hierarSrchReportExcelFileName}"/>
