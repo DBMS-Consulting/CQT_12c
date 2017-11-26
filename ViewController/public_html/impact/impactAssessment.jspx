@@ -290,7 +290,8 @@
                                                                  valuePassThru="true"
                                                                  value="#{pageFlowScope.ImpactAnalysisBean.productList}"
                                                                  labelStyle="white-space:nowrap"
-                                                                 selectAllVisible="false" contentStyle="color:#000000;">
+                                                                 selectAllVisible="false" contentStyle="color:#000000;"
+                                                                 binding="#{pageFlowScope.ImpactAnalysisBean.productComponent}">
                                                 <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                                             var="row">
                                                     <f:selectItem id="groups1" itemLabel="#{row.longValue}"
@@ -304,11 +305,13 @@
                                                                                    method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReport2}"/>
                                                 </af:commandButton>
                                             </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s22"/>
                                             <af:panelGroupLayout id="pgl8" layout="horizontal">
                                                 <af:selectOneChoice id="soc61" label="State"
                                                                     value="#{pageFlowScope.ImpactAnalysisBean.searchStateStr}"
-                                                                    autoSubmit="true">
-                                                    <af:selectItem label="ALL" value="%" id="si81"/>
+                                                                    autoSubmit="true"
+                                                                    binding="#{pageFlowScope.ImpactAnalysisBean.stateComponent}">
+                                                    <af:selectItem label="" value="%" id="si81"/>
                                                     <af:selectItem label="Pending Impact Assessment"
                                                                    value="Pending Impact Assessment" id="si461"/>
                                                     <af:selectItem label="Reviewed IA" value="Reviewed IA" id="si421"/>
@@ -319,8 +322,9 @@
                                                 <af:selectOneChoice label="Status" id="smc61"
                                                                     labelStyle="white-space:nowrap"
                                                                     value="#{pageFlowScope.ImpactAnalysisBean.searchStatusStr}"
-                                                                    autoSubmit="true">
-                                                    <af:selectItem label="All" value="%" id="si191"/>
+                                                                    autoSubmit="true"
+                                                                    binding="#{pageFlowScope.ImpactAnalysisBean.statusComponent}">
+                                                    <af:selectItem label="" value="%" id="si191"/>
                                                     <af:selectItem label="Active" value="A" id="si19a1"/>
                                                     <af:selectItem label="Inactive" value="I" id="si41"/>
                                                 </af:selectOneChoice>
@@ -328,10 +332,12 @@
                                             <af:spacer width="10" height="10" id="s41"/>
                                             <af:panelGroupLayout id="pgl16" layout="horizontal">
                                                 <af:inputText label="Term " columns="35" id="it21"
-                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchTermStr}"/>
+                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchTermStr}"
+                                                              binding="#{pageFlowScope.ImpactAnalysisBean.termComponent}"/>
                                                 <af:spacer width="10" height="10" id="s71"/>
                                                 <af:inputText label="Code " columns="10" id="it51"
-                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchCodeStr}"/>
+                                                              value="#{pageFlowScope.ImpactAnalysisBean.searchCodeStr}"
+                                                              binding="#{pageFlowScope.ImpactAnalysisBean.termCodeComponent}"/>
                                                 <af:spacer width="10" height="10" id="s141"/>
                                                 <af:commandButton text="Search" id="cb11" partialSubmit="true"
                                                                   actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchAction}"/>
@@ -340,7 +346,8 @@
                                         </af:panelGroupLayout>
                                     <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;" partialTriggers="cb11">
                                         <af:showDetailItem text="Impacted CMQs" id="sdi5" styleClass="AFStretchWidth"
-                                                           disclosed="true">
+                                                           disclosed="true"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.impactedCMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_CMQ_Y.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_CMQ_Y.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_CMQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -405,7 +412,8 @@
                                             </af:table>
                                         </af:showDetailItem>
                                         <af:showDetailItem text="Impacted NMQs" styleClass="AFStretchWidth"
-                                                           id="sdi4">
+                                                           id="sdi4"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.impactedNMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_NMQ_Y.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_NMQ_Y.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_NMQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -440,7 +448,8 @@
                                                 </af:column>
                                             </af:table>
                                         </af:showDetailItem>
-                                        <af:showDetailItem text="Impacted SMQs" id="sdi2" inlineStyle="height:335px;">
+                                        <af:showDetailItem text="Impacted SMQs" id="sdi2" inlineStyle="height:335px;"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.impactedSMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_MQ_Y.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_MQ_Y.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_MQ_Y.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -474,7 +483,8 @@
                                                 </af:column>
                                             </af:table>
                                         </af:showDetailItem>
-                                        <af:showDetailItem text="Non-impacted CMQs" id="sdi6" styleClass="AFStretchWidth">
+                                        <af:showDetailItem text="Non-impacted CMQs" id="sdi6" styleClass="AFStretchWidth"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.nonImpactedCMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_CMQ_N.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_CMQ_N.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_CMQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -541,7 +551,8 @@
                                             </af:table>
                                         </af:showDetailItem>
                                         <af:showDetailItem text="Non-impacted NMQs"
-                                                           id="sdi3" styleClass="AFStretchWidth">
+                                                           id="sdi3" styleClass="AFStretchWidth"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.nonImpactedNMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_NMQ_N.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_NMQ_N.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_NMQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -576,7 +587,8 @@
                                                 </af:column>
                                             </af:table>
                                         </af:showDetailItem>
-                                        <af:showDetailItem text="Non-impacted SMQs" id="sdi1">
+                                        <af:showDetailItem text="Non-impacted SMQs" id="sdi1"
+                                                           disclosureListener="#{pageFlowScope.ImpactAnalysisBean.nonImpactedSMQSelection}">
                                             <af:table value="#{bindings.ImpactSearchListVO_MQ_N.collectionModel}"
                                                       var="row" rows="#{bindings.ImpactSearchListVO_MQ_N.rangeSize}"
                                                       emptyText="#{bindings.ImpactSearchListVO_MQ_N.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -703,8 +715,9 @@
                                         </f:facet>
                                             <f:facet name="toolbar">
                                                 <af:toolbar id="t4" binding="#{ImpactAnalysisUIBean.cntrlImpactLeftToolbar}">
-                                                <af:commandToolbarButton text="Select MQ" id="cb5" partialSubmit="true" icon="/image/table_go.png">
-                                                        <af:showPopupBehavior popupId="::p3" triggerType="click"/>
+                                                <af:commandToolbarButton text="Select MQ" id="cb5" partialSubmit="true" icon="/image/table_go.png"
+                                                                         actionListener="#{pageFlowScope.ImpactAnalysisBean.openSelectMQPopup}">
+                                                        <!--<af:showPopupBehavior popupId="::p3" triggerType="click"/>-->
                                                     </af:commandToolbarButton>
                                                 <af:commandToolbarButton text="Export Displayed" icon="/image/EXCEL.png" id="ctb12"
                                                                          binding="#{ImpactAnalysisUIBean.cntrlExportDisplayedButtonLeft}" disabled="true" rendered="false">

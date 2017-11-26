@@ -110,10 +110,12 @@
                                                  binding="#{pageFlowScope.NMQWizardSearchBean.ctrlProducts}"
                                                  value="#{pageFlowScope.NMQWizardSearchBean.productList}"
                                                  labelStyle="white-space:nowrap" selectAllVisible="false"
-                                                 contentStyle="color:#000000;" inlineStyle="margin-left: 25px;">
+                                                 contentStyle="color:#000000;" inlineStyle="margin-left: 25px;"
+                                                 partialTriggers="soc15">
                               <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                           var="row">
-                                <f:selectItem id="groups" itemLabel="#{row.longValue}" itemValue="#{row.shortVal}"/>
+                                <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"
+                                              rendered="#{!(row.shortVal eq 'STANDARD' and UserBean.currentMenu eq 'UPDATE_NMQ' and pageFlowScope.NMQWizardSearchBean.paramExtension eq 'CMQ')}"/>
                               </af:forEach>
                             </af:selectManyChoice>
                           </af:gridCell>

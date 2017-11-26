@@ -39,6 +39,7 @@ import oracle.adf.share.ADFContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTreeTable;
+import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
@@ -47,6 +48,7 @@ import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.dnd.DnDAction;
 import oracle.adf.view.rich.event.DialogEvent;
 import oracle.adf.view.rich.event.DropEvent;
+import oracle.adf.view.rich.event.ItemEvent;
 import oracle.adf.view.rich.event.PopupFetchEvent;
 
 import oracle.binding.OperationBinding;
@@ -56,6 +58,7 @@ import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
+import org.apache.myfaces.trinidad.event.DisclosureEvent;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -122,6 +125,11 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private String searchTermStr;
     private boolean showPrevVerCurrentImpactedOnly;
     private boolean showPrevVerFutureImpactedOnly;
+    private RichSelectManyChoice productComponent;
+    private RichSelectOneChoice stateComponent;
+    private RichSelectOneChoice statusComponent;
+    private RichInputText termComponent;
+    private RichInputText termCodeComponent;
 
     public void setHints(RichPopup.PopupHints hints) {
         this.hints = hints;
@@ -1755,4 +1763,329 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         
         return workbook;
     }
+
+    public void impactedCMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_CMQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
+    }
+
+    public void impactedNMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_NMQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
+    }
+
+    public void impactedSMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_MQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
+    }
+
+    public void nonImpactedCMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_CMQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
+    }
+
+    public void nonImpactedNMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_NMQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
+    }
+
+    public void nonImpactedSMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeImpactSearchListVO_MQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
+    }
+
+    public void setProductComponent(RichSelectManyChoice productComponent) {
+        this.productComponent = productComponent;
+    }
+
+    public RichSelectManyChoice getProductComponent() {
+        return productComponent;
+    }
+
+    public void setStateComponent(RichSelectOneChoice stateComponent) {
+        this.stateComponent = stateComponent;
+    }
+
+    public RichSelectOneChoice getStateComponent() {
+        return stateComponent;
+    }
+
+    public void setStatusComponent(RichSelectOneChoice statusComponent) {
+        this.statusComponent = statusComponent;
+    }
+
+    public RichSelectOneChoice getStatusComponent() {
+        return statusComponent;
+    }
+
+    public void setTermComponent(RichInputText termComponent) {
+        this.termComponent = termComponent;
+    }
+
+    public RichInputText getTermComponent() {
+        return termComponent;
+    }
+
+    public void setTermCodeComponent(RichInputText termCodeComponent) {
+        this.termCodeComponent = termCodeComponent;
+    }
+
+    public RichInputText getTermCodeComponent() {
+        return termCodeComponent;
+    }
+
+    public void openSelectMQPopup(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactSearch");
+        ob.getParamsMap().put("searchLevelStr", null);
+        ob.getParamsMap().put("searchTermStr", null);
+        ob.getParamsMap().put("searchCodeStr", null);
+        ob.getParamsMap().put("status", "%");
+        ob.getParamsMap().put("state", "%");
+        ob.getParamsMap().put("searchProduct", null);
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.getImpactAnalysisUIBean().getImpactSearchPopUp().show(hints);      
+    }
+
+    public void previousImpactedCMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_CMQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
+    }
+
+    public void previousImpactedNMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_NMQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
+    }
+
+    public void previousImpactedSMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_MQ_Y");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
+    }
+
+    public void previousNonImpactedCMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_CMQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
+    }
+
+    public void previousNonImpactedNMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_NMQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
+    }
+
+    public void previousNonImpactedSMQSelection(DisclosureEvent disclosureEvent) {
+        System.out.println("Start Exec OnSelectMQPopupCancel() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_MQ_N");
+        ob.execute();
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
+    }
+
+    public void openPreviousSelectMQPopup(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSearch1");
+        ob.getParamsMap().put("searchLevelStr", null);
+        ob.getParamsMap().put("searchTermStr", null);
+        ob.getParamsMap().put("searchCodeStr", null);
+        ob.getParamsMap().put("status", "%");
+        ob.getParamsMap().put("state", "%");
+        ob.getParamsMap().put("searchProduct", null);
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+        
+        this.setProductList(null);
+        this.setSearchStateStr("%");
+        this.setSearchStatusStr("%");
+        this.setSearchTermStr(null);
+        this.setSearchCodeStr(null);
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        
+        RichPopup.PopupHints hints = new RichPopup.PopupHints();
+        this.getImpactAnalysisUIBean().getImpactSearchPopUp().show(hints);  
+    }
+    
 }

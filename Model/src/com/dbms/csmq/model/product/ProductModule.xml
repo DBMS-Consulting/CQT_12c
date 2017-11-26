@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ProductModule"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.product.ProductModuleImpl"
   DefClass="com.dbms.csmq.model.product.ProductModuleDefImpl">
@@ -14,7 +14,8 @@
   </DesignTime>
   <ViewUsage
     Name="ViewObj_ProductList1"
-    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"/>
+    ViewObjectName="com.dbms.csmq.model.product.ProductListVO"
+    FetchSize="200"/>
   <ViewUsage
     Name="ProductListByMQ1"
     ViewObjectName="com.dbms.csmq.model.product.ProductListByMQVO"/>

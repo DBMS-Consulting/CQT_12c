@@ -24,6 +24,71 @@ public class ImpactModuleClient extends ApplicationModuleImpl implements ImpactM
     }
 
 
+    public void ImpactAssesmentClearSelectMQ() {
+        Object _ret = this.riInvokeExportedMethod(this, "ImpactAssesmentClearSelectMQ", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_CMQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_CMQ_N", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_CMQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_CMQ_Y", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_MQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_MQ_N", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_MQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_MQ_Y", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_NMQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_NMQ_N", null, null);
+        return;
+    }
+
+    public void executeImpactSearchListVO_NMQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executeImpactSearchListVO_NMQ_Y", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_CMQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_CMQ_N", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_CMQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_CMQ_Y", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_MQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_MQ_N", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_MQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_MQ_Y", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_NMQ_N() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_NMQ_N", null, null);
+        return;
+    }
+
+    public void executePreviousImpactSearchListVO_NMQ_Y() {
+        Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_NMQ_Y", null, null);
+        return;
+    }
+
     public void loadPrevVersionCurrentMQDetails(Long dictContentId, Boolean showImpactedOnly) {
         Object _ret =
             this.riInvokeExportedMethod(this, "loadPrevVersionCurrentMQDetails",
@@ -75,6 +140,11 @@ public class ImpactModuleClient extends ApplicationModuleImpl implements ImpactM
                                                        "java.lang.String", "java.lang.String", "java.lang.String" },
                                         new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
                                                        searchProduct });
+        return;
+    }
+
+    public void previousImpactVersionClearSelectMQ() {
+        Object _ret = this.riInvokeExportedMethod(this, "previousImpactVersionClearSelectMQ", null, null);
         return;
     }
 }

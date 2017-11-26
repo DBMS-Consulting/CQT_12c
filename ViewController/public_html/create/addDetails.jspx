@@ -107,12 +107,13 @@
                                                                  readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQProduct}"
                                                                  showRequired="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
                                                                  required="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}" contentStyle="color:#000000;width:130px;"
-                                                                 >
-                                                <af:selectItem id="si23" label="Standard" value="STANDARD"
-                                                               rendered="#{pageFlowScope.NMQWizardBean.isNMQ}"/>
+                                                                 partialTriggers="soc4">
+                                                <!--<af:selectItem id="si23" label="Standard" value="STANDARD"
+                                                               rendered="#{pageFlowScope.NMQWizardBean.isNMQ}"/>-->
                                                 <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                                             var="row">
-                                                    <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"/>
+                                                    <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"
+                                                                   rendered="#{!(row.shortVal eq 'STANDARD' and UserBean.currentMenu eq 'UPDATE_NMQ' and pageFlowScope.NMQWizardBean.currentExtension eq 'CMQ')}"/>
                                                 </af:forEach>                                                
                                             </af:selectManyChoice>   
                                             <af:inputText label="Product" id="it1" value="#{pageFlowScope.NMQWizardBean.currentProduct}"

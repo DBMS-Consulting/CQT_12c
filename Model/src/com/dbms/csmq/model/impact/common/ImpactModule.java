@@ -19,5 +19,33 @@ public interface ImpactModule extends ApplicationModule {
 
     void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
                                   String state, String searchProduct);
+
+    void ImpactAssesmentClearSelectMQ();
+
+    void executeImpactSearchListVO_CMQ_N();
+
+    void executeImpactSearchListVO_CMQ_Y();
+
+    void executeImpactSearchListVO_MQ_N();
+
+    void executeImpactSearchListVO_MQ_Y();
+
+    void executeImpactSearchListVO_NMQ_N();
+
+    void executeImpactSearchListVO_NMQ_Y();
+
+    void executePreviousImpactSearchListVO_CMQ_N();
+
+    void executePreviousImpactSearchListVO_CMQ_Y();
+
+    void executePreviousImpactSearchListVO_MQ_N();
+
+    void executePreviousImpactSearchListVO_MQ_Y();
+
+    void executePreviousImpactSearchListVO_NMQ_N();
+
+    void executePreviousImpactSearchListVO_NMQ_Y();
+
+    void previousImpactVersionClearSelectMQ();
 }
 
