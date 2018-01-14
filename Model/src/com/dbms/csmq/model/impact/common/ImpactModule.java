@@ -47,5 +47,41 @@ public interface ImpactModule extends ApplicationModule {
     void executePreviousImpactSearchListVO_NMQ_Y();
 
     void previousImpactVersionClearSelectMQ();
+
+    void onCurrentVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                     String state, String searchProduct);
+
+    void onCurrentVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                     String state, String searchProduct);
+
+    void onCurrentVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                        String status, String state, String searchProduct);
+
+    void onCurrentVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                        String status, String state, String searchProduct);
+
+    void onCurrentVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                        String status, String state, String searchProduct);
+
+    void onCurrentVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                     String state, String searchProduct);
+
+    void onPreviousVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                      String state, String searchProduct);
+
+    void onPreviousVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                      String state, String searchProduct);
+
+    void onPreviousVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                         String status, String state, String searchProduct);
+
+    void onPreviousVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                         String status, String state, String searchProduct);
+
+    void onPreviousVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                         String status, String state, String searchProduct);
+
+    void onPreviousVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
+                                      String state, String searchProduct);
 }
 
