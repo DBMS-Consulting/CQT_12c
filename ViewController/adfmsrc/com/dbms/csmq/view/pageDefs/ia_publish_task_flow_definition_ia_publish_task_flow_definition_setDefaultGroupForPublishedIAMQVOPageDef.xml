@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.2.1.12.24"
+                id="ia_publish_task_flow_definition_ia_publish_task_flow_definition_setDefaultGroupForPublishedIAMQVOPageDef"
+                Package="com.dbms.csmq.view.pageDefs" SkipValidation="true">
+  <parameters/>
+  <executables/>
+  <bindings>
+    <methodAction id="setDefaultGroupForPublishedIAMQVO" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="setDefaultGroupForPublishedIAMQVO" IsViewObjectMethod="false"
+                  DataControl="PublishModuleDataControl"
+                  InstanceName="bindings.setDefaultGroupForPublishedIAMQVO.dataControl.dataProvider">
+      <NamedData NDName="bindDefaultGroup" NDValue="#{CSMQBean.defaultMedDRAReleaseGroup}" NDType="java.lang.String"/>
+    </methodAction>
+  </bindings>
+</pageDefinition>

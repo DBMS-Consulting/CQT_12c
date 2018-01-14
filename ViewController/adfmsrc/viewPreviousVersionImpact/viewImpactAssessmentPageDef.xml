@@ -357,17 +357,6 @@
         <Item Value="LongValue"/>
       </ListDisplayAttrNames>
     </list>
-    <methodAction id="onPreviousVerImpactSearch1" RequiresUpdateModel="true" Action="invokeMethod"
-                  MethodName="onPreviousVerImpactSearch" IsViewObjectMethod="false"
-                  DataControl="ImpactModuleDataControl"
-                  InstanceName="bindings.onPreviousVerImpactSearch.dataControl.dataProvider">
-      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
-      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
-      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
-      <NamedData NDName="status" NDType="java.lang.String"/>
-      <NamedData NDName="state" NDType="java.lang.String"/>
-      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
-    </methodAction>
     <methodAction id="executePreviousImpactSearchListVO_CMQ_N" RequiresUpdateModel="true" Action="invokeMethod"
                   MethodName="executePreviousImpactSearchListVO_CMQ_N" IsViewObjectMethod="false"
                   DataControl="ImpactModuleDataControl"
@@ -392,5 +381,71 @@
                   MethodName="executePreviousImpactSearchListVO_MQ_Y" IsViewObjectMethod="false"
                   DataControl="ImpactModuleDataControl"
                   InstanceName="bindings.executePreviousImpactSearchListVO_MQ_Y.dataControl.dataProvider"/>
+    <methodAction id="onPreviousVerImpactCMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactCMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactCMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="onPreviousVerImpactNonCMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactNonCMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactNonCMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="onPreviousVerImpactNMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactNMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactNMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="onPreviousVerImpactSMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactSMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactSMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="onPreviousVerImpactNonNMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactNonNMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactNonNMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="onPreviousVerImpactNonSMQSearch" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="onPreviousVerImpactNonSMQSearch" IsViewObjectMethod="false"
+                  DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.onPreviousVerImpactNonSMQSearch.dataControl.dataProvider">
+      <NamedData NDName="searchLevelStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchTermStr" NDType="java.lang.String"/>
+      <NamedData NDName="searchCodeStr" NDType="java.lang.String"/>
+      <NamedData NDName="status" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDType="java.lang.String"/>
+      <NamedData NDName="searchProduct" NDType="java.lang.String"/>
+    </methodAction>
   </bindings>
 </pageDefinition>

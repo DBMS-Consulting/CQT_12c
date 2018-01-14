@@ -4,13 +4,14 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="PublishedMQVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false">
+  ComponentClass="com.dbms.csmq.model.publish.PublishedMQVOImpl">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -18,44 +19,27 @@
         ResId="com.dbms.csmq.model.publish.PublishedMQVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
-  <SQLQuery><![CDATA[SELECT
-          pc.dict_content_code       tms_code,
-          pc.term                    tms_name,
-          pc.created_by              tms_created_by,
-          l.short_name               level_name,
-          g.name                     Activation_Group
-   FROM nmat_state_designee_vw   s,
-        tms.tms_def_levels       l,
-        tms.tms_predict_groups   g,
-        tms.tms_predict_contents pc,
-        tms.tms_dict_contents    c
-    WHERE s.state in ('PUBLISHED')
-      AND s.dict_content_id = c.dict_content_id
-      AND l.def_level_id = c.def_level_id
-      AND c.dict_content_id = pc.predict_content_id
-      AND g.name = (select prop_value from nmat_properties where prop_name = 'DEFAULT_PUBLISH_RELEASE_GROUP')
-      AND g.predict_group_id = pc.predict_group_id
-      AND TO_CHAR(c.end_ts,'DD-MON-YYYY' ) = '15-AUG-3501'
-UNION
-   SELECT
-          pc.dict_content_code       tms_code,
-          pc.term                    tms_name,
-          pc.created_by              tms_created_by,
-          l.short_name               level_name,
-          g.name                     pending_group_name
-   FROM nmat_state_designee_vw    s,
-        tms.tms_def_levels        l,
-        tms.tms_predict_groups    g,
-        tms.tms_predict_contents  pc
-   WHERE s.state in ('PUBLISHED')
-      AND s.dict_content_id = pc.predict_content_id
-      AND l.def_level_id = pc.def_level_id
-      AND g.name =  (select prop_value from nmat_properties where prop_name = 'DEFAULT_PUBLISH_RELEASE_GROUP')
-      AND g.predict_group_id = pc.predict_group_id
-      AND NOT EXISTS
-         (SELECT 1 FROM tms.tms_dict_contents
-          WHERE dict_content_id = s.dict_content_id
-            AND TO_CHAR(end_ts,'DD-MON-YYYY') = '15-AUG-3501')]]></SQLQuery>
+  <Variable
+    Name="bindDefaultGroup"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="state"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[SELECT DICT_CONTENT_CODE tms_code,     
+        TERM tms_name,     
+        CREATED_BY tms_created_by,     
+  (SELECT NAME     
+  FROM TMS.TMS_DEF_LEVELS     
+  WHERE TMS.TMS_PREDICT_CONTENTS.DEF_LEVEL_ID = TMS.TMS_DEF_LEVELS.DEF_LEVEL_ID     
+  ) level_name,     
+  (SELECT NAME     
+  FROM TMS.TMS_PREDICT_GROUPS     
+  WHERE TMS.TMS_PREDICT_CONTENTS.PREDICT_GROUP_ID = TMS.TMS_PREDICT_GROUPS.PREDICT_GROUP_ID     
+  ) Activation_Group     
+FROM TMS.TMS_PREDICT_CONTENTS     
+WHERE PREDICT_CONTENT_ID in (select dict_nm from table (nmat_ui_pkg.f_contentid_term_array (:state,:bindDefaultGroup)))]]></SQLQuery>
   <ViewAttribute
     Name="TmsCode"
     IsUpdateable="false"

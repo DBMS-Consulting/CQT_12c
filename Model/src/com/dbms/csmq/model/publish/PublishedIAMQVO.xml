@@ -4,13 +4,14 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="PublishedIAMQVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false">
+  ComponentClass="com.dbms.csmq.model.publish.PublishedIAMQVOImpl">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -18,64 +19,28 @@
         ResId="com.dbms.csmq.model.publish.PublishedIAMQVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
-  <SQLQuery><![CDATA[SELECT pc.dict_content_code       tms_code,
-          pc.term                    tms_name,
-          pc.created_by              tms_created_by,
-          l.short_name               level_name,
-          g.name                     activation_group
-   FROM nmat_state_designee_vw   s,
-        nmat_properties          p,
-        tms.tms_def_levels       l,
-        tms.tms_predict_groups   g,
-        tms.tms_predict_contents pc,
-        tms.tms_dict_contents    c
-    WHERE s.state = 'PUBLISHED IA'
-      AND p.domain = 'TMS.RELEASE_GROUPS'
-      AND p.prop_name = 'DEFAULT_MEDDRA_RELEASE'
-      AND UPPER(g.name) = UPPER(p.prop_value)
-      AND s.dict_content_id = c.dict_content_id
-      AND l.def_level_id = c.def_level_id
-      AND c.dict_content_id = pc.predict_content_id
-      AND pc.predict_group_id = g.predict_group_id
-      AND TO_CHAR(c.end_ts,'DD-MON-YYYY') = '15-AUG-3501'
-UNION
-   SELECT c.dict_content_code        tms_code,
-          c.term                     tms_name,
-          c.created_by               tms_created_by,
-          l.short_name               level_name,
-          NULL                       activation_group
-   FROM nmat_state_designee_vw s,
-        tms.tms_def_levels     l,
-        tms.tms_dict_contents  c
-    WHERE s.state = 'PUBLISHED IA'
-      AND s.dict_content_id = c.dict_content_id
-      AND l.def_level_id = c.def_level_id
-      AND TO_CHAR(c.end_ts,'DD-MON-YYYY') = '15-AUG-3501'
-      AND NOT EXISTS
-         (SELECT 1 FROM tms.tms_predict_contents
-          WHERE predict_content_id = s.dict_content_id)
-UNION
-  SELECT pc.dict_content_code       tms_code,
-          pc.term                    tms_name,
-          pc.created_by              tms_created_by,
-          l.short_name               level_name,
-          g.name                     activation_group
-   FROM nmat_state_designee_vw    s,
-        nmat_properties           p,
-        tms.tms_def_levels        l,
-        tms.tms_predict_groups    g,
-        tms.tms_predict_contents  pc
-   WHERE s.state = 'PUBLISHED IA'
-      AND p.domain = 'TMS.RELEASE_GROUPS'
-      AND p.prop_name = 'DEFAULT_MEDDRA_RELEASE'
-      AND UPPER(g.name) = UPPER(p.prop_value)
-      AND s.dict_content_id = pc.predict_content_id
-      AND l.def_level_id = pc.def_level_id
-      AND g.predict_group_id = pc.predict_group_id
-      AND NOT EXISTS
-         (SELECT 1 FROM tms.tms_dict_contents
-          WHERE dict_content_id = s.dict_content_id
-            AND TO_CHAR(end_ts,'DD-MON-YYYY') = '15-AUG-3501')]]></SQLQuery>
+  <Variable
+    Name="bindDefaultGroup"
+    Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="state"
+    Kind="where"
+    Type="java.lang.String"/>
+  <SQLQuery><![CDATA[SELECT c.dict_content_code        tms_code,   
+          c.term                  tms_name,   
+          c.created_by            tms_created_by,   
+          l.name                  level_name,   
+          NULL                    activation_group   
+   FROM nmat_state_designee_vw s,   
+        tms.tms_def_levels     l,   
+        tms.tms_dict_contents  c   
+    WHERE s.state = 'PUBLISHED IA'   
+      AND s.dict_content_id = c.dict_content_id   
+      AND l.def_level_id = c.def_level_id   
+      AND TO_CHAR(c.end_ts,'DD-MON-YYYY') = '15-AUG-3501'   
+      AND  s.dict_content_id in    
+         (select dict_nm from table (nmat_ui_pkg.f_contentid_term_array (:state,:bindDefaultGroup)))]]></SQLQuery>
   <ViewAttribute
     Name="TmsCode"
     IsUpdateable="false"

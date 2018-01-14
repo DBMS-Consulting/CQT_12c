@@ -113,10 +113,142 @@ public class ImpactModuleClient extends ApplicationModuleImpl implements ImpactM
         return;
     }
 
+    public void onCurrentVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                            String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactCMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onCurrentVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                            String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactNMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onCurrentVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                               String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactNonCMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onCurrentVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                               String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactNonNMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onCurrentVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                               String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactNonSMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onCurrentVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                            String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onCurrentVerImpactSMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
     public void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
                                          String status, String state, String searchProduct) {
         Object _ret =
             this.riInvokeExportedMethod(this, "onCurrentVerImpactSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                             String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactCMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                             String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactNMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                                String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactNonCMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                                String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactNonNMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                                String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactNonSMQSearch",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
+                                                       "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,
+                                                       searchProduct });
+        return;
+    }
+
+    public void onPreviousVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr,
+                                             String status, String state, String searchProduct) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "onPreviousVerImpactSMQSearch",
                                         new String[] { "java.lang.String", "java.lang.String", "java.lang.String",
                                                        "java.lang.String", "java.lang.String", "java.lang.String" },
                                         new Object[] { searchLevelStr, searchTermStr, searchCodeStr, status, state,

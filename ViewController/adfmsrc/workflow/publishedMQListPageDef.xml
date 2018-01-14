@@ -5,6 +5,7 @@
   <executables>
     <variableIterator id="variables"/>
     <iterator Binds="PublishedMQVO1" RangeSize="25" DataControl="PublishModuleDataControl" id="PublishedMQVO1Iterator"/>
+    <!--<invokeAction Binds="ExecuteWithParams" id="Invoke_EWP" Refresh="renderModel"/>-->
   </executables>
   <bindings>
     <tree IterBinding="PublishedMQVO1Iterator" id="PublishedMQVO1">
@@ -18,5 +19,11 @@
         </AttrNames>
       </nodeDefinition>
     </tree>
+    <action IterBinding="PublishedMQVO1Iterator" id="ExecuteWithParams"
+            InstanceName="PublishModuleDataControl.PublishedMQVO1" DataControl="PublishModuleDataControl"
+            RequiresUpdateModel="true" Action="executeWithParams">
+      <NamedData NDName="bindDefaultGroup" NDValue="#{CSMQBean.defaultPublishReleaseGroup}" NDType="java.lang.String"/>
+      <NamedData NDName="state" NDValue="Published" NDType="java.lang.String"/>
+    </action>
   </bindings>
 </pageDefinition>

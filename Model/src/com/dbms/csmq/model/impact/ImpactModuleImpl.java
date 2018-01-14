@@ -194,6 +194,125 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         return (ViewObjectImpl) findViewObject("PreviousVerImpactSearchListVO1");
     }
 
+    
+    public void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+//        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
+//                                  searchCodeStr, status, state, searchProduct);
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "CMQ", "Y");
+//        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
+//                                  searchCodeStr, status, state, searchProduct);
+//        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
+//                                  searchCodeStr, status, state, searchProduct);
+//        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
+//                                  searchCodeStr, status, state, searchProduct);
+//        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
+//                                  searchCodeStr, status, state, searchProduct);
+        //System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+        public void onCurrentVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "CMQ", "Y");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+            exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
+                                      searchCodeStr, status, state, searchProduct, "NMQ", "Y");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+            exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
+                                      searchCodeStr, status, state, searchProduct, "SMQ", "Y");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+            exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
+                                      searchCodeStr, status, state, searchProduct, "CMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+            exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
+                                      searchCodeStr, status, state, searchProduct, "NMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void onCurrentVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+            exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
+                                      searchCodeStr, status, state, searchProduct, "SMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    }
+    
+    public void ImpactAssesmentClearSelectMQ(){
+        getImpactSearchListVO_CMQ_N().executeEmptyRowSet();
+        getImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
+        getImpactSearchListVO_MQ_N().executeEmptyRowSet();
+        getImpactSearchListVO_MQ_Y().executeEmptyRowSet();
+        getImpactSearchListVO_NMQ_N().executeEmptyRowSet();
+        getImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
+    }
+    
+    public void previousImpactVersionClearSelectMQ(){
+        getPreviousVerImpactSearchListVO_CMQ_N().executeEmptyRowSet();
+        getPreviousVerImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
+        getPreviousVerImpactSearchListVO_MQ_N().executeEmptyRowSet();
+        getPreviousVerImpactSearchListVO_MQ_Y().executeEmptyRowSet();
+        getPreviousVerImpactSearchListVO_NMQ_N().executeEmptyRowSet();
+        getPreviousVerImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
+    }
+    
+    public void executeImpactSearchListVO_CMQ_N(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), null, null,null, "%", "%", null, "CMQ", "N");
+    }
+    
+    public void executeImpactSearchListVO_CMQ_Y(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(),  null, null,null, "%", "%", null, "CMQ", "Y");
+    }
+    
+    public void executeImpactSearchListVO_MQ_N(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(),  null, null,null, "%", "%", null, "SMQ", "N");
+    }
+    
+    public void executeImpactSearchListVO_MQ_Y(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(),  null, null,null, "%", "%", null, "SMQ", "Y");
+    }
+    
+    public void executeImpactSearchListVO_NMQ_N(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(),  null, null,null, "%", "%", null, "NMQ", "N");
+    }
+    
+    public void executeImpactSearchListVO_NMQ_Y(){
+        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(),  null, null,null, "%", "%", null, "NMQ", "Y");
+    }
+    
     public void onPreviousVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr) {
         System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
                            ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
@@ -230,100 +349,84 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
-    public void onCurrentVerImpactSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+    public void onPreviousVerImpactCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
         System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
                            ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
-                                  searchCodeStr, status, state, searchProduct);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "CMQ", "Y");
         System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
-    public void ImpactAssesmentClearSelectMQ(){
-        getImpactSearchListVO_CMQ_N().executeEmptyRowSet();
-        getImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
-        getImpactSearchListVO_MQ_N().executeEmptyRowSet();
-        getImpactSearchListVO_MQ_Y().executeEmptyRowSet();
-        getImpactSearchListVO_NMQ_N().executeEmptyRowSet();
-        getImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
+    public void onPreviousVerImpactNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+        
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "NMQ", "Y");
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
-    public void previousImpactVersionClearSelectMQ(){
-        getPreviousVerImpactSearchListVO_CMQ_N().executeEmptyRowSet();
-        getPreviousVerImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
-        getPreviousVerImpactSearchListVO_MQ_N().executeEmptyRowSet();
-        getPreviousVerImpactSearchListVO_MQ_Y().executeEmptyRowSet();
-        getPreviousVerImpactSearchListVO_NMQ_N().executeEmptyRowSet();
-        getPreviousVerImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
+    public void onPreviousVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_Y(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "SMQ", "Y");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
-    public void executeImpactSearchListVO_CMQ_N(){
-        getImpactSearchListVO_CMQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_N(), null, null,null, "%", "%", null);
+    public void onPreviousVerImpactNonCMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "CMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
+    } 
+    
+    public void onPreviousVerImpactNonNMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "NMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
-    public void executeImpactSearchListVO_CMQ_Y(){
-        getImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_CMQ_Y(),  null, null,null, "%", "%", null);
-    }
-    
-    public void executeImpactSearchListVO_MQ_N(){
-        getImpactSearchListVO_MQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_N(),  null, null,null, "%", "%", null);
-    }
-    
-    public void executeImpactSearchListVO_MQ_Y(){
-        getImpactSearchListVO_MQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_MQ_Y(),  null, null,null, "%", "%", null);
-    }
-    
-    public void executeImpactSearchListVO_NMQ_N(){
-        getImpactSearchListVO_NMQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_N(),  null, null,null, "%", "%", null);
-    }
-    
-    public void executeImpactSearchListVO_NMQ_Y(){
-        getImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getImpactSearchListVO_NMQ_Y(),  null, null,null, "%", "%", null);
+    public void onPreviousVerImpactNonSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
+        System.out.println(" Starts executing onPreviousVerImpactSearch() searchLevelStr=" + searchLevelStr +
+                           ";; searchTermStr=" + searchTermStr + ":; searchCodeStr=" + searchCodeStr);
+
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_N(), searchLevelStr, searchTermStr,
+                                  searchCodeStr, status, state, searchProduct, "SMQ", "N");
+
+        System.out.println(" End of execution onPreviousVerImpactSearch() -------------------");
     }
     
     public void executePreviousImpactSearchListVO_CMQ_N(){
-        getPreviousVerImpactSearchListVO_CMQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_N(), null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_N(), null, null,null, "%", "%", null, "CMQ", "N");
     }
     
     public void executePreviousImpactSearchListVO_CMQ_Y(){
-        getPreviousVerImpactSearchListVO_CMQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_Y(),  null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_CMQ_Y(),  null, null,null, "%", "%", null, "CMQ", "Y");
     }
     
     public void executePreviousImpactSearchListVO_MQ_N(){
-        getPreviousVerImpactSearchListVO_MQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_N(),  null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_N(),  null, null,null, "%", "%", null, "SMQ", "N");
     }
     
     public void executePreviousImpactSearchListVO_MQ_Y(){
-        getPreviousVerImpactSearchListVO_MQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_Y(),  null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_MQ_Y(),  null, null,null, "%", "%", null, "SMQ", "Y");
     }
     
     public void executePreviousImpactSearchListVO_NMQ_N(){
-        getPreviousVerImpactSearchListVO_NMQ_N().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_N(),  null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_N(),  null, null,null, "%", "%", null, "NMQ", "N");
     }
     
     public void executePreviousImpactSearchListVO_NMQ_Y(){
-        getPreviousVerImpactSearchListVO_NMQ_Y().executeEmptyRowSet();
-        exceuteCurrImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_Y(),  null, null,null, "%", "%", null);
+        exceutePrevImpactSearchVC(getPreviousVerImpactSearchListVO_NMQ_Y(),  null, null,null, "%", "%", null, "NMQ", "Y");
     }
     
     private void exceutePrevImpactSearchVC(ViewObjectImpl previousVerImpactSearchListVO, String searchLevelStr,
@@ -373,6 +476,45 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
     }
     
+    private void exceutePrevImpactSearchVC(ViewObjectImpl previousVerImpactSearchListVO, String searchLevelStr,
+                                           String searchTermStr, String searchCodeStr, String status, String state, String searchProduct, String mType, String showImpact) {
+        boolean isProductSearched = false;
+        String productList = "";
+        if((searchProduct != null) && (!"[]".equalsIgnoreCase(searchProduct))){
+        int length = searchProduct.length();
+        String productString = searchProduct.substring(1, length-1);
+        List<String> list = Arrays.asList(productString.split("\\s*,\\s*"));
+        int count = 0;
+        int listCount = list.size();
+        for(String item : list){
+            count++;
+            isProductSearched = true;
+            if(listCount != count){
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%'");   
+            }
+        }
+        }
+        previousVerImpactSearchListVO.setWhereClause(null);
+        previousVerImpactSearchListVO.setWhereClauseParams(null);
+        previousVerImpactSearchListVO.applyViewCriteria(null);
+        if(isProductSearched){
+        previousVerImpactSearchListVO.setWhereClause(productList);
+        }
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("mqType", mType);
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("showImpact", showImpact);
+        ViewCriteria vc = previousVerImpactSearchListVO.getViewCriteria("PreviousVerImpactSearchListVOCriteria");
+        previousVerImpactSearchListVO.applyViewCriteria(vc);
+        previousVerImpactSearchListVO.executeQuery();
+        System.out.println("exceutePrevImpactSearchVC() QUERY --> " + previousVerImpactSearchListVO.getQuery());
+    }
+    
     private void exceuteCurrImpactSearchVC(ViewObjectImpl currentVerImpactSearchListVO, String searchLevelStr,
                                            String searchTermStr, String searchCodeStr, String status, String state, String searchProduct) {
         boolean isProductSearched = false;
@@ -403,6 +545,45 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        ViewCriteria vc = currentVerImpactSearchListVO.getViewCriteria("CurrentVerImpactSearchListVOCriteria");
+        currentVerImpactSearchListVO.applyViewCriteria(vc);
+        currentVerImpactSearchListVO.executeQuery();
+        System.out.println("exceutePrevImpactSearchVC() QUERY --> " + currentVerImpactSearchListVO.getQuery());
+    }
+    
+    private void exceuteCurrImpactSearchVC(ViewObjectImpl currentVerImpactSearchListVO, String searchLevelStr,
+                                           String searchTermStr, String searchCodeStr, String status, String state, String searchProduct, String mType, String showImpact) {
+        boolean isProductSearched = false;
+        String productList = "";
+        if((searchProduct != null) && (!"[]".equalsIgnoreCase(searchProduct))){
+        int length = searchProduct.length();
+        String productString = searchProduct.substring(1, length-1);
+        List<String> list = Arrays.asList(productString.split("\\s*,\\s*"));
+        int count = 0;
+        int listCount = list.size();
+        for(String item : list){
+            count++;
+            isProductSearched = true;
+            if(listCount != count){
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%'");   
+            }
+        }
+        }
+        currentVerImpactSearchListVO.setWhereClause(null);
+        currentVerImpactSearchListVO.setWhereClauseParams(null);
+        currentVerImpactSearchListVO.applyViewCriteria(null);
+        if(isProductSearched){
+        currentVerImpactSearchListVO.setWhereClause(productList);
+        }
+        //currentVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("mqType", mType);
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("showImpact", showImpact);
         ViewCriteria vc = currentVerImpactSearchListVO.getViewCriteria("CurrentVerImpactSearchListVOCriteria");
         currentVerImpactSearchListVO.applyViewCriteria(vc);
         currentVerImpactSearchListVO.executeQuery();

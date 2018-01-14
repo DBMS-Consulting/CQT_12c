@@ -63,6 +63,14 @@
           <name>User</name>
           <display-name>User</display-name>
         </role>
+        <role>
+          <name>TMS_NMAT_MQM</name>
+          <display-name>TMS_NMAT_MQM</display-name>
+        </role>
+        <role>
+          <name>TMS_NMAT_REQUESTOR</name>
+          <display-name>TMS_NMAT_REQUESTOR</display-name>
+        </role>
       </roles>
     </realm>
   </jazn-realm>
@@ -92,6 +100,10 @@
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
                 <name>NMAT_REQUESTOR</name>
+              </member>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
+                <name>TMS_NMAT_MQM</name>
               </member>
             </members>
           </app-role>
@@ -141,6 +153,10 @@
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
                 <name>TEST_MQM</name>
+              </member>
+              <member>
+                <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
+                <name>TMS_NMAT_REQUESTOR</name>
               </member>
             </members>
           </app-role>
