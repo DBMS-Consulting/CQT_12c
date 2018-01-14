@@ -221,7 +221,8 @@
                                                                  value="#{pageFlowScope.ImpactAnalysisBean.productList}"
                                                                  labelStyle="white-space:nowrap"
                                                                  selectAllVisible="false" contentStyle="color:#000000;"
-                                                                 binding="#{pageFlowScope.ImpactAnalysisBean.productComponent}">
+                                                                 binding="#{pageFlowScope.ImpactAnalysisBean.productComponent}"
+                                                                 disabled="#{(pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_SMQ') or (pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_SMQ')}">
                                                 <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                                             var="row">
                                                     <f:selectItem id="groups" itemLabel="#{row.longValue}"
@@ -229,12 +230,51 @@
                                                 </af:forEach>
                                             </af:selectManyChoice>
                                             <af:spacer width="150" height="10" id="s18"/>
-                                                <af:commandButton text="Export Search" id="b11" icon="/image/EXCEL.png">
+                                            <af:panelGroupLayout id="pgl1" binding="#{pageFlowScope.ImpactAnalysisBean.buttonGroup}">
+                                                <af:commandButton text="Export Impacted CMQ Search" id="b11"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_CMQ'}">
                                                     <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                                                    filename="ImpactSearchReport.xls"
-                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReport1}"/>
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForImpactedCMQ}"/>
+                                                </af:commandButton>
+                                                <af:commandButton text="Export Impacted NMQ Search" id="cb4"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_NMQ'}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForImpactedNMQ}"/>
+                                                </af:commandButton>
+                                                <af:commandButton text="Export Impacted SMQ Search" id="cb6"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_SMQ'}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForImpactedSMQ}"/>
+                                                </af:commandButton>
+                                                <af:commandButton text="Export Non-Impacted CMQ Search" id="cb7"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_CMQ'}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForNonImpactedCMQ}"/>
+                                                </af:commandButton>
+                                                <af:commandButton text="Export Non-Impacted NMQ Search" id="cb8"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_NMQ'}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForNonImpactedNMQ}"/>
+                                                </af:commandButton>
+                                                <af:commandButton text="Export Non-Impacted SMQ Search" id="cb9"
+                                                                  icon="/image/EXCEL.png"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_SMQ'}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="ImpactSearchReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadSearchReportForNonImpactedSMQ}"/>
                                                 </af:commandButton>
                                             </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
                                             <af:spacer width="10" height="10" id="s22"/>
                                             <af:panelGroupLayout id="pgl8" layout="horizontal">
                                                 <af:selectOneChoice id="soc6" label="State"
@@ -269,12 +309,30 @@
                                                               value="#{pageFlowScope.ImpactAnalysisBean.searchCodeStr}"
                                                               binding="#{pageFlowScope.ImpactAnalysisBean.termCodeComponent}"/>
                                                 <af:spacer width="10" height="10" id="s14"/>
+                                            <af:panelGroupLayout id="pgl19" binding="#{pageFlowScope.ImpactAnalysisBean.searchButtonGroup}">
                                                 <af:commandButton text="Search" id="cb1" partialSubmit="true"
-                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onCurrImpartSearchAction}"/>
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchCMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_CMQ'}"/>
+                                                <af:commandButton text="Search" id="cb10" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchNMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_NMQ'}"/>
+                                                <af:commandButton text="Search" id="cb11" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchSMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'IMPACT_SMQ'}"/>
+                                                <af:commandButton text="Search" id="cb12" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchNonCMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_CMQ'}"/>
+                                                <af:commandButton text="Search" id="cb13" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchNonNMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_NMQ'}"/>
+                                                <af:commandButton text="Search" id="cb14" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpactAssesmentSearchNonSMQAction}"
+                                                                  rendered="#{pageFlowScope.ImpactAnalysisBean.currentImpactedDownloadFlat eq 'NON_IMPACT_SMQ'}"/>
                                             </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
                                             <af:spacer width="10" height="10" id="s15"/>
                                         </af:panelGroupLayout>
-                    <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;" partialTriggers="cb1">
+                    <af:panelTabbed id="pt2" inlineStyle="width:503px; height:381px;">
                         <af:showDetailItem text="Impacted CMQs" id="sdi5" styleClass="AFStretchWidth"
                                            disclosed="true"
                                            disclosureListener="#{pageFlowScope.ImpactAnalysisBean.impactedCMQSelection}">
@@ -287,7 +345,7 @@
                                       inlineStyle="height:335px;"
                                       rowBandingInterval="0" id="T_CMQ_Y"
                                       binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_CMQ_Y}"
-                                      columnStretching="column:c46" styleClass="AFStretchWidth">
+                                      columnStretching="column:c46" styleClass="AFStretchWidth" partialTriggers="::cb1">
                                 <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_Y.hints.Term.name}"
                                            sortable="false"
                                            headerText="Term"
@@ -353,7 +411,8 @@
                                       selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
                                       rowSelection="single" id="TBL_NMQ_Y" inlineStyle="height:335px;"
                                       styleClass="AFStretchWidth" columnStretching="column:c40"
-                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_Y}">
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_Y}"
+                                      partialTriggers="::cb10">
                                 <af:column headerText="Term" id="c40" filterable="true">
                                     <af:outputText value="#{row.Term}" id="ot42"/>
                                 </af:column>
@@ -388,7 +447,8 @@
                                       selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
                                       rowSelection="single" inlineStyle="height:335px;"
                                       styleClass="AFStretchWidth" columnStretching="column:c22"
-                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_Y}">
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_Y}"
+                                      partialTriggers="::cb11">
                                 <af:column headerText="Term" id="c22" filterable="true">
                                     <af:outputText value="#{row.Term}" id="ot30"/>
                                 </af:column>
@@ -426,7 +486,7 @@
                                       inlineStyle="height:335px;"
                                       columnStretching="column:c52"
                                       binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_CMQ_N}"
-                                      styleClass="AFStretchWidth">
+                                      styleClass="AFStretchWidth" partialTriggers="::cb12">
                                 <af:column sortProperty="#{bindings.ImpactSearchListVO_CMQ_N.hints.Term.name}"
                                            sortable="false"
                                            headerText="Term"
@@ -492,7 +552,8 @@
                                       selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
                                       rowSelection="single" id="TBL_NMQ_N" inlineStyle="height:335px;"
                                       styleClass="AFStretchWidth" columnStretching="column:c34"
-                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_N}">
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_NMQ_N}"
+                                      partialTriggers="::cb13">
                                 <af:column headerText="Term" id="c34" filterable="true">
                                     <af:outputText value="#{row.Term}" id="ot36"/>
                                 </af:column>
@@ -528,7 +589,8 @@
                                       selectionListener="#{pageFlowScope.ImpactAnalysisBean.viewRowSelected}"
                                       rowSelection="single" id="TBL_MQ_N" inlineStyle="height:335px;"
                                       styleClass="AFStretchWidth" columnStretching="column:c9"
-                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_N}">
+                                      binding="#{ImpactAnalysisUIBean.cntrlSearchResultsTBL_MQ_N}"
+                                      partialTriggers="::cb14">
                             <af:column  headerText="Term" id="c9" filterable="true">
                                 <af:outputText value="#{row.Term}" id="ot5"/>
                             </af:column>

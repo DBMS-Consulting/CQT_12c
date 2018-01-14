@@ -270,6 +270,22 @@ public class NMQWizardUIBean {
 
 
     public boolean saveDetails() {
+        Boolean productRequired = false;
+        productRequired = (Boolean)ADFUtils.evaluateEL("#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}");
+        if(productRequired && (nMQWizardBean.getProductListControl().getValue() == null)){
+            FacesMessage msg =
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product is required.", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return false;
+        }else if(productRequired && (nMQWizardBean.getProductListControl().getValue() != null)){
+            List productList = (List)nMQWizardBean.getProductListControl().getValue();
+            if(productList.size() == 0){
+                FacesMessage msg =
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product is required.", "");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                return false;
+            }
+        }
         ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.FALSE);
         ADFUtils.setEL("#{pageFlowScope.detailsFromTrain}", Boolean.FALSE);
         setCurrentDetailValuesFromUI();

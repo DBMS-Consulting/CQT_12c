@@ -44,7 +44,7 @@
                                     </af:commandButton>
                                     <af:spacer width="10" height="10" id="s3"/>
                                      <af:commandButton text="Export" id="cb2" rendered="true">
-                                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel" filename="ExportDeals.xls"
+                                     <af:fileDownloadActionListener contentType="application/vnd.ms-excel" filename="Promote-Approved-To-Published.xls"
                                                method="#{pageFlowScope.WorkflowBean.exportPromoteDownload}"/>
                                     </af:commandButton>
                                 </af:panelGroupLayout>

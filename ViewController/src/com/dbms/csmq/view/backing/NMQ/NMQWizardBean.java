@@ -10,6 +10,7 @@ import com.dbms.util.dml.DMLUtils;
 import java.math.BigDecimal;
 
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,6 +29,11 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import javax.sql.DataSource;
 
 import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
@@ -167,6 +173,7 @@ public class NMQWizardBean {
     private RichPopup addDetailsWarningPopup;
     private RichPopup infoNotesWarningPopup;
     private RichPopup addRelationsWarningPopup;
+    private final String dbUrlString = "jdbc/TMSDS";
 
     public NMQWizardBean() {           
         
@@ -807,22 +814,53 @@ public class NMQWizardBean {
    
     public void getDictionaryInfo() {
 
+//            String sql = "SELECT dict.short_name, dict.name, dict.description, s.def_detail_value VERSION FROM tms.tms_def_details    d, tms.tms_dict_info_hdrs h,                tms.tms_dict_info_strs s,                tms.tms_def_dictionaries dict           WHERE d.short_name               = '~DICTVER'             and dict.short_name = '" +this.currentFilterDictionaryShortName+ "'             AND h.dict_content_relation_id = dict.def_dictionary_id             AND d.def_detail_id            = h.def_detail_id AND h.dict_info_hdr_id = s.dict_info_hdr_id AND h.end_ts = TO_DATE(3000000,'J') AND s.end_ts = TO_DATE(3000000,'J')";
+//            PreparedStatement stmt = null;
+//            ResultSet rs = null;
+//            DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+//            if(dBTransaction != null){
+//            CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
+//                
+//            System.out.println("***** : " + sql);
+//            try {
+//                rs = cstmt.executeQuery();
+//                rs.next();
+//                this.activeDictionaryName =  rs.getString("Name");// Utils.getAsString(row, "Name");
+//                this.activeDictionaryVersion = rs.getString("Version");//Utils.getAsString(row, "Version");
+//                
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//            }
+//            dictionaryInfoFetched = true;
+        
+        
             String sql = "SELECT dict.short_name, dict.name, dict.description, s.def_detail_value VERSION FROM tms.tms_def_details    d, tms.tms_dict_info_hdrs h,                tms.tms_dict_info_strs s,                tms.tms_def_dictionaries dict           WHERE d.short_name               = '~DICTVER'             and dict.short_name = '" +this.currentFilterDictionaryShortName+ "'             AND h.dict_content_relation_id = dict.def_dictionary_id             AND d.def_detail_id            = h.def_detail_id AND h.dict_info_hdr_id = s.dict_info_hdr_id AND h.end_ts = TO_DATE(3000000,'J') AND s.end_ts = TO_DATE(3000000,'J')";
+            Connection conn = getConnection();
             PreparedStatement stmt = null;
             ResultSet rs = null;
-            DBTransaction dBTransaction = DMLUtils.getDBTransaction();
-            
-            CallableStatement cstmt = dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT);
+            if(conn != null){
                 
             System.out.println("***** : " + sql);
             try {
-                rs = cstmt.executeQuery();
+                stmt = conn.prepareCall(sql);
+                rs = stmt.executeQuery();
                 rs.next();
                 this.activeDictionaryName =  rs.getString("Name");// Utils.getAsString(row, "Name");
                 this.activeDictionaryVersion = rs.getString("Version");//Utils.getAsString(row, "Version");
                 
             } catch (SQLException e) {
                 e.printStackTrace();
+            }finally{
+                try {
+                    rs.close();
+                    stmt.close();
+                    conn.close();
+                } catch (SQLException sqle) {
+                    // TODO: Add catch code
+                    sqle.printStackTrace();
+                }
+            }
             }
             dictionaryInfoFetched = true;
 
@@ -1466,8 +1504,11 @@ public class NMQWizardBean {
 
         if (newList != null) {
             for (int i = 0; i < newList.size(); i++) {
-                int l = newList.size() - 1;
-                newString = newList.get(l).toString();
+                if(newList.size() > 0){
+                int index = newList.size() - 1;
+                if(newList.get(index) != null)
+                newString = newList.get(index).toString();
+                }
             }
 
             if (newString != null) {
@@ -1752,5 +1793,23 @@ public class NMQWizardBean {
         else{
             return "CANCEL";
         }
+    }
+    
+    private Connection getConnection(){
+        Connection dbConnection = null;
+        if (null != dbConnection){
+            return dbConnection;
+        }else {
+            try {
+                InitialContext initialContext = new InitialContext();
+                DataSource ds = (DataSource)initialContext.lookup(dbUrlString);
+                dbConnection = ds.getConnection();
+            } catch (NamingException e) {
+                        e.printStackTrace();
+            } catch (SQLException e) {
+                        e.printStackTrace();
+            }
+        }
+        return dbConnection;
     }
 }

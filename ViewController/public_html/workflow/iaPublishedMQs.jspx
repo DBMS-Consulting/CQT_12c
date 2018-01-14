@@ -20,7 +20,7 @@
                             <f:facet name="menuBar"/>
                             <f:facet name="toolbar">
                                 <af:commandButton text="#{viewcontrollerBundle.EXPORT}" id="cb1"
-                                                  icon="/image/EXCEL.png">
+                                                  icon="/image/EXCEL.png" partialSubmit="true">
                                     <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                                    filename="PublishedIAMQReport.xls"
                                                                    method="#{pageFlowScope.WorkflowBean.downloadReport}"/>
@@ -28,6 +28,8 @@
                             </f:facet>
                             <f:facet name="legend"/>
                             <f:facet name="info"/>
+                            <af:outputText value="#{pageFlowScope.WorkflowBean.runExecuteParams}" id="ot1"
+                                           visible="false"/>
                             <af:panelCollection id="pc1" styleClass="AFStretchWidth">
                                 <f:facet name="menus"/>
                                 <f:facet name="toolbar"/>

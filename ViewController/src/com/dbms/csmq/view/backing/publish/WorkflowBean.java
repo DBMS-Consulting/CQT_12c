@@ -72,6 +72,8 @@ import org.apache.poi.util.IOUtils;
 import java.util.Map;
 import java.util.HashMap;
 
+import oracle.binding.OperationBinding;
+
 public class WorkflowBean {
 
 
@@ -90,6 +92,8 @@ public class WorkflowBean {
     private int errorCount = 1;
     private RichCommandToolbarButton cntrlActivateButton;
     private RichInputText controlMQState;
+    
+    private String runExecuteParams;
 
     public String init() {
         //userBean.setCurrentMenuPath("Publish");
@@ -700,7 +704,7 @@ public class WorkflowBean {
             cellA7.setCellValue("Approved State");
             
             HSSFCell cellA8 = excelrow.createCell(1);
-            cellA8.setCellValue("Published State");
+            cellA8.setCellValue("Awaiting Published Confirmation");
             
             
             ViewObject view = dcIteratorBindings.getViewObject();
@@ -775,7 +779,7 @@ public class WorkflowBean {
             cellA7.setCellValue("Approved IA State");
             
             HSSFCell cellA8 = excelrow.createCell(1);
-            cellA8.setCellValue("Published IA State");
+            cellA8.setCellValue("Awaiting Published IA Confirmation");
             
             
             ViewObject view = dcIteratorBindings.getViewObject();
@@ -828,5 +832,18 @@ public class WorkflowBean {
             e.printStackTrace();
         }
 
+    }
+
+//    public void setRunExecuteParams(String runExecuteParams) {
+//        this.runExecuteParams = runExecuteParams;
+//    }
+
+    public String getRunExecuteParams() {
+            OperationBinding ob=BindingContext.getCurrent().getCurrentBindingsEntry().getOperationBinding("ExecuteWithParams");
+                ob.execute();
+                if(ob.getErrors().isEmpty()){
+                    // Successfully Executed
+                }
+        return runExecuteParams;
     }
 }

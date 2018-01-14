@@ -175,7 +175,7 @@ public class POIExportUtil {
         for (int i = 1; i < colSpan; i++) {
             row.createCell((short)i);
         }
-        if(label.length() >0){
+        if((label != null) && (label.length() >0)){
         row.setHeightInPoints((label.length()/100)*13 + 15); 
         HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
         cellStyle.setWrapText(true);
@@ -194,7 +194,7 @@ public class POIExportUtil {
         for (int i = 1; i < colSpan; i++) {
             row.createCell((short)i);
         }
-        if(label.length() >0){
+        if((label != null) && (label.length() >0)){
         row.setHeightInPoints((label.length()/100)*20 + 15); 
         HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
         cellStyle.setWrapText(true);

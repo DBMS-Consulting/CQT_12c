@@ -29,14 +29,22 @@ public class DMLUtils {
      * The method below is implemented from a Singleton Object for utilitarian purposes.
      */
     public static synchronized DBTransaction getDBTransaction() {
-        BindingContext   bc = BindingContext.getCurrent();
-        DataControl dc = bc.findDataControl("NMQModuleDataControl");
-        if(dc != null){
-            ADFUtils.setEL("#{sessionScope.bcContext}", dc);
+        DBTransaction dBTransaction = null;
+        try {
+            BindingContext bc = BindingContext.getCurrent();
+            DataControl dc = bc.findDataControl("NMQModuleDataControl");
+            if (dc != null) {
+                ADFUtils.setEL("#{sessionScope.bcContext}", dc);
+            }
+            dc = (DataControl) ADFUtils.evaluateEL("#{sessionScope.bcContext}");
+            if(dc != null){
+            ApplicationModuleImpl am = ((ApplicationModuleImpl) dc.getDataProvider());
+            dBTransaction = am.getDBTransaction();
+            }
+        } catch (Exception e) {
+            // TODO: Add catch code
+            e.printStackTrace();
         }
-        dc = (DataControl) ADFUtils.evaluateEL("#{sessionScope.bcContext}");
-        ApplicationModuleImpl am = ((ApplicationModuleImpl)(ApplicationModule)dc.getDataProvider());
-        DBTransaction dBTransaction = am.getDBTransaction();
         return dBTransaction;
     }
 

@@ -106,7 +106,7 @@
                                                                   visible="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
                                                                  readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQProduct}"
                                                                  showRequired="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}"
-                                                                 required="#{RenderingRulesBean.wizardDetailsRenderNMQProduct or pageFlowScope.NMQWizardBean.renderProduct}" contentStyle="color:#000000;width:130px;"
+                                                                 required="false" contentStyle="color:#000000;width:130px;"
                                                                  partialTriggers="soc4">
                                                 <!--<af:selectItem id="si23" label="Standard" value="STANDARD"
                                                                rendered="#{pageFlowScope.NMQWizardBean.isNMQ}"/>-->

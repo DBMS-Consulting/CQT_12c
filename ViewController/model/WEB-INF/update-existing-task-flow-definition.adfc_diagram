@@ -46,7 +46,7 @@
       <property
          name="description">&lt;html>&lt;p>&lt;b>addRelations&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="y">194.41817</property>
+         name="y">194.06758</property>
       <property
          name="page">/create/addRelations.jspx</property>
       <property
@@ -172,7 +172,7 @@
       from="View7"
       to="View4">
       <property
-         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,194.41817,L50</property>
+         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,193.717,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -180,7 +180,7 @@
       from="View4"
       to="View8">
       <property
-         name="sdm:polyPoints">R54,771.749,197.91817,835.27344,226.14127,L50</property>
+         name="sdm:polyPoints">R54,771.749,197.217,835.27344,226.14127,L50</property>
    </TrainFlow>
    <ControlFlowCase
       islink="true"
@@ -220,7 +220,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,771.749,190.91817,995.6709,97.79883,L58</property>
+         name="sdm:polyPoints">R46,771.749,190.217,995.6758,97.79883,L58</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -230,7 +230,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,294.5,88.74306,993.97546,76.79883,L34</property>
+         name="sdm:polyPoints">R46,294.5,88.74306,993.9873,76.79883,L34</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"

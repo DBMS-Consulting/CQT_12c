@@ -3,86 +3,86 @@
    <OverallProperties
       id="OverallProperties1">
       <property
-         name="y">338.8075</property>
-      <property
          name="x">91.5</property>
+      <property
+         name="y">338.8075</property>
    </OverallProperties>
    <MethodCall
       id="MethodCall2">
       <property
          name="activityId">init</property>
       <property
+         name="x">91.5</property>
+      <property
          name="start">true</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>init&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">171.10632</property>
       <property
-         name="x">91.5</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <View
       id="View3">
       <property
          name="activityId">promoteToPublished</property>
       <property
-         name="page">/workflow/promoteToPublished.jspx</property>
+         name="x">278.36523</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>promoteToPublished&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">163.45691</property>
+      <property
+         name="page">/workflow/promoteToPublished.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">163.45691</property>
-      <property
-         name="x">278.36523</property>
+         name="trainStop">true</property>
    </View>
    <MethodCall
       id="MethodCall5">
       <property
          name="activityId">clearMenu</property>
       <property
-         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
+         name="x">745.2637</property>
       <property
-         name="exceptionHandler">false</property>
+         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
          name="y">140.87549</property>
       <property
-         name="x">745.2637</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <TaskFlowReturn
       id="TaskFlowReturn6">
       <property
          name="activityId">cancelFlow</property>
       <property
-         name="finish">true</property>
+         name="x">907.2637</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>cancelFlow&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Return&lt;/p>&lt;p>Outcome:  cancelFlow&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">148.5249</property>
       <property
-         name="x">907.2637</property>
+         name="finish">true</property>
+      <property
+         name="exceptionHandler">false</property>
    </TaskFlowReturn>
    <View
       id="View7">
       <property
          name="activityId">demoteToDraft</property>
       <property
-         name="page">/workflow/demoteToDraft.jspx</property>
+         name="x">453.74707</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>demoteToDraft&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">117.92529</property>
+      <property
+         name="page">/workflow/demoteToDraft.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">117.92529</property>
-      <property
-         name="x">453.74707</property>
+         name="trainStop">true</property>
    </View>
    <TrainFlow
       islink="true"
@@ -137,17 +137,17 @@
       <property
          name="activityId">publishedMQList</property>
       <property
-         name="page">/workflow/publishedMQList.jspx</property>
+         name="x">564.0</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>publishedMQList&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">-9.402344</property>
+      <property
+         name="page">/workflow/publishedMQList.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">-9.402344</property>
-      <property
-         name="x">564.0</property>
+         name="trainStop">true</property>
    </View>
    <TrainFlow
       islink="true"

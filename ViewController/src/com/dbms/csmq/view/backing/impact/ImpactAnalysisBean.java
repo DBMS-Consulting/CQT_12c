@@ -42,6 +42,7 @@ import oracle.adf.view.rich.component.rich.data.RichTreeTable;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
+import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
 import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
@@ -130,6 +131,10 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private RichSelectOneChoice statusComponent;
     private RichInputText termComponent;
     private RichInputText termCodeComponent;
+    private String currentImpactedDownloadFlat;
+    private String previousImpactedDownloadFlag;
+    private RichPanelGroupLayout buttonGroup;
+    private RichPanelGroupLayout searchButtonGroup;
 
     public void setHints(RichPopup.PopupHints hints) {
         this.hints = hints;
@@ -1554,6 +1559,90 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         System.out.println("End of Exec onImpartSearchAction() ");
     }
     
+    public void onImpartSearchActionCMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactCMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpartSearchActionNMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactNMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpartSearchActionSMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpartSearchActionNonCMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactNonCMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpartSearchActionNonNMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactNonNMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpartSearchActionNonSMQ(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactNonSMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
     public void onCurrImpartSearchAction(ActionEvent actionEvent) {
         System.out.println("Start Exec onImpartSearchAction() ");
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
@@ -1568,10 +1657,82 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         System.out.println("End of Exec onImpartSearchAction() ");
     }
     
-    public void onImpactAssesmentSearchAction(ActionEvent actionEvent) {
+    public void onImpactAssesmentSearchCMQAction(ActionEvent actionEvent) {
         System.out.println("Start Exec onImpartSearchAction() ");
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactSearch");
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactCMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+
+    
+    public void onImpactAssesmentSearchNMQAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactNMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    
+    public void onImpactAssesmentSearchSMQAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactSMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpactAssesmentSearchNonCMQAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactNonCMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpactAssesmentSearchNonNMQAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactNonNMQSearch");
+        ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
+        ob.getParamsMap().put("searchTermStr", getSearchTermStr());
+        ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
+        ob.getParamsMap().put("status", getSearchStatusStr());
+        ob.getParamsMap().put("state", getSearchStateStr());
+        ob.getParamsMap().put("searchProduct", getProductList());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
+    
+    public void onImpactAssesmentSearchNonSMQAction(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("onCurrentVerImpactNonSMQSearch");
         ob.getParamsMap().put("searchLevelStr", getSearchLevelStr());
         ob.getParamsMap().put("searchTermStr", getSearchTermStr());
         ob.getParamsMap().put("searchCodeStr", getSearchCodeStr());
@@ -1638,15 +1799,15 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         return searchStatusStr;
     }
     
-    public void downloadSearchReport(FacesContext facesContext, OutputStream outputStream) {
+    public void downloadpreviousCMQReport(FacesContext facesContext, OutputStream outputStream) {
             try {
                 HSSFWorkbook workbook = new HSSFWorkbook();
                 workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
-                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
-                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
                 
                 workbook.write(outputStream);
                 outputStream.flush();
@@ -1655,14 +1816,179 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
             }
         }
     
-    public void downloadSearchReport1(FacesContext facesContext, OutputStream outputStream) {
+    public void downloadpreviousNMQReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+     //           workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+                   workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadpreviousSMQReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+              //  workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+                    workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadpreviousNonCMQReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+               // workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+                    workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                //
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadpreviousNonNMQReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+              // workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+                   workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadpreviousNonSMQReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_YIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","PreviousVerImpactSearchListVO_CMQ_NIterator", workbook);
+    //                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","PreviousVerImpactSearchListVO_NMQ_NIterator", workbook);
+                   workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","PreviousVerImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadSearchReportForImpactedCMQ(FacesContext facesContext, OutputStream outputStream) {
             try {
                 HSSFWorkbook workbook = new HSSFWorkbook();
                 workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReportForImpactedNMQ(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
                 workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+               // workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReportForImpactedSMQ(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
                 workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReportForNonImpactedCMQ(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
                 workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+                //workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+                //workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReportForNonImpactedNMQ(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+                //workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
                 workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+               // workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    public void downloadSearchReportForNonImpactedSMQ(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+//                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
                 workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
                 
                 workbook.write(outputStream);
@@ -1671,22 +1997,22 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 e.printStackTrace();
             }
         }
-    public void downloadSearchReport2(FacesContext facesContext, OutputStream outputStream) {
-            try {
-                HSSFWorkbook workbook = new HSSFWorkbook();
-                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
-                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
-                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
-                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
-                
-                workbook.write(outputStream);
-                outputStream.flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//    public void downloadSearchReport2(FacesContext facesContext, OutputStream outputStream) {
+//            try {
+//                HSSFWorkbook workbook = new HSSFWorkbook();
+//                workbook = createWorkBookTab("Impacted CMQs","Impacted CMQs Search Results","ImpactSearchListVO_CMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted NMQs","Impacted NMQs Search Results","ImpactSearchListVO_NMQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Impacted SMQs","Impacted SMQs Search Results","ImpactSearchListVO_MQ_YIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted CMQs","Non-impacted CMQs Search Results","ImpactSearchListVO_CMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted NMQs","Non-impacted NMQs Search Results","ImpactSearchListVO_NMQ_NIterator", workbook);
+//                workbook = createWorkBookTab("Non-impacted SMQs","Non-impacted SMQs Search Results","ImpactSearchListVO_MQ_NIterator", workbook);
+//                
+//                workbook.write(outputStream);
+//                outputStream.flush();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
     
     private HSSFWorkbook createWorkBookTab(String sheetName, String tableName, String iteratorName, HSSFWorkbook workbook){
 
@@ -1775,11 +2101,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "IMPACT_CMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
     }
 
@@ -1794,11 +2123,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "IMPACT_NMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
     }
 
@@ -1813,11 +2145,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "IMPACT_SMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
     }
 
@@ -1832,11 +2167,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "NON_IMPACT_CMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
     }
 
@@ -1851,11 +2189,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "NON_IMPACT_NMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
     }
 
@@ -1870,11 +2211,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.currentImpactedDownloadFlat = "NON_IMPACT_SMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
     }
 
@@ -1957,11 +2301,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "IMPACT_CMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
     }
 
@@ -1976,11 +2323,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "IMPACT_NMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
     }
 
@@ -1995,11 +2345,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "IMPACT_SMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
     }
 
@@ -2014,11 +2367,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "NON_IMPACT_CMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
     }
 
@@ -2033,11 +2389,14 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "NON_IMPACT_NMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
     }
 
@@ -2052,18 +2411,21 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         this.setSearchStatusStr("%");
         this.setSearchTermStr(null);
         this.setSearchCodeStr(null);
+        this.previousImpactedDownloadFlag = "NON_IMPACT_SMQ";
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getProductComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStateComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getStatusComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
     }
 
     public void openPreviousSelectMQPopup(ActionEvent actionEvent) {
         System.out.println("Start Exec onImpartSearchAction() ");
         DCBindingContainer bc = ADFUtils.getDCBindingContainer();
-        OperationBinding ob = bc.getOperationBinding("onPreviousVerImpactSearch1");
+        OperationBinding ob = bc.getOperationBinding("executePreviousImpactSearchListVO_CMQ_Y");
         ob.getParamsMap().put("searchLevelStr", null);
         ob.getParamsMap().put("searchTermStr", null);
         ob.getParamsMap().put("searchCodeStr", null);
@@ -2087,5 +2449,44 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         RichPopup.PopupHints hints = new RichPopup.PopupHints();
         this.getImpactAnalysisUIBean().getImpactSearchPopUp().show(hints);  
     }
-    
+
+    public void setCurrentImpactedDownloadFlat(String currentImpactedDownloadFlat) {
+        this.currentImpactedDownloadFlat = currentImpactedDownloadFlat;
+    }
+
+    public String getCurrentImpactedDownloadFlat() {
+        if(this.currentImpactedDownloadFlat == null){
+        return "IMPACT_CMQ";
+        }else{
+        return currentImpactedDownloadFlat;
+        }
+    }
+
+    public void setButtonGroup(RichPanelGroupLayout buttonGroup) {
+        this.buttonGroup = buttonGroup;
+    }
+
+    public RichPanelGroupLayout getButtonGroup() {
+        return buttonGroup;
+    }
+
+    public void setPreviousImpactedDownloadFlag(String previousImpactedDownloadFlag) {
+        this.previousImpactedDownloadFlag = previousImpactedDownloadFlag;
+    }
+
+    public String getPreviousImpactedDownloadFlag() {
+        if(this.previousImpactedDownloadFlag == null){
+        return "IMPACT_CMQ";   
+        }else{
+        return previousImpactedDownloadFlag;
+        }
+    }
+
+    public void setSearchButtonGroup(RichPanelGroupLayout searchButtonGroup) {
+        this.searchButtonGroup = searchButtonGroup;
+    }
+
+    public RichPanelGroupLayout getSearchButtonGroup() {
+        return searchButtonGroup;
+    }
 }

@@ -3,101 +3,101 @@
    <OverallProperties
       id="OverallProperties1">
       <property
-         name="y">266.5</property>
-      <property
          name="x">91.5</property>
+      <property
+         name="y">266.5</property>
    </OverallProperties>
    <TaskFlowReturn
       id="TaskFlowReturn2">
       <property
          name="activityId">cancelFlow</property>
       <property
-         name="finish">true</property>
+         name="x">766.2637</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>cancelFlow&lt;/b>&lt;/p>&lt;p>Activity Type:  Task Flow Return&lt;/p>&lt;p>Outcome:  cancelFlow&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">167.84097</property>
       <property
-         name="x">766.2637</property>
+         name="finish">true</property>
+      <property
+         name="exceptionHandler">false</property>
    </TaskFlowReturn>
    <View
       id="View3">
       <property
          name="activityId">demoteToDraft</property>
       <property
-         name="page">/workflow/ia_demoteToDraft.jspx</property>
+         name="x">453.74707</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>demoteToDraft&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">125.57471</property>
+      <property
+         name="page">/workflow/ia_demoteToDraft.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">125.57471</property>
-      <property
-         name="x">453.74707</property>
+         name="trainStop">true</property>
    </View>
    <MethodCall
       id="MethodCall4">
       <property
          name="activityId">clearMenu</property>
       <property
-         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
+         name="x">604.2637</property>
       <property
-         name="exceptionHandler">false</property>
+         name="description">&lt;html>&lt;p>&lt;b>clearMenu&lt;/b>&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
          name="y">160.19156</property>
       <property
-         name="x">604.2637</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <View
       id="View5">
       <property
          name="activityId">promoteToPublished</property>
       <property
-         name="page">/workflow/ia_promoteToPublished.jspx</property>
+         name="x">278.36523</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>promoteToPublished&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">91.149414</property>
+      <property
+         name="page">/workflow/ia_promoteToPublished.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">91.149414</property>
-      <property
-         name="x">278.36523</property>
+         name="trainStop">true</property>
    </View>
    <View
       id="View6">
       <property
          name="activityId">activate</property>
       <property
-         name="page">/workflow/ia_activate.jspx</property>
+         name="x">453.74707</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>activate&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">298.27588</property>
       <property
-         name="x">453.74707</property>
+         name="page">/workflow/ia_activate.jspx</property>
+      <property
+         name="exceptionHandler">false</property>
    </View>
    <MethodCall
       id="MethodCall7">
       <property
          name="activityId">init</property>
       <property
+         name="x">91.5</property>
+      <property
          name="start">true</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>init&lt;/b> (Default Activity)&lt;/p>&lt;p>Activity Type:  Method Call&lt;/p></property>
       <property
-         name="exceptionHandler">false</property>
-      <property
          name="y">98.79883</property>
       <property
-         name="x">91.5</property>
+         name="exceptionHandler">false</property>
    </MethodCall>
    <TrainFlow
       islink="true"
@@ -105,7 +105,7 @@
       from="View5"
       to="View3">
       <property
-         name="sdm:polyPoints">R50,319.36523,90.79883,412.74707,125.22412,L50</property>
+         name="sdm:polyPoints">R50,319.36523,90.79883,412.74707,121.72412,L46</property>
    </TrainFlow>
    <ControlFlowCase
       islink="true"
@@ -115,7 +115,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">T50,278.36523,36.79883,604.2637,105.84097,T50</property>
+         name="sdm:polyPoints">T50,278.36523,36.79883,607.7637,99.95871,T56</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -162,17 +162,17 @@
       <property
          name="activityId">iaPublishedMQs</property>
       <property
-         name="page">/workflow/iaPublishedMQs.jspx</property>
+         name="x">282.0</property>
       <property
          name="description">&lt;html>&lt;p>&lt;b>iaPublishedMQs&lt;/b>&lt;/p>&lt;p>Activity Type:  View&lt;/p></property>
       <property
-         name="trainStop">true</property>
+         name="y">244.59766</property>
+      <property
+         name="page">/workflow/iaPublishedMQs.jspx</property>
       <property
          name="exceptionHandler">false</property>
       <property
-         name="y">244.59766</property>
-      <property
-         name="x">282.0</property>
+         name="trainStop">true</property>
    </View>
    <TrainFlow
       islink="true"
@@ -180,7 +180,7 @@
       from="View3"
       to="View14">
       <property
-         name="sdm:polyPoints">L54,412.74707,128.72412,282.0,190.94824,T50</property>
+         name="sdm:polyPoints">L54,411.73138,128.72412,61.0,36.5,T8</property>
    </TrainFlow>
    <ControlFlowCase
       islink="true"
@@ -190,6 +190,6 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R48,L51</property>
+         name="sdm:polyPoints">R46,61.698753,29.5,600.7637,105.84097,T44</property>
    </ControlFlowCase>
 </SDM>
