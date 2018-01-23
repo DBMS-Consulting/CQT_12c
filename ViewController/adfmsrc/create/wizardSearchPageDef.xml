@@ -54,6 +54,7 @@
     <searchRegion Criteria="HierarchySourceTermSearchVOCriteria"
                   Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
                   Binds="HierarchySourceTermPTSearchIterator" id="HierarchySourceTermSearchVOCriteriaQuery"/>
+    <iterator Binds="SimplePTSearch" RangeSize="25" DataControl="SearchModuleDataControl1" id="SimplePTSearchIterator"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
@@ -274,6 +275,35 @@
     <attributeValues IterBinding="HierarchySourceTermPTSearchIterator" id="Mqterm">
       <AttrNames>
         <Item Value="Mqterm"/>
+      </AttrNames>
+    </attributeValues>
+    <tree IterBinding="SimplePTSearchIterator" id="SimplePTSearch">
+      <nodeDefinition DefName="com.dbms.csmq.model.search.SimplePTSearchRVO" Name="SimplePTSearch0">
+        <AttrNames>
+          <Item Value="MeddraLevel"/>
+          <Item Value="MeddraExtension"/>
+          <Item Value="MeddraCode"/>
+          <Item Value="MeddraTerm"/>
+          <Item Value="PtCode"/>
+          <Item Value="PtName"/>
+          <Item Value="MeddraLevelNumber"/>
+          <Item Value="TmsRelationScope"/>
+          <Item Value="TmsStatus"/>
+          <Item Value="MeddraDictContentId"/>
+          <Item Value="PtContentId"/>
+          <Item Value="ApprovedFlag"/>
+          <Item Value="Status"/>
+          <Item Value="Value2"/>
+          <Item Value="Value4"/>
+          <Item Value="Category"/>
+          <Item Value="Value3"/>
+          <Item Value="CreatedBy"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <attributeValues IterBinding="HierarchySourceTermPTSearchIterator" id="Mqcode">
+      <AttrNames>
+        <Item Value="Mqcode"/>
       </AttrNames>
     </attributeValues>
   </bindings>

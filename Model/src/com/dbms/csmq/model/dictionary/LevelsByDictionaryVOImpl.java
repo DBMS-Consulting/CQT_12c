@@ -29,4 +29,20 @@ public class LevelsByDictionaryVOImpl extends ViewObjectImpl {
     public void setdictShortName(String value) {
         setNamedWhereClauseParam("dictShortName", value);
     }
+
+    /**
+     * Returns the variable value for bindShortName.
+     * @return variable value for bindShortName
+     */
+    public String getbindShortName() {
+        return (String) ensureVariableManager().getVariableValue("bindShortName");
+    }
+
+    /**
+     * Sets <code>value</code> for variable bindShortName.
+     * @param value value to bind as bindShortName
+     */
+    public void setbindShortName(String value) {
+        ensureVariableManager().setVariableValue("bindShortName", value);
+    }
 }

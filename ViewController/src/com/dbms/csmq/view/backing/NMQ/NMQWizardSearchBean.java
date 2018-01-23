@@ -47,6 +47,7 @@ import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichPanelBox;
 import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
+import oracle.adf.view.rich.component.rich.nav.RichButton;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.nav.RichTrain;
 import oracle.adf.view.rich.component.rich.output.RichSpacer;
@@ -137,7 +138,11 @@ public class NMQWizardSearchBean  {
     private int paramMode = 0;
     private String paramApproved = CSMQBean.WILDCARD;
     private String searchIterator = "";
+    private String searchPTIterator = "";
     private String dictionaryVersion = "CURRENT";
+    private String ptSearch = null;
+    private String ptSearchCode = null;
+    private boolean showPtSearch = true;
     
 
     // CURRENT SELECTED DATA
@@ -232,6 +237,8 @@ public class NMQWizardSearchBean  {
     private RichPopup groupSearchPopup;
     private RichInputText ctrlPTSearch;
     private RichPopup ptSearchPopup;
+    private RichTable ctrlPTSearchResults;
+    private RichButton doPTSearchButton;
 
     public void setCtrlDictionaryTypeSearch(RichSelectOneChoice dictionaryTypeSearch) {
         this.ctrlDictionaryTypeSearch = dictionaryTypeSearch;
@@ -287,6 +294,7 @@ public class NMQWizardSearchBean  {
         //set defaults     
         if (nMQWizardBean.getMode() == CSMQBean.MODE_UPDATE_EXISTING) {
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_LABEL;
             this.detailsLabelPrefix = NMQ_LABEL;
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("QUERY_TYPE");
@@ -296,6 +304,7 @@ public class NMQWizardSearchBean  {
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_UPDATE_SMQ) {
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = SMQ_LABEL;
             this.detailsLabelPrefix = SMQ_LABEL;
             if (ctrlLevelList != null)
@@ -305,6 +314,7 @@ public class NMQWizardSearchBean  {
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_COPY_EXISTING) {
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_SMQ_LABEL;
             this.detailsLabelPrefix = NMQ_LABEL;
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("QUERY_TYPE");
@@ -315,12 +325,14 @@ public class NMQWizardSearchBean  {
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_INSERT_NEW) {
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_LABEL;
             this.detailsLabelPrefix = NMQ_LABEL;
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("NMQ_SQM_SELECT_ITEMS");
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_HISTORIC) { 
             this.searchIterator = "HistoricSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_SMQ_LABEL;
             this.detailsLabelPrefix = "";
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("QUERY_TYPE");
@@ -331,6 +343,7 @@ public class NMQWizardSearchBean  {
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_BROWSE_SEARCH) { 
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_SMQ_LABEL;
             this.detailsLabelPrefix = "";
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("NMQ_SQM_SELECT_ITEMS");
@@ -344,6 +357,7 @@ public class NMQWizardSearchBean  {
             }
         else if (nMQWizardBean.getMode() == CSMQBean.MODE_IMPACT_ASSESSMENT) { 
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_SMQ_LABEL;
             this.detailsLabelPrefix = "";
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("NMQ_SQM_SELECT_ITEMS");
@@ -353,6 +367,7 @@ public class NMQWizardSearchBean  {
                 }
         } else if (nMQWizardBean.getMode() == CSMQBean.MODE_VIEW_VERSION_IMPACT) { 
             this.searchIterator = "SimpleSearch1Iterator";
+            this.searchPTIterator = "SimplePTSearchIterator";
             //this.searchLabelPrefix = NMQ_SMQ_LABEL;
             this.detailsLabelPrefix = "";
             getLevelsForQueryType = cSMQBean.getLevelsForQueryType("NMQ_SQM_SELECT_ITEMS");
@@ -363,6 +378,7 @@ public class NMQWizardSearchBean  {
             }
               
         clearSearch (this.searchIterator);
+        clearPTSearch (this.searchPTIterator);
         releaseGroupSelectItems = cSMQBean.getAGsForDictionary(nMQWizardBean.getCurrentDictionary());
         }
     
@@ -379,6 +395,25 @@ public class NMQWizardSearchBean  {
             ctrlSearchResults.setEmptyText("Selected Term: " + this.currentTermName);
             AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+            
+            
+           
+            //nMQWizardUIBean.getProductListControl().resetValue();
+            }
+        catch (Exception e) {}
+        }
+    
+    private void clearPTSearch (String iterator) {
+        try {
+            BindingContext bc = BindingContext.getCurrent();
+            DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+            DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(iterator);
+            ViewObject vo = dciterb.getViewObject();
+            vo.executeEmptyRowSet();
+
+            ctrlPTSearchResults.setEmptyText("Selected Term: " + this.currentTermName);
+            AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlPTSearchResults);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlPTSearchResults);
             
             
            
@@ -952,7 +987,9 @@ public class NMQWizardSearchBean  {
 
     public String getParamState() {
         try {
-            List<String> selected = (List<String>)ctrlState.getValue();
+            List<String> selected = null;
+            if(ctrlState != null)
+             selected = (List<String>)ctrlState.getValue();
             if (selected == null)
                 return "%";
             String csvValue = "";
@@ -1291,6 +1328,65 @@ public class NMQWizardSearchBean  {
         
         CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE COMPLETE ****");
     }
+    
+    public void onTableNodeSelectionPT(SelectionEvent selectionEvent) {
+        CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE START ****");
+        nMQWizardBean.setTreeAccessed(false);  //reset this to recreate the tree when the page loads
+        nMQWizardBean.clearDetailsPT(); // hopefully this works
+        resolveMethodExpression("#{bindings.SimplePTSearch.collectionModel.makeCurrent}", null, new Class[] { SelectionEvent.class }, new Object[] { selectionEvent });
+        RichTable object = (RichTable)selectionEvent.getSource();
+        Row row = null;
+        for (Object facesRowKey : object.getSelectedRowKeys()) {
+            object.setRowKey(facesRowKey);
+            Object o = object.getRowData();
+            JUCtrlHierNodeBinding rowData = (JUCtrlHierNodeBinding)o;
+            if (rowData == null) return;
+            row = rowData.getRow();
+            }
+
+        if (row == null) return;
+
+        processSearchResultsPT(row);
+        //Copy mode - reset the level to NMQ levels
+        if (nMQWizardBean.getMode() == cSMQBean.MODE_COPY_EXISTING){
+            nMQWizardBean.setIsNMQ(Boolean.TRUE);
+            if (null!= currentMqlevel && currentMqlevel.equalsIgnoreCase(cSMQBean.SMQ_LEVEL_1)){
+                nMQWizardBean.setCurrentTermLevel(cSMQBean.NMQ_LEVEL_1);
+            } else if (null!= currentMqlevel && currentMqlevel.equalsIgnoreCase(cSMQBean.SMQ_LEVEL_2)){
+                nMQWizardBean.setCurrentTermLevel(cSMQBean.NMQ_LEVEL_2);
+            } else if (null!= currentMqlevel && currentMqlevel.equalsIgnoreCase(cSMQBean.SMQ_LEVEL_3)){
+                nMQWizardBean.setCurrentTermLevel(cSMQBean.NMQ_LEVEL_3);
+            } else if (null!= currentMqlevel && currentMqlevel.equalsIgnoreCase(cSMQBean.SMQ_LEVEL_4)){
+                nMQWizardBean.setCurrentTermLevel(cSMQBean.NMQ_LEVEL_4);
+            } else if (null!= currentMqlevel && currentMqlevel.equalsIgnoreCase(cSMQBean.SMQ_LEVEL_5)){
+                nMQWizardBean.setCurrentTermLevel(cSMQBean.NMQ_LEVEL_5);
+            }
+            if (nMQWizardBean.isIsNMQ() && userBean.isRequestor() && !(userBean.isMQM()|| userBean.isAdmin())){
+                nMQWizardBean.setCurrentState(CSMQBean.STATE_PROPOSED);
+            } else {
+                nMQWizardBean.setCurrentState(CSMQBean.STATE_DRAFT);
+            }
+            nMQWizardBean.setCurrentPredictGroups(cSMQBean.getDefaultDraftReleaseGroup());
+        }
+        AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlTrain);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlTrain);
+        // get the notes.
+        getInfNotes();
+        
+        // update the hierarchy
+        //nMQWizardBean.updateRelations();  //??  NOT NEEDED ??
+        // ??? AdfFacesContext.getCurrentInstance().addPartialTarget(termHierarchyBean.getTargetTree());
+        // ???? AdfFacesContext.getCurrentInstance().partialUpdateNotify(termHierarchyBean.getTargetTree());
+        
+        //clearSearch("SimpleSearch1Iterator");
+        setHistoryDate(null);
+        historyFlow = false;
+        
+        AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
+        
+        CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE COMPLETE ****");
+    }
 
     public void onHistoricSearchTableNodeSelection(SelectionEvent selectionEvent) {
         CSMQBean.logger.info(userBean.getCaller() + " ***** HISTORIC ROW CHANGE START ****");
@@ -1557,6 +1653,205 @@ public class NMQWizardSearchBean  {
         //userBean.addHistory(currentTermName, currentMqcode);
         
     }
+    
+    private void processSearchResultsPT (Row row) {
+        CSMQBean.logger.info(userBean.getCaller() + " ***** processSearchResults  Mode ==" + nMQWizardBean.getMode());
+        currentTermName = Utils.getAsString(row, "MeddraTerm");
+        CSMQBean.logger.info(userBean.getCaller() + " currentTermName:" + currentTermName);
+        
+        currentMqlevel = Utils.getAsString(row, "MeddraLevel");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqlevel:" + currentMqlevel);
+        
+        currentMqcode = Utils.getAsString(row, "MeddraCode");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqcode:" + currentMqcode);
+        
+        //currentMqalgo = Utils.getAsString(row, "Mqalgo");
+            
+        if (currentMqalgo == null || currentMqalgo.length() < 1)
+            currentMqalgo = CSMQBean.DEFAULT_ALGORITHM;
+            
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqalgo:" + currentMqalgo);
+
+        //currentMqaltcode = Utils.getAsString(row, "Mqaltcode");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqaltcode:" + currentMqaltcode);
+
+        currentDictionary = getParamDictName();
+        CSMQBean.logger.info(userBean.getCaller() + " currentDictionary:" + currentDictionary);
+        
+        // TEST 9-MAY
+        //currentReleaseGroup = getParamReleaseGroup();
+        //currentReleaseGroup = Utils.getAsString(row, "Groupname");
+        CSMQBean.logger.info(userBean.getCaller() + " currentReleaseGroup:" + currentReleaseGroup);
+
+        currentMqstatus = Utils.getAsString(row, "Status");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqstatus:" + currentMqstatus);
+
+        currentDictContentID = Utils.getAsString(row, "MeddraDictContentId");
+        CSMQBean.logger.info(userBean.getCaller() + " currentDictContentID:" + currentDictContentID);
+        
+        currentApprovalFlag = Utils.getAsString(row, "ApprovedFlag");
+        CSMQBean.logger.info(userBean.getCaller() + " currentApprovalFlag:" + currentApprovalFlag);
+
+        //currentVersion = Utils.getAsString(row, "Version");
+        CSMQBean.logger.info(userBean.getCaller() + " currentVersion:" + currentVersion);
+
+       // currentSubType = Utils.getAsString(row, "TermSubtype");
+        CSMQBean.logger.info(userBean.getCaller() + " currentSubType:" + currentSubType);
+
+        currentMqscp = Utils.getAsString(row, "Category");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqscp:" + currentMqscp);
+
+        currentMqgroups = Utils.getAsString(row, "Value2");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqgroups:" + currentMqgroups);
+
+        currentMqproduct = Utils.getAsString(row, "Value3");
+        CSMQBean.logger.info(userBean.getCaller() + " currentMqproduct:" + currentMqproduct);
+
+        currentCriticalEvent = Utils.getAsString(row, "Value4");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCriticalEvent:" + currentCriticalEvent);
+        
+        currentStatus = CSMQBean.CURRENT_RELEASE_STATUS;
+        CSMQBean.logger.info(userBean.getCaller() + " currentStatus:" + currentStatus);
+        
+        //currentState = Utils.getAsString(row, "State");
+        CSMQBean.logger.info(userBean.getCaller() + " currentState:" + currentState);
+        
+        //requestedByDate = Utils.getAsDate(row, "DueDate");
+        CSMQBean.logger.info(userBean.getCaller() + " requestedByDate:" + requestedByDate);
+        
+       // currentDateRequested = Utils.getAsDate(row, "Dates");
+        CSMQBean.logger.info(userBean.getCaller() + " currentDateRequested:" + currentDateRequested);
+        
+        //currentReasonForRequest = Utils.getAsString(row, "ReasonForRequest");
+        CSMQBean.logger.info(userBean.getCaller() + " currentReasonForRequest:" + currentReasonForRequest);
+        
+        //currentReasonForApproval = Utils.getAsString(row, "ReasonForApproval");
+        CSMQBean.logger.info(userBean.getCaller() + " currentReasonForApproval:" + currentReasonForApproval);
+        
+        isApproved = Utils.getAsBoolean(row, "ApprovedFlag");
+        CSMQBean.logger.info(userBean.getCaller() + " isApproved:" + isApproved);
+        
+        //currentCutOffDate = Utils.getAsString(row, "CutOffDate");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCutOffDate:" + currentCutOffDate);
+        
+        //currentUntilDate = Utils.getAsString(row, "NmatUntildt");
+        CSMQBean.logger.info(userBean.getCaller() + " currentUntilDate:" + currentUntilDate);
+
+       // currentCreateDate = Utils.getAsString(row, "NmatCreatedt");
+        CSMQBean.logger.info(userBean.getCaller() + " currentCreateDate:" + currentCreateDate);
+        
+        currentCreatedBy = Utils.getAsString(row, "CreatedBy");
+        CSMQBean.logger.info(userBean.getCaller() + " Createdby:" + currentCreatedBy);
+        
+        currentExtension = Utils.getAsString(row, "MeddraExtension");
+        CSMQBean.logger.info(userBean.getCaller() + " Extension:" + currentExtension);
+        
+        String designeeStr = null;
+        //Utils.getAsString(row, "Designee");
+        CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
+        List <String> designeeList = new ArrayList <String> ();
+        if (null != designeeStr){
+            CSMQBean.logger.info(userBean.getCaller() + " designeeStr:" + designeeStr);
+            designeeStr = designeeStr.replaceAll("\\[", "").replaceAll("\\]","");
+            designeeList = Arrays.asList(designeeStr.split("\\s*,\\s*"));    
+        }
+        nMQWizardBean.setCurrentTermName(currentTermName);
+        nMQWizardBean.setCurrentFilterDictionaryShortName(this.currentDictionary);
+        nMQWizardBean.getDictionaryInfo(); // GET BASE DICT INFO FROM FILTER
+        
+        //UPDATE THE WIZARD WITH THE RESULTS
+        nMQWizardBean.setCurrentContentCode(currentMqcode);
+        nMQWizardBean.setCurrentDictContentID(currentDictContentID);
+        nMQWizardBean.setActiveDictionary(currentDictionary);
+        nMQWizardBean.setCurrentMQALGO(currentMqalgo);
+        nMQWizardBean.setCurrentMQCRTEV(currentCriticalEvent);
+        nMQWizardBean.setCurrentMQGROUP(currentMqgroups);
+        //nMQWizardBean.setCurrentPredictGroups(currentReleaseGroup);  //<--test
+        nMQWizardBean.setCurrentReleaseGroup(currentReleaseGroup);
+        nMQWizardBean.setCurrentProduct(currentMqproduct);
+        nMQWizardBean.setCurrentScope(currentMqscp);
+        nMQWizardBean.setCurrentMQStatus(currentMqstatus);
+        nMQWizardBean.setCurrentTermLevel(currentMqlevel);
+        nMQWizardBean.setCurrentStatus(currentStatus);
+        nMQWizardBean.setCurrentState(currentState);
+        nMQWizardBean.setCurrentDateRequested(currentDateRequested);
+        nMQWizardBean.setCurrentRequestedByDate(requestedByDate);
+        nMQWizardBean.setCurrentReasonForRequest(currentReasonForRequest);
+        nMQWizardBean.setCurrentReasonForApproval(currentReasonForApproval);
+        nMQWizardBean.setIsApproved(isApproved);
+        nMQWizardBean.setCurrentCutOffDate(currentCutOffDate);
+        nMQWizardBean.setCurrentCreateDate(currentCreateDate);
+        nMQWizardBean.setCurrentUntilDate(currentUntilDate);
+        nMQWizardBean.setCurrentVersion(currentVersion);
+        nMQWizardBean.setCurrentCreatedBy(currentCreatedBy);
+        nMQWizardBean.setCurrentExtension(currentExtension);
+        
+        /* 
+         * TES 31-JUL-2014
+           Added to get activation info
+        */
+        Hashtable <String, String> activationInfo = NMQUtils.getActivationInfo(currentDictContentID, currentDictionary);
+        if (activationInfo != null) {
+            nMQWizardBean.setCurrentInitialCreationDate(activationInfo.get("initialCreationDate"));
+            nMQWizardBean.setCurrentInitialCreationBy(activationInfo.get("initialCreationBy"));
+            nMQWizardBean.setCurrentLastActivationDate(activationInfo.get("lastActivationDate"));
+            nMQWizardBean.setCurrentActivationBy(activationInfo.get("activationBy"));
+        
+            CSMQBean.logger.info(userBean.getCaller() + " initialCreationDate:" + activationInfo.get("initialCreationDate"));
+            CSMQBean.logger.info(userBean.getCaller() + " initialCreationBy:" + activationInfo.get("initialCreationBy"));
+            CSMQBean.logger.info(userBean.getCaller() + " lastActivationDate:" + activationInfo.get("lastActivationDate"));
+            CSMQBean.logger.info(userBean.getCaller() + " activationBy:" + activationInfo.get("activationBy"));
+        }
+        else {
+            CSMQBean.logger.info(userBean.getCaller() + " *** UNABLE TO GET ACTIVATION INFO *** ");
+            nMQWizardBean.setCurrentInitialCreationDate("N/A");
+            nMQWizardBean.setCurrentInitialCreationBy("N/A");
+            nMQWizardBean.setCurrentLastActivationDate("N/A");
+            nMQWizardBean.setCurrentActivationBy("N/A");
+            }
+            
+            
+            
+        
+        /*
+         * TES 1-AUG-2014
+         */
+        // No need to load the designee list in case of copy existing.Default set as logged in user name already.
+        if (nMQWizardBean.getMode() != cSMQBean.MODE_COPY_EXISTING){
+            if (null == designeeList || designeeList.size() == 0){
+                designeeList = getDesignees(currentDictContentID);
+            }
+            nMQWizardBean.setDesigneeList(designeeList);
+            //List<String> designee = nMQWizardBean.getDesigneeList();
+            CSMQBean.logger.info(userBean.getCaller() + " designee::" + designeeList);
+            this.setModifiedDesigneeList(designeeList);
+        }
+              
+        // FIX FOR REGEX CRAZINESS
+        if (currentMqproduct != null) {
+            currentMqproduct = currentMqproduct.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+            Collections.addAll(nMQWizardBean.getProductList(), currentMqproduct.split("%"));
+            }
+
+        if (currentMqgroups != null) {
+            currentMqgroups = currentMqgroups.replace(CSMQBean.DEFAULT_DELIMETER_CHAR, '%');
+            Collections.addAll(nMQWizardBean.getMQGroupList(), currentMqgroups.split("%"));
+            }
+        
+        // set the query type 
+        /*
+         * TES CHANGED 06-AUG-2014
+         */
+        
+        //nMQWizardBean.setIsNMQ(currentMqlevel.indexOf("N") > -1);
+        nMQWizardBean.setIsNMQ(this.currentExtension.equalsIgnoreCase("NMQ"));
+        nMQWizardBean.setIsSMQ(this.currentExtension.equalsIgnoreCase("SMQ"));
+        
+        //update the history
+        // todo: add later
+        //userBean.addHistory(currentTermName, currentMqcode);
+        
+    }
 
 
     public void setCurrentApprovalFlag(String currentApprovalFlag) {
@@ -1648,6 +1943,7 @@ public class NMQWizardSearchBean  {
                 this.MEDDraSearch = true;
                 
                 ctrlNMQStatus.setRendered(false);
+                if(ctrlState != null)
                 ctrlState.setRendered(false);
                 ctrlMQScope.setRendered(false);
                 ctrlCriticalEvent.setRendered(false);
@@ -1679,6 +1975,7 @@ public class NMQWizardSearchBean  {
                 
                 renderingRulesBean = (RenderingRulesBean)ADFContext.getCurrent().getRequestScope().get("RenderingRulesBean");
                 ctrlNMQStatus.setRendered(true && renderingRulesBean.isWizardSearchRenderSMQStatus());
+                if(ctrlState != null)
                 ctrlState.setRendered(true);
                 ctrlMQScope.setRendered(true && renderingRulesBean.isWizardSearchRenderScope());
                 ctrlCriticalEvent.setRendered(true && renderingRulesBean.isWizardSearchRenderCriticalEvent());
@@ -1700,6 +1997,16 @@ public class NMQWizardSearchBean  {
                 
                 }
             
+                if(CSMQBean.MEDRA_DICTIONARY.equalsIgnoreCase(this.currentDictionary )){
+                        showPtSearch = false;
+                        ptSearch = null;
+                        getCtrlPTSearch().resetValue();
+                }else{
+                    showPtSearch = true;
+                    ptSearch = null;
+                    getCtrlPTSearch().resetValue();
+                }
+
             AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlSearchPanel);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlSearchPanel);
             
@@ -1922,6 +2229,7 @@ public class NMQWizardSearchBean  {
             ctrlReleaseGroupSearch.setRendered(false);
             cntrlApprovedColumn.setRendered(true);
             cntrlApproved.setDisabled(false);
+            if(ctrlState != null)
             ctrlState.setRendered(false);
             }
         else if (currentMqstatus.equals(CSMQBean.PENDING_RELEASE_STATUS)) {
@@ -1929,6 +2237,7 @@ public class NMQWizardSearchBean  {
             cntrlApprovedColumn.setRendered(true);
             ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
             cntrlApproved.setDisabled(true);
+                if(ctrlState != null)
             ctrlState.setRendered(true);
             }
         else {
@@ -1936,6 +2245,7 @@ public class NMQWizardSearchBean  {
             cntrlApprovedColumn.setRendered(false);
             ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
             cntrlApproved.setDisabled(true);
+            if(ctrlState != null)
             ctrlState.setRendered(false);
         }
         AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlParamPanel);
@@ -1944,11 +2254,14 @@ public class NMQWizardSearchBean  {
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
         AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlNMQStatus);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlNMQStatus);
+        if(ctrlState != null)
         AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlState);
+        if(ctrlState != null)
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlState);
     }
     
     public void releaseStatusChanged1(ValueChangeEvent valueChangeEvent) {
+        
         if (ctrlReleaseStatus != null)
             currentMqstatus = ctrlReleaseStatus.getValue().toString();
         
@@ -1957,6 +2270,9 @@ public class NMQWizardSearchBean  {
             cntrlApprovedColumn.setRendered(true);
             cntrlApproved.setDisabled(false);
             //ctrlState.setRendered(false);
+            showPtSearch = true;
+            ptSearch = null;
+            getCtrlPTSearch().resetValue();
             }
         else if (currentMqstatus.equals(CSMQBean.PENDING_RELEASE_STATUS)) {
             //ctrlReleaseGroupSearch.setRendered(false);
@@ -1964,6 +2280,9 @@ public class NMQWizardSearchBean  {
             ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
             cntrlApproved.setDisabled(true);
             //ctrlState.setRendered(true);
+            showPtSearch = false;
+            ptSearch = null;
+            getCtrlPTSearch().resetValue();
             }
         else {
             //ctrlReleaseGroupSearch.setRendered(true);
@@ -1971,6 +2290,9 @@ public class NMQWizardSearchBean  {
             ctrlNMQStatus.setValue(CSMQBean.BOTH_RELEASE_STATUSES);
             cntrlApproved.setDisabled(true);
             //ctrlState.setRendered(false);
+            showPtSearch = false;
+            ptSearch = null;
+            getCtrlPTSearch().resetValue();
         }
         AdfFacesContext.getCurrentInstance().addPartialTarget(cntrlParamPanel);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(cntrlParamPanel);
@@ -3531,5 +3853,263 @@ public class NMQWizardSearchBean  {
             paramPtTerm = ctrlPTSearch.getValue().toString();
         return paramPtTerm;
     }
-}
 
+    public void clearSearchResutlt(ActionEvent actionEvent) {
+        nMQWizardBean.setDefaultDictionary();
+        getCtrlReleaseStatus().resetValue();
+        getCtrlCriticalEvent().resetValue();
+        getCtrlReleaseStatus().setValue("CURRENT");
+        getCtrlCriticalEvent().setValue("%");
+        nMQWizardBean.getProductList().clear();
+        nMQWizardBean.getMQGroupList().clear();
+        productList = new ArrayList<String>();
+        mQGroupList = new ArrayList<String>();
+        paramExtension = CSMQBean.ALL_EXTENSIONS;
+        paramApproved = CSMQBean.WILDCARD;
+        getCtrlMQScope().resetValue();
+        getCtrlMQScope().setValue("%");
+        paramLevel = CSMQBean.FILTER_LEVEL_ONE;
+        getCtrlNMQStatus().resetValue();
+        getCtrlNMQStatus().setValue("A");
+        getCtrlMQName().setValue(null);
+        getCtrlMQCode().setValue(null);
+        ptSearch = null;
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+        DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("SimpleSearch1Iterator");
+        dcIter.getViewObject().executeEmptyRowSet();
+        ptSearch = null;
+        getCtrlPTSearch().resetValue();
+    }
+
+    public void setPtSearch(String ptSearch) {
+        this.ptSearch = ptSearch;
+    }
+
+    public String getPtSearch() {
+        return ptSearch;
+    }
+
+    public void setShowPtSearch(boolean showPtSearch) {
+        this.showPtSearch = showPtSearch;
+    }
+
+    public boolean isShowPtSearch() {
+        return showPtSearch;
+    }
+
+    public void doPTSearch(ActionEvent actionEvent) {
+        
+        if(actionEvent != null){
+            RichButton button = (RichButton) actionEvent.getComponent();
+            if(button != null && button.getText() != null && 
+               button.getText().equalsIgnoreCase("Search")){
+                clearProductSearchRows(actionEvent); 
+                clearGroupSearchRows(actionEvent);
+            }
+        }
+            // 05-NOV-2013
+            // Fix for dupes 
+        nMQWizardBean.clearDetails();
+        
+        // FIX FOR WHEN A USER CANCELS AND COMES BACK IN
+        if (searchIterator.length() == 0) setUIDefaults ();
+        
+        
+        nMQWizardBean.getProductList().clear();
+        nMQWizardBean.getMQGroupList().clear();
+        if (termHierarchyBean != null)
+        termHierarchyBean.showStatus(CSMQBean.MQ_INIT);
+        nMQWizardBean.setTreeAccessed(false); //reset the tree
+        //nMQWizardBean.clearDetails();  UI MOVE?
+        
+        String activationGroup = getParamReleaseGroup();
+        String queryLevel = getParamLevel();
+        if (IASearch){
+            CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING IA SEARCH **");
+            activationGroup = CSMQBean.WILDCARD;
+        } else {
+            CSMQBean.logger.info(userBean.getCaller() + " ** PERFORMING SEARCH **");
+        }
+        CSMQBean.logger.info(userBean.getCaller() + " searchIterator: " + searchPTIterator);
+        CSMQBean.logger.info(userBean.getCaller() + " startDate: " + getParamStartDate());
+        CSMQBean.logger.info(userBean.getCaller() + " endDate: " + getParamEndDate());
+        CSMQBean.logger.info(userBean.getCaller() + " term: " + getParamTerm());
+        CSMQBean.logger.info(userBean.getCaller() + " activityStatus: " + getParamActivityStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " dictShortName: " + getParamDictName());
+        CSMQBean.logger.info(userBean.getCaller() + " releaseStatus: " + getParamReleaseStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + activationGroup);
+        CSMQBean.logger.info(userBean.getCaller() + " MQGroup: " + getParamMQGroupList());
+        CSMQBean.logger.info(userBean.getCaller() + " product: " + getParamProductList());
+        CSMQBean.logger.info(userBean.getCaller() + " MQCode: " + getParamMQCode());
+        CSMQBean.logger.info(userBean.getCaller() + " MQCriticalEvent: " + getParamMQCriticalEvent());
+        CSMQBean.logger.info(userBean.getCaller() + " uniqueIDsOnly: " + getParamUniqueIDsOnly());
+        // CSMQBean.logger.info(userBean.getCaller() + " filterForUser: " +  getParamFilterForUser());
+        CSMQBean.logger.info(userBean.getCaller() + " currentUser: " + getParamUserName().toUpperCase());
+        CSMQBean.logger.info(userBean.getCaller() + " mqType: " + getParamQueryType());
+        CSMQBean.logger.info(userBean.getCaller() + " showNarrowScpOnly: " + getParamNarrowScopeOnly());
+        CSMQBean.logger.info(userBean.getCaller() + " MQScope: " + getParamMQScope());
+        CSMQBean.logger.info(userBean.getCaller() + " pState: " + getParamState());
+        CSMQBean.logger.info(userBean.getCaller() + " pUserRole: " + getParamUserRole());
+        CSMQBean.logger.info(userBean.getCaller() + " pMode: " + getParamMode());
+        CSMQBean.logger.info(userBean.getCaller() + " pApprove: " + getParamApproved());
+        CSMQBean.logger.info(userBean.getCaller() + " psVirtualDictionaryName: " + getDictionaryVersion());
+        CSMQBean.logger.info(userBean.getCaller() + " queryLevel: " + queryLevel);
+        CSMQBean.logger.info(userBean.getCaller() + " extension: " + getParamExtension());
+        CSMQBean.logger.info(userBean.getCaller() + " killSwitch: " + CSMQBean.KILL_SWITCH_OFF);
+        
+        CSMQBean.logger.info(userBean.getCaller() + " ** DATABASE DEBUGGING INFO **");
+        CSMQBean.logger.info(userBean.getCaller() + " pStartDate: " + getParamStartDate());
+        CSMQBean.logger.info(userBean.getCaller() + " pEndDate: " + getParamEndDate());
+        CSMQBean.logger.info(userBean.getCaller() + " psTerm: " + getParamTerm());
+        CSMQBean.logger.info(userBean.getCaller() + " pMQStatus: " + getParamActivityStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " psDictionaryName: " + getParamDictName());
+        CSMQBean.logger.info(userBean.getCaller() + " pCurrPendStatus: " + getParamReleaseStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " pRelGroup: " + activationGroup);
+        CSMQBean.logger.info(userBean.getCaller() + " pMQGroup: " + getParamMQGroupList());
+        CSMQBean.logger.info(userBean.getCaller() + " pProduct: " + getParamProductList());
+        CSMQBean.logger.info(userBean.getCaller() + " pMQCode: " + getParamMQCode());
+        CSMQBean.logger.info(userBean.getCaller() + " pMQCrtlEvt: " + getParamMQCriticalEvent());
+        CSMQBean.logger.info(userBean.getCaller() + " pUniqueIdOnly: " + getParamUniqueIDsOnly());
+        CSMQBean.logger.info(userBean.getCaller() + " pCurrentUser: " + getParamUserName().toUpperCase());
+        CSMQBean.logger.info(userBean.getCaller() + " pLevel: " + getParamQueryType());
+        CSMQBean.logger.info(userBean.getCaller() + " pNarrowScpOnlyMq: " + getParamNarrowScopeOnly());
+        CSMQBean.logger.info(userBean.getCaller() + " pMQSCP: " + getParamMQScope());
+        CSMQBean.logger.info(userBean.getCaller() + " pState: " + getParamState());
+        CSMQBean.logger.info(userBean.getCaller() + " pUserRole: " + getParamUserRole());
+        CSMQBean.logger.info(userBean.getCaller() + " pMode: " + getParamMode());
+        CSMQBean.logger.info(userBean.getCaller() + " pApprove: " + getParamApproved());
+        CSMQBean.logger.info(userBean.getCaller() + " psVirtualDictionaryName: " + getDictionaryVersion());
+        CSMQBean.logger.info(userBean.getCaller() + " ***********************");
+        
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get(searchPTIterator);
+        ViewObject vo = dciterb.getViewObject();
+        vo.setWhereClause(null);
+        
+        vo.setNamedWhereClauseParam("pApproved", getParamApproved());
+        vo.setNamedWhereClauseParam("pCode",  getParamMQCode());
+        String paramTermVal = getParamTerm();
+        String paramPTTermVal = getParamPtTerm();
+        if (null != paramTermVal && !paramTermVal.isEmpty() && !"%".equalsIgnoreCase(paramTermVal)){
+           paramTermVal = paramTermVal.replace("'","\''");
+        }else{
+            paramTermVal = getParamTerm();
+            if(null != paramTermVal && !paramTermVal.isEmpty()){
+                paramTermVal = paramTermVal.replace("'","\''"); 
+            }
+        }
+        
+        if (null != paramPTTermVal && !paramPTTermVal.isEmpty() && !"%".equalsIgnoreCase(paramPTTermVal)){
+           paramTermVal = paramTermVal.replace("'","\''");
+        }else{
+            paramPTTermVal = getParamPtTerm();
+            if(null != paramPTTermVal && !paramPTTermVal.isEmpty()){
+                paramPTTermVal = paramPTTermVal.replace("'","\''"); 
+            }
+        }
+        
+        boolean isProductSearched = false;
+        String productList = "";
+        String searchProduct = getParamProductList();
+        if((searchProduct != null) && (!"[]".equalsIgnoreCase(searchProduct))){
+        int length = searchProduct.length();
+        if(length > 2){
+        String productString = searchProduct.substring(1, length-1);
+        List<String> list = Arrays.asList(productString.split("\\^"));
+        int count = 0;
+        int listCount = list.size();
+        for(String item : list){
+            count++;
+            isProductSearched = true;
+            if(listCount != count){
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                productList = productList.concat("VALUE_3 LIKE '%"+item+"%'");   
+            }
+        }
+        }
+        }
+        vo.setWhereClause(null);
+        vo.setWhereClauseParams(null);
+        if(isProductSearched){
+        vo.setWhereClause(productList);
+        }
+        
+        boolean isGroupSearched = false;
+        String groupList = "";
+        String searchGroup = getParamMQGroupList();
+        if((searchGroup != null) && (!"[]".equalsIgnoreCase(searchGroup))){
+        int length = searchGroup.length();
+            if(length > 2){
+        String groupString = searchGroup.substring(0, length);
+        List<String> list1 = Arrays.asList(groupString.split("\\^"));
+        int count1 = 0;
+        int listCount1 = list1.size();
+        for(String item : list1){
+            count1++;
+            isGroupSearched = true;
+            if(listCount1 != count1){
+                groupList = groupList.concat("VALUE_2 LIKE '%"+item+"%' ").concat("OR ");   
+            }else{
+                groupList = groupList.concat("VALUE_2 LIKE '%"+item+"%'");   
+            }
+        }
+            }
+        }
+
+        if(isGroupSearched){
+        vo.setWhereClause(groupList);
+        }
+        
+        vo.setNamedWhereClauseParam("pTerm", paramTermVal);
+        vo.setNamedWhereClauseParam("pCriticalEvent", getParamMQCriticalEvent());
+        vo.setNamedWhereClauseParam("pExtension", getParamExtension());
+        vo.setNamedWhereClauseParam("pLevel", queryLevel);
+        vo.setNamedWhereClauseParam("pScope", getParamMQScope());
+        vo.setNamedWhereClauseParam("pStatus", getParamActivityStatus());
+        vo.setNamedWhereClauseParam("bindPTCode", getPtSearchCode());
+
+        vo.executeQuery();
+        CSMQBean.logger.info(userBean.getCaller() + " Simple PT Search Query:: " + vo.getQuery());
+        if (ctrlPTSearchResults != null) {  // if we are calling this from IA, we won't need this
+            CSMQBean.logger.info(userBean.getCaller() + " ctrlSearchResults is not null :: ");
+            ctrlPTSearchResults.setEmptyText("No data to display.");
+            AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlPTSearchResults);
+            AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlPTSearchResults);
+            //clear the selected row
+            RowKeySet rks= ctrlPTSearchResults.getSelectedRowKeys();
+            rks.clear();
+        
+            //CLEAR OLD TRESS
+            NMQSourceTermSearchBean nMQSourceTermSearchBean = (NMQSourceTermSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQSourceTermSearchBean");
+            nMQSourceTermSearchBean.clearTree();
+            nMQWizardBean.clearRelations();
+            }
+    }
+
+    public void setCtrlPTSearchResults(RichTable ctrlPTSearchResults) {
+        this.ctrlPTSearchResults = ctrlPTSearchResults;
+    }
+
+    public RichTable getCtrlPTSearchResults() {
+        return ctrlPTSearchResults;
+    }
+
+    public void setPtSearchCode(String ptSearchCode) {
+        this.ptSearchCode = ptSearchCode;
+    }
+
+    public String getPtSearchCode() {
+        return ptSearchCode;
+    }
+
+    public void setDoPTSearchButton(RichButton doPTSearchButton) {
+        this.doPTSearchButton = doPTSearchButton;
+    }
+
+    public RichButton getDoPTSearchButton() {
+        return doPTSearchButton;
+    }
+}

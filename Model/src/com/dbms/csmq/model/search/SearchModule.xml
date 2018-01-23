@@ -133,7 +133,14 @@
       </PIMap>
     </ParameterMap>
   </ViewUsage>
-<ClientInterface
+  <ViewUsage
+    Name="SimplePTSearch"
+    ViewObjectName="com.dbms.csmq.model.search.SimplePTSearchRVO">
+    <ViewCriteriaUsage
+      Name="SimplePTSearchRVOCriteria"
+      FullName="com.dbms.csmq.model.search.SimplePTSearchRVO.SimplePTSearchRVOCriteria"/>
+  </ViewUsage>
+  <ClientInterface
     Name="__clientInterface">
     <Method
       Name="loadHistoricTermInformation"

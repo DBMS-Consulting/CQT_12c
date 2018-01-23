@@ -109,7 +109,7 @@ public class CSMQBean {
     public static final String CURRENT_RELEASE_STATUS_IA = "CURRENT_IA";
     public static final String PENDING_RELEASE_STATUS_IA = "PENDING_IA";
     public static final String CURRENT_IF_PENDING_NULL_IA = "PENDING_NULL_IA";
-    
+    public static final String MEDRA_DICTIONARY = "NMATMED";
 
     public static final String WILDCARD = "%";
     public static final String NMQ_SMQ_SEARCH = "%MQ%";

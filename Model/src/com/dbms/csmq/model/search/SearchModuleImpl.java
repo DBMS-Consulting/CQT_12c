@@ -147,4 +147,19 @@ public class SearchModuleImpl extends ApplicationModuleImpl implements SearchMod
         System.out.println("End of loadMQDetailedDetailedTermHierarchyInformation()  ");
     }
 
+    /**
+     * Container's getter for HierarchySourceTermPTSearch.
+     * @return HierarchySourceTermPTSearch
+     */
+    public ViewObjectImpl getHierarchySourceTermPTSearch() {
+        return (ViewObjectImpl) findViewObject("HierarchySourceTermPTSearch");
+    }
+
+    /**
+     * Container's getter for SimplePTSearchRVO1.
+     * @return SimplePTSearchRVO1
+     */
+    public SimplePTSearchRVOImpl getSimplePTSearch() {
+        return (SimplePTSearchRVOImpl) findViewObject("SimplePTSearch");
+    }
 }

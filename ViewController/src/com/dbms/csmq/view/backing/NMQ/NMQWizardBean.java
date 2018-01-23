@@ -371,7 +371,7 @@ public class NMQWizardBean {
     
    
     
-    private void setDefaultDictionary () {
+    public void setDefaultDictionary () {
         currentDictionary = cSMQBean.getDefaultBaseDictionaryShortName();
         if (this.mode == CSMQBean.MODE_UPDATE_EXISTING || this.mode == CSMQBean.MODE_COPY_EXISTING || this.mode == CSMQBean.MODE_UPDATE_SMQ || this.mode == CSMQBean.MODE_BROWSE_SEARCH)
             currentDictionary = cSMQBean.getDefaultFilterDictionaryShortName();
@@ -1459,6 +1459,54 @@ public class NMQWizardBean {
         if (controlDesignee != null) {
             try {
                 this.getDesigneeList().clear();
+                controlDesignee.resetValue();
+            } catch (java.lang.UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.setCurrentContentCode(null);
+        
+        
+        // clear out the conf page too
+        this.setCurrentReasonForRequest(null);
+        this.setCurrentReasonForApproval(null);
+        this.setCurrentRequestedByDate(null);
+        this.setCurrentRequestedByDate(null);
+        // and inf notes
+        this.setCurrentInfNoteDescription(null);
+        this.setCurrentInfNoteSource(null);
+        this.setCurrentInfNoteNotes(null);
+        this.saved = false;
+        this.actionDelete = false;
+        this.setCurrentInitialCreationDate(null);
+        this.setCurrentInitialCreationBy(null);
+        this.setCurrentLastActivationDate(null);
+        this.setCurrentActivationBy(null);
+
+    }
+    
+    public void clearDetailsPT() {
+        if (controlMQGroup != null) {
+            try {
+               // this.getMQGroupList().clear();
+                controlMQGroup.resetValue();
+            } catch (java.lang.UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+        }
+        if (productListControl != null) {
+            try {
+               // this.getProductList().clear();
+                productListControl.resetValue();
+            } catch (java.lang.UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if (controlDesignee != null) {
+            try {
+                //this.getDesigneeList().clear();
                 controlDesignee.resetValue();
             } catch (java.lang.UnsupportedOperationException e) {
                 e.printStackTrace();

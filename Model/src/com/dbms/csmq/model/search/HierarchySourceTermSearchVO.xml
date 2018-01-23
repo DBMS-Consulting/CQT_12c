@@ -287,6 +287,73 @@
       </SchemaBasedProperties>
     </Properties>
   </Variable>
+  <ViewAccessor
+    Name="CurrentDictionaryVA"
+    ViewObjectName="com.dbms.csmq.model.dictionary.CurrentDictionaryVO"
+    RowLevelBinds="true">
+    <ParameterMap>
+      <PIMap Variable="shortName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ViewAccessor
+    Name="LevelsByDictionaryVA"
+    ViewObjectName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO"
+    RowLevelBinds="true">
+    <ViewCriteriaUsage
+      Name="LevelsByDictionaryVOCriteria"
+      FullName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO.LevelsByDictionaryVOCriteria"/>
+    <ParameterMap>
+      <PIMap Variable="bindShortName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['PT']]></TransientExpression>
+      </PIMap>
+      <PIMap Variable="dictShortName">
+        <TransientExpression
+          trustMode="untrusted"
+          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
+      </PIMap>
+    </ParameterMap>
+  </ViewAccessor>
+  <ListBinding
+    Name="LOV_DictNm"
+    ListVOName="CurrentDictionaryVA"
+    NullValueFlag="none"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="DictNm"/>
+    </AttrArray>
+    <AttrArray Name="AttrExpressions"/>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="ShortName"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="Name"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
+  <ListBinding
+    Name="LOV_Mqlevel"
+    ListVOName="LevelsByDictionaryVA"
+    NullValueFlag="none"
+    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
+    MRUCount="0">
+    <AttrArray Name="AttrNames">
+      <Item Value="Mqlevel"/>
+    </AttrArray>
+    <AttrArray Name="AttrExpressions"/>
+    <AttrArray Name="ListAttrNames">
+      <Item Value="ShortName"/>
+    </AttrArray>
+    <AttrArray Name="ListDisplayAttrNames">
+      <Item Value="ShortName"/>
+    </AttrArray>
+    <DisplayCriteria/>
+  </ListBinding>
   <SQLQuery><![CDATA[SELECT DISTINCT rownum  rnum,
 
 CONTENT_ID || '.' || to_char(DATES, 'yyyymmddhh24miss') PRIKEY, 
@@ -389,10 +456,19 @@ ORDER BY MQTERM]]></SQLQuery>
     ColumnType="VARCHAR2"
     AliasName="DICT_NM"
     Expression="DICT_NM"
-    SQLType="VARCHAR">
+    SQLType="VARCHAR"
+    LOVName="LOV_DictNm">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+        <LABEL
+          ResId="DICTIONARY"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="LevelNm"
@@ -510,10 +586,19 @@ ORDER BY MQTERM]]></SQLQuery>
     ColumnType="VARCHAR2"
     AliasName="MQLEVEL"
     Expression="MQLEVEL"
-    SQLType="VARCHAR">
+    SQLType="VARCHAR"
+    LOVName="LOV_Mqlevel">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="10"/>
     </DesignTime>
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="choice"/>
+        <LABEL
+          ResId="LEVEL"/>
+      </SchemaBasedProperties>
+    </Properties>
   </ViewAttribute>
   <ViewAttribute
     Name="Mqcode"
@@ -547,7 +632,7 @@ ORDER BY MQTERM]]></SQLQuery>
     <Properties>
       <SchemaBasedProperties>
         <DISPLAYWIDTH
-          Value="50"/>
+          Value="30"/>
         <LABEL
           ResId="com.dbms.csmq.model.search.HierarchySourceTermSearchVO.Mqterm_LABEL"/>
       </SchemaBasedProperties>
@@ -831,6 +916,20 @@ ORDER BY MQTERM]]></SQLQuery>
     <ViewCriteriaRow
       Name="HierarchySourceTermSearchVOCriteria_row_0"
       UpperColumns="1">
+      <ViewCriteriaItem
+        Name="DictNm"
+        ViewAttribute="DictNm"
+        Operator="="
+        Conjunction="AND"
+        Required="Optional"
+        Value="NMATMED"/>
+      <ViewCriteriaItem
+        Name="Mqlevel"
+        ViewAttribute="Mqlevel"
+        Operator="="
+        Conjunction="AND"
+        Value="PT"
+        Required="Optional"/>
       <ViewCriteriaItem
         Name="Mqterm"
         ViewAttribute="Mqterm"

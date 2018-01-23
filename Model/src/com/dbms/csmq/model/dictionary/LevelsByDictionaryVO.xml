@@ -4,11 +4,10 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="LevelsByDictionaryVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Full"
-  UseGlueCode="false"
   RowClass="com.dbms.csmq.model.dictionary.LevelsByDictionaryVORowImpl"
   ComponentClass="com.dbms.csmq.model.dictionary.LevelsByDictionaryVOImpl"
   DefClass="com.dbms.csmq.model.dictionary.LevelsByDictionaryVODefImpl">
@@ -26,6 +25,10 @@
   <Variable
     Name="dictShortName"
     Kind="where"
+    Type="java.lang.String"/>
+  <Variable
+    Name="bindShortName"
+    Kind="viewcriteria"
     Type="java.lang.String"/>
   <SQLQuery><![CDATA[SELECT TMS_DEF_LEVELS.NAME, TMS_DEF_LEVELS.SHORT_NAME, 
 REPLACE(TMS_DEF_LEVELS.NAME, 'Level ' ) queryTypeLevel,
@@ -97,6 +100,42 @@ AND TMS_DEF_LEVELS.short_name NOT IN ('PPGRP', 'VT', 'PPG', 'LLT')]]></SQLQuery>
       <Attr Name="_DisplaySize" Value="22"/>
     </DesignTime>
   </ViewAttribute>
+  <ViewCriteria
+    Name="LevelsByDictionaryVOCriteria"
+    ViewObjectName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO"
+    Conjunction="AND">
+    <Properties Name="_Props">
+      <CustomProperties>
+        <Property
+          Name="autoExecute"
+          Value="false"/>
+        <Property
+          Name="mode"
+          Value="Basic"/>
+        <Property
+          Name="allowConjunctionOverride"
+          Value="true"/>
+        <Property
+          Name="showInList"
+          Value="true"/>
+        <Property
+          Name="displayOperators"
+          Value="InAdvancedMode"/>
+      </CustomProperties>
+    </Properties>
+    <ViewCriteriaRow
+      Name="LevelsByDictionaryVOCriteria_row_0"
+      UpperColumns="1">
+      <ViewCriteriaItem
+        Name="ShortName"
+        ViewAttribute="ShortName"
+        Operator="="
+        Conjunction="AND"
+        Value=":bindShortName"
+        IsBindVarValue="true"
+        Required="Optional"/>
+    </ViewCriteriaRow>
+  </ViewCriteria>
   <AttrArray Name="KeyAttributes">
     <Item Value="DefLevelId"/>
   </AttrArray>
