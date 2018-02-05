@@ -37,7 +37,7 @@ public class ReportEngine {
     String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
     //String sourceDirectory = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\JRXMLReport\\";
     String reportFile;
-    
+    private final String dbUrlString = "jdbc/TMSDS";
     JRPropertiesUtil jRPropertiesUtil;
     
     public ReportEngine() {
@@ -79,7 +79,8 @@ public class ReportEngine {
         Connection conn = null;
         try {
             InitialContext initialContext = new InitialContext();
-            DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
+            DataSource ds = (DataSource)initialContext.lookup(dbUrlString);
+            //DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
             conn = ds.getConnection();
             
             for (String reportName : reportNames) {
@@ -138,7 +139,8 @@ public class ReportEngine {
         Connection conn = null;
         try {
             InitialContext initialContext = new InitialContext();
-            DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
+            DataSource ds = (DataSource)initialContext.lookup(dbUrlString);
+            //DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
             conn = ds.getConnection();
             InputStream is = new FileInputStream(new File(reportFile));
             JasperDesign jasperDesign = JRXmlLoader.load(is);
@@ -194,8 +196,8 @@ public class ReportEngine {
         Connection conn = null;
         try {
             InitialContext initialContext = new InitialContext();
-            DataSource ds =
-                (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
+            DataSource ds = (DataSource)initialContext.lookup(dbUrlString);
+            //DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
             conn = ds.getConnection();
 
             for (String reportName : reportNames) {

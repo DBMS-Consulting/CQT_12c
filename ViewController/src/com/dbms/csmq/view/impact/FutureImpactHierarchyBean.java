@@ -51,7 +51,7 @@ public class FutureImpactHierarchyBean extends Hierarchy {
     private RichInputText term;
     private int numberOfTermsToBeDeleted;
     private boolean hasScope = false;
-    
+    protected GenericTreeNode rootCopy;
     
     public FutureImpactHierarchyBean() {
         System.out.println("START: FutureImpactHierarchyBean");
@@ -65,6 +65,7 @@ public class FutureImpactHierarchyBean extends Hierarchy {
         createTree();
         List nodes = new ArrayList();
         nodes.add(root);
+        rootCopy = root;
         treemodel = new ChildPropertyTreeModel(nodes, "children") {
                 public boolean isContainer() {
                     if (getRowData() == null) return false;
@@ -420,5 +421,68 @@ public class FutureImpactHierarchyBean extends Hierarchy {
         return hasScope;
     }
 
+
+    public void setRootCopy(GenericTreeNode rootCopy) {
+        this.rootCopy = rootCopy;
+    }
+
+    public GenericTreeNode getRootCopy() {
+        return rootCopy;
+    }
     
+    public void rebuildTree(boolean isShowImpactedOnly) {
+        System.out.println("START: PreviousVerFutureImpactHierarchyBean.rebuildTree() isShowImpactedOnly=" +
+                           isShowImpactedOnly);
+        if (isShowImpactedOnly) {
+            /*
+            root = copyNode(rootCopy);
+            if(rootCopy.getChildren() != null && rootCopy.getChildren().size() > 0){
+                int size = rootCopy.getChildren().size();
+                List<GenericTreeNode> impactedNodes = null;
+                GenericTreeNode childNode = null;
+                GenericTreeNode copyNode = null;
+                for (int i = 0; i < size; i++) {
+                    childNode = (GenericTreeNode) rootCopy.getChildren().get(i);
+                    impactedNodes = getImpactedNodes(childNode);
+                    if(impactedNodes != null && impactedNodes.size() > 0){
+                        copyNode = copyNode(childNode);
+                        copyNode.getChildren().addAll(impactedNodes);
+                        root.getChildren().add(copyNode);
+                    }
+                }
+            }
+            */
+            root = copyNode(rootCopy);
+            copyNBuildImpactTreeNode(rootCopy, root);
+        } else {
+            root = rootCopy;
+        }
+        List nodes = new ArrayList();
+        nodes.add(root);
+        treemodel = new ChildPropertyTreeModel(nodes, "children") {
+                public boolean isContainer() {
+                    if (getRowData() == null)
+                        return false;
+                    return ((GenericTreeNode)getRowData()).getChildCount() > 0;
+                }
+            };
+        System.out.println("END: PreviousVerFutureImpactHierarchyBean.rebuildTree()");
+    }
+    
+    public GenericTreeNode copyNBuildImpactTreeNode(GenericTreeNode node, GenericTreeNode uiDisplayNode) {
+        if (node.getChildren() != null && node.getChildren().size() > 0) {
+            int size = node.getChildren().size();
+            GenericTreeNode childNode = null;
+            GenericTreeNode uiDisplaychildNode = null;
+            for (int i = 0; i < size; i++) {
+                childNode = (GenericTreeNode)node.getChildren().get(i);
+                if (!"0".equalsIgnoreCase(childNode.getIcon())) {
+                    uiDisplaychildNode = copyNode(childNode);
+                    copyNBuildImpactTreeNode(childNode, uiDisplaychildNode);
+                    uiDisplayNode.getChildren().add(uiDisplaychildNode);
+                }
+            }
+        }
+        return uiDisplayNode;
+    }
 }

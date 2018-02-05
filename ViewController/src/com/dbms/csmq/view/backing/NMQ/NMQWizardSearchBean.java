@@ -3005,6 +3005,294 @@ public class NMQWizardSearchBean  {
             }
         }
     
+    public void downloadPTSearchReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet worksheet = workbook.createSheet("Search Report");
+                HSSFRow excelrow = null;
+
+                int i = 0;
+                int colCount = 0;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Search Criteria");
+
+                i++;
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Dictionary");
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamDictName());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Extenstion");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamExtension()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamExtension());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Release Status");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamReleaseStatus());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Approved");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamApproved()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamApproved());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Level");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamLevel()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamLevel());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Critical Event");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQCriticalEvent()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamMQCriticalEvent());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Product");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamProductList())){
+                    String clause = (String)ADFUtils.evaluateEL("#{pageFlowScope.productClause}");
+                    if(clause != null){
+                        cellA2.setCellValue(clause);
+                    }
+                    else{
+                        cellA2.setCellValue("All");
+                    }
+                }
+                else{
+                    cellA2.setCellValue(getParamProductList());
+                }
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Status");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(getParamActivityStatus());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Group");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQGroupList())){
+                    String clause = (String)ADFUtils.evaluateEL("#{pageFlowScope.groupClause}");
+                    if(clause != null){
+                        cellA2.setCellValue(clause);
+                    }
+                    else{
+                        cellA2.setCellValue("All");
+                    }
+                }
+                else
+                    cellA2.setCellValue(getParamMQGroupList());
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Scope");
+                cellA2 = excelrow.createCell((short) 1);
+                if("%".equals(getParamMQScope()))
+                    cellA2.setCellValue("All");
+                else
+                    cellA2.setCellValue(getParamMQScope());
+
+                i++;
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Search Results Table");
+
+                i++;
+                i++;
+
+                int k = i;
+
+                BindingContext bc = BindingContext.getCurrent();
+                DCBindingContainer binding = (DCBindingContainer) bc.getCurrentBindingsEntry();
+                DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("SimplePTSearchIterator");
+
+
+                RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+    //                        short j = 0;
+    //                        for (String colName : row.getAttributeNames()) {
+    //                            cellA1 = excelrow.createCell((short) j);
+    //                            cellA1.setCellValue(colName);
+    //                            j++;
+    //
+    //                        }
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("NAME");
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        cellA1.setCellValue("CODE");
+                        
+                        cellA1 = excelrow.createCell((short) 2);
+                        cellA1.setCellValue("EXTENSION");
+
+                        cellA1 = excelrow.createCell((short) 3);
+                        cellA1.setCellValue("LEVEL");
+
+                        cellA1 = excelrow.createCell((short) 4);
+                        cellA1.setCellValue("STATUS");
+
+                        cellA1 = excelrow.createCell((short) 5);
+                        cellA1.setCellValue("SCOPE");
+
+                        cellA1 = excelrow.createCell((short) 6);
+                        cellA1.setCellValue("GROUP");
+
+                        cellA1 = excelrow.createCell((short) 7);
+                        cellA1.setCellValue("PRODUCT");
+
+                        cellA1 = excelrow.createCell((short) 8);
+                        cellA1.setCellValue("CRITICAL EVENT");
+
+                        cellA1 = excelrow.createCell((short) 9);
+                        cellA1.setCellValue("CUR/PEND");
+
+                        cellA1 = excelrow.createCell((short) 10);
+                        cellA1.setCellValue("CREATED BY");
+
+                        cellA1 = excelrow.createCell((short) 11);
+                        cellA1.setCellValue("PT CODE");
+
+                        cellA1 = excelrow.createCell((short) 12);
+                        cellA1.setCellValue("PT NAME");
+                        
+                        
+                    }
+
+                    //print data from second row in excel
+                    ++i;
+    //                    short j = 0;
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    cell.setCellValue(row.getAttribute("MeddraTerm") + "");
+                    
+                    cell = excelrow.createCell(1);
+                    cell.setCellValue(row.getAttribute("MeddraCode")+ "");
+                    
+                    cell = excelrow.createCell(2);
+                    cell.setCellValue(row.getAttribute("MeddraExtension")+ "");
+                    
+                    cell = excelrow.createCell(3);
+                    cell.setCellValue(row.getAttribute("MeddraLevel")+ "");
+                    
+                    cell = excelrow.createCell(4);
+                    cell.setCellValue(row.getAttribute("Status")+ "");
+                    
+                    cell = excelrow.createCell(5);
+                    cell.setCellValue(row.getAttribute("Category")+ "");
+                    
+                    cell = excelrow.createCell(6);
+                    cell.setCellValue((row.getAttribute("Value2") == null ? "" : row.getAttribute("Value2"))+ "");
+                    
+                    cell = excelrow.createCell(7);
+                    cell.setCellValue((row.getAttribute("Value3") == null ? "" : row.getAttribute("Value3")) + "");
+                    
+                    cell = excelrow.createCell(8);
+                    cell.setCellValue(row.getAttribute("Value4")+ "");
+                    
+                    cell = excelrow.createCell(9);
+                    cell.setCellValue("Current");
+                    
+//                    oracle.jbo.domain.Date date = (oracle.jbo.domain.Date)row.getAttribute("Dates");
+//                    
+//                    String dateFormatted = "";
+//                    if(date != null){
+//                        java.util.Date utilDate = convertDomainDateToUtilDate(date);
+//                        dateFormatted = formatter.format(utilDate);
+//                    }
+//                    
+//                    cell = excelrow.createCell(12);
+//                    cell.setCellValue(dateFormatted);
+                    
+                    cell = excelrow.createCell(10);
+                    cell.setCellValue(row.getAttribute("CreatedBy")+ "");
+                    
+                    cell = excelrow.createCell(11);
+                    cell.setCellValue((row.getAttribute("PtCode") == null ? "" : row.getAttribute("PtCode"))+ "");
+                    
+                    cell = excelrow.createCell(12);
+                    cell.setCellValue((row.getAttribute("PtName") == null ? "" : row.getAttribute("PtName"))+ "");
+                    
+                    
+    //                    for (String colName : row.getAttributeNames()) {
+    //                        HSSFCell cell = excelrow.createCell(j);
+    //                        if (row.getAttribute(colName) != null)
+    //                            cell.setCellValue(row.getAttribute(colName).toString());
+    //                        j++;
+    //                    }
+    //                    colCount = j;
+                }
+                
+                i++;
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Row Count");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(dcIter.getEstimatedRowCount());
+                
+                worksheet.createFreezePane(0, 1, 0, 1);
+
+                for (int x = 0; x < colCount; x++) {
+                    worksheet.autoSizeColumn(x);
+                }
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
     public void setHistoryDate(Date historyDate) {
         this.historyDate = historyDate;
     }
@@ -4066,7 +4354,9 @@ public class NMQWizardSearchBean  {
         vo.setNamedWhereClauseParam("pTerm", paramTermVal);
         vo.setNamedWhereClauseParam("pCriticalEvent", getParamMQCriticalEvent());
         vo.setNamedWhereClauseParam("pExtension", getParamExtension());
+        if( queryLevel != null && !"%".equalsIgnoreCase(queryLevel)){
         vo.setNamedWhereClauseParam("pLevel", queryLevel);
+        }
         vo.setNamedWhereClauseParam("pScope", getParamMQScope());
         vo.setNamedWhereClauseParam("pStatus", getParamActivityStatus());
         vo.setNamedWhereClauseParam("bindPTCode", getPtSearchCode());

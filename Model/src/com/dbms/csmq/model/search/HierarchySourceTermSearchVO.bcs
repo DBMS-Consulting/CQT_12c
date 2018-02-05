@@ -1,0 +1,12 @@
+//Groovy Scripts for com.dbms.csmq.model.search.HierarchySourceTermSearchVO
+
+package com.dbms.csmq.model.search
+
+import oracle.jbo.script.annotation.VariableExpression;
+
+@VariableExpression(path="dictShtName")
+def dictShtName_VariableScript_Variable()
+{
+adf.context.current.sessionScope.get('defaultBaseDictionaryShortName')
+}
+

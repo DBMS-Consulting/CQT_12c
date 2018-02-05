@@ -7,9 +7,11 @@
   Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
-  PageIterMode="Full">
+  PageIterMode="Full"
+  ComponentClass="com.dbms.csmq.model.search.HierarchySourceTermSearchVOImpl">
   <DesignTime>
     <Attr Name="_isExpertMode" Value="true"/>
+    <Attr Name="_codeGenFlag2" Value="Coll|VarAccess"/>
   </DesignTime>
   <Properties>
     <SchemaBasedProperties>
@@ -287,37 +289,23 @@
       </SchemaBasedProperties>
     </Properties>
   </Variable>
+  <Variable
+    Name="dictShtName"
+    Kind="viewcriteria"
+    Type="java.lang.String">
+    <TransientExpression
+      Name="VariableScript"
+      CodeSourceName="HierarchySourceTermSearchVO"/>
+  </Variable>
   <ViewAccessor
     Name="CurrentDictionaryVA"
-    ViewObjectName="com.dbms.csmq.model.dictionary.CurrentDictionaryVO"
+    ViewObjectName="com.dbms.csmq.model.dictionary.CurrentDictionaryPTVO"
     RowLevelBinds="true">
-    <ParameterMap>
-      <PIMap Variable="shortName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
   </ViewAccessor>
   <ViewAccessor
     Name="LevelsByDictionaryVA"
-    ViewObjectName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO"
+    ViewObjectName="com.dbms.csmq.model.dictionary.LevelsByDictionaryPTVO"
     RowLevelBinds="true">
-    <ViewCriteriaUsage
-      Name="LevelsByDictionaryVOCriteria"
-      FullName="com.dbms.csmq.model.dictionary.LevelsByDictionaryVO.LevelsByDictionaryVOCriteria"/>
-    <ParameterMap>
-      <PIMap Variable="bindShortName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['PT']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="dictShortName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
   </ViewAccessor>
   <ListBinding
     Name="LOV_DictNm"
@@ -340,7 +328,6 @@
     Name="LOV_Mqlevel"
     ListVOName="LevelsByDictionaryVA"
     NullValueFlag="none"
-    NullValueId="${adfBundle['oracle.javatools.resourcebundle.SystemBundle']['NULL_VALUE_RESID']}"
     MRUCount="0">
     <AttrArray Name="AttrNames">
       <Item Value="Mqlevel"/>
@@ -921,19 +908,19 @@ ORDER BY MQTERM]]></SQLQuery>
         ViewAttribute="DictNm"
         Operator="="
         Conjunction="AND"
-        Required="Optional"
-        Value="NMATMED"/>
+        Value=":dictShtName"
+        IsBindVarValue="true"
+        Required="Optional"/>
       <ViewCriteriaItem
         Name="Mqlevel"
         ViewAttribute="Mqlevel"
         Operator="="
         Conjunction="AND"
-        Value="PT"
-        Required="Optional"/>
+        Required="Optional" Value="PT"/>
       <ViewCriteriaItem
         Name="Mqterm"
         ViewAttribute="Mqterm"
-        Operator="CONTAINS"
+        Operator="="
         Conjunction="AND"
         Required="Optional"/>
     </ViewCriteriaRow>

@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+
+import javax.servlet.http.HttpSession;
 
 import oracle.jbo.server.DBTransaction;
 
@@ -37,9 +41,9 @@ public class CSMQBean {
     String initialize = null;
     
     // ******** VERSION **********
-    public static final String APP_VERSION = "01.11";
+    public static final String APP_VERSION = "01.13";
     public static final String APP_BUILD = "00";
-    public static final String APP_BUILD_DATE = "15-MAR-2017";
+    public static final String APP_BUILD_DATE = "24-JAN-2018";
     public static final String RESOURCE_BUNDLE_NAME = "NMAT";
     // ******** VERSION **********
 
@@ -579,6 +583,10 @@ public class CSMQBean {
     }
 
     public String getDefaultBaseDictionaryShortName() {
+        FacesContext fctx = FacesContext.getCurrentInstance();
+        ExternalContext ectx = fctx.getExternalContext();
+        HttpSession userSession = (HttpSession)ectx.getSession(true);
+        userSession.setAttribute("defaultBaseDictionaryShortName", defaultBaseDictionaryShortName);
         return defaultBaseDictionaryShortName;
     }
 

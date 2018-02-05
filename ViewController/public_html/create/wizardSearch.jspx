@@ -173,7 +173,7 @@
                               <af:selectItem label="Active" value="A" id="si19a"/>
                               <af:selectItem label="Inactive" value="I" id="si16"/>
                               <af:selectItem label="Pending" value="P" id="si18"/>
-                            </af:selectOneChoice>
+                        </af:selectOneChoice>
                           </af:gridCell>
                           <af:gridCell marginStart="5px" width="25%" marginEnd="5px" id="gc12"/>
                         </af:gridRow>
@@ -217,11 +217,12 @@
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s22"/>
                     <af:panelGroupLayout id="pgl4" layout="horizontal"
-                                         visible="#{pageFlowScope.NMQWizardSearchBean.showPtSearch}" partialTriggers="b4 b6 soc2">
+                                         visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch) and (UserBean.currentMenu eq 'BROWSE_SEARCH')}" partialTriggers="b4 b6 soc2">
                       <af:inputText label="Preferred Term " id="it51" helpTopicId="NMAT_HELP_TERM" wrap="off"
                                     labelStyle="white-space:nowrap" value="#{pageFlowScope.NMQWizardSearchBean.ptSearch}"
-                                    binding="#{pageFlowScope.NMQWizardSearchBean.ctrlPTSearch}" columns="30"
-                                    partialTriggers="b4 b6 soc2" autoSubmit="true"/>
+                                    binding="#{pageFlowScope.NMQWizardSearchBean.ctrlPTSearch}" columns="47"
+                                    partialTriggers="b4 b6 soc2" autoSubmit="true"
+                                    disabled="true"/>
                       <af:spacer width="5" id="s23"/>
                       <af:button text="Select PT" id="b5">
                         <af:showPopupBehavior popupId="p5"/>
@@ -595,10 +596,19 @@
                     <af:button text="Clear Search" id="b6"
                                actionListener="#{pageFlowScope.NMQWizardSearchBean.clearSearchResutlt}"/>
                     <af:spacer width="10" height="10" id="s24"/>
-                    <af:commandButton text="Export Search" id="b1" icon="/image/EXCEL.png">
+                    <af:commandButton text="Export Search" id="b1" icon="/image/EXCEL.png"
+                                    visible="#{((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}"
+                                      partialTriggers="it51">
                       <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                      filename="SearchReport.xls"
                                                      method="#{pageFlowScope.NMQWizardSearchBean.downloadSearchReport}"/>
+                    </af:commandButton>
+                    <af:commandButton text="Export Search" id="cb14" icon="/image/EXCEL.png"
+                                       visible="#{!((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}"
+                                       partialTriggers="it51">
+                      <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                     filename="SearchReport.xls"
+                                                     method="#{pageFlowScope.NMQWizardSearchBean.downloadPTSearchReport}"/>
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s11"/>
                   </af:panelGroupLayout>
@@ -615,21 +625,38 @@
                     </af:dialog>
                 </af:popup>
                 <af:popup childCreation="deferred" autoCancel="disabled" id="p5"
-                          binding="#{pageFlowScope.NMQWizardSearchBean.ptSearchPopup}" contentDelivery="immediate">
-                  <af:dialog id="d6" title="" type="cancel" closeIconVisible="false">
+                          binding="#{pageFlowScope.NMQWizardSearchBean.ptSearchPopup}" contentDelivery="lazyUncached">
+                  <af:dialog id="d6" title="PT Hierarchy Search" type="cancel" closeIconVisible="false">
                     <f:facet name="buttonBar">
                       <af:button text="Ok" id="b4" action="#{pageFlowScope.NMQWizardSearchBean.hidePtSearchPopup}">
                         <af:setPropertyListener from="#{bindings.Mqterm.inputValue}" to="#{pageFlowScope.NMQWizardSearchBean.ptSearch}" type="action"/>
                          <af:setPropertyListener from="#{bindings.Mqcode.inputValue}" to="#{pageFlowScope.NMQWizardSearchBean.ptSearchCode}" type="action"/>
                       </af:button>
                     </f:facet>
-                    <af:query id="qryId1" headerText="PT Hierarchy Search"
-                              value="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.queryDescriptor}"
-                              model="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.queryModel}"
-                              queryListener="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.processQuery}"
-                              queryOperationListener="#{bindings.HierarchySourceTermSearchVOCriteriaQuery.processQueryOperation}"
-                              resultComponentId="::resId1" saveQueryMode="hidden" modeChangeVisible="false" rows="2"
-                              maxColumns="2" disclosed="true"/>
+                    <af:panelGroupLayout id="pgl5" styleClass="AFStretchWidth" inlineStyle="width:520px;"
+                                                                     layout="horizontal">
+                                                    <af:panelFormLayout id="pfl3" labelAlignment="start">
+                                                        <af:selectOneChoice label="Dictionary" id="soc8" autoSubmit="true"
+                                                                            valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.dictionaryTypeChanged}"
+                                                                            value="BASE"
+                                                                            binding="#{pageFlowScope.NMQSourceTermSearchBean.controlDictionaryType}"
+                                                                            valuePassThru="true">
+                                                            <af:selectItem label="MedDRA" value="BASE" id="si40"/>
+                                                        </af:selectOneChoice>
+                                                        <af:selectOneChoice id="soc5" label="Level"
+                                                                            binding="#{pageFlowScope.NMQSourceTermSearchBean.controlLevel}"
+                                                                            value="PT" valuePassThru="true">
+                                                            <af:selectItem label="PT" value="PT" id="si55"/>
+                                                        </af:selectOneChoice>
+                                                    </af:panelFormLayout>
+                                                    <af:panelFormLayout id="pfl4" labelAlignment="start">
+                                                        <af:inputText label="Term " id="it2"
+                                                                      binding="#{NMQSourceTermSearchUIBean.controlTerm}"/>
+                                                        <af:commandButton text="Search" id="cb13" partialSubmit="true"
+                                                                          actionListener="#{pageFlowScope.NMQSourceTermSearchBean.doMultiPTSearch}"
+                                                                          inlineStyle="height:auto;"/>
+                                                    </af:panelFormLayout>
+                                                </af:panelGroupLayout>
                     <af:table value="#{bindings.HierarchySourceTermPTSearch.collectionModel}" var="row"
                               rows="#{bindings.HierarchySourceTermPTSearch.rangeSize}"
                               emptyText="#{bindings.HierarchySourceTermPTSearch.viewable ? 'No data to display.' : 'Access Denied.'}"
@@ -637,9 +664,10 @@
                               selectedRowKeys="#{bindings.HierarchySourceTermPTSearch.collectionModel.selectedRow}"
                               selectionListener="#{bindings.HierarchySourceTermPTSearch.collectionModel.makeCurrent}"
                               rowSelection="single" fetchSize="#{bindings.HierarchySourceTermPTSearch.rangeSize}"
-                              id="resId1" contentDelivery="immediate">
+                              id="resId1" partialTriggers="::cb13"
+                              binding="#{pageFlowScope.NMQSourceTermSearchBean.ptSearchTable}">
                       <af:column headerText="Term" id="resId1c1"
-                                 width="250" minimumWidth="250">
+                                 width="450" minimumWidth="450">
                         <af:outputText value="#{row.Mqterm}"
                                        shortDesc="#{bindings.HierarchySourceTermPTSearch.hints.Mqterm.tooltip}"
                                        id="ot30"/>

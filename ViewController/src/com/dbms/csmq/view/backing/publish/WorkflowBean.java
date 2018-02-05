@@ -746,6 +746,7 @@ public class WorkflowBean {
                 HSSFCell cellA6 = excelrow.createCell(1);
                 cellA6.setCellValue(item);
                 j++;
+                i++;
             }
             //worksheet.createFreezePane(0, 1, 0, 1);
             worksheet.autoSizeColumn(0);

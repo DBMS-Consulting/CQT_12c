@@ -12,6 +12,8 @@ import com.dbms.csmq.view.backing.impact.ImpactAnalysisUIBean;
 import com.dbms.csmq.view.hierarchy.GenericTreeNode;
 import com.dbms.csmq.view.hierarchy.TermHierarchyBean;
 import com.dbms.csmq.view.hierarchy.TermHierarchySourceBean;
+import com.dbms.csmq.view.impact.FutureImpactHierarchyBean;
+import com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean;
 import com.dbms.csmq.view.impact.PreviousVerCurrentImpactHierarchyBean;
 import com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean;
 import com.dbms.util.ADFUtils;
@@ -147,6 +149,29 @@ public class HierarchyExportBean {
 
             PreviousVerFutureImpactHierarchyBean futuretImpactHierarchyBean =
                 (PreviousVerFutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("PreviousVerFutureImpactHierarchyBean");
+            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
+                            nMQWizardBean.getIncludeLLTsInExport());
+
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void impactAssessPOIExport(FacesContext facesContext, OutputStream outputStream) {
+        try {
+            NMQWizardBean nMQWizardBean =
+                (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            MedDRAImpactHierarchyBean currentImpactHierarchyBean =
+                (MedDRAImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
+            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
+                            nMQWizardBean.getIncludeLLTsInExport());
+
+            FutureImpactHierarchyBean futuretImpactHierarchyBean =
+                (FutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
             createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
                             nMQWizardBean.getIncludeLLTsInExport());
 
@@ -933,7 +958,8 @@ public class HierarchyExportBean {
                             scopeFlag ? getLevelName(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
                                                      (java.math.BigDecimal)element[18]) : "";
                     java.math.BigDecimal relDepthFromRoot = (java.math.BigDecimal)element[54]; // rel_depth_from_root
-                    if(!"Broad".equalsIgnoreCase(valArr[5]))
+                    //if(!"Broad".equalsIgnoreCase(valArr[5]))
+                    if(!("LLT".equalsIgnoreCase(valArr[2])) || (("LLT".equalsIgnoreCase(valArr[2])) && (nMQWizardBean.getIncludeLLTsInExport())))
                     POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,
                                                             relDepthFromRoot.intValue() + 1);
                 }
@@ -955,7 +981,7 @@ public class HierarchyExportBean {
         }
         CSMQBean.logger.info(userBean.getCaller() + " End of generateMQDtlReportTermHierarchyDetails() ");
     }
-
+    
     public void generateHistoryMQDetailedReport(OutputStream outputStream) {
         CSMQBean.logger.info(userBean.getCaller() + "Start exec generateHistoryMQDetailedReport() ");
         CSMQBean.logger.info(userBean.getCaller() + " user: " + userBean.getUsername());

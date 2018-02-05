@@ -1,5 +1,7 @@
 package com.dbms.csmq.model.search;
 
+import oracle.adf.share.ADFContext;
+
 import oracle.jbo.domain.Number;
 import oracle.jbo.server.ViewObjectImpl;
 // ---------------------------------------------------------------------
@@ -366,5 +368,42 @@ public class HierarchySourceTermSearchVOImpl extends ViewObjectImpl {
      */
     public void setpsVirtualDictionaryName(String value) {
         setNamedWhereClauseParam("psVirtualDictionaryName", value);
+    }
+
+    /**
+     * Returns the bind variable value for product.
+     * @return bind variable value for product
+     */
+    public String getproduct() {
+        return (String) getNamedWhereClauseParam("product");
+    }
+
+    /**
+     * Sets <code>value</code> for bind variable product.
+     * @param value value to bind as product
+     */
+    public void setproduct(String value) {
+        setNamedWhereClauseParam("product", value);
+    }
+
+    /**
+     * Returns the variable value for dictShtName.
+     * @return variable value for dictShtName
+     */
+    public String getdictShtName() {
+        String defaultBaseDictionaryShortName = (String)ADFContext.getCurrent().getSessionScope().get("defaultBaseDictionaryShortName");
+        if(defaultBaseDictionaryShortName != null){
+            return defaultBaseDictionaryShortName;
+        }else{
+        return (String) ensureVariableManager().getVariableValue("dictShtName");
+        }
+    }
+
+    /**
+     * Sets <code>value</code> for variable dictShtName.
+     * @param value value to bind as dictShtName
+     */
+    public void setdictShtName(String value) {
+        ensureVariableManager().setVariableValue("dictShtName", value);
     }
 }

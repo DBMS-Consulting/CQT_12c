@@ -49,89 +49,9 @@
     ViewObjectName="com.dbms.csmq.model.search.TermHierarchyDetailsVO"/>
   <ViewUsage
     Name="HierarchySourceTermPTSearch"
-    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO">
-     <ParameterMap>
-      <PIMap Variable="dictShortName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['NMATMED']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="activityStatus">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['ALL']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="releaseStatus">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['ALL']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="levelName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['PT']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="uniqueIDsOnly">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['Y']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="filterForUser">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['N']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="currentUser">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['test_mqm']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="killSwitch">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA[1]]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="showNarrowScpOnly">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['N']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="pUserRole">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['MQM']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="psVirtualDictionaryName">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['CURRENT']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="MQGroup">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="term">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="activationGroup">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="MQCode">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
-      </PIMap>
-      <PIMap Variable="MQCriticalEvent">
-        <TransientExpression
-          trustMode="untrusted"
-          Name="ExpressionScript"><![CDATA['%']]></TransientExpression>
-      </PIMap>
-    </ParameterMap>
+    ViewObjectName="com.dbms.csmq.model.search.HierarchySourceTermSearchVO"
+    FetchSize="1001"
+    RangeSize="1000">
   </ViewUsage>
   <ViewUsage
     Name="SimplePTSearch"

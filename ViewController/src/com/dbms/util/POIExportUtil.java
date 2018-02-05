@@ -81,6 +81,7 @@ public class POIExportUtil {
     private static int rowHeight(String value){
         double upperCount = 0;
         int numberOfLines = 0;
+        if(value != null){
         for(int i=0; i<value.length();i++){
             if(Character.isUpperCase(value.charAt(i))){
                 upperCount = upperCount + 1;
@@ -95,6 +96,9 @@ public class POIExportUtil {
           return 15;  
         }else{
         return numberOfLines*15 + 10;
+        }
+        }else{
+            return 15;  
         }
     }
 

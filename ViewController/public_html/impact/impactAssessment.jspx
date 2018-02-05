@@ -1034,7 +1034,7 @@
                                                 <af:showPopupBehavior popupId="::confirmDelete"/>
                                             </af:commandToolbarButton>
                                             <af:commandToolbarButton text="Export" id="ctb11a" icon="/image/hierarchy/EXCEL.png" binding="#{ImpactAnalysisUIBean.cntrlExportButton}">
-                                                <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactExport}" contentType="application/x-download"
+                                                <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactAssessPOIExport}" contentType="application/x-download"
                                                                                filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
                                             </af:commandToolbarButton>
                                             <af:commandToolbarButton text="Legend" id="cb3" icon="/image/color_swatch.png">

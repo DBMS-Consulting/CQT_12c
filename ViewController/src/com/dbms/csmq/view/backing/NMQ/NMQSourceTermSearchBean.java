@@ -87,6 +87,7 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
     private RichTreeTable controlMultiResultsTable;
     private boolean meddraSearch = true;
     private boolean showHierarchyChildTree = false;
+    private RichTable ptSearchTable;
 
     public void doSearch(ActionEvent actionEvent) {
 
@@ -262,7 +263,73 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
         
     }
     
-    
+    public void doMultiPTSearch(ActionEvent actionEvent) {
+        
+        paramScope = "-1";
+         
+        CSMQBean.logger.info(userBean.getCaller() + " *** PRFORMING Hierarchy SEARCH ***");
+        CSMQBean.logger.info(userBean.getCaller() + " Iterator: HierarchySourceTermPTSearchIterator");
+        CSMQBean.logger.info(userBean.getCaller() + " Mode:: " + getCurrentMode());
+        BindingContext bc = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+        DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("HierarchySourceTermPTSearchIterator");
+        ViewObject vo = dciterb.getViewObject();
+        vo.setWhereClause(null);
+        vo.setNamedWhereClauseParam("startDate", "");
+        vo.setNamedWhereClauseParam("endDate", "");
+        String paramTermVal = getParamTerm();
+        if (null != paramTermVal && !paramTermVal.isEmpty()){
+           paramTermVal = paramTermVal.replace("'","\''");
+        }
+        String activationGroup = CSMQBean.WILDCARD;
+        vo.setNamedWhereClauseParam("term", paramTermVal);
+        vo.setNamedWhereClauseParam("activityStatus", "ALL");
+        vo.setNamedWhereClauseParam("dictShortName", getParamDictionary());
+        vo.setNamedWhereClauseParam("releaseStatus", CSMQBean.BOTH_ACTIVITY_STATUSES);
+        vo.setNamedWhereClauseParam("activationGroup",CSMQBean.WILDCARD );
+        vo.setNamedWhereClauseParam("MQGroup", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("product", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("MQCode", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("MQCriticalEvent", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("uniqueIDsOnly", CSMQBean.TRUE);
+        vo.setNamedWhereClauseParam("filterForUser",  CSMQBean.FALSE);
+        vo.setNamedWhereClauseParam("currentUser", nMQWizardBean.getCurrentUser());
+        vo.setNamedWhereClauseParam("killSwitch", CSMQBean.KILL_SWITCH_OFF);
+        vo.setNamedWhereClauseParam("showNarrowScpOnly", getParamNarrowScopeOnly());
+        vo.setNamedWhereClauseParam("MQScope", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("pState", CSMQBean.WILDCARD);
+        vo.setNamedWhereClauseParam("pUserRole", userBean.getUserRole());
+        vo.setNamedWhereClauseParam("levelName", getParamLevel());
+        
+        
+        CSMQBean.logger.info(userBean.getCaller() + " startDate: " + "");
+        CSMQBean.logger.info(userBean.getCaller() + " endDate: " + "");
+        CSMQBean.logger.info(userBean.getCaller() + " term: " + paramTermVal);
+        CSMQBean.logger.info(userBean.getCaller() + " activityStatus: " + "ALL");
+        CSMQBean.logger.info(userBean.getCaller() + " dictShortName: " + getParamDictionary());
+        CSMQBean.logger.info(userBean.getCaller() + " releaseStatus: " + CSMQBean.BOTH_ACTIVITY_STATUSES);
+        CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " MQGroup: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " product: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " MQCode: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " MQCriticalEvent: " + "%");
+        CSMQBean.logger.info(userBean.getCaller() + " uniqueIDsOnly: " + CSMQBean.TRUE);
+        CSMQBean.logger.info(userBean.getCaller() + " filterForUser: " +  CSMQBean.FALSE);
+        CSMQBean.logger.info(userBean.getCaller() + " currentUser: " + nMQWizardBean.getCurrentUser());
+        CSMQBean.logger.info(userBean.getCaller() + " killSwitch: " + CSMQBean.KILL_SWITCH_OFF);
+        CSMQBean.logger.info(userBean.getCaller() + " showNarrowScpOnly: " + getParamNarrowScopeOnly());
+        CSMQBean.logger.info(userBean.getCaller() + " MQScope: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " pState: " + CSMQBean.WILDCARD);
+        CSMQBean.logger.info(userBean.getCaller() + " pUserRole: " + userBean.getUserRole());
+        CSMQBean.logger.info(userBean.getCaller() + " levelName: " + getParamLevel());
+
+       
+        vo.executeQuery();
+
+        AdfFacesContext.getCurrentInstance().addPartialTarget(ptSearchTable);
+        AdfFacesContext.getCurrentInstance().partialUpdateNotify(ptSearchTable);
+        
+    }
     
     
     public NMQSourceTermSearchBean () {
@@ -880,6 +947,14 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
 
     public boolean isShowHierarchyChildTree() {
         return showHierarchyChildTree;
+    }
+
+    public void setPtSearchTable(RichTable ptSearchTable) {
+        this.ptSearchTable = ptSearchTable;
+    }
+
+    public RichTable getPtSearchTable() {
+        return ptSearchTable;
     }
 }
 

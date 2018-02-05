@@ -51,9 +51,6 @@
     <iterator id="GroupTypeVO1Iterator" Binds="GroupTypeVO1" DataControl="ProductModuleDataControl" RangeSize="25"/>
     <iterator id="HierarchySourceTermPTSearchIterator" Binds="HierarchySourceTermPTSearch"
               DataControl="SearchModuleDataControl" RangeSize="25"/>
-    <searchRegion Criteria="HierarchySourceTermSearchVOCriteria"
-                  Customizer="oracle.jbo.uicli.binding.JUSearchBindingCustomizer"
-                  Binds="HierarchySourceTermPTSearchIterator" id="HierarchySourceTermSearchVOCriteriaQuery"/>
     <iterator Binds="SimplePTSearch" RangeSize="25" DataControl="SearchModuleDataControl1" id="SimplePTSearchIterator"/>
   </executables>
   <bindings>
