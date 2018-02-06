@@ -945,7 +945,8 @@ public class HierarchyExportBean {
                 valArr[4] = scopeFlag ? "N/A" : "";
                 valArr[5] = scopeFlag ? "Full " + (String)element[3] + "/SMQ" : "";
                 POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan, 0);
-
+                int mqDepth = 0;
+                boolean isMQCUSTOMFound = false;
                 for (int i = 0; i < elements.length; i++) {
                     element = ((STRUCT)elements[i]).getAttributes();
                     valArr = new String[6];
@@ -959,9 +960,24 @@ public class HierarchyExportBean {
                                                      (java.math.BigDecimal)element[18]) : "";
                     java.math.BigDecimal relDepthFromRoot = (java.math.BigDecimal)element[54]; // rel_depth_from_root
                     //if(!"Broad".equalsIgnoreCase(valArr[5]))
-                    if(!("LLT".equalsIgnoreCase(valArr[2])) || (("LLT".equalsIgnoreCase(valArr[2])) && (nMQWizardBean.getIncludeLLTsInExport())))
-                    POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,
-                                                            relDepthFromRoot.intValue() + 1);
+                    //Later remove this if code code and get from procedure/function
+                    if(relDepthFromRoot.intValue() == mqDepth){
+                        mqDepth = relDepthFromRoot.intValue();
+                        isMQCUSTOMFound = false;
+                    }
+                    //Later remove this if code code and get from procedure/function
+                    if("MQCUSTOM".equals(valArr[5])){
+                        mqDepth = relDepthFromRoot.intValue();
+                        isMQCUSTOMFound = true;
+                    }
+                    if(!("LLT".equalsIgnoreCase(valArr[2])) || (("LLT".equalsIgnoreCase(valArr[2])) && (nMQWizardBean.getIncludeLLTsInExport()))){
+                    //POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,relDepthFromRoot.intValue() + 1);
+                    //Later remove this if code code and get from procedure/function
+                    if(!("Broad".equals(valArr[5]) && "PT".equals(valArr[2]) && ((isMQCUSTOMFound) && (mqDepth < relDepthFromRoot.intValue())))){
+                        POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,relDepthFromRoot.intValue() + 1);   
+                    }
+                    //System.out.println("------valArr[0]------"+valArr[0]+"------valArr[2]-----"+valArr[2]+"---valArr[5]----"+valArr[5]+"---------------"+relDepthFromRoot.intValue() + 1);
+                    }
                 }
 
             }
