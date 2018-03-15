@@ -21,8 +21,10 @@
     ViewObjectName="com.dbms.csmq.model.publish.ViewObjActivationErrors_Relations"/>
   <ViewUsage
     Name="PublishedIAMQVO1"
-    ViewObjectName="com.dbms.csmq.model.publish.PublishedIAMQVO"/>
+    ViewObjectName="com.dbms.csmq.model.publish.PublishedIAMQVO"
+    FetchSize="1001"/>
   <ViewUsage
     Name="PublishedMQVO1"
-    ViewObjectName="com.dbms.csmq.model.publish.PublishedMQVO"/>
+    ViewObjectName="com.dbms.csmq.model.publish.PublishedMQVO"
+    FetchSize="1001"/>
 </AppModule>

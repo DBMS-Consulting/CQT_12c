@@ -4,7 +4,7 @@
   <parameters/>
   <executables>
     <variableIterator id="variables"/>
-    <iterator Binds="PublishedMQVO1" RangeSize="25" DataControl="PublishModuleDataControl" id="PublishedMQVO1Iterator"/>
+    <iterator Binds="PublishedMQVO1" RangeSize="1000" DataControl="PublishModuleDataControl" id="PublishedMQVO1Iterator"/>
     <!--<invokeAction Binds="ExecuteWithParams" id="Invoke_EWP" Refresh="renderModel"/>-->
   </executables>
   <bindings>

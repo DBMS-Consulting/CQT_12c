@@ -298,7 +298,8 @@ public class HierarchyExportBean {
         if (nMQWizardSearchBean.isHistoryFlow()) {
             exportHistoryTermRelationsPOI(facesContext, outputStream);
         } else {
-            exportRelationJasperReport(facesContext, outputStream);
+            exportHistoryTermRelationsPOINonHistory(facesContext, outputStream);
+            //exportRelationJasperReport(facesContext, outputStream);
         }
     }
     
@@ -391,6 +392,97 @@ public class HierarchyExportBean {
             }
 
             generateHierarchyRow(worksheet, root, colSpan, new Integer("0"), scopeFlag);
+
+            worksheet.createFreezePane(0, 1, 0, 1);
+
+            for (int x = 0; x < 8; x++) {
+                worksheet.autoSizeColumn(x);
+            }
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CSMQBean.logger.info(userBean.getCaller() + "End of exec exportHistoryTermRelationsPOI() ");
+    }
+    
+    public void exportHistoryTermRelationsPOINonHistory(FacesContext facesContext, OutputStream outputStream) {
+        CSMQBean.logger.info(userBean.getCaller() + "Start exec exportHistoryTermRelationsPOI() ");
+        CSMQBean.logger.info(userBean.getCaller() + " user: " + userBean.getUsername());
+        CSMQBean.logger.info(userBean.getCaller() + " I_DICT_CONTENT_ID: " + nMQWizardBean.getCurrentDictContentID());
+        CSMQBean.logger.info(userBean.getCaller() + " CurrentStatus: " + nMQWizardBean.getCurrentStatus());
+        CSMQBean.logger.info(userBean.getCaller() + " getCurrentReleaseGroup: " +
+                             nMQWizardBean.getCurrentReleaseGroup());
+        loadMQDetailedDetailedTermHierarchyInformation(new BigDecimal(nMQWizardBean.getCurrentDictContentID()),
+                                                       nMQWizardBean.getCurrentStatus(),
+                                                       nMQWizardBean.getCurrentReleaseGroup());
+        try {
+            TermHierarchyBean termHierarchyBean =
+                (TermHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("TermHierarchyBean");
+            GenericTreeNode root = termHierarchyBean.getRoot();
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            HSSFSheet worksheet = workbook.createSheet("Existing");
+            rowCount = 0;
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            POIExportUtil.addImageRow(worksheet, rowCount++);
+            worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
+            String logoPath = sourceDirectory + "/app_logo.png";
+            //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
+            POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            POIExportUtil.addHeaderTextRow(worksheet, rowCount++, nMQWizardBean.getCurrentTermName(), 6);
+
+            // GET DICT VERSIONS
+            try {
+                BindingContainer bindings = BindingContext.getCurrent().getCurrentBindingsEntry();
+                AttributeBinding attr = (AttributeBinding)bindings.getControlBinding("Version");
+                version = (String)attr.getInputValue();
+            } catch (Exception e) {
+                // TODO: Add catch code
+                e.printStackTrace();
+            }
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            NMQWizardSearchBean nMQWizardSearchBean =
+                (NMQWizardSearchBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardSearchBean");
+            if (nMQWizardSearchBean != null) {
+                POIExportUtil.addSimpleTextRow(worksheet, rowCount++,
+                                               "Historic View as of  " + nMQWizardSearchBean.getHistoryInputDateStr(),
+                                               5);
+            }
+            POIExportUtil.addFormRow(worksheet, rowCount++, "MedDRA Dictionary Version:",
+                                     nMQWizardBean.getActiveDictionaryVersion(), 2, 2);
+            POIExportUtil.addFormRow(worksheet, rowCount++, "Status:",
+                                     "A".equals(nMQWizardBean.getCurrentMQStatus()) ? "Active" : "Inactive", 2, 2);
+            POIExportUtil.addFormRow(worksheet, rowCount++, "Scope (Yes/No):",
+                                     "Y".equals(nMQWizardBean.getCurrentScope()) ? "Yes" : "No", 2, 2);
+            POIExportUtil.addFormRow(worksheet, rowCount++, "Report Date/Time:",
+                                     new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())),
+                                     2, 2);
+
+            POIExportUtil.addEmptyRow(worksheet, rowCount++);
+            String[] headerArr = { "Term", "Code", "Level", "Category", "Weight", "Scope" };
+            int[] colSpan = { 3, 1, 1, 1, 1, 1 };
+            POIExportUtil.addHierarchyTableHeaderRow(worksheet, rowCount++, headerArr, colSpan);
+
+            boolean scopeFlag = true;
+            if ("No".equalsIgnoreCase(nMQWizardBean.getCurrentScope()) ||
+                "N".equalsIgnoreCase(nMQWizardBean.getCurrentScope())) {
+                scopeFlag = false;
+            }
+
+            //generateHierarchyRow(worksheet, root, colSpan, new Integer("0"), scopeFlag);
+            
+            generateMQDtlReportTermHierarchyDetailsExport(worksheet, new Integer(nMQWizardBean.getCurrentDictContentID()),
+                                                    nMQWizardBean.getCurrentStatus(),
+                                                    nMQWizardBean.getCurrentReleaseGroup(), scopeFlag);
 
             worksheet.createFreezePane(0, 1, 0, 1);
 
@@ -956,7 +1048,7 @@ public class HierarchyExportBean {
                     valArr[3] = scopeFlag ? (String)element[46] : ""; //rel_relation_category
                     valArr[4] = scopeFlag ? (String)element[47] : ""; //rel_relation_weight
                     valArr[5] =
-                            scopeFlag ? getLevelName(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
+                            scopeFlag ? getLevelNameExport(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
                                                      (java.math.BigDecimal)element[18]) : "";
                     java.math.BigDecimal relDepthFromRoot = (java.math.BigDecimal)element[54]; // rel_depth_from_root
                     //if(!"Broad".equalsIgnoreCase(valArr[5]))
@@ -969,6 +1061,101 @@ public class HierarchyExportBean {
                     if("MQCUSTOM".equals(valArr[5])){
                         mqDepth = relDepthFromRoot.intValue();
                         isMQCUSTOMFound = true;
+                    }
+                    if(!("LLT".equalsIgnoreCase(valArr[2])) || (("LLT".equalsIgnoreCase(valArr[2])) && (nMQWizardBean.getIncludeLLTsInExport()))){
+                    //POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,relDepthFromRoot.intValue() + 1);
+                    //Later remove this if code code and get from procedure/function
+                    if(!("Broad".equals(valArr[5]) && "PT".equals(valArr[2]) && ((isMQCUSTOMFound) && (mqDepth < relDepthFromRoot.intValue())))){
+                        POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,relDepthFromRoot.intValue() + 1);   
+                    }
+                    //System.out.println("------valArr[0]------"+valArr[0]+"------valArr[2]-----"+valArr[2]+"---valArr[5]----"+valArr[5]+"---------------"+relDepthFromRoot.intValue() + 1);
+                    }
+                }
+
+            }
+
+        } catch (Exception e) {
+            // TODO: Add catch code
+            e.printStackTrace();
+            CSMQBean.logger.error("error while generateMQDtlReportTermHierarchyDetails()..." + e);
+        } finally {
+            if (null != cstmt) {
+                try {
+                    cstmt.close();
+                } catch (SQLException sqe) {
+                    CSMQBean.logger.error("error while closing callable statment...");
+                }
+            }
+        }
+        CSMQBean.logger.info(userBean.getCaller() + " End of generateMQDtlReportTermHierarchyDetails() ");
+    }
+    
+    private void generateMQDtlReportTermHierarchyDetailsExport(HSSFSheet worksheet, Integer dictContentId,
+                                                         String tMSRecordStatus, String activationGroup,
+                                                         boolean scopeFlag) {
+        Datum[] elements = null;
+        int[] colSpan = { 5, 1, 1, 1, 1, 1 };
+        CSMQBean.logger.info(userBean.getCaller() + "Start exec generateMQDtlReportTermHierarchyDetails() ");
+        CSMQBean.logger.info(userBean.getCaller() + " dictContentId: " + dictContentId);
+        CSMQBean.logger.info(userBean.getCaller() + " tMSRecordStatus: " + tMSRecordStatus);
+        CSMQBean.logger.info(userBean.getCaller() + " activationGroup: " + activationGroup);
+        CSMQBean.logger.info(userBean.getCaller() + " scopeFlag: " + scopeFlag);
+
+        OracleCallableStatement cstmt = null;
+        try {
+            DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+            cstmt =
+                    (OracleCallableStatement)dBTransaction.createCallableStatement(MQ_DTL_REPORT_SQL, DBTransaction.DEFAULT);
+            cstmt.registerOutParameter(1, OracleTypes.ARRAY, "NMAT_DICT_HIERARCHY_QRY_OBJT");
+            cstmt.setString(2, tMSRecordStatus);
+            cstmt.setInt(3, dictContentId.intValue());
+            cstmt.setString(4, activationGroup);
+            cstmt.execute();
+            ARRAY array_to_pass = cstmt.getARRAY(1);
+            elements = array_to_pass.getOracleArray();;
+    //            oracle.sql.ARRAY array_to_pass = ((weblogic.jdbc.wrapper.Array)(cstmt).getObject(1)).unwrap(ARRAY.class);
+    //            elements = array_to_pass.getOracleArray();
+
+            if (elements != null && elements.length > 0) {
+                Map<java.math.BigDecimal, String> levelNameMap = new HashMap<java.math.BigDecimal, String>();
+                Object[] element = ((STRUCT)elements[0]).getAttributes();
+                String[] valArr = new String[6];
+                valArr[0] = (String)element[6]; //root_term
+                valArr[1] = (String)element[5]; //root_dict_content_code
+                valArr[2] = (String)element[2]; //root_level_name
+                valArr[3] = scopeFlag ? "N/A" : "";
+                valArr[4] = scopeFlag ? "N/A" : "";
+                valArr[5] = scopeFlag ? "Full " + (String)element[3] + "/SMQ" : "";
+                POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan, 0);
+                int mqDepth = 0;
+                boolean isMQCUSTOMFound = false;
+                for (int i = 0; i < elements.length; i++) {
+                    element = ((STRUCT)elements[i]).getAttributes();
+                    valArr = new String[6];
+                    valArr[0] = (String)element[34]; //dtls_term
+                    valArr[1] = (String)element[33]; //dtls_dict_content_code
+                    valArr[2] = (String)element[29]; //dtls_level_name
+                    valArr[3] = scopeFlag ? (String)element[46] : ""; //rel_relation_category
+                    valArr[4] = scopeFlag ? (String)element[47] : ""; //rel_relation_weight
+                    valArr[5] =
+                            scopeFlag ? getLevelNameExport(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
+                                                     (java.math.BigDecimal)element[18]) : "";
+//                    if("20000035".equals(valArr[1]) || "20000067".equals(valArr[1]) || "20000037".equals(valArr[1])){
+//                        System.out.println("------------Level Name -------------"+getLevelNameExport(levelNameMap, (String)element[45], (java.math.BigDecimal)element[32],
+//                                                     (java.math.BigDecimal)element[18]));
+//                    }
+                    java.math.BigDecimal relDepthFromRoot = (java.math.BigDecimal)element[54]; // rel_depth_from_root
+                    //if(!"Broad".equalsIgnoreCase(valArr[5]))
+                    //Later remove this if code code and get from procedure/function
+                    if(relDepthFromRoot.intValue() == mqDepth){
+                        mqDepth = relDepthFromRoot.intValue();
+                        isMQCUSTOMFound = false;
+                    }
+                    //Later remove this if code code and get from procedure/function
+                    if("MQCUSTOM".equals(valArr[5])){
+                        mqDepth = relDepthFromRoot.intValue();
+                        isMQCUSTOMFound = true;
+                        valArr[5] = "Child/Narrow";
                     }
                     if(!("LLT".equalsIgnoreCase(valArr[2])) || (("LLT".equalsIgnoreCase(valArr[2])) && (nMQWizardBean.getIncludeLLTsInExport()))){
                     //POIExportUtil.addHierarchyTableValueRow(worksheet, rowCount++, valArr, colSpan,relDepthFromRoot.intValue() + 1);
@@ -1159,8 +1346,29 @@ public class HierarchyExportBean {
     private String getLevelName(Map<java.math.BigDecimal, String> levelNameMap, String dtlLevelName,
                                 java.math.BigDecimal dtlDictContentId, java.math.BigDecimal masterDictContentId) {
         String levelName = dtlLevelName;
+        //System.out.println("-----levelNameMap-----"+levelNameMap);
         if ("0".equals(dtlLevelName)) {
             levelName = levelNameMap.get(masterDictContentId);
+        } else {
+            if (dtlLevelName.contains("BROAD")) {
+                levelName = "Broad";
+            } else if (dtlLevelName.contains("NARROW")) {
+                levelName = "Narrow";
+            }
+            levelNameMap.put(dtlDictContentId, levelName);
+        }
+        return levelName;
+    }
+    
+    private String getLevelNameExport(Map<java.math.BigDecimal, String> levelNameMap, String dtlLevelName,
+                                java.math.BigDecimal dtlDictContentId, java.math.BigDecimal masterDictContentId) {
+        String levelName = dtlLevelName;
+        //System.out.println("-----levelNameMap-----"+levelNameMap);
+        if ("0".equals(dtlLevelName)) {
+            levelName = levelNameMap.get(masterDictContentId);
+            if(levelName == null || "".equals(levelName)){
+                levelName = "Full CMQ/SMQ";
+            }
         } else {
             if (dtlLevelName.contains("BROAD")) {
                 levelName = "Broad";

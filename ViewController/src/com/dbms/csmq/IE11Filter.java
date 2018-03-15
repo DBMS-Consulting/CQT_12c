@@ -23,15 +23,15 @@ public class IE11Filter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-            String userAgentStr = ((HttpServletRequest)servletRequest).getHeader("user-agent");
+            //String userAgentStr = ((HttpServletRequest)servletRequest).getHeader("user-agent");
           // user-agent for the IE 11 request:
           // Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0)...
-          if (userAgentStr != null &&  userAgentStr.contains("Trident")) {  
-            ServletRequest fakeIE10 = new FakeIE10Request((HttpServletRequest)servletRequest);
-            filterChain.doFilter(fakeIE10, servletResponse);  
-          } else {  
+//          if (userAgentStr != null &&  userAgentStr.contains("Trident")) {  
+//            ServletRequest fakeIE10 = new FakeIE10Request((HttpServletRequest)servletRequest);
+//            filterChain.doFilter(fakeIE10, servletResponse);  
+//          } else {  
             filterChain.doFilter(servletRequest, servletResponse);  
-          }  
+          //}  
     }
 
     @Override

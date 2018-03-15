@@ -53,10 +53,6 @@
               <type>user</type>
               <name>NMAT_REQUESTOR</name>
             </member>
-            <member>
-              <type>user</type>
-              <name>TEST_MQM</name>
-            </member>
           </members>
         </role>
         <role>
@@ -149,10 +145,6 @@
               <member>
                 <name>NMAT_REQUESTOR</name>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-              </member>
-              <member>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-                <name>TEST_MQM</name>
               </member>
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
