@@ -228,7 +228,7 @@
                                             <af:selectOneChoice label="Scope" id="soc2" binding="#{NMQWizardUIBean.controlMQScope}"
                                                                 value="#{pageFlowScope.NMQWizardBean.currentScope}" showRequired="false"
                                                                 required="false" labelStyle="white-space:nowrap"
-                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableNMQScope}"
+                                                                readOnly="#{RenderingRulesBean.wizardDetailsDisableScope}"
                                                                 rendered="#{RenderingRulesBean.wizardDetailsRenderNMQScope}"
                                                                 autoSubmit="true" valueChangeListener="#{NMQWizardUIBean.scopeChanged}"
                                                                 contentStyle="color:#000000;">

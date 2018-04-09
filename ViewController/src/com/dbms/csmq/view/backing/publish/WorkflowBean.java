@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.Date;
+import  java.text.SimpleDateFormat;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -513,6 +514,10 @@ public class WorkflowBean {
         style1.setFont(font);
         cellTitle.setCellStyle(style1);
         
+        excelrow = (HSSFRow) worksheet.createRow((short) 1);
+        HSSFCell cellReportRun = excelrow.createCell((short) 1);
+        cellReportRun.setCellValue("Report Date/Time: "+new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())));
+        
         for (oracle.jbo.Row row : rows) {
 
             //print header on first row in excel
@@ -614,6 +619,10 @@ public class WorkflowBean {
         CellStyle style1 = workbook.createCellStyle();
         style1.setFont(font);
         cellTitle.setCellStyle(style1);
+        
+        excelrow = (HSSFRow) worksheet.createRow((short) 1);
+        HSSFCell cellReportRun = excelrow.createCell((short) 1);
+        cellReportRun.setCellValue("Report Date/Time: "+new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())));
 
         for (oracle.jbo.Row row : rows) {
 

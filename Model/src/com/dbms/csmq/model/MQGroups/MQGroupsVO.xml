@@ -4,7 +4,7 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="MQGroupsVO"
-  Version="11.1.2.64.36"
+  Version="12.2.1.12.24"
   BindingStyle="OracleName"
   CustomQuery="true"
   PageIterMode="Partial"
@@ -24,9 +24,7 @@
         ResId="com.dbms.csmq.model.MQGroups.MQGroupsVO_LABEL"/>
     </SchemaBasedProperties>
   </Properties>
-  <SQLQuery>
-    <![CDATA[Select REF_CODELIST_VALUE_SHORT_VAL short_val, LONG_VALUE from rxc.reference_codelist_values where ref_codelist_name = 'NMQ_MQ_GROUP_CODES' ORDER BY LONG_VALUE]]>
-  </SQLQuery>
+  <SQLQuery><![CDATA[Select REF_CODELIST_VALUE_SHORT_VAL short_val, LONG_VALUE from rxc.reference_codelist_values where ref_codelist_name = 'NMQ_MQ_GROUP_CODES' AND REF_CODELIST_VALUE_SHORT_VAL <> 'OTH' ORDER BY LONG_VALUE]]></SQLQuery>
   <ViewAttribute
     Name="ShortVal"
     IsUpdateable="false"

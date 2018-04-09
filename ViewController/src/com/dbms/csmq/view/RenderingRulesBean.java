@@ -94,6 +94,7 @@ public class RenderingRulesBean {
     private boolean wizardDetailsDisableCriticalEvent = false;
     private boolean wizardDetailsDisableNMQLevel = false;
     private boolean wizardDetailsDisableNMQScope = false;
+    private boolean wizardDetailsDisableScope = false;
     private boolean wizardDetailsDisableNMQGroup = false;
     private boolean wizardDetailsDisableNMQCode = false;
     private boolean wizardDetailsDisableSave = false;
@@ -1204,5 +1205,15 @@ public class RenderingRulesBean {
         if (MODE_BROWSE || (MODE_IMPACT_ASSESSMENT && (QUERY_SMQ || STATE_APPROVED_IA || STATE_PUBLISHED_IA)) || (MODE_UPDATE && (STATE_APPROVED || STATE_PUBLISHED))) 
             this.wizardDetailsDisableNMQDesignee = true;
         return wizardDetailsDisableNMQDesignee;
+    }
+
+    public void setWizardDetailsDisableScope(boolean wizardDetailsDisableScope) {
+        this.wizardDetailsDisableScope = wizardDetailsDisableScope;
+    }
+
+    public boolean isWizardDetailsDisableScope() {
+        if (USER_DESIGNEE || USER_USER || MODE_BROWSE || (MODE_UPDATE && (STATE_APPROVED || STATE_PUBLISHED))
+            || (MODE_IMPACT_ASSESSMENT && (STATE_APPROVED_IA || STATE_PUBLISHED_IA))) this.wizardDetailsDisableScope = true;
+        return wizardDetailsDisableScope;
     }
 }
