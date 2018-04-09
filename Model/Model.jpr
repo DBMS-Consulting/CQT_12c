@@ -113,6 +113,8 @@
          <string v=".xsd"/>
          <string v=".xsl"/>
          <string v=".jpx"/>
+         <string v=".rpx"/>
+         <string v=".bcs"/>
       </list>
       <value n="internalEncoding" v="Cp1252"/>
       <list n="Javac.commandline.optionlist">

@@ -53,11 +53,21 @@
               <type>user</type>
               <name>NMAT_REQUESTOR</name>
             </member>
+            <member>
+              <type>user</type>
+              <name>TEST_REQUESTOR</name>
+            </member>
           </members>
         </role>
         <role>
           <name>User</name>
           <display-name>User</display-name>
+          <members>
+            <member>
+              <type>user</type>
+              <name>TEST_USER</name>
+            </member>
+          </members>
         </role>
         <role>
           <name>TMS_NMAT_MQM</name>
@@ -94,10 +104,6 @@
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
               </member>
               <member>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-                <name>NMAT_REQUESTOR</name>
-              </member>
-              <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
                 <name>TMS_NMAT_MQM</name>
               </member>
@@ -108,10 +114,6 @@
             <class>oracle.security.jps.service.policystore.ApplicationRole</class>
             <display-name>User</display-name>
             <members>
-              <member>
-                <name>TEST_USER</name>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-              </member>
               <member>
                 <name>User</name>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
@@ -125,10 +127,6 @@
             <members>
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-                <name>NMAT_REQUESTOR</name>
-              </member>
-              <member>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
                 <name>TEST_MQM</name>
               </member>
             </members>
@@ -138,14 +136,6 @@
             <class>oracle.security.jps.service.policystore.ApplicationRole</class>
             <display-name>Requestor</display-name>
             <members>
-              <member>
-                <name>TEST_REQUESTOR</name>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-              </member>
-              <member>
-                <name>NMAT_REQUESTOR</name>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-              </member>
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
                 <name>TMS_NMAT_REQUESTOR</name>

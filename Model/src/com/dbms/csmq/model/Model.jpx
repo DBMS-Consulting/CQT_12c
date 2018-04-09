@@ -5,7 +5,7 @@
 <JboProject
    xmlns="http://xmlns.oracle.com/bc4j"
    Name="Model"
-   Version="11.1.2.64.36"
+   Version="12.2.1.12.24"
    SeparateXMLFiles="true"
    PackageName="com.dbms.csmq.model">
    <DesignTime>
@@ -29,6 +29,14 @@
       <Attr Name="_appModuleNames14" Value="com.dbms.csmq.model.designee.DesigneeModule"/>
    </DesignTime>
    <Containee
+      Name="am"
+      PackageName="com.dbms.csmq.model.am"
+      ObjectType="JboPackage">
+      <DesignTime>
+         <Attr Name="_AM" Value="true"/>
+      </DesignTime>
+   </Containee>
+   <Containee
       Name="config"
       PackageName="com.dbms.csmq.model.config"
       ObjectType="JboPackage">
@@ -47,10 +55,6 @@
          <Attr Name="_AM" Value="true"/>
       </DesignTime>
    </Containee>
-   <Containee
-      Name="designeeUserList"
-      PackageName="com.dbms.csmq.model.designeeUserList"
-      ObjectType="JboPackage"/>
    <Containee
       Name="dictionary"
       PackageName="com.dbms.csmq.model.dictionary"
