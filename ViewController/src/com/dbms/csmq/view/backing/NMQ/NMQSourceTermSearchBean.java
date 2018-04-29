@@ -16,6 +16,7 @@ import com.dbms.util.Utils;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 
@@ -955,6 +956,10 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
 
     public RichTable getPtSearchTable() {
         return ptSearchTable;
+    }
+
+    public void onRowSelection(ValueChangeEvent valueChangeEvent) {
+        valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
     }
 }
 

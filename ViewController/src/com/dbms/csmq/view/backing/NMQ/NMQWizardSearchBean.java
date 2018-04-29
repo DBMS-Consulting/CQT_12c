@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -1323,7 +1324,7 @@ public class NMQWizardSearchBean  {
         setHistoryDate(null);
         historyFlow = false;
         
-        AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(ctrlSearchResults);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(ctrlSearchResults);
         
         CSMQBean.logger.info(userBean.getCaller() + " ***** ROW CHANGE COMPLETE ****");
@@ -2995,6 +2996,118 @@ public class NMQWizardSearchBean  {
                 
                 worksheet.createFreezePane(0, 1, 0, 1);
 
+                worksheet.autoSizeColumn(0);
+                worksheet.autoSizeColumn(1);
+                worksheet.autoSizeColumn(2);
+                worksheet.autoSizeColumn(3);
+
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public DCBindingContainer getDCBindingContainer(){
+        DCBindingContainer dcBindingContainer = (DCBindingContainer)BindingContext.getCurrent().getCurrentBindingsEntry();
+        return dcBindingContainer;
+    }
+    
+    public void downloadSearchReportPT(FacesContext facesContext, OutputStream outputStream) {
+            DCBindingContainer bindings = this.getDCBindingContainer();
+            DCIteratorBinding itrBinding = bindings.findIteratorBinding("SimpleSearch1Iterator");
+            ViewObject vo = itrBinding.getViewObject();
+            Row[] selectedRows = vo.getFilteredRows("SelectedRow", true);       
+            String whereClause = "";
+            for(Row row : selectedRows){
+                String medraCode = (String)row.getAttribute("Mqcode");
+                whereClause = whereClause.concat(medraCode).concat(",");
+            }
+                whereClause = whereClause.substring(0, whereClause.length()-1); 
+                whereClause = "MEDDRA_CODE IN (".concat(whereClause).concat(")");
+                DCIteratorBinding exportItrBinding = bindings.findIteratorBinding("ExportSearchPT1Iterator");
+                ViewObject ptExportVo = exportItrBinding.getViewObject();
+                ptExportVo.setWhereClause(null);
+                ptExportVo.setWhereClause(whereClause);
+                System.out.println("----whereClause-------"+whereClause);
+                ptExportVo.executeQuery();
+        
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet worksheet = workbook.createSheet("Search Report");
+                HSSFRow excelrow = null;
+
+                int i = 0;
+                int colCount = 0;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
+
+                i++;
+
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Search Results Table");
+
+                i++;
+                i++;
+
+                int k = i;
+
+
+                RowSetIterator rs = ptExportVo.createRowSetIterator(null);
+
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("MEDDRA CODE");
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        cellA1.setCellValue("MEDDRA TERM");
+                        
+                        cellA1 = excelrow.createCell((short) 2);
+                        cellA1.setCellValue("PT CODE");
+
+                        cellA1 = excelrow.createCell((short) 3);
+                        cellA1.setCellValue("PT NAME");
+                        
+                    }
+
+                    //print data from second row in excel
+                    ++i;
+    //                    short j = 0;
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    cell.setCellValue(row.getAttribute("MeddraCode") + "");
+                    
+                    cell = excelrow.createCell(1);
+                    cell.setCellValue(row.getAttribute("MeddraTerm")+ "");
+                    
+                    cell = excelrow.createCell(2);
+                    cell.setCellValue(row.getAttribute("PtCode")+ "");
+                    
+                    cell = excelrow.createCell(3);
+                    cell.setCellValue(row.getAttribute("PtName")+ "");
+                    
+                }
+                
+                i++;
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Row Count");
+                cellA2 = excelrow.createCell((short) 1);
+                cellA2.setCellValue(exportItrBinding.getEstimatedRowCount());
+                
+                worksheet.createFreezePane(0, 1, 0, 1);
+
                 for (int x = 0; x < colCount; x++) {
                     worksheet.autoSizeColumn(x);
                 }
@@ -3003,7 +3116,8 @@ public class NMQWizardSearchBean  {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+ 
+            }
     
     public void downloadPTSearchReport(FacesContext facesContext, OutputStream outputStream) {
             try {
@@ -4401,5 +4515,43 @@ public class NMQWizardSearchBean  {
 
     public RichButton getDoPTSearchButton() {
         return doPTSearchButton;
+    }
+
+    public void ptExport(ActionEvent actionEvent) {
+        DCBindingContainer bindings = this.getDCBindingContainer();
+        DCIteratorBinding itrBinding = bindings.findIteratorBinding("SimpleSearch1Iterator");
+        ViewObject vo = itrBinding.getViewObject();
+        Row[] selectedRows = vo.getFilteredRows("SelectedRow", true);
+        
+        if(selectedRows.length == 0){
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select atlest one row.", "");
+            ctx.addMessage(null,fm);
+        }else if(selectedRows.length == 0){
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select less than 5 rows", "");
+            ctx.addMessage(null,fm);
+            
+        }
+    }
+    
+    public void onRowSelection(ValueChangeEvent valueChangeEvent) {
+        valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
+        
+        DCBindingContainer bindings = this.getDCBindingContainer();
+        DCIteratorBinding itrBinding = bindings.findIteratorBinding("SimpleSearch1Iterator");
+        ViewObject vo = itrBinding.getViewObject();
+        Row[] selectedRows = vo.getFilteredRows("SelectedRow", true);
+        
+        if((selectedRows.length == 0) || (selectedRows.length > 10)){
+            ADFContext adfCtx = ADFContext.getCurrent();
+            Map pageFlowScope = adfCtx.getPageFlowScope();
+            Object val = pageFlowScope.put("enablePTExportButton", "N");
+        }else{
+            ADFContext adfCtx = ADFContext.getCurrent();
+            Map pageFlowScope = adfCtx.getPageFlowScope();
+            Object val = pageFlowScope.put("enablePTExportButton", "Y");
+        }
+        
     }
 }
