@@ -60,6 +60,9 @@
       Name="SimplePTSearchRVOCriteria"
       FullName="com.dbms.csmq.model.search.SimplePTSearchRVO.SimplePTSearchRVOCriteria"/>
   </ViewUsage>
+  <ViewUsage
+    Name="ExportSearchPT1"
+    ViewObjectName="com.dbms.csmq.model.search.ExportSearchPT"/>
   <ClientInterface
     Name="__clientInterface">
     <Method

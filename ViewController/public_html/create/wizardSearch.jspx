@@ -404,6 +404,13 @@
                             selectionListener="#{pageFlowScope.NMQWizardSearchBean.onTableNodeSelection}" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlSearchResults}" contentDelivery="immediate" filterVisible="true" autoHeightRows="-1" inlineStyle="height:230px;"
                             persist="ALL" partialTriggers="::b6 ::it51"
                             visible="#{((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}">
+                    <af:column headerText="" id="c27" width="12" align="center" visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch) and (UserBean.currentMenu eq 'BROWSE_SEARCH')}">
+                      <af:selectBooleanCheckbox value="#{row.bindings.SelectedRow.inputValue}"
+                                                label="#{row.bindings.SelectedRow.label}"
+                                                shortDesc="#{bindings.SimpleSearch1.hints.SelectedRow.tooltip}"
+                                                id="sbc1" autoSubmit="true"
+                                                valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.onRowSelection}"/>
+                    </af:column>
                     <af:column sortProperty="Mqterm" sortable="true" headerText="Term" id="c20" width="165" filterable="true">
                       <af:outputText value="#{row.Mqterm}" id="ot16" styleClass="#{pageFlowScope.NMQWizardSearchBean.historyFlow and row.ContentId eq pageFlowScope.NMQWizardBean.currentDictContentID ? 'HistoricView' : ''}"/>                    
                     </af:column>
@@ -602,6 +609,15 @@
                       <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                      filename="SearchReport.xls"
                                                      method="#{pageFlowScope.NMQWizardSearchBean.downloadSearchReport}"/>
+                    </af:commandButton>
+                    <af:spacer width="10" height="10" id="s25"/>
+                    <af:commandButton text="Export PT" id="cb15" icon="/image/EXCEL.png"
+                                    visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch) and (UserBean.currentMenu eq 'BROWSE_SEARCH') and ((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}"
+                                      partialTriggers="searchResultsTable:sbc1 smc1"
+                                      disabled="#{(pageFlowScope.enablePTExportButton eq 'N') or (pageFlowScope.enablePTExportButton eq null)}">
+                      <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                     filename="PTSearchReport.xls"
+                                                     method="#{pageFlowScope.NMQWizardSearchBean.downloadSearchReportPT}"/>
                     </af:commandButton>
                     <af:commandButton text="Export Search" id="cb14" icon="/image/EXCEL.png"
                                        visible="#{!((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}"

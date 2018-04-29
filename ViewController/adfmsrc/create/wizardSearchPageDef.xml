@@ -52,6 +52,8 @@
     <iterator id="HierarchySourceTermPTSearchIterator" Binds="HierarchySourceTermPTSearch"
               DataControl="SearchModuleDataControl" RangeSize="25"/>
     <iterator Binds="SimplePTSearch" RangeSize="25" DataControl="SearchModuleDataControl1" id="SimplePTSearchIterator"/>
+    <iterator id="ExportSearchPT1Iterator" Binds="ExportSearchPT1" DataControl="SearchModuleDataControl"
+              RangeSize="25"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
@@ -98,7 +100,7 @@
         <Item Value="LongValue"/>
       </ListDisplayAttrNames>
     </list>
-    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1">
+    <tree IterBinding="SimpleSearch1Iterator" id="SimpleSearch1" ChangeEventPolicy="none">
       <nodeDefinition DefName="com.dbms.csmq.model.search.SimpleSearch" Name="SimpleSearch10">
         <AttrNames>
           <Item Value="DictNm"/>
@@ -129,6 +131,7 @@
           <Item Value="Extension"/>
           <Item Value="Querylevel"/>
           <Item Value="PublishedInLastMonth"/>
+          <Item Value="SelectedRow"/>
         </AttrNames>
       </nodeDefinition>
     </tree>
@@ -303,5 +306,14 @@
         <Item Value="Mqcode"/>
       </AttrNames>
     </attributeValues>
+    <button IterBinding="SimpleSearch1Iterator" id="SelectedRow" DTSupportsMRU="false">
+      <AttrNames>
+        <Item Value="SelectedRow"/>
+      </AttrNames>
+      <ValueList>
+        <Item Value="true"/>
+        <Item Value="false"/>
+      </ValueList>
+    </button>
   </bindings>
 </pageDefinition>

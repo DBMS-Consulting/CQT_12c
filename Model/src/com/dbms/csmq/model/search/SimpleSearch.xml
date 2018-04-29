@@ -721,6 +721,22 @@ WHERE (to_char(QUERYLEVEL) LIKE :queryLevel OR to_char(MQLEVEL) LIKE :queryLevel
     ColumnType="VARCHAR2"
     AliasName="VIEW_ATTR"
     SQLType="VARCHAR"/>
+  <ViewAttribute
+    Name="SelectedRow"
+    IsSelected="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Type="java.lang.Boolean"
+    ColumnType="NUMBER"
+    AliasName="VIEW_ATTR"
+    SQLType="BIT">
+    <Properties>
+      <SchemaBasedProperties>
+        <CONTROLTYPE
+          Value="check_box"/>
+      </SchemaBasedProperties>
+    </Properties>
+  </ViewAttribute>
   <AttrArray Name="KeyAttributes">
     <Item Value="Prikey"/>
     <Item Value="CurPendStatus"/>

@@ -162,4 +162,12 @@ public class SearchModuleImpl extends ApplicationModuleImpl implements SearchMod
     public SimplePTSearchRVOImpl getSimplePTSearch() {
         return (SimplePTSearchRVOImpl) findViewObject("SimplePTSearch");
     }
+
+    /**
+     * Container's getter for ExportSearchPT1.
+     * @return ExportSearchPT1
+     */
+    public ExportSearchPTImpl getExportSearchPT1() {
+        return (ExportSearchPTImpl) findViewObject("ExportSearchPT1");
+    }
 }
