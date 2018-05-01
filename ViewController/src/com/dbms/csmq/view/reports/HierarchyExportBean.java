@@ -158,29 +158,29 @@ public class HierarchyExportBean {
             e.printStackTrace();
         }
     }
-    public void impactAssessPOIExport(FacesContext facesContext, OutputStream outputStream) {
-        try {
-            NMQWizardBean nMQWizardBean =
-                (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
-
-            HSSFWorkbook workbook = new HSSFWorkbook();
-
-            MedDRAImpactHierarchyBean currentImpactHierarchyBean =
-                (MedDRAImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
-            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
-                            nMQWizardBean.getIncludeLLTsInExport());
-
-            FutureImpactHierarchyBean futuretImpactHierarchyBean =
-                (FutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
-            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
-                            nMQWizardBean.getIncludeLLTsInExport());
-
-            workbook.write(outputStream);
-            outputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void impactAssessPOIExport(FacesContext facesContext, OutputStream outputStream) {
+//        try {
+//            NMQWizardBean nMQWizardBean =
+//                (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+//
+//            HSSFWorkbook workbook = new HSSFWorkbook();
+//
+//            MedDRAImpactHierarchyBean currentImpactHierarchyBean =
+//                (MedDRAImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
+//            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
+//                            nMQWizardBean.getIncludeLLTsInExport());
+//
+//            FutureImpactHierarchyBean futuretImpactHierarchyBean =
+//                (FutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
+//            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
+//                            nMQWizardBean.getIncludeLLTsInExport());
+//
+//            workbook.write(outputStream);
+//            outputStream.flush();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void createWorksheet(HSSFWorkbook workbook, GenericTreeNode root, String worksheetName,
                                  boolean includeLLTsInExport) {
@@ -288,6 +288,30 @@ public class HierarchyExportBean {
             (ImpactAnalysisUIBean)ADFContext.getCurrent().getRequestScope().get("ImpactAnalysisUIBean");
         doExport(facesContext, outputStream, true, getVisableRowsFromTable(impactAnalysisBean.getMedDRATree()),
                  getVisableRowsFromTable(impactAnalysisBean.getFutureTree()));
+    }
+    
+    public void impactAssessPOIExport(FacesContext facesContext, OutputStream outputStream) {
+        try {
+            NMQWizardBean nMQWizardBean =
+                (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+
+            MedDRAImpactHierarchyBean currentImpactHierarchyBean =
+                (MedDRAImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
+            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
+                            nMQWizardBean.getIncludeLLTsInExport());
+
+            FutureImpactHierarchyBean futuretImpactHierarchyBean =
+                (FutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
+            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
+                            nMQWizardBean.getIncludeLLTsInExport());
+
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void exportRelations(FacesContext facesContext, OutputStream outputStream) {

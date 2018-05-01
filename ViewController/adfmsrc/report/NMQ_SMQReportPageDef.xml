@@ -9,6 +9,8 @@
                       BeanClass="java.lang.String" id="reportListIterator"/>
     <iterator Binds="MQGroupsVO1" RangeSize="-1" DataControl="MQGroupModuleDataControl" id="MQGroupsVO1Iterator"/>
     <iterator Binds="ViewObj_ProductList1" RangeSize="-1" DataControl="ProductModuleDataControl" id="ViewObj_ProductList1Iterator"/>
+    <iterator id="GenerateCurrentMedraQuery1Iterator" Binds="GenerateCurrentMedraQuery1"
+              DataControl="ReportModuleDataControl" RangeSize="-1"/>
   </executables>
   <bindings>
     <tree IterBinding="NMAT_PROPS_VO1Iterator" id="NMAT_PROPS_VO1">

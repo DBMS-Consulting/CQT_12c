@@ -1917,6 +1917,7 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 e.printStackTrace();
             }
         }
+    
     public void downloadSearchReportForImpactedNMQ(FacesContext facesContext, OutputStream outputStream) {
             try {
                 HSSFWorkbook workbook = new HSSFWorkbook();

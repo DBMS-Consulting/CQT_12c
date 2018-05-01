@@ -32,6 +32,8 @@ public class ReportDownloadBean {
         super();
         cSMQBean = (CSMQBean)ADFContext.getCurrent().getApplicationScope().get("CSMQBean");
         reportDirectory = cSMQBean.getProperty("DOWNLOAD_DIRECTORY");
+        
+        //reportDirectory = "C:\\Users\\DileepKumar\\Desktop\\Donna\\reports\\";
         System.out.println("reportDirectory ==> "+ reportDirectory);
         reports = new ArrayList<String>();
         loadReportList();
@@ -49,11 +51,12 @@ public class ReportDownloadBean {
             return;
         File folder = new File(reportDirectory);
         File[] listOfFiles = folder.listFiles();
-
+        if(listOfFiles != null){
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 reports.add(listOfFiles[i].getName());
             }
+        }
         }
         
     }

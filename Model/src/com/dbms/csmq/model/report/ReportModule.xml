@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="ReportModule"
-  Version="11.1.2.60.81"
+  Version="12.2.1.12.24"
   ClearCacheOnRollback="true">
   <ViewUsage
     Name="ViewObjUserListForState1"
@@ -12,4 +12,7 @@
   <ViewUsage
     Name="ViewObjLatestActivationState1"
     ViewObjectName="com.dbms.csmq.model.report.ViewObjLatestActivationState"/>
+  <ViewUsage
+    Name="GenerateCurrentMedraQuery1"
+    ViewObjectName="com.dbms.csmq.model.report.GenerateCurrentMedraQuery"/>
 </AppModule>
