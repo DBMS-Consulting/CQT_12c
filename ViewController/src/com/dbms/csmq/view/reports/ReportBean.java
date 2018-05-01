@@ -57,20 +57,26 @@ import oracle.adf.view.rich.context.AdfFacesContext;
 
 import oracle.jbo.Row;
 
+import oracle.jbo.RowSetIterator;
+import oracle.jbo.ViewObject;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 
 
@@ -144,17 +150,6 @@ public class ReportBean {
         String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
         String reportFile = sourceDirectory + reportName + ".jrxml";
 
-        //BindingContainer bindings = BindingContext.getCurrent().getCurrentBindingsEntry();
-        //AttributeBinding attr = (AttributeBinding)bindings.getControlBinding("Version");
-        //version = (String) attr.getInputValue();
-
-
-        //if (cntrlReleaseGroupList.getValue() != null)
-        //    paramReleaseGroup = cntrlReleaseGroupList.getValue().toString();
-
-        //if (cntrlRequestorList.getValue() != null)
-        //   paramRequestor = cntrlRequestorList.getValue().toString();
-
         if (cntrlStartDate.getValue() != null) {
             paramStartDate = (Date)cntrlStartDate.getValue();
         }
@@ -178,16 +173,6 @@ public class ReportBean {
                 paramStartDate = new java.util.Date(lastActDate.getTime());
             }
         }
-        //        paramProposed = (((Boolean)cntrlProposed.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramRequested = (((Boolean)cntrlRequested.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramDraft = (((Boolean)cntrlDraft.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramPending = (((Boolean)cntrlPending.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramReviewed = (((Boolean)cntrlReviewed.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramApproved = (((Boolean)cntrlApproved.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramPublished = (((Boolean)cntrlPublished.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramActivated = (((Boolean)cntrlActivated.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramRetired = (((Boolean)cntrlActivated.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
-        //        paramReActivated = (((Boolean)cntrlActivated.getValue()) ? CSMQBean.TRUE : CSMQBean.FALSE);
 
         Map parameters = new HashMap();
         parameters.put("ReportTitle", reportName);
@@ -246,23 +231,213 @@ public class ReportBean {
             if (reportFormat.equals("PDF")) {
                 JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
             } else if (reportFormat.equals("XLS")) {
-                JRXlsExporter exporterXLS = new JRXlsExporter();
-                exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
-                exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-                exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, outputStream);
-                exporterXLS.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
-                                         Boolean.TRUE);
-                exporterXLS.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
-                                         Boolean.TRUE);
+                
+//                JRXlsExporter exporterXLS = new JRXlsExporter();
+//                                exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+//                                exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+//                                exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+//                                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, outputStream);
+//                                exporterXLS.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+//                                                         Boolean.TRUE);
+//                                exporterXLS.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
+//                                                         Boolean.TRUE);
+//
+//                                exporterXLS.exportReport();
+            if(true){
+            DCBindingContainer bindings = this.getDCBindingContainer();
+            DCIteratorBinding itrBinding = bindings.findIteratorBinding("GenerateCurrentMedraQuery1Iterator");
+            ViewObject vo = itrBinding.getViewObject();
+        
+            try {
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet worksheet = workbook.createSheet("Search Report");
+                HSSFRow excelrow = null;
 
-                exporterXLS.exportReport();
+                int i = 0;
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 5));
+                String logoPath = sourceDirectory + "/app_logo.png";
+                POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                int colCount = 0;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA2 = excelrow.createCell((short) 1);
 
+                i++;
+
+                POIExportUtil.addHeaderTextRow(worksheet, i++, "Current MedDRA Queries", 6);
+                
+                POIExportUtil.addFormRow(worksheet, i++, "Report Date/Time:",new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())),3, 2);
+                
+                POIExportUtil.addFormRow(worksheet, i++, "Total:",new Long(itrBinding.getEstimatedRowCount()).toString(),3, 2);
+
+                i++;
+                int k = i;
+
+
+                RowSetIterator rs = vo.createRowSetIterator(null);
+
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        CellStyle styleNew = worksheet.getWorkbook().createCellStyle();
+                        Font font = worksheet.getWorkbook().createFont();
+                        font.setFontHeightInPoints((short)10);
+                        font.setFontName("Arial");
+                        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                        font.setColor(new HSSFColor.BLACK().getIndex());
+                        styleNew.setFillBackgroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+                        styleNew.setFillPattern(CellStyle.FINE_DOTS);
+                        styleNew.setFont(font);
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("Code");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        excelrow.createCell((short) 2);
+                        excelrow.createCell((short) 3);
+                        excelrow.createCell((short) 4);
+                        excelrow.createCell((short) 5);
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 1, 5));
+                        cellA1.setCellValue("Name");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        
+                        cellA1 = excelrow.createCell((short) 6);
+                        cellA1.setCellValue("Extension");
+                        cellA1.setCellStyle(styleNew);
+
+                        cellA1 = excelrow.createCell((short) 7);
+                        cellA1.setCellValue("Product");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 8);
+                        cellA1.setCellValue("Level");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 9);
+                        cellA1.setCellValue("Scope");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 10);
+                        excelrow.createCell((short) 11);
+                        cellA1.setCellValue("Dictionary Version");
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 10, 11));
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 12);
+                        cellA1.setCellValue("Status");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 13);
+                        cellA1.setCellValue("Algorithm");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 14);
+                        cellA1.setCellValue("Critical Event");
+                        cellA1.setCellStyle(styleNew);
+                        
+                        cellA1 = excelrow.createCell((short) 15);
+                        excelrow.createCell((short) 16);
+                        excelrow.createCell((short) 17);
+                        excelrow.createCell((short) 18);
+                        excelrow.createCell((short) 19);
+                        excelrow.createCell((short) 20);
+                        excelrow.createCell((short) 21);
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 15, 21));
+                        cellA1.setCellValue("MG Group");
+                        cellA1.setCellStyle(styleNew);
+                        
+                    }
+
+                    //print data from second row in excel
+                    ++i;
+    //                    short j = 0;
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    cell.setCellValue(row.getAttribute("Mqcd") + "");
+                    
+                    cell = excelrow.createCell(1);
+                    excelrow.createCell(2);
+                    excelrow.createCell(3);
+                    excelrow.createCell(4);
+                    excelrow.createCell(5);
+                    worksheet.addMergedRegion(new CellRangeAddress(i, i, 1, 5));
+                    cell.setCellValue(row.getAttribute("Mqname")+ "");
+                    
+                    cell = excelrow.createCell(6);
+                    cell.setCellValue(row.getAttribute("Extension")+ "");
+                    
+                    cell = excelrow.createCell(7);
+                    cell.setCellValue(row.getAttribute("Mqprodct")+ "");
+                    
+                    cell = excelrow.createCell(8);
+                    cell.setCellValue(row.getAttribute("Mqlevel") + "");
+                    
+                    cell = excelrow.createCell(9);
+                    cell.setCellValue(row.getAttribute("Mqscp")+ "");
+                    
+                    cell = excelrow.createCell(10);
+                    excelrow.createCell(11);
+                    worksheet.addMergedRegion(new CellRangeAddress(i, i, 10, 11));
+                    cell.setCellValue(row.getAttribute("Dictver")+ "");
+                    
+                    cell = excelrow.createCell(12);
+                    cell.setCellValue(row.getAttribute("Status")+ "");
+                    
+                    cell = excelrow.createCell(13);
+                    cell.setCellValue(row.getAttribute("Mqalgo")+ "");
+                    
+                    cell = excelrow.createCell(14);
+                    cell.setCellValue(row.getAttribute("Mqcrtev")+ "");
+                    
+                    cell = excelrow.createCell(15);
+                    excelrow.createCell(16);
+                    excelrow.createCell(17);
+                    excelrow.createCell(18);
+                    excelrow.createCell(19);
+                    excelrow.createCell(20);
+                    excelrow.createCell(21);
+                    worksheet.addMergedRegion(new CellRangeAddress(i, i, 15, 21));
+                    cell.setCellValue(row.getAttribute("Mqgroup")+ "");
+                    
+                }
+                
+                i++;
+                i++;
+//                excelrow = (HSSFRow) worksheet.createRow((short) i);
+//                cellA1 = excelrow.createCell((short) 0);
+//                cellA1.setCellValue("Row Count");
+//                cellA2 = excelrow.createCell((short) 1);
+//                cellA2.setCellValue(itrBinding.getEstimatedRowCount());
+                
+                worksheet.createFreezePane(0, 1, 0, 1);
+
+                for (int x = 0; x < colCount; x++) {
+                    worksheet.autoSizeColumn(x);
+                }
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
+            }
+            }
             is.close();
             //conn.close();
             outputStream.close();
+            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -276,7 +451,11 @@ public class ReportBean {
         }
 
     }
-
+    
+    public DCBindingContainer getDCBindingContainer(){
+        DCBindingContainer dcBindingContainer = (DCBindingContainer)BindingContext.getCurrent().getCurrentBindingsEntry();
+        return dcBindingContainer;
+    }
 
     public void setCntrlReportList(RichSelectOneChoice cntrlReportList) {
         this.cntrlReportList = cntrlReportList;
