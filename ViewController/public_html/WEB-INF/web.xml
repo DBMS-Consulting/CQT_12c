@@ -219,4 +219,10 @@
   <security-role>
     <role-name>valid-users</role-name>
   </security-role>
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsff</url-pattern>
+      <is-xml>true</is-xml>
+    </jsp-property-group>
+  </jsp-config>
 </web-app>

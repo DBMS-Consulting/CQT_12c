@@ -27,6 +27,7 @@
       <Attr Name="_appModuleNames12" Value="com.dbms.csmq.model.diff.DiffModule"/>
       <Attr Name="_appModuleNames13" Value="com.dbms.csmq.model.userAccountsList.UserAccountsListModule"/>
       <Attr Name="_appModuleNames14" Value="com.dbms.csmq.model.designee.DesigneeModule"/>
+      <Attr Name="_appModuleNames15" Value="com.dbms.csmq.model.am.CQTAppModule"/>
    </DesignTime>
    <Containee
       Name="am"

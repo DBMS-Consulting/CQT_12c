@@ -99,8 +99,8 @@
                         <f:facet name="start">
                             <af:group id="pt_g1">
                                 <af:panelGroupLayout id="pt_pgl3" inlineStyle="height:45px;" layout="horizontal">
-                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/nmat_logo.png">
-                                    <!--af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png"-->
+                                    <!--<af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/nmat_logo.png">-->
+                                    <af:image id="pt_i1" shortDesc="#{CSMQBean.version}" source="/image/app_logo.png">
                                         <af:showPopupBehavior popupId="pt_p2" triggerType="click" align="overlap"/>
                                     </af:image>
                                 </af:panelGroupLayout>
@@ -171,17 +171,17 @@
                             <af:commandMenuItem text="Create" id="pt_cmi1"
                                                 action="CREATE_NEW_NMQ"
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'CREATE_NEW_NMQ' ? 'bold' : 'normal'};"
-                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"] or securityContext.userInRole ["Requestor"]}'/>
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole ["Requestor"]}'/>
                             <af:commandMenuItem text="Update" id="pt_cmi3"
                                                 action="UPDATE_NMQ"
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'UPDATE_NMQ' ? 'bold' : 'normal'};"
-                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"] or securityContext.userInRole ["Requestor"]}'/>
+                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole ["Requestor"] or securityContext.userInRole["Admin"]}'/>
                             <af:commandMenuItem text="Copy" id="pt_cmi5"
                                                 action="COPY_NMQ"
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'COPY_NMQ' ? 'bold' : 'normal'};"
-                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'/>
+                                                rendered='#{securityContext.userInRole["MQM"]}'/>
                             <af:commandMenuItem text="Update SMQs" id="pt_cmi6" action="UPDATE_SMQ"
-                                                rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
+                                                rendered='#{securityContext.userInRole["MQM"]}'
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'UPDATE_SMQ' ? 'bold' : 'normal'};"/>
                             <af:commandMenuItem text="Browse &amp; Search" id="pt_cmi17" action="BROWSE_SEARCH"
                                                 inlineStyle="font-weight:#{UserBean.currentMenu eq 'BROWSE_SEARCH' ? 'bold' : 'normal'};"
@@ -191,7 +191,7 @@
                                                 useWindow="false" rendered="false"/>
                             <af:menu text="Publish" id="pt_m1"
                                      inlineStyle="font-weight:#{UserBean.currentMenu eq 'NON_IMPACT_PUBLISH' or UserBean.currentMenu eq 'IMPACT_PUBLISH' ? 'bold' : 'normal'};"
-                                     rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'>
+                                     rendered='#{securityContext.userInRole["MQM"]}'>
                                 <af:commandMenuItem text="Publish Current Version" id="pt_cmi2"
                                                     action="NON_IMPACT_PUBLISH"
                                                     rendered='#{securityContext.userInRole["MQM"] or securityContext.userInRole["Admin"]}'
