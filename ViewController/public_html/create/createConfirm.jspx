@@ -32,7 +32,7 @@
                                          id="aot5"/>
                 </af:dialog>
             </af:popup>
-            <af:popup id="confirmApproved">
+            <af:popup id="confirmApproved" binding="#{backingBeanScope.cmqSmqPublishBean.approveConfirmPopup}">
                 <af:dialog title="Confirm Approve" dialogListener="#{NMQWizardUIBean.approve}" id="d7">
                     <af:activeOutputText value="Are you sure you want to approve this MedDRA Query?"
                                          id="aot6"/>
@@ -44,9 +44,21 @@
                                          id="aot7"/>
                 </af:dialog>
             </af:popup>
-            <af:popup id="confirmPublished">
+            <af:popup id="confirmPublished" binding="#{backingBeanScope.cmqSmqPublishBean.publishConfirmPopup}">
                 <af:dialog title="Confirm Publication" dialogListener="#{pageFlowScope.WorkflowBean.promoteSingleMQToPublished}" id="d9">
                     <af:activeOutputText value="Are you sure you want to publish the selected MedDRA Query?" id="aot8"/>
+                </af:dialog>
+            </af:popup>
+            <af:popup id="warningPublished" binding="#{backingBeanScope.cmqSmqPublishBean.publishWarningPopup}">
+                <af:dialog title="Warning Publication" id="d10" type="ok" closeIconVisible="false">
+                    <af:activeOutputText value="This MQ cannot be published because no MedDRA terms have been added to this MQ."
+                                         id="aot9"/>
+                </af:dialog>
+            </af:popup>
+            <af:popup id="warningApprove" binding="#{backingBeanScope.cmqSmqPublishBean.approveWarningPopup}">
+                <af:dialog title="Warning Publication" id="d11" type="ok" closeIconVisible="false">
+                    <af:activeOutputText value="This MQ cannot be approved because no MedDRA terms have been added to this MQ."
+                                         id="aot10"/>
                 </af:dialog>
             </af:popup>
             <af:form id="f1">
@@ -146,7 +158,7 @@
                                 </af:panelFormLayout>
                             </af:panelBox>
                             <af:spacer width="10" height="1" id="s3"/>
-                            <af:panelBox text="Workflow" id="pb1" inlineStyle="width:1195px; padding:5px;" showDisclosure="false">
+                            <af:panelBox text="Workflow" id="pb1" inlineStyle="width:1395px; padding:5px;" showDisclosure="false">
                                 <f:facet name="toolbar">
                                     <af:toolbar id="t3" binding="#{NMQWizardUIBean.cntrlConfirmToolbar}">
                                         <af:commandButton text="Submit to MQM" id="cb8"
@@ -173,20 +185,30 @@
                                                           binding="#{NMQWizardUIBean.cntrlReviewed}">
                                             <af:showPopupBehavior popupId="::confirmReviewed" triggerType="action" align="afterEnd"/>
                                         </af:commandButton>
-                                        <af:commandButton text="Approved" id="cb13"
+                                        <af:button text="Approved" id="cb13"
                                                           disabled="#{RenderingRulesBean.wizardConfirmDisableApproved}"
-                                                          partialTriggers="cb12" binding="#{NMQWizardUIBean.cntrlApproved}">
-                                            <af:showPopupBehavior popupId="::confirmApproved" triggerType="action" align="afterEnd"/>
-                                        </af:commandButton>
+                                                          partialTriggers="cb12"
+                                                   binding="#{pageFlowScope.WorkflowBean.approveButton}"
+                                                          actionListener="#{backingBeanScope.cmqSmqPublishBean.approveAction}">
+                                            <!--<af:showPopupBehavior popupId="::confirmApproved" triggerType="action" align="afterEnd"/>-->
+                                        </af:button>
                                         <af:commandButton text="Delete" id="cb14"
                                                           disabled="#{RenderingRulesBean.wizardConfirmDisableDelete || pageFlowScope.NMQWizardBean.actionDelete}"
                                                           partialTriggers="cb1">
                                             <af:showPopupBehavior popupId="::confirmDelete" triggerType="action" align="afterEnd"/>
                                         </af:commandButton>
-                                        <af:commandButton text="Publish" binding="#{pageFlowScope.WorkflowBean.cb1}" id="cb1" disabled="#{RenderingRulesBean.wizardConfirmDisablePublished}">
-                                            <af:showPopupBehavior popupId="::confirmPublished" triggerType="action" align="afterEnd"/>
+                                        <af:button text="Publish" binding="#{pageFlowScope.WorkflowBean.promoteButton}" id="cb1" 
+                                                   disabled="#{RenderingRulesBean.wizardConfirmDisablePublished}"
+                                                   actionListener="#{backingBeanScope.cmqSmqPublishBean.cmqPublishAction}">
+                                            <!--<af:showPopupBehavior popupId="::confirmPublished" triggerType="action" align="afterEnd"/>-->
+                                        </af:button>
+                                        <!--<af:button text="Publish" binding="#{pageFlowScope.WorkflowBean.cb2}"
+                                                          id="cb2" visible="#{RenderingRulesBean.wizardShowPublished}"
+                                                          disabled="#{RenderingRulesBean.wizardConfirmDisablePublished}">
+                                            <af:showPopupBehavior popupId="::warningPublished" triggerType="action"
+                                                                  align="afterEnd"/>
                                         </af:commandButton>
-                                    </af:toolbar>
+                                    --></af:toolbar>
                                 </f:facet>
                                 <af:panelFormLayout id="pfl3">
                                     <f:facet name="footer"/>

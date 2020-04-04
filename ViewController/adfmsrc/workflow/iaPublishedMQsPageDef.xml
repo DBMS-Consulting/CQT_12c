@@ -6,7 +6,6 @@
     <variableIterator id="variables"/>
     <iterator Binds="PublishedIAMQVO1" RangeSize="1000" DataControl="PublishModuleDataControl"
               id="PublishedIAMQVO1Iterator"/>
-    <invokeAction Binds="ExecuteWithParams" id="Invoke_EWP" Refresh="renderModel"/>
   </executables>
   <bindings>
     <tree IterBinding="PublishedIAMQVO1Iterator" id="PublishedIAMQVO1">

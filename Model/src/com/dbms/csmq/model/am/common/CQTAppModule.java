@@ -50,17 +50,19 @@ public interface CQTAppModule extends ApplicationModule {
     HashMap changeState(String dictContentIDs, String state, String currentUser, String currentUserRole, Date dueDate,
                         String comment, String activationGroup);
 
-    HashMap<String, String> changeStateFromDraftToPublish(String dictContentIDs, String state, String currentUser,
-                                                          String currentUserRole, Date dueDate, String comment,
-                                                          String activationGroup);
-
-    Hashtable<String, String> getActivationInfo(String dictContentID, String dictionaryID);
 
     HashMap saveDetails(String currentFilterDictionaryShortName, String currentPredictGroups, String tempName,
                         String currentProduct, String currentTermLevel, String currentScope, String currentMQALGO,
                         String currentMQCRTEV, String currentMQGROUP, String currentContentCode, String updateParam,
                         String currentRequestor, String currentDictContentID, String userRole,
                         String currentPendingStatus, String currentDesignee);
+
+
+    HashMap<String, String> changeStateFromDraftToPublish(String dictContentIDs, String state, String currentUser,
+                                                          String currentUserRole, Date dueDate, String comment,
+                                                          String activationGroup);
+
+    Hashtable<String, String> getActivationInfo(String dictContentID, String dictionaryID);
 
     HashMap<String, String> saveIADetails(String tempName, String currentProduct, String currentTermLevel,
                                           String currentScope, String currentMQALGO, String currentMQCRTEV,

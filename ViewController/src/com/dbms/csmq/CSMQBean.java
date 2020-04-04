@@ -41,9 +41,9 @@ public class CSMQBean {
     String initialize = null;
     
     // ******** VERSION **********
-    public static final String APP_VERSION = "01.13";
+    public static final String APP_VERSION = "01.16";
     public static final String APP_BUILD = "00";
-    public static final String APP_BUILD_DATE = "24-JAN-2018";
+    public static final String APP_BUILD_DATE = "14-AUG-2019";
     public static final String RESOURCE_BUNDLE_NAME = "NMAT";
     // ******** VERSION **********
 

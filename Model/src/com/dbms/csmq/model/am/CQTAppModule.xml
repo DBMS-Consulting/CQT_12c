@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="CQTAppModule"
-  Version="12.2.1.0.31"
+  Version="12.2.1.12.24"
   InheritPersonalization="merge"
   ComponentClass="com.dbms.csmq.model.am.CQTAppModuleImpl"
   ClearCacheOnRollback="true"
@@ -257,6 +257,61 @@
         Type="java.lang.String"/>
     </Method>
     <Method
+      Name="saveDetails"
+      MethodName="saveDetails">
+      <Return
+        Name="_return_type_"
+        Type="java.util.HashMap"/>
+      <Parameter
+        Name="currentFilterDictionaryShortName"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentPredictGroups"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="tempName"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentProduct"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentTermLevel"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentScope"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentMQALGO"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentMQCRTEV"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentMQGROUP"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentContentCode"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="updateParam"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentRequestor"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentDictContentID"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="userRole"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentPendingStatus"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="currentDesignee"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
       Name="changeStateFromDraftToPublish"
       MethodName="changeStateFromDraftToPublish">
       <Return
@@ -311,61 +366,6 @@
         Type="java.lang.String"/>
       <Parameter
         Name="dictionaryID"
-        Type="java.lang.String"/>
-    </Method>
-    <Method
-      Name="saveDetails"
-      MethodName="saveDetails">
-      <Return
-        Name="_return_type_"
-        Type="java.util.HashMap"/>
-      <Parameter
-        Name="currentFilterDictionaryShortName"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentPredictGroups"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="tempName"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentProduct"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentTermLevel"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentScope"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentMQALGO"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentMQCRTEV"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentMQGROUP"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentContentCode"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="updateParam"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentRequestor"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentDictContentID"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="userRole"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentPendingStatus"
-        Type="java.lang.String"/>
-      <Parameter
-        Name="currentDesignee"
         Type="java.lang.String"/>
     </Method>
     <Method

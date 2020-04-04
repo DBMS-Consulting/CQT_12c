@@ -83,5 +83,9 @@ public interface ImpactModule extends ApplicationModule {
 
     void onPreviousVerImpactSMQSearch(String searchLevelStr, String searchTermStr, String searchCodeStr, String status,
                                       String state, String searchProduct);
+
+    void executePTReport(String product, String term, String termCode);
+
+    void executePTResults(String product, String term, String termCode);
 }
 

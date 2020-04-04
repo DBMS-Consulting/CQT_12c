@@ -13,6 +13,7 @@ import com.dbms.csmq.view.hierarchy.TermHierarchySourceBean;
 import com.dbms.util.ADFUtils;
 import com.dbms.util.Utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,6 +50,8 @@ import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.CollectionModel;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.model.RowKeySetTreeImpl;
+import org.apache.myfaces.trinidad.model.TreeModel;
 
 
 public class NMQSourceTermSearchBean extends HierarchyAccessor {
@@ -960,6 +963,38 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
 
     public void onRowSelection(ValueChangeEvent valueChangeEvent) {
         valueChangeEvent.getComponent().processUpdates(FacesContext.getCurrentInstance());
+    }
+
+    public void selectAllCheckboxValueChange(ValueChangeEvent valueChangeEvent) {
+        
+        RichTreeTable tree = termHierarchyBean.getTargetTree();
+        TreeModel treeModel = termHierarchyBean.getTreemodel(); 
+        int numberOfTermsToBeDeleted = 0;
+        List immediateChildren = ((GenericTreeNode)tree.getRowData(0)).getChildren();
+        ArrayList <GenericTreeNode> nodesToBeDeleted = new ArrayList <GenericTreeNode> ();
+        
+        Iterator iterator = immediateChildren.iterator();
+
+        CSMQBean.logger.info(userBean.getCaller() + " ** CREATING LIST FOR DELETE **");
+                
+        while(iterator.hasNext()) {
+            GenericTreeNode genericTreeNode = (GenericTreeNode)iterator.next();
+            if (genericTreeNode.isDeletable()) {
+                    Boolean newValue = (Boolean)valueChangeEvent.getNewValue();
+                    if(newValue){
+                    genericTreeNode.setMarkedForDeletion(true);
+                    }else{
+                        genericTreeNode.setMarkedForDeletion(false);  
+                    }
+               // nodesToBeDeleted.add(genericTreeNode);
+               // numberOfTermsToBeDeleted++;
+                }  
+            }
+
+                AdfFacesContext.getCurrentInstance().addPartialTarget(tree); 
+                AdfFacesContext.getCurrentInstance().partialUpdateNotify(tree); 
+
+            
     }
 }
 

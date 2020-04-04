@@ -116,7 +116,7 @@
                               <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                           var="row">
                                 <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"
-                                              rendered="#{!(row.shortVal eq 'STANDARD' and UserBean.currentMenu eq 'UPDATE_NMQ' and pageFlowScope.NMQWizardSearchBean.paramExtension eq 'CMQ')}"/>
+                                              rendered="#{!(((row.shortVal eq 'STANDARD') or (row.shortVal eq 'ADR_STD') or (row.shortVal eq 'MEDHIST_STD')) and (pageFlowScope.NMQWizardSearchBean.paramExtension eq 'CMQ'))}"/>
                               </af:forEach>
                             </af:selectManyChoice>
                           </af:gridCell>
@@ -404,7 +404,7 @@
                             selectionListener="#{pageFlowScope.NMQWizardSearchBean.onTableNodeSelection}" binding="#{pageFlowScope.NMQWizardSearchBean.ctrlSearchResults}" contentDelivery="immediate" filterVisible="true" autoHeightRows="-1" inlineStyle="height:230px;"
                             persist="ALL" partialTriggers="::b6 ::it51"
                             visible="#{((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}">
-                    <af:column headerText="" id="c27" width="12" align="center" visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch) and (UserBean.currentMenu eq 'BROWSE_SEARCH')}">
+                    <af:column headerText="" id="c27" width="12" align="center" visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch)}">
                       <af:selectBooleanCheckbox value="#{row.bindings.SelectedRow.inputValue}"
                                                 label="#{row.bindings.SelectedRow.label}"
                                                 shortDesc="#{bindings.SimpleSearch1.hints.SelectedRow.tooltip}"
@@ -612,7 +612,7 @@
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s25"/>
                     <af:commandButton text="Export PT" id="cb15" icon="/image/EXCEL.png"
-                                    visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch) and (UserBean.currentMenu eq 'BROWSE_SEARCH') and ((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}"
+                                    visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch)}"
                                       partialTriggers="searchResultsTable:sbc1 smc1"
                                       disabled="#{(pageFlowScope.enablePTExportButton eq 'N') or (pageFlowScope.enablePTExportButton eq null)}">
                       <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

@@ -3,6 +3,7 @@ package com.dbms.csmq.view.reports;
 
 import com.dbms.csmq.CSMQBean;
 import com.dbms.csmq.UserBean;
+import com.dbms.csmq.model.report.MedraQueryReportRVOImpl;
 import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 import com.dbms.util.POIExportUtil;
 
@@ -23,7 +24,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -33,6 +34,7 @@ import javax.naming.InitialContext;
 
 import javax.sql.DataSource;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -82,7 +84,7 @@ import org.apache.poi.util.IOUtils;
 
 public class ReportBean {
 
-
+    private final String dbUrlString = "jdbc/TMSDS";
     private RichSelectOneChoice cntrlReportList;
     private RichSelectOneChoice cntrlFormatList;
     //private RichSelectManyChoice cntrlStateList;
@@ -149,18 +151,18 @@ public class ReportBean {
         reportFormat = cntrlFormatList.getValue().toString();
         String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
         String reportFile = sourceDirectory + reportName + ".jrxml";
-
+        boolean medraQueryReport = false;
         if (cntrlStartDate.getValue() != null) {
             paramStartDate = (Date)cntrlStartDate.getValue();
         }
         if (cntrlEndDate.getValue() != null) {
             paramEndDate = (Date)cntrlEndDate.getValue();
         }
-
         java.sql.Date lastActDate = null;
 
         // Code to get the last activation date from function if start date and end dates are null from UI
         if (!reportName.equalsIgnoreCase("CURRENT_MEDDRA_QUERIES")) {
+            medraQueryReport = true;
             if (null != paramEndDate) {
                 long milliInADay = 1000 * 60 * 60 * 24;
                 lastActDate =
@@ -168,7 +170,9 @@ public class ReportBean {
             } else {
                 lastActDate = NMQUtils.getLastActivationDate(null, null);
             }
+            if (null == paramEndDate && null != lastActDate) {
             paramEndDate = new java.util.Date(lastActDate.getTime());
+            }
             if (null == paramStartDate && null != lastActDate) {
                 paramStartDate = new java.util.Date(lastActDate.getTime());
             }
@@ -217,19 +221,36 @@ public class ReportBean {
         CSMQBean.logger.info(userBean.getCaller() + " reactivated_yn: " + paramReActivated);
         CSMQBean.logger.info(userBean.getCaller() + " retired_yn: " + paramRetired);
         //CSMQBean.logger.info(userBean.getCaller() + " LAST_ACTIVATON_DATE: " +  this.getParamLastActivationDate());
-        Connection conn = null;
-        try {
-            InitialContext initialContext = new InitialContext();
-            DataSource ds =
-                (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
-            conn = ds.getConnection();
-            InputStream is = new FileInputStream(new File(reportFile));
-            JasperDesign jasperDesign = JRXmlLoader.load(is);
-            JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
-
+       
+        
             if (reportFormat.equals("PDF")) {
+                    Connection conn = null;
+                    try {
+                        InitialContext initialContext = new InitialContext();
+                        //DataSource ds = (DataSource)initialContext.lookup(dbUrlString); // get from your application module configuration
+                        DataSource ds = (DataSource)initialContext.lookup(CSMQBean.getProperty("DATABASE_URL")); // get from your application module configuration
+                        conn = ds.getConnection();
+                        InputStream is = new FileInputStream(new File(reportFile));
+                        JasperDesign jasperDesign = JRXmlLoader.load(is);
+                        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
                 JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+                
+                is.close();
+                //conn.close();
+                outputStream.close();
+                
+                } catch (Exception e) {
+                e.printStackTrace();
+                } finally {
+                if (null != conn) {
+                    try {
+                        conn.close();
+                    } catch (SQLException sqe) {
+                        CSMQBean.logger.info("error while closing connection...");
+                    }
+                }
+                }
             } else if (reportFormat.equals("XLS")) {
                 
 //                JRXlsExporter exporterXLS = new JRXlsExporter();
@@ -242,8 +263,168 @@ public class ReportBean {
 //                                exporterXLS.setParameter(JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
 //                                                         Boolean.TRUE);
 //
-//                                exporterXLS.exportReport();
-            if(true){
+//            try {
+//                exporterXLS.exportReport();
+//            } catch (JRException e) {
+//            }
+            if(medraQueryReport){
+                DCBindingContainer bindings = this.getDCBindingContainer();
+                DCIteratorBinding itrBinding = bindings.findIteratorBinding("MedraQueryReportIterator");
+                ViewObject vo = itrBinding.getViewObject();
+                MedraQueryReportRVOImpl medraQueryReportRVOImpl = (MedraQueryReportRVOImpl)vo;
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+                medraQueryReportRVOImpl.setbindStartDate(sdf.format(paramStartDate));
+                medraQueryReportRVOImpl.setbindEndDate(sdf.format(paramEndDate));
+                medraQueryReportRVOImpl.executeQuery();
+                try {
+                    HSSFWorkbook workbook = new HSSFWorkbook();
+                    HSSFSheet worksheet = workbook.createSheet("MEDDRA QUERY NMQ REPORT");
+                    HSSFRow excelrow = null;
+
+                    int i = 0;
+                    POIExportUtil.addImageRow(worksheet, i++);
+                    POIExportUtil.addImageRow(worksheet, i++);
+                    POIExportUtil.addImageRow(worksheet, i++);
+                    POIExportUtil.addImageRow(worksheet, i++);
+                    POIExportUtil.addImageRow(worksheet, i++);
+                    worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 5));
+                    String logoPath = sourceDirectory + "/app_logo.png";
+                    POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                    int colCount = 0;
+                    excelrow = (HSSFRow) worksheet.createRow((short) i);
+                    HSSFCell cellA1 = excelrow.createCell((short) 0);
+                    
+                    excelrow = (HSSFRow) worksheet.createRow((short) i);
+                    HSSFCell cellA2 = excelrow.createCell((short) 1);
+
+                    i++;
+
+                    POIExportUtil.addHeaderTextRow(worksheet, i++, "MedDRA Query Report", 6);
+                    
+                    POIExportUtil.addFormRow(worksheet, i++, "Between "+new SimpleDateFormat("dd-MMM-yyyy").format(paramStartDate).toString()+" and "+new SimpleDateFormat("dd-MMM-yyyy").format(paramEndDate).toString(),null,5, 1);
+
+                    i++;
+                    int k = i;
+
+
+                    RowSetIterator rs = medraQueryReportRVOImpl.createRowSetIterator(null);
+                    List<String> extensionList = new ArrayList<String>();
+                    List<String> extension = null;
+                    while (rs.hasNext()) {
+                        Row row = rs.next();
+                        //print header on first row in excel
+                        if (i == k) {
+                            CellStyle styleNew = worksheet.getWorkbook().createCellStyle();
+                            Font font = worksheet.getWorkbook().createFont();
+                            font.setFontHeightInPoints((short)10);
+                            font.setFontName("Arial");
+                            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                            font.setColor(new HSSFColor.BLACK().getIndex());
+                            styleNew.setFillBackgroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+                            //styleNew.setFillPattern(CellStyle.FINE_DOTS);
+                            styleNew.setFont(font);
+                            excelrow = (HSSFRow) worksheet.createRow((short) i);
+                            
+                            cellA1 = excelrow.createCell((short) 0);
+                            excelrow.createCell((short) 1);
+                            worksheet.addMergedRegion(new CellRangeAddress(i, i, 0, 1));
+                            cellA1.setCellValue("NMQ Code");
+                            cellA1.setCellStyle(styleNew);
+                            
+                            cellA1 = excelrow.createCell((short) 2);
+                            excelrow.createCell((short) 3);
+                            excelrow.createCell((short) 4);
+                            excelrow.createCell((short) 5);
+                            excelrow.createCell((short) 6);
+                            worksheet.addMergedRegion(new CellRangeAddress(i, i, 2, 6));
+                            cellA1.setCellValue("NMQ Name");
+                            cellA1.setCellStyle(styleNew);
+                            
+                            
+                            cellA1 = excelrow.createCell((short) 7);
+                            excelrow.createCell((short) 8);
+                            worksheet.addMergedRegion(new CellRangeAddress(i, i, 7, 8));
+                            cellA1.setCellValue("Published Date");
+                            cellA1.setCellStyle(styleNew);
+                            
+                        }
+
+                        //print data from second row in excel
+                        i++;
+                        
+                        CellStyle styleNew = worksheet.getWorkbook().createCellStyle();
+                        Font font = worksheet.getWorkbook().createFont();
+                        font.setFontHeightInPoints((short)10);
+                        font.setFontName("Arial");
+                        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                        font.setColor(new HSSFColor.BLACK().getIndex());
+                        styleNew.setFont(font);
+                        //excelrow = (HSSFRow) worksheet.createRow((short) i);   
+                        
+                        if((!extensionList.contains(row.getAttribute("ApprovalReason"))) || (!extension.contains(row.getAttribute("Extension")))){
+                        if(!extensionList.contains(row.getAttribute("ApprovalReason"))){   
+                        excelrow = worksheet.createRow((short) i);
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue(row.getAttribute("ApprovalReason") + "");
+                        cellA1.setCellStyle(styleNew);
+                        extensionList.add(row.getAttribute("ApprovalReason") + "");
+                        extension = new ArrayList<String>();
+                        i++;
+                        }
+                        if(!extension.contains(row.getAttribute("Extension"))){
+                            excelrow = worksheet.createRow((short) i);
+                            cellA1 = excelrow.createCell((short) 1);
+                            cellA1.setCellValue(row.getAttribute("Extension") + "");
+                            cellA1.setCellStyle(styleNew);
+                            extension.add(row.getAttribute("Extension") +  "");
+                            i++;   
+                        }
+                        }
+
+                        
+                        
+                        excelrow = worksheet.createRow((short) i);
+                        
+                        HSSFCell cell = excelrow.createCell(0);
+                        excelrow.createCell(1);
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 0, 1));
+                        cell.setCellValue(row.getAttribute("DictContentCode") + "");
+                        
+                        cell = excelrow.createCell(2);
+                        excelrow.createCell(3);
+                        excelrow.createCell(4);
+                        excelrow.createCell(5);
+                        excelrow.createCell(6);
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 2, 6));
+                        cell.setCellValue(row.getAttribute("Term")+ "");
+                        
+                        cell = excelrow.createCell(7);
+                        excelrow.createCell(8);
+                        worksheet.addMergedRegion(new CellRangeAddress(i, i, 7, 8));
+                        oracle.jbo.domain.Date date = (oracle.jbo.domain.Date)row.getAttribute("TransactionDate");
+                        cell.setCellValue(new SimpleDateFormat("dd-MMM-yyyy").format(date.dateValue()).toString()+ "");                    
+                    }
+                    
+                    i++;
+                    i++;
+                //                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                //                cellA1 = excelrow.createCell((short) 0);
+                //                cellA1.setCellValue("Row Count");
+                //                cellA2 = excelrow.createCell((short) 1);
+                //                cellA2.setCellValue(itrBinding.getEstimatedRowCount());
+                    
+                    worksheet.createFreezePane(0, 1, 0, 1);
+
+                    for (int x = 0; x < colCount; x++) {
+                        worksheet.autoSizeColumn(x);
+                    }
+                    workbook.write(outputStream);
+                    outputStream.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+            }else{
             DCBindingContainer bindings = this.getDCBindingContainer();
             DCIteratorBinding itrBinding = bindings.findIteratorBinding("GenerateCurrentMedraQuery1Iterator");
             ViewObject vo = itrBinding.getViewObject();
@@ -434,21 +615,7 @@ public class ReportBean {
 
             }
             }
-            is.close();
-            //conn.close();
-            outputStream.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != conn) {
-                try {
-                    conn.close();
-                } catch (SQLException sqe) {
-                    CSMQBean.logger.info("error while closing connection...");
-                }
-            }
-        }
+           
 
     }
     

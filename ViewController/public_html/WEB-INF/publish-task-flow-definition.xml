@@ -7,6 +7,11 @@
       <managed-bean-class>com.dbms.csmq.view.backing.publish.WorkflowBean</managed-bean-class>
       <managed-bean-scope>pageFlow</managed-bean-scope>
     </managed-bean>
+    <managed-bean id="__7">
+      <managed-bean-name>cmqSmqPublishBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.CMQSMQPublishBean</managed-bean-class>
+      <managed-bean-scope>backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="promoteToPublished">
       <page>/workflow/promoteToPublished.jspx</page>
       <train-stop>

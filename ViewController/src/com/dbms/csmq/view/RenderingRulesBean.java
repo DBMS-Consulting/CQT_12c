@@ -3,6 +3,7 @@ package com.dbms.csmq.view;
 
 import com.dbms.csmq.CSMQBean;
 import com.dbms.csmq.UserBean;
+import com.dbms.csmq.view.backing.NMQ.NMQUtils;
 import com.dbms.csmq.view.backing.NMQ.NMQWizardBean;
 
 import oracle.adf.share.ADFContext;
@@ -125,6 +126,7 @@ public class RenderingRulesBean {
     private boolean wizardConfirmDisableReviewed = false;
     private boolean wizardConfirmDisableApproved = false;
     private boolean wizardConfirmDisablePublished = false;
+    private boolean wizardShowPublished = false;
     
     // ************************************ REQUIRED *******************************************
     
@@ -1110,9 +1112,34 @@ public class RenderingRulesBean {
     }
 
     public boolean isWizardConfirmDisablePublished() { 
-        if (!(QUERY_CUSTOM && STATE_DRAFT) || STATE_PUBLISHED) wizardConfirmDisablePublished = true;
+        if (!(QUERY_CUSTOM && STATE_DRAFT) || STATE_PUBLISHED ) {
+            wizardConfirmDisablePublished = true;
+        }
         return wizardConfirmDisablePublished;
     }
+
+    public void setWizardShowPublished(boolean wizardShowPublished) {
+        this.wizardShowPublished = wizardShowPublished;
+    }
+
+    public boolean isWizardShowPublished() {
+        NMQWizardBean nMQWizardBean = (NMQWizardBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+        String hasRelations = NMQUtils.checkMqHasRelations(nMQWizardBean.getCurrentDictContentID());
+        if("NO_RELATION".equalsIgnoreCase(hasRelations)){
+            wizardShowPublished = true;
+        }else{
+            wizardShowPublished = false; 
+        }
+        return wizardShowPublished;
+    }
+    //    public boolean isWizardShowPublished() {
+//            NMQWizardBean nMQWizardBean = (NMQWizardBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+//            String hasRelations = NMQUtils.checkMqHasRelations(nMQWizardBean.getCurrentDictContentID());
+//        if ("NO_RELATION".equalsIgnoreCase(hasRelations)) {
+//            return 
+//        }
+//        return wizardConfirmDisablePublished;
+//    }
 
     public void setWizardDetailsShowSMQInSelectList(boolean wizardDetailsShowSMQInSelectList) {
         this.wizardDetailsShowSMQInSelectList = wizardDetailsShowSMQInSelectList;

@@ -60,6 +60,8 @@
               RangeSize="-1"/>
     <iterator id="ViewObj_ProductList1Iterator" Binds="ViewObj_ProductList1" DataControl="ProductModuleDataControl"
               RangeSize="-1"/>
+    <iterator id="NewPTReportIterator" Binds="NewPTReport" DataControl="ImpactModuleDataControl" RangeSize="25"/>
+    <iterator Binds="NewPTResults" RangeSize="25" DataControl="ImpactModuleDataControl" id="NewPTResultsIterator"/>
   </executables>
   <bindings>
   
@@ -420,6 +422,28 @@
       <NamedData NDName="state" NDType="java.lang.String"/>
       <NamedData NDName="searchProduct" NDType="java.lang.String"/>
     </methodAction>
+    <methodAction id="executePTResults" RequiresUpdateModel="true" Action="invokeMethod" MethodName="executePTResults"
+                  IsViewObjectMethod="false" DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.executePTResults.dataControl.dataProvider">
+      <NamedData NDName="product" NDType="java.lang.String"/>
+      <NamedData NDName="term" NDType="java.lang.String"/>
+      <NamedData NDName="termCode" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="executePTReport" RequiresUpdateModel="true" Action="invokeMethod" MethodName="executePTReport"
+                  IsViewObjectMethod="false" DataControl="ImpactModuleDataControl"
+                  InstanceName="bindings.executePTReport.dataControl.dataProvider">
+      <NamedData NDName="product" NDType="java.lang.String"/>
+      <NamedData NDName="term" NDType="java.lang.String"/>
+      <NamedData NDName="termCode" NDType="java.lang.String"/>
+    </methodAction>
+    <tree IterBinding="NewPTResultsIterator" id="NewPTResults">
+      <nodeDefinition DefName="com.dbms.csmq.model.impact.NewPTResultsVVO" Name="NewPTResults0">
+        <AttrNames>
+          <Item Value="MqCode"/>
+          <Item Value="MqName"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
   </bindings>
 </pageDefinition>
 

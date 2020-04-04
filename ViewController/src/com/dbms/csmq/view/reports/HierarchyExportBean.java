@@ -139,17 +139,20 @@ public class HierarchyExportBean {
         try {
             NMQWizardBean nMQWizardBean =
                 (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+            
 
             HSSFWorkbook workbook = new HSSFWorkbook();
 
             PreviousVerCurrentImpactHierarchyBean currentImpactHierarchyBean =
                 (PreviousVerCurrentImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("PreviousVerCurrentImpactHierarchyBean");
-            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
+            AdfFacesContext.getCurrentInstance().getPageFlowScope().put("previousVersionImpact", "Y");
+            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Previous",
                             nMQWizardBean.getIncludeLLTsInExport());
+            AdfFacesContext.getCurrentInstance().getPageFlowScope().put("previousVersionImpact", "N");
 
             PreviousVerFutureImpactHierarchyBean futuretImpactHierarchyBean =
                 (PreviousVerFutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("PreviousVerFutureImpactHierarchyBean");
-            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
+            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Current",
                             nMQWizardBean.getIncludeLLTsInExport());
 
             workbook.write(outputStream);
@@ -212,10 +215,25 @@ public class HierarchyExportBean {
             }
 
             POIExportUtil.addEmptyRow(currentWorksheet, rowCount++);
+            String previousVersionImpact = (String)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("previousVersionImpact");
             if("Future".equalsIgnoreCase(worksheetName)){
                 Double doubleValue = new Double(version);
-                doubleValue = doubleValue + 1;
-                POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", (new Integer(doubleValue.intValue())).toString().concat(".0"), 3, 2);   
+                if(doubleValue%1 == 0 || doubleValue%1 == 0.0){
+                    doubleValue = doubleValue + 0.1;
+                }else{
+                doubleValue = doubleValue + 0.9;
+                }
+                //POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", (new Integer(doubleValue.intValue())).toString().concat(".0"), 3, 2);   
+                POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", doubleValue.toString(), 3, 2);
+            }else if((previousVersionImpact != null) && ("Y".equalsIgnoreCase(previousVersionImpact)) && "Previous".equalsIgnoreCase(worksheetName)){
+                Double doubleValue = new Double(version);
+                if(doubleValue%1 == 0 || doubleValue%1 == 0.0){
+                    doubleValue = doubleValue - 0.9;
+                }else{
+                doubleValue = doubleValue - 0.1;
+                }
+                //POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", (new Integer(doubleValue.intValue())).toString().concat(".0"), 3, 2);   
+                POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", doubleValue.toString(), 3, 2);
             }else{
             POIExportUtil.addFormRow(currentWorksheet, rowCount++, "MedDRA Dictionary Version:", version, 3, 2);
             }
@@ -292,20 +310,36 @@ public class HierarchyExportBean {
     
     public void impactAssessPOIExport(FacesContext facesContext, OutputStream outputStream) {
         try {
+            
+            
             NMQWizardBean nMQWizardBean =
                 (NMQWizardBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
 
             HSSFWorkbook workbook = new HSSFWorkbook();
-
+            
             MedDRAImpactHierarchyBean currentImpactHierarchyBean =
                 (MedDRAImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("MedDRAImpactHierarchyBean");
-            createWorksheet(workbook, currentImpactHierarchyBean.getRootCopy(), "Current",
+            if(nMQWizardBean.getIncludeLLTsInExport()){
+            currentImpactHierarchyBean.addChildrenForExport(currentImpactHierarchyBean.getRootExcelExportCopy().getChildren(), "LLT");
+            createWorksheet(workbook, currentImpactHierarchyBean.getRootExcelExportCopy(), "Current",
                             nMQWizardBean.getIncludeLLTsInExport());
+            }else{
+                currentImpactHierarchyBean.addChildrenForExport(currentImpactHierarchyBean.getRootExcelExportCopy().getChildren(), "PT");
+                createWorksheet(workbook, currentImpactHierarchyBean.getRootExcelExportCopy(), "Current",
+                                nMQWizardBean.getIncludeLLTsInExport()); 
+            }
 
             FutureImpactHierarchyBean futuretImpactHierarchyBean =
                 (FutureImpactHierarchyBean)AdfFacesContext.getCurrentInstance().getPageFlowScope().get("FutureImpactHierarchyBean");
-            createWorksheet(workbook, futuretImpactHierarchyBean.getRootCopy(), "Future",
+            if(nMQWizardBean.getIncludeLLTsInExport()){
+                futuretImpactHierarchyBean.addChildrenForExport(futuretImpactHierarchyBean.getRootExcelExportCopy().getChildren(), "LLT");
+                createWorksheet(workbook, futuretImpactHierarchyBean.getRootExcelExportCopy(), "Future",
+                                nMQWizardBean.getIncludeLLTsInExport());
+            }else{
+            futuretImpactHierarchyBean.addChildrenForExport(futuretImpactHierarchyBean.getRootExcelExportCopy().getChildren(), "PT");
+            createWorksheet(workbook, futuretImpactHierarchyBean.getRootExcelExportCopy(), "Future",
                             nMQWizardBean.getIncludeLLTsInExport());
+            }
 
             workbook.write(outputStream);
             outputStream.flush();

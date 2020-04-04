@@ -59,6 +59,22 @@ public class ImpactModuleClient extends ApplicationModuleImpl implements ImpactM
         return;
     }
 
+    public void executePTReport(String product, String term, String termCode) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "executePTReport",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { product, term, termCode });
+        return;
+    }
+
+    public void executePTResults(String product, String term, String termCode) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "executePTResults",
+                                        new String[] { "java.lang.String", "java.lang.String", "java.lang.String" },
+                                        new Object[] { product, term, termCode });
+        return;
+    }
+
     public void executePreviousImpactSearchListVO_CMQ_N() {
         Object _ret = this.riInvokeExportedMethod(this, "executePreviousImpactSearchListVO_CMQ_N", null, null);
         return;

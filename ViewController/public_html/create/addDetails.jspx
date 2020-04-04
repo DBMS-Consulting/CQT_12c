@@ -113,7 +113,7 @@
                                                 <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
                                                             var="row">
                                                     <af:selectItem id="groups" label="#{row.longValue}" value="#{row.shortVal}"
-                                                                   rendered="#{!(row.shortVal eq 'STANDARD' and UserBean.currentMenu eq 'UPDATE_NMQ' and pageFlowScope.NMQWizardBean.currentExtension eq 'CMQ')}"/>
+                                                                    rendered="#{!(((row.shortVal eq 'STANDARD') or (row.shortVal eq 'ADR_STD') or (row.shortVal eq 'MEDHIST_STD')) and (pageFlowScope.NMQWizardBean.currentExtension eq 'CMQ'))}"/>
                                                 </af:forEach>                                                
                                             </af:selectManyChoice>   
                                             <af:inputText label="Product" id="it1" value="#{pageFlowScope.NMQWizardBean.currentProduct}"

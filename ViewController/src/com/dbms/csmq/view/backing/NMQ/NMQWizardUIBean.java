@@ -23,6 +23,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import javax.faces.model.SelectItem;
 
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.input.RichInputDate;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectBooleanCheckbox;
@@ -97,6 +98,8 @@ public class NMQWizardUIBean {
     private NMQWizardBean nMQWizardBean;
     private TermHierarchyBean termHierarchyBean;
     private UISelectItems cntrlProductSelectItems;
+    private RichPopup publishWarningPopup;
+    private RichPopup publishConfirmPopup;
 
 
     public NMQWizardUIBean() {
@@ -852,5 +855,34 @@ public class NMQWizardUIBean {
 
     public void detailsChanged(ValueChangeEvent valueChangeEvent) {
         ADFUtils.setEL("#{pageFlowScope.isDetailsChanged}", Boolean.TRUE);
+    }
+
+    public void setPublishWarningPopup(RichPopup publishWarningPopup) {
+        this.publishWarningPopup = publishWarningPopup;
+    }
+
+    public RichPopup getPublishWarningPopup() {
+        return publishWarningPopup;
+    }
+
+    public void setPublishConfirmPopup(RichPopup publishConfirmPopup) {
+        this.publishConfirmPopup = publishConfirmPopup;
+    }
+
+    public RichPopup getPublishConfirmPopup() {
+        return publishConfirmPopup;
+    }
+
+    public void clickPublishButon(ActionEvent actionEvent) {
+//        NMQWizardBean nMQWizardBean = (NMQWizardBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+//        String hasRelations = NMQUtils.checkMqHasRelations(nMQWizardBean.getCurrentDictContentID());
+       String hasRelations = "NO_RELATION";
+        if("NO_RELATION".equalsIgnoreCase(hasRelations)){
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();
+            this.getPublishWarningPopup().show(hints);
+        }else{
+            RichPopup.PopupHints hints = new RichPopup.PopupHints();
+            this.getPublishConfirmPopup().show(hints);
+        }
     }
 }

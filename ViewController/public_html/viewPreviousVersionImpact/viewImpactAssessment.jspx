@@ -4,6 +4,14 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <f:view>
         <af:document title="NMAT" id="d1">
+                    <af:resource type="javascript">
+              var customHandler = function (event) {
+                  var component = AdfPage.PAGE.findComponent(event);
+                  var actionEvent = new AdfActionEvent(component);
+                  actionEvent.queue();
+              }
+            </af:resource>
+            <af:messages id="m3"/>
             <af:form id="f1">
                 <af:pageTemplate viewId="/CSMQ.jspx" id="pt1">
                     <f:facet name="main">
@@ -336,8 +344,10 @@
                                                               value="#{pageFlowScope.ImpactAnalysisBean.searchCodeStr}"
                                                               binding="#{pageFlowScope.ImpactAnalysisBean.termCodeComponent}"/>
                                                 <af:spacer width="10" height="10" id="s14"/>
-                                                <af:panelGroupLayout id="pgl20"
-                                                                     binding="#{pageFlowScope.ImpactAnalysisBean.searchButtonGroup}">
+                                                <af:group id="g10"
+                                                      binding="#{pageFlowScope.ImpactAnalysisBean.searchBtnGrp}">
+                                               <!-- <af:panelGroupLayout id="pgl20"
+                                                                     binding="#{pageFlowScope.ImpactAnalysisBean.searchButtonGroup}">-->
                                                     <af:commandButton text="Search" id="cb1" partialSubmit="true"
                                                                       actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpartSearchActionCMQ}"
                                                                       rendered="#{pageFlowScope.ImpactAnalysisBean.previousImpactedDownloadFlag eq 'IMPACT_CMQ'}"/>
@@ -356,7 +366,8 @@
                                                     <af:commandButton text="Search" id="cb14" partialSubmit="true"
                                                                       actionListener="#{pageFlowScope.ImpactAnalysisBean.onImpartSearchActionNonSMQ}"
                                                                       rendered="#{pageFlowScope.ImpactAnalysisBean.previousImpactedDownloadFlag eq 'NON_IMPACT_SMQ'}"/>
-                                                </af:panelGroupLayout>
+                                               <!-- </af:panelGroupLayout>-->
+                                               </af:group>
                                             </af:panelGroupLayout>
                                             <af:spacer width="10" height="10" id="s15"/>
                                         </af:panelGroupLayout>
@@ -552,6 +563,7 @@
                                                     </af:column>
                                                 </af:table>
                                             </af:showDetailItem>
+                                            <af:showDetailItem text="showDetailItem 1" id="sdi7"/>
                                         </af:panelTabbed>
                                     </af:panelGroupLayout>
                                     <f:facet name="buttonBar">
@@ -561,6 +573,93 @@
                                             </af:panelLabelAndMessage>
                                         </af:group>
                                     </f:facet>
+                                </af:dialog>
+                            </af:popup>
+                            <af:popup childCreation="deferred" autoCancel="disabled" id="p1">
+                                <af:dialog id="d2" title="New PT Report" closeIconVisible="false" type="cancel">
+                                <f:facet name="buttonBar"/>
+                                <af:panelGroupLayout id="pgl24" layout="vertical">
+                    <af:panelGroupLayout id="pgl23" layout="horizontal">
+                                            <af:selectOneChoice label="Product" id="smc1" autoSubmit="true"
+                                                                 valuePassThru="true"
+                                                                 value="#{pageFlowScope.ImpactAnalysisBean.newProductStr}"
+                                                                 labelStyle="white-space:nowrap"
+                                                                 contentStyle="color:#000000;">
+                                                <f:selectItem id="si21" itemLabel="" itemValue="PLEASE_SELECT"/>
+                                                <af:forEach items="#{bindings.ViewObj_ProductList1.iteratorBinding.allRowsInRange}"
+                                                            var="row">
+                                                    <f:selectItem id="si22" itemLabel="#{row.longValue}"
+                                                                  itemValue="#{row.shortVal}"/>
+                                                </af:forEach>
+                                            </af:selectOneChoice>
+                                            <af:spacer width="150" height="10" id="s23"/>
+                                            <af:panelGroupLayout id="pgl22">
+                                              <af:button text="Export All New PT" id="cb15"
+                                                                  icon="/image/EXCEL.png" visible="false"
+                                                           binding="#{pageFlowScope.ImpactAnalysisBean.dndNewAllPTbtn}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="NewPTReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadAllNewPTReport}"/>
+                                                </af:button>
+                                                <af:button text="Export All New PT" id="b1"
+                                                                  icon="/image/EXCEL.png"
+                                                           actionListener="#{pageFlowScope.ImpactAnalysisBean.validateExportNewPT}">
+                                                    </af:button>
+                                                <af:spacer width="5" id="s28"/>
+                                                <af:button text="Export Selected New PT" id="cb17"
+                                                                  icon="/image/EXCEL.png" visible="false"                                    
+                                                           binding="#{pageFlowScope.ImpactAnalysisBean.dndNewSelectedPTbtn}">
+                                                    <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                                                   filename="NewPTReport.xls"
+                                                                                   method="#{pageFlowScope.ImpactAnalysisBean.downloadNewPTReport}"/>
+                                                </af:button>
+                                                <af:button text="Export Selected New PT" id="cb18"
+                                                                  icon="/image/EXCEL.png"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.validateDownldSelectedNewPT}">
+                                                </af:button>
+                                            </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s24"/>
+                                            <af:panelGroupLayout id="pgl25" layout="horizontal">
+                                                <af:inputText label="Term " columns="35" id="it6" value="#{pageFlowScope.ImpactAnalysisBean.newSearchTermStr}"
+                                                              autoSubmit="true"/>
+                                                <af:spacer width="10" height="10" id="s25"/>
+                                                <af:inputText label="Code " columns="10" id="it7"
+                                                              value="#{pageFlowScope.ImpactAnalysisBean.newSearchCodeStr}"
+                                                              autoSubmit="true"/>
+                                                <af:spacer width="10" height="10" id="s26"/>
+                                            <af:panelGroupLayout id="pgl21" binding="#{pageFlowScope.ImpactAnalysisBean.searchButtonGroup}">
+                                                  <af:commandButton text="Search" id="cb16" partialSubmit="true"
+                                                                  actionListener="#{pageFlowScope.ImpactAnalysisBean.searchNewPT}"/>
+                                            </af:panelGroupLayout>
+                                        </af:panelGroupLayout>
+                                            <af:spacer width="10" height="10" id="s27"/>
+                                        <af:panelBox text="" id="pb2"  showDisclosure="false" showHeader="never"  partialTriggers="cb16">
+                                            <f:facet name="toolbar"/>
+                                            <af:table value="#{bindings.NewPTResults.collectionModel}" var="row"
+                                                      rows="#{bindings.NewPTResults.rangeSize}"
+                                                      emptyText="#{bindings.NewPTResults.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                                      rowBandingInterval="0"
+                                                      selectedRowKeys="#{bindings.NewPTResults.collectionModel.selectedRow}"
+                                                      selectionListener="#{bindings.NewPTResults.collectionModel.makeCurrent}"
+                                                      rowSelection="single"
+                                                      fetchSize="#{bindings.NewPTResults.rangeSize}" id="t5"
+                                                      editingMode="clickToEdit" columnStretching="last">
+                                                <af:column headerText="Code"
+                                                           id="c7">
+                                                    <af:outputText value="#{row.MqCode}"
+                                                                   shortDesc="#{bindings.NewPTResults.hints.MqCode.tooltip}"
+                                                                   id="ot4"/>
+                                                </af:column>
+                                                <af:column headerText="Term"
+                                                           id="c21">
+                                                    <af:outputText value="#{row.MqName}"
+                                                                   shortDesc="#{bindings.NewPTResults.hints.MqName.tooltip}"
+                                                                   id="ot21"/>
+                                                </af:column>
+                                            </af:table>
+                                        </af:panelBox>
+                                    </af:panelGroupLayout>
                                 </af:dialog>
                             </af:popup>
                             <af:panelBox text="Previous Version Impact" id="pb1" showDisclosure="false"
@@ -749,7 +848,7 @@
                                                         <af:selectItem label="Narrow" value="2" id="si13d"/>
                                                         <af:selectItem label="Child Narrow" value="3" id="si4"/>
                                                     </af:selectOneChoice>-->
-                                                    <af:outputText value="#{node.scopeName}" id="ot4"/>   
+                                                    <af:outputText value="#{node.scopeName}" id="ot9"/>   
                                                 </af:column>
                                                 <af:column id="c4" headerText="Category" width="45" sortable="true"
                                                            filterable="true">
@@ -830,6 +929,10 @@
                                                 <af:fileDownloadActionListener method="#{pageFlowScope.HierarchyExportBean.impactPOIExport}"
                                                                                contentType="application/x-download"
                                                                                filename="#{pageFlowScope.HierarchyExportBean.excelFileName}"/>
+                                            </af:commandToolbarButton>
+                                            <af:commandToolbarButton text="New PT Report" id="ctb11b"
+                                                                     icon="/image/hierarchy/EXCEL.png">
+                                             <af:showPopupBehavior popupId="p1"/>
                                             </af:commandToolbarButton>
                                             <af:commandToolbarButton text="Legend" id="cb3"
                                                                      icon="/image/color_swatch.png">

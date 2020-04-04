@@ -15,6 +15,7 @@ import com.dbms.csmq.view.impact.MedDRAImpactHierarchyBean;
 import com.dbms.csmq.view.impact.PreviousVerCurrentImpactHierarchyBean;
 import com.dbms.csmq.view.impact.PreviousVerFutureImpactHierarchyBean;
 import com.dbms.util.ADFUtils;
+import com.dbms.util.POIExportUtil;
 import com.dbms.util.Utils;
 
 import java.io.OutputStream;
@@ -36,6 +37,7 @@ import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
+import oracle.adf.share.security.SecurityContext;
 import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.data.RichTreeTable;
@@ -44,6 +46,7 @@ import oracle.adf.view.rich.component.rich.input.RichSelectManyChoice;
 import oracle.adf.view.rich.component.rich.input.RichSelectOneChoice;
 import oracle.adf.view.rich.component.rich.layout.RichPanelGroupLayout;
 import oracle.adf.view.rich.component.rich.layout.RichToolbar;
+import oracle.adf.view.rich.component.rich.nav.RichButton;
 import oracle.adf.view.rich.component.rich.output.RichImage;
 import oracle.adf.view.rich.context.AdfFacesContext;
 import oracle.adf.view.rich.dnd.DnDAction;
@@ -59,13 +62,20 @@ import oracle.jbo.RowSetIterator;
 import oracle.jbo.ViewObject;
 import oracle.jbo.uicli.binding.JUCtrlHierNodeBinding;
 
+import org.apache.myfaces.trinidad.component.UIXGroup;
 import org.apache.myfaces.trinidad.event.DisclosureEvent;
 import org.apache.myfaces.trinidad.event.SelectionEvent;
 import org.apache.myfaces.trinidad.model.RowKeySet;
+import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
+import org.apache.myfaces.trinidad.util.Service;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 
 public class ImpactAnalysisBean extends HierarchyAccessor {
@@ -92,7 +102,7 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private String activationGroups;
     private String activeDictionaryName;
     private String currentDictId;
-    
+    String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
     // FOR WORKFLOW
     private String currentState = CSMQBean.STATE_PROPOSED;
     private String currentReasonForApproval;
@@ -124,6 +134,10 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private String searchStateStr = "%";
     private String searchStatusStr = "%";
     private String searchTermStr;
+    private String newSearchTermStr;
+    private String searchCodeStr;
+    private String newSearchCodeStr;
+    private String newProductStr;
     private boolean showPrevVerCurrentImpactedOnly;
     private boolean showPrevVerFutureImpactedOnly;
     private RichSelectManyChoice productComponent;
@@ -135,6 +149,9 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     private String previousImpactedDownloadFlag;
     private RichPanelGroupLayout buttonGroup;
     private RichPanelGroupLayout searchButtonGroup;
+    private RichButton dndNewSelectedPTbtn;
+    private RichButton dndNewAllPTbtn;
+    private UIXGroup searchBtnGrp;
 
     public void setHints(RichPopup.PopupHints hints) {
         this.hints = hints;
@@ -167,7 +184,6 @@ public class ImpactAnalysisBean extends HierarchyAccessor {
     public String getSearchCodeStr() {
         return searchCodeStr;
     }
-    private String searchCodeStr;
 
     public ImpactAnalysisBean() {
         
@@ -1670,6 +1686,21 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         ob.execute();
         System.out.println("End of Exec onImpartSearchAction() ");
     }
+    
+    public void searchNewPT(ActionEvent actionEvent) {
+        System.out.println("Start Exec onImpartSearchAction() ");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePTResults");
+        if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr()) || "".equalsIgnoreCase(getNewProductStr())){
+            ob.getParamsMap().put("product", null);   
+        }else{
+        ob.getParamsMap().put("product", getNewProductStr());
+        }
+        ob.getParamsMap().put("term", getNewSearchTermStr());
+        ob.getParamsMap().put("termCode", getNewSearchCodeStr());
+        ob.execute();
+        System.out.println("End of Exec onImpartSearchAction() ");
+    }
 
     
     public void onImpactAssesmentSearchNMQAction(ActionEvent actionEvent) {
@@ -1918,6 +1949,523 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
             }
         }
     
+    public void downloadAllNewPTReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                
+                DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+                OperationBinding ob = bc.getOperationBinding("executePTReport");
+                if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr()) || "".equalsIgnoreCase(getNewProductStr())){
+                    ob.getParamsMap().put("product", null);   
+                }else{
+                ob.getParamsMap().put("product", getNewProductStr());
+                }
+                ob.getParamsMap().put("term", getNewSearchTermStr());
+                ob.getParamsMap().put("termCode", getNewSearchCodeStr());
+                ob.execute();
+                
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("New PT Report","New PT Report","ImpactSearchListVO_CMQ_YIterator", workbook); 
+                //------------------
+                HSSFSheet worksheet = workbook.createSheet("NewPTReport");
+                HSSFRow excelrow = null;
+
+                int i = 0;
+                int colCount = 0;
+                
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+               // POIExportUtil.addImageRow(worksheet, i++);
+                worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 3));
+                String logoPath = sourceDirectory + "/app_logo.png";
+                POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+
+                POIExportUtil.addEmptyRow(worksheet, i++);
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Export Criteria Used");
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA4 = excelrow.createCell((short) 0);
+                if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr())){
+                cellA4.setCellValue("Product :  ");   
+                }else if(getNewProductStr() == null){
+                cellA4.setCellValue("Product :  ");
+                }else{
+                cellA4.setCellValue("Product :  "+getNewProductStr());   
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA2 = excelrow.createCell((short) 0);
+                if(getNewSearchTermStr() == null){
+                cellA2.setCellValue("Term    :  ");   
+                }else{
+                cellA2.setCellValue("Term    :  "+getNewSearchTermStr());
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA3 = excelrow.createCell((short) 0);
+                if(getNewSearchCodeStr() == null){
+                cellA3.setCellValue("Code    :  ");  
+                }else{
+                cellA3.setCellValue("Code    :  "+getNewSearchCodeStr());
+                }
+                i++;
+                POIExportUtil.addEmptyRow(worksheet, i++);
+                POIExportUtil.addHeaderTextRow(worksheet, i++, "New PT Report", 3);
+                
+                i++;
+                i++;
+
+                int k = i;
+
+                BindingContext bcx = BindingContext.getCurrent();
+                DCBindingContainer binding = (DCBindingContainer) bcx.getCurrentBindingsEntry();
+                DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("NewPTReportIterator");
+
+
+                RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+                        HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
+                        Font font = worksheet.getWorkbook().createFont();
+                        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                        cellStyle.setFont(font);
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("PRODUCT");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        cellA1.setCellValue("MQ CODE");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 2);
+                        cellA1.setCellValue("MQ NAME"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 3);
+                        cellA1.setCellValue("PRIMARY HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 4);
+                        cellA1.setCellValue("PRIMARY HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 5);
+                        cellA1.setCellValue("NEW PT CODE");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 6);
+                        cellA1.setCellValue("NEW PT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 7);
+                        cellA1.setCellValue("FORMER PT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 8);
+                        cellA1.setCellValue("FORMER PT TERM");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 9);
+                        cellA1.setCellValue("RELATED LLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 10);
+                        cellA1.setCellValue("RELATED LLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 11);
+                        cellA1.setCellValue("REPORT TYPE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        colCount = 18;
+                    }
+
+                    ++i;
+
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    if(row.getAttribute("Product") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("Product") + "");
+                    }
+                    
+                    cell = excelrow.createCell(1);
+                    if(row.getAttribute("MqCode") == null){
+                    cell.setCellValue(""); 
+                    }else{
+                    cell.setCellValue(row.getAttribute("MqCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(2);
+                    if(row.getAttribute("MqName") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("MqName")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(3);
+                    if(row.getAttribute("PrimaryHltCode") == null){
+                    cell.setCellValue("");        
+                    }else{
+                    cell.setCellValue(row.getAttribute("PrimaryHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(4);
+                    if(row.getAttribute("PrimaryHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("PrimaryHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(5);
+                    if(row.getAttribute("NewPtCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewPtCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(6);
+                    if(row.getAttribute("NewPtTerm") == null){
+                    cell.setCellValue("");     
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewPtTerm")+ "");
+                    }   
+                    
+                    cell = excelrow.createCell(7);
+                    if( row.getAttribute("FormerPtCode") == null){
+                    cell.setCellValue("");   
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerPtCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(8);
+                    if(row.getAttribute("FormerPtTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerPtTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(9);
+                    if(row.getAttribute("RelatedLltCode") == null){
+                    cell.setCellValue("");       
+                    }else{
+                    cell.setCellValue(row.getAttribute("RelatedLltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(10);
+                    if(row.getAttribute("RelatedLltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("RelatedLltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(11);
+                    if(row.getAttribute("ReportType") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("ReportType")+ "");
+                    }
+
+                }
+                
+                i++;
+                i++;
+//                excelrow = (HSSFRow) worksheet.createRow((short) i);
+//                cellA1 = excelrow.createCell((short) 0);
+//                cellA1.setCellValue("Row Count");
+//                HSSFCell cellA2 = excelrow.createCell((short) 1);
+//                cellA2.setCellValue(dcIter.getEstimatedRowCount());
+                
+                //worksheet.createFreezePane(0, 1, 0, 1);
+
+                for (int x = 0; x < colCount; x++) {
+                    worksheet.autoSizeColumn(x);
+                }
+                if(colCount == 0){
+                    worksheet.autoSizeColumn(0);
+                }
+                //---------
+                
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+    public void downloadNewPTReport(FacesContext facesContext, OutputStream outputStream) {
+            try {
+                BindingContext bcx = BindingContext.getCurrent();
+                DCBindingContainer binding = (DCBindingContainer) bcx.getCurrentBindingsEntry();
+                DCIteratorBinding dcIter1 = (DCIteratorBinding) binding.get("NewPTResultsIterator");
+                Row currentRow = dcIter1.getViewObject().getCurrentRow();
+                
+                DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+                OperationBinding ob = bc.getOperationBinding("executePTReport");
+                if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr()) || "".equalsIgnoreCase(getNewProductStr())){
+                    ob.getParamsMap().put("product", null);   
+                }else{
+                ob.getParamsMap().put("product", getNewProductStr());
+                }
+                if(currentRow == null){ 
+                ob.getParamsMap().put("term", getNewSearchTermStr());
+                ob.getParamsMap().put("termCode", getNewSearchCodeStr());
+                }else{
+                    ob.getParamsMap().put("term", currentRow.getAttribute("MqName"));
+                    ob.getParamsMap().put("termCode", currentRow.getAttribute("MqCode"));
+                }
+                ob.execute();
+                
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //workbook = createWorkBookTab("New PT Report","New PT Report","ImpactSearchListVO_CMQ_YIterator", workbook); 
+                //------------------
+                HSSFSheet worksheet = workbook.createSheet("New PT Report");
+                HSSFRow excelrow = null;
+
+                int i = 0;
+                int colCount = 0;
+                
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+                POIExportUtil.addImageRow(worksheet, i++);
+               // POIExportUtil.addImageRow(worksheet, i++);
+                worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 3));
+                String logoPath = sourceDirectory + "/app_logo.png";
+                POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+
+                POIExportUtil.addEmptyRow(worksheet, i++);
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA1 = excelrow.createCell((short) 0);
+                cellA1.setCellValue("Export Criteria Used");
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA4 = excelrow.createCell((short) 0);
+                if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr())){
+                cellA4.setCellValue("Product :  ");   
+                }else if(getNewProductStr() == null){
+                cellA4.setCellValue("Product :  ");
+                }else{
+                cellA4.setCellValue("Product :  "+getNewProductStr());
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA2 = excelrow.createCell((short) 0);
+                if(currentRow == null){
+                cellA2.setCellValue("Term    :  ");
+                }else{
+                cellA2.setCellValue("Term    :  "+currentRow.getAttribute("MqName"));    
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA3 = excelrow.createCell((short) 0);
+                if(currentRow == null){
+                cellA3.setCellValue("Code    :  ");
+                }else{
+                cellA3.setCellValue("Code    :  "+currentRow.getAttribute("MqCode"));   
+                }
+                i++;
+                POIExportUtil.addEmptyRow(worksheet, i++);
+                POIExportUtil.addHeaderTextRow(worksheet, i++, "New PT Report", 3);
+                
+                i++;
+                i++;
+
+                int k = i;
+                DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("NewPTReportIterator");
+
+                RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+
+                while (rs.hasNext()) {
+                    Row row = rs.next();
+                    //print header on first row in excel
+                    if (i == k) {
+                        excelrow = (HSSFRow) worksheet.createRow((short) i);
+                        HSSFCellStyle cellStyle = worksheet.getWorkbook().createCellStyle();
+                        Font font = worksheet.getWorkbook().createFont();
+                        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+                        cellStyle.setFont(font);
+                        
+                        cellA1 = excelrow.createCell((short) 0);
+                        cellA1.setCellValue("PRODUCT");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 1);
+                        cellA1.setCellValue("MQ CODE");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 2);
+                        cellA1.setCellValue("MQ NAME"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 3);
+                        cellA1.setCellValue("PRIMARY HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 4);
+                        cellA1.setCellValue("PRIMARY HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 5);
+                        cellA1.setCellValue("NEW PT CODE");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 6);
+                        cellA1.setCellValue("NEW PT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 7);
+                        cellA1.setCellValue("FORMER PT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 8);
+                        cellA1.setCellValue("FORMER PT TERM");
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 9);
+                        cellA1.setCellValue("RELATED LLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 10);
+                        cellA1.setCellValue("RELATED LLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 11);
+                        cellA1.setCellValue("REPORT TYPE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        colCount = 18;
+                    }
+
+                    ++i;
+
+                    excelrow = worksheet.createRow((short) i);
+                    
+                    HSSFCell cell = excelrow.createCell(0);
+                    if(row.getAttribute("Product") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("Product") + "");
+                    }
+                    
+                    cell = excelrow.createCell(1);
+                    if(row.getAttribute("MqCode") == null){
+                    cell.setCellValue(""); 
+                    }else{
+                    cell.setCellValue(row.getAttribute("MqCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(2);
+                    if(row.getAttribute("MqName") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("MqName")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(3);
+                    if(row.getAttribute("PrimaryHltCode") == null){
+                    cell.setCellValue("");        
+                    }else{
+                    cell.setCellValue(row.getAttribute("PrimaryHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(4);
+                    if(row.getAttribute("PrimaryHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("PrimaryHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(5);
+                    if(row.getAttribute("NewPtCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewPtCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(6);
+                    if(row.getAttribute("NewPtTerm") == null){
+                    cell.setCellValue("");     
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewPtTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(7);
+                    if( row.getAttribute("FormerPtCode") == null){
+                    cell.setCellValue("");   
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerPtCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(8);
+                    if(row.getAttribute("FormerPtTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerPtTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(9);
+                    if(row.getAttribute("RelatedLltCode") == null){
+                    cell.setCellValue("");       
+                    }else{
+                    cell.setCellValue(row.getAttribute("RelatedLltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(10);
+                    if(row.getAttribute("RelatedLltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("RelatedLltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(11);
+                    if(row.getAttribute("ReportType") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("ReportType")+ "");
+                    }
+
+                }
+                
+                i++;
+                i++;
+    //                excelrow = (HSSFRow) worksheet.createRow((short) i);
+    //                cellA1 = excelrow.createCell((short) 0);
+    //                cellA1.setCellValue("Row Count");
+    //                HSSFCell cellA2 = excelrow.createCell((short) 1);
+    //                cellA2.setCellValue(dcIter.getEstimatedRowCount());
+                
+                //worksheet.createFreezePane(0, 1, 0, 1);
+
+                for (int x = 0; x < colCount; x++) {
+                    worksheet.autoSizeColumn(x);
+                }
+                if(colCount == 0){
+                    worksheet.autoSizeColumn(0);
+                }
+                //---------
+                
+                
+                workbook.write(outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
     public void downloadSearchReportForImpactedNMQ(FacesContext facesContext, OutputStream outputStream) {
             try {
                 HSSFWorkbook workbook = new HSSFWorkbook();
@@ -2109,7 +2657,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
     }
 
@@ -2131,7 +2680,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+       // AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
     }
 
@@ -2153,7 +2703,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
     }
 
@@ -2175,7 +2726,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
     }
 
@@ -2197,7 +2749,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
     }
 
@@ -2219,7 +2772,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
     }
 
@@ -2309,7 +2863,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_Y());
     }
 
@@ -2331,7 +2886,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_Y());
     }
 
@@ -2353,7 +2909,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_Y());
     }
 
@@ -2375,7 +2932,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_CMQ_N());
     }
 
@@ -2397,7 +2955,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_NMQ_N());
     }
 
@@ -2419,7 +2978,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getTermCodeComponent());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getButtonGroup());
-        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        //AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchButtonGroup());
+        AdfFacesContext.getCurrentInstance().addPartialTarget(this.getSearchBtnGrp());
         AdfFacesContext.getCurrentInstance().addPartialTarget(this.getImpactAnalysisUIBean().getCntrlSearchResultsTBL_MQ_N());
     }
 
@@ -2489,5 +3049,130 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
 
     public RichPanelGroupLayout getSearchButtonGroup() {
         return searchButtonGroup;
+    }
+
+    public void setNewSearchTermStr(String newSearchTermStr) {
+        this.newSearchTermStr = newSearchTermStr;
+    }
+
+    public String getNewSearchTermStr() {
+        return newSearchTermStr;
+    }
+
+    public void setNewSearchCodeStr(String newSearchCodeStr) {
+        this.newSearchCodeStr = newSearchCodeStr;
+    }
+
+    public String getNewSearchCodeStr() {
+        return newSearchCodeStr;
+    }
+
+    public void setNewProductStr(String newProductStr) {
+        this.newProductStr = newProductStr;
+    }
+
+    public String getNewProductStr() {
+        return newProductStr;
+    }
+
+    public void validateDownldSelectedNewPT(ActionEvent actionEvent) {
+        BindingContext bcx = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer) bcx.getCurrentBindingsEntry();
+        DCIteratorBinding dcIter1 = (DCIteratorBinding) binding.get("NewPTResultsIterator");
+        Row currentRow = dcIter1.getViewObject().getCurrentRow();
+        
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePTReport");
+        if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr()) || "".equalsIgnoreCase(getNewProductStr())){
+            ob.getParamsMap().put("product", null);   
+        }else{
+        ob.getParamsMap().put("product", getNewProductStr());
+        }
+        if(currentRow == null){ 
+        ob.getParamsMap().put("term", getNewSearchTermStr());
+        ob.getParamsMap().put("termCode", getNewSearchCodeStr());
+        }else{
+            ob.getParamsMap().put("term", currentRow.getAttribute("MqName"));
+            ob.getParamsMap().put("termCode", currentRow.getAttribute("MqCode"));
+        }
+        ob.execute();
+        DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("NewPTReportIterator");
+
+        RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+             if (rs.hasNext()) {
+                      FacesContext context = FacesContext.getCurrentInstance();
+                     ExtendedRenderKitService erks =
+                         Service.getService(context.getRenderKit(),
+                                            ExtendedRenderKitService.class);
+                     FacesContext.getCurrentInstance();
+                     String id =
+                         this.getDndNewSelectedPTbtn().getClientId(FacesContext.getCurrentInstance());
+                     erks.addScript(context, "customHandler('" + id + "');");
+                 } else {
+                     String msg = "No impacted new PTs exist for the MQs select";
+                     FacesContext ctx = FacesContext.getCurrentInstance();
+                     FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, msg,"");
+                     ctx.addMessage(null,fm);
+                 }
+    }
+
+    public void setDndNewSelectedPTbtn(RichButton dndNewSelectedPTbtn) {
+        this.dndNewSelectedPTbtn = dndNewSelectedPTbtn;
+    }
+
+    public RichButton getDndNewSelectedPTbtn() {
+        return dndNewSelectedPTbtn;
+    }
+
+    public void validateExportNewPT(ActionEvent actionEvent) {
+        
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executePTReport");
+        if("PLEASE_SELECT".equalsIgnoreCase(getNewProductStr()) || "".equalsIgnoreCase(getNewProductStr())){
+            ob.getParamsMap().put("product", null);   
+        }else{
+        ob.getParamsMap().put("product", getNewProductStr());
+        }
+        ob.getParamsMap().put("term", getNewSearchTermStr());
+        ob.getParamsMap().put("termCode", getNewSearchCodeStr());
+        ob.execute();
+        
+        BindingContext bcx = BindingContext.getCurrent();
+        DCBindingContainer binding = (DCBindingContainer) bcx.getCurrentBindingsEntry();
+        DCIteratorBinding dcIter = (DCIteratorBinding) binding.get("NewPTReportIterator");
+
+
+        RowSetIterator rs = dcIter.getViewObject().createRowSetIterator(null);
+             if (rs.hasNext()) {
+                      FacesContext context = FacesContext.getCurrentInstance();
+                     ExtendedRenderKitService erks =
+                         Service.getService(context.getRenderKit(),
+                                            ExtendedRenderKitService.class);
+                     FacesContext.getCurrentInstance();
+                     String id =
+                         this.getDndNewAllPTbtn().getClientId(FacesContext.getCurrentInstance());
+                     erks.addScript(context, "customHandler('" + id + "');");
+                 } else {
+                     String msg = "No impacted new PTs exist for the MQs select";
+                     FacesContext ctx = FacesContext.getCurrentInstance();
+                     FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, msg,"");
+                     ctx.addMessage(null,fm);
+                 }
+    }
+
+    public void setDndNewAllPTbtn(RichButton dndNewAllPTbtn) {
+        this.dndNewAllPTbtn = dndNewAllPTbtn;
+    }
+
+    public RichButton getDndNewAllPTbtn() {
+        return dndNewAllPTbtn;
+    }
+
+    public void setSearchBtnGrp(UIXGroup searchBtnGrp) {
+        this.searchBtnGrp = searchBtnGrp;
+    }
+
+    public UIXGroup getSearchBtnGrp() {
+        return searchBtnGrp;
     }
 }

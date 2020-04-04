@@ -120,4 +120,7 @@
     <PropertiesBundle
       PropertiesFile="com.dbms.csmq.model.ModelBundle"/>
   </ResourceBundle>
+  <AttrArray Name="KeyAttributes">
+    <Item Value="TmsCode"/>
+  </AttrArray>
 </ViewObject>

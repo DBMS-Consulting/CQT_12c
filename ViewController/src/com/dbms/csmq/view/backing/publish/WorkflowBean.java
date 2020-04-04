@@ -37,9 +37,11 @@ import oracle.adf.model.BindingContext;
 import oracle.adf.model.binding.DCBindingContainer;
 import oracle.adf.model.binding.DCIteratorBinding;
 import oracle.adf.share.ADFContext;
+import oracle.adf.view.rich.component.rich.RichPopup;
 import oracle.adf.view.rich.component.rich.data.RichTable;
 import oracle.adf.view.rich.component.rich.input.RichInputText;
 import oracle.adf.view.rich.component.rich.input.RichSelectManyShuttle;
+import oracle.adf.view.rich.component.rich.nav.RichButton;
 import oracle.adf.view.rich.component.rich.nav.RichCommandButton;
 import oracle.adf.view.rich.component.rich.nav.RichCommandToolbarButton;
 import oracle.adf.view.rich.context.AdfFacesContext;
@@ -78,7 +80,7 @@ import oracle.binding.OperationBinding;
 public class WorkflowBean {
 
 
-    List list = new ArrayList<javax.faces.model.SelectItem>();
+    private List list = new ArrayList<javax.faces.model.SelectItem>();
     List selectedTerms;
     private RichSelectManyShuttle sms1;
     private UISelectItems si1;
@@ -93,8 +95,12 @@ public class WorkflowBean {
     private int errorCount = 1;
     private RichCommandToolbarButton cntrlActivateButton;
     private RichInputText controlMQState;
-    
+    private RichPopup publishConfirmPopup;
+    private RichPopup publishWarningPopup;
     private String runExecuteParams;
+    private RichCommandButton cb2;
+    private RichButton promoteButton;
+    private RichButton approveButton;
 
     public String init() {
         //userBean.setCurrentMenuPath("Publish");
@@ -208,8 +214,12 @@ public class WorkflowBean {
         System.out.println("Changing state : " + h);
         if (h.get("STATE").equals("Published")) {
             nMQWizardBean.setCurrentState(CSMQBean.STATE_PUBLISHED);
-            AdfFacesContext.getCurrentInstance().addPartialTarget(cb1);
-            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cb1);
+//            AdfFacesContext.getCurrentInstance().addPartialTarget(cb1);
+//            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cb1);
+//            AdfFacesContext.getCurrentInstance().addPartialTarget(cb2);
+//            AdfFacesContext.getCurrentInstance().partialUpdateNotify(cb2);
+              AdfFacesContext.getCurrentInstance().addPartialTarget(this.promoteButton);
+              AdfFacesContext.getCurrentInstance().partialUpdateNotify(this.promoteButton);
             AdfFacesContext.getCurrentInstance().addPartialTarget(controlMQState);
             AdfFacesContext.getCurrentInstance().partialUpdateNotify(controlMQState);
             
@@ -305,7 +315,8 @@ public class WorkflowBean {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select at least one term.", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return;
-            }
+            }    
+        
         terms = terms.substring(0, terms.length() - 1);
         NMQUtils.changeState(terms, state, userBean.getCurrentUser(), userBean.getUserRole(), null, null, activationGroup);
     }
@@ -585,7 +596,111 @@ public class WorkflowBean {
         e.printStackTrace();
         }
     }
-        
+      
+    public void downloadReport1(FacesContext facesContext, OutputStream outputStream) {
+        System.out.println("-------------Inside downloadReport1------------------------------");
+//        HSSFWorkbook workbook = new HSSFWorkbook();
+//        HSSFSheet worksheet = workbook.createSheet("Published IA MQ Report");
+//
+//        DCBindingContainer bindings = (DCBindingContainer) BindingContext.getCurrent().getCurrentBindingsEntry();
+//        DCIteratorBinding dcIteratorBindings = bindings.findIteratorBinding("PublishedIAMQVO1Iterator");
+//        HSSFRow excelrow = null;
+//
+//        // Get all the rows of a iterator
+//        oracle.jbo.Row[] rows = dcIteratorBindings.getAllRowsInRange();
+//        int i = 0;
+//
+//        try {
+//            writeImageTOExcel(worksheet, getImageInpStream());
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//        
+//        HSSFFont font= workbook.createFont();
+//        font.setFontHeightInPoints((short)10);
+//        font.setFontName("Arial");
+//        font.setColor(IndexedColors.BLACK.getIndex());
+//        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//        font.setItalic(false);
+//
+//        excelrow = (HSSFRow) worksheet.createRow((short) 0);
+//        HSSFCell cellTitle = excelrow.createCell((short) 1);
+//        cellTitle.setCellValue("Published IA MQ Report");
+//        CellStyle style1 = workbook.createCellStyle();
+//        style1.setFont(font);
+//        cellTitle.setCellStyle(style1);
+//        
+//        excelrow = (HSSFRow) worksheet.createRow((short) 1);
+//        HSSFCell cellReportRun = excelrow.createCell((short) 1);
+//        cellReportRun.setCellValue("Report Date/Time: "+new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new Date(System.currentTimeMillis())));
+//        
+//        for (oracle.jbo.Row row : rows) {
+//
+//            //print header on first row in excel
+//            if (i == 0) {
+//                excelrow = (HSSFRow) worksheet.createRow((short) 3);
+//                HSSFCell cellA1 = excelrow.createCell((short) 0);
+//                cellA1.setCellValue("MQ Code");
+//                HSSFCell cellA2 = excelrow.createCell((short) 1);
+//                cellA2.setCellValue("Term Name");
+//                HSSFCell cellA3 = excelrow.createCell((short) 2);
+//                cellA3.setCellValue("Level Name");
+//                
+//                HSSFCell cellA7 = excelrow.createCell((short) 3);
+//                cellA7.setCellValue("Created By");
+//                
+//                HSSFCell cellA4 = excelrow.createCell((short) 4);
+//                cellA4.setCellValue("Activation Group");
+//                
+//                CellStyle style = workbook.createCellStyle();
+//                style.setFont(font);
+//                style.setFillBackgroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+//                style.setFillPattern(CellStyle.FINE_DOTS);
+//                cellA1.setCellStyle(style);
+//                cellA2.setCellStyle(style);
+//                cellA3.setCellStyle(style);
+//                cellA4.setCellStyle(style);
+//                cellA7.setCellStyle(style);
+//                
+//                i=3;
+//            }
+//
+//            //print data from second row in excel
+//            ++i;
+//            excelrow = worksheet.createRow((short) i);
+//            HSSFCell cell = excelrow.createCell((short) 0);
+//            cell.setCellValue(row.getAttribute("TmsCode") + "" );
+//            HSSFCell cell1 = excelrow.createCell((short) 1);
+//            cell1.setCellValue(row.getAttribute("TmsName") + "");
+//            HSSFCell cell2 = excelrow.createCell((short) 2);
+//            cell2.setCellValue((row.getAttribute("LevelName") == null ? "" : row.getAttribute("LevelName")) + "");
+//            
+//            HSSFCell cell7 = excelrow.createCell((short) 3);
+//            cell7.setCellValue(row.getAttribute("TmsCreatedBy") + "");
+//            
+//            HSSFCell cell3 = excelrow.createCell((short) 4);
+//            cell3.setCellValue(row.getAttribute("ActivationGroup") + "");
+//        }
+//
+//        
+//
+//
+//        worksheet.createFreezePane(0, 1, 0, 1);
+//        worksheet.autoSizeColumn(0);
+//        worksheet.autoSizeColumn(1);
+//        worksheet.autoSizeColumn(2);
+//        worksheet.autoSizeColumn(3);
+//        worksheet.autoSizeColumn(4);
+//        worksheet.autoSizeColumn(5);
+//        worksheet.autoSizeColumn(6);
+//        try{
+//        workbook.write(outputStream);
+//        outputStream.flush();
+//
+//        } catch (Exception e) {
+//        e.printStackTrace();
+//        }
+    }  
 
     public void downloadPublishedMQReport(FacesContext facesContext, OutputStream outputStream) {
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -855,5 +970,66 @@ public class WorkflowBean {
                     // Successfully Executed
                 }
         return runExecuteParams;
+    }
+
+    public void promoteAction(ActionEvent actionEvent) {
+//      NMQWizardBean nMQWizardBean = (NMQWizardBean) AdfFacesContext.getCurrentInstance().getPageFlowScope().get("NMQWizardBean");
+//      String hasRelations = NMQUtils.checkMqHasRelations(nMQWizardBean.getCurrentDictContentID());
+        String hasRelations = "NO_RELATION";
+      if("NO_RELATION".equalsIgnoreCase(hasRelations)){
+          RichPopup.PopupHints hints = new RichPopup.PopupHints();
+          this.getPublishWarningPopup().show(hints);
+      }else{
+          RichPopup.PopupHints hints = new RichPopup.PopupHints();
+          this.getPublishConfirmPopup().show(hints);
+      }
+    }
+
+    public void setCb2(RichCommandButton cb2) {
+        this.cb2 = cb2;
+    }
+
+    public RichCommandButton getCb2() {
+        return cb2;
+    }
+
+    public void setPromoteButton(RichButton promoteButton) {
+        this.promoteButton = promoteButton;
+    }
+
+    public RichButton getPromoteButton() {
+        return promoteButton;
+    }
+
+    public void setPublishConfirmPopup(RichPopup publishConfirmPopup) {
+        this.publishConfirmPopup = publishConfirmPopup;
+    }
+
+    public RichPopup getPublishConfirmPopup() {
+        return publishConfirmPopup;
+    }
+
+    public void setPublishWarningPopup(RichPopup publishWarningPopup) {
+        this.publishWarningPopup = publishWarningPopup;
+    }
+
+    public RichPopup getPublishWarningPopup() {
+        return publishWarningPopup;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setApproveButton(RichButton approveButton) {
+        this.approveButton = approveButton;
+    }
+
+    public RichButton getApproveButton() {
+        return approveButton;
     }
 }

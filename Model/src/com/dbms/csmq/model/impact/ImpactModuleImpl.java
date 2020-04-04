@@ -505,8 +505,16 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         previousVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
         previousVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
         previousVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        if(!"%".equalsIgnoreCase(status)){
         previousVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        }else{
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", null);    
+        }      
+        if(!"%".equalsIgnoreCase(state)){
         previousVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        }else{
+        previousVerImpactSearchListVO.setNamedWhereClauseParam("bindState", null);    
+        }
         previousVerImpactSearchListVO.setNamedWhereClauseParam("mqType", mType);
         previousVerImpactSearchListVO.setNamedWhereClauseParam("showImpact", showImpact);
         ViewCriteria vc = previousVerImpactSearchListVO.getViewCriteria("PreviousVerImpactSearchListVOCriteria");
@@ -580,8 +588,16 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
         //currentVerImpactSearchListVO.setNamedWhereClauseParam("bindLevelNumber", searchLevelStr);
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindTerm", searchTermStr);
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindCode", searchCodeStr);
+        if(!"%".equalsIgnoreCase(status)){
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", status);
+        }else{
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindStatus", null);   
+        }
+        if(!"%".equalsIgnoreCase(state)){
         currentVerImpactSearchListVO.setNamedWhereClauseParam("bindState", state);
+        }else{
+        currentVerImpactSearchListVO.setNamedWhereClauseParam("bindState", null);    
+        }
         currentVerImpactSearchListVO.setNamedWhereClauseParam("mqType", mType);
         currentVerImpactSearchListVO.setNamedWhereClauseParam("showImpact", showImpact);
         ViewCriteria vc = currentVerImpactSearchListVO.getViewCriteria("CurrentVerImpactSearchListVOCriteria");
@@ -635,6 +651,38 @@ public class ImpactModuleImpl extends ApplicationModuleImpl implements ImpactMod
      */
     public ViewObjectImpl getPreviousVerFutureImpactVO1() {
         return (ViewObjectImpl) findViewObject("PreviousVerFutureImpactVO1");
+    }
+
+    /**
+     * Container's getter for NewPTResultsVVO1.
+     * @return NewPTResultsVVO1
+     */
+    public NewPTResultsVVOImpl getNewPTResults() {
+        return (NewPTResultsVVOImpl) findViewObject("NewPTResults");
+    }
+
+    /**
+     * Container's getter for NewPTReportVVO1.
+     * @return NewPTReportVVO1
+     */
+    public NewPTReportVVOImpl getNewPTReport() {
+        return (NewPTReportVVOImpl) findViewObject("NewPTReport");
+    }
+    
+    public void executePTResults(String product, String term, String termCode){
+        NewPTResultsVVOImpl vo = this.getNewPTResults();
+        vo.setbindProduct(product);
+        vo.setbindTerm(term);
+        vo.setbindTermCode(termCode);
+        vo.executeQuery();
+    }
+    
+    public void executePTReport(String product, String term, String termCode){
+        NewPTReportVVOImpl vo = this.getNewPTReport();
+        vo.setbindProduct(product);
+        vo.setbindTerm(term);
+        vo.setbindTermCode(termCode);
+        vo.executeQuery();
     }
 }
 

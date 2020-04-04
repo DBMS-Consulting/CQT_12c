@@ -15,4 +15,7 @@
   <ViewUsage
     Name="GenerateCurrentMedraQuery1"
     ViewObjectName="com.dbms.csmq.model.report.GenerateCurrentMedraQuery"/>
+  <ViewUsage
+    Name="MedraQueryReport"
+    ViewObjectName="com.dbms.csmq.model.report.MedraQueryReportRVO"/>
 </AppModule>

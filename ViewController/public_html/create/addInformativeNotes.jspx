@@ -45,9 +45,9 @@
                     -->
                   <af:showDetailItem text="Description" id="sdi1" inflexibleHeight="10">
                     <af:panelGroupLayout id="pgl1" layout="vertical" inlineStyle="height:560px; width:1257px;">
-                      <af:inputText id="it2" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQDescription}"
+                      <af:inputText id="it2" rows="40" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQDescription}"
                                     required="#{RenderingRulesBean.wizardInfNotesRenderSave}"
-                                    requiredMessageDetail="An MQ Description is required." changed="false" columns="225"
+                                    requiredMessageDetail="An MQ Description is required." changed="false" columns="198"
                                     value="#{pageFlowScope.NMQWizardBean.currentInfNoteDescription}"
                                     showRequired="true"
                                     readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
@@ -60,8 +60,8 @@
                     -->
                   <af:showDetailItem text="Notes" id="showDetailItem1" inflexibleHeight="10">
                     <af:panelGroupLayout id="panelGroupLayout1" layout="vertical" inlineStyle="height:560px; width:1257px;">
-                      <af:inputText id="inputText1" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQNotes}" required="false" changed="false"
-                                    columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteNotes}" showRequired="false"
+                      <af:inputText id="inputText1" rows="40" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQNotes}" required="false" changed="false"
+                                    columns="199" value="#{pageFlowScope.NMQWizardBean.currentInfNoteNotes}" showRequired="false"
                                     readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
                                     valueChangeListener="#{pageFlowScope.NMQWizardBean.notesChanged}"/>
                     </af:panelGroupLayout>
@@ -72,8 +72,8 @@
                     -->
                   <af:showDetailItem text="Source" id="showDetailItem2" inflexibleHeight="10" flex="0">
                     <af:panelGroupLayout id="panelGroupLayout2" layout="vertical" inlineStyle="height:560px; width:1257px;">
-                      <af:inputText id="inputText2" rows="24" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQSource}" required="false" changed="false"
-                                    columns="225" value="#{pageFlowScope.NMQWizardBean.currentInfNoteSource}" showRequired="false"
+                      <af:inputText id="inputText2" rows="40" editable="always" binding="#{NMQWizardUIBean.controlInfNoteMQSource}" required="false" changed="false"
+                                    columns="199" value="#{pageFlowScope.NMQWizardBean.currentInfNoteSource}" showRequired="false"
                                     readOnly="#{RenderingRulesBean.wizardInfNotesDisableEdit}" autoSubmit="true"
                                     valueChangeListener="#{pageFlowScope.NMQWizardBean.notesChanged}"/>
                     </af:panelGroupLayout>

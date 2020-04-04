@@ -1195,4 +1195,33 @@ public class NMQUtils {
                 }
             }
     }
+    
+    public static String checkMqHasRelations(String dictContentID) {
+
+        String hasRelations = null;
+        String sql = "{? = call nmat_ui_pkg.check_mq_has_relation(?)}";
+        DBTransaction dBTransaction = DMLUtils.getDBTransaction();
+
+        CallableStatement cstmt = new CallableStatement (dBTransaction.createCallableStatement(sql, DBTransaction.DEFAULT), "nmat_ui_pkg.check_mq_has_relation");
+        
+        try {
+            cstmt.registerOutParameter(1, Types.VARCHAR);
+            cstmt.setInt(2, Integer.parseInt(dictContentID));
+            cstmt.execute();
+            hasRelations = cstmt.getString(1);
+            return hasRelations;
+            }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+                if (null != cstmt){
+                    try {
+                        cstmt.close();
+                    } catch (SQLException sqe){
+                        CSMQBean.logger.error("error while closing callable statment...");     
+                    }
+                }
+            }
+    }
 }

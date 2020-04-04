@@ -44,6 +44,7 @@
               usageId="com_dbms_csmq_view_ia_publish_task_flow_definition_ia_publish_task_flow_definition_setDefaultGroupForPublishedIAMQVOPageDef"/>
         <page path="/WEB-INF/publish-task-flow-definition.xml#publish-task-flow-definition@setDefaultGroupForPublishedMQVO"
               usageId="com_dbms_csmq_view_publish_task_flow_definition_publish_task_flow_definition_setDefaultGroupForPublishedMQVOPageDef"/>
+        <page path="/impact/newPTReport.jsff" usageId="com_dbms_csmq_view_newPTReportPageDef"/>
     </pageMap>
     <pageDefinitionUsages>
         <page id="com_dbms_csmq_view_loginPageDef" path="com.dbms.csmq.view.pageDefs.loginPageDef"/>
@@ -128,6 +129,7 @@
               path="com.dbms.csmq.view.pageDefs.ia_publish_task_flow_definition_ia_publish_task_flow_definition_setDefaultGroupForPublishedIAMQVOPageDef"/>
         <page id="com_dbms_csmq_view_publish_task_flow_definition_publish_task_flow_definition_setDefaultGroupForPublishedMQVOPageDef"
               path="com.dbms.csmq.view.pageDefs.publish_task_flow_definition_publish_task_flow_definition_setDefaultGroupForPublishedMQVOPageDef"/>
+        <page id="com_dbms_csmq_view_newPTReportPageDef" path="impact.newPTReportPageDef"/>
     </pageDefinitionUsages>
     <dataControlUsages>
         <dc id="ReportDownloadBean" path="com.dbms.csmq.view.ReportDownloadBean"/>

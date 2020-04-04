@@ -152,13 +152,20 @@
                                                                            autoSubmit="true"
                                                                            readOnly="#{pageFlowScope.NMQWizardBean.currentScope eq 'N' or AddRelationsRenderingRulesBean.wizardRelationsDisableDetails or !node.isDirectRelationOrRoot}"/>
                                                 </af:column>
-                                                <af:column id="c7" width="16" rowHeader="true" align="left"
-                                                           >
+                                                <af:column id="c7" width="15" rowHeader="true" align="left"
+                                                           minimumWidth="15">
                                                     <af:selectBooleanCheckbox id="sbc2" rendered="#{node.deletable}"
                                                                  value="#{node.markedForDeletion}" immediate="true"
                                                                  autoSubmit="true"/>
                                                     <f:facet name="header">
-                                                        <af:image source="/image/hierarchy/SMALL_DELETE.png" id="i1" shortDesc="Delete"/>
+                                                        <!--<af:image source="/image/hierarchy/SMALL_DELETE.png" id="i1" shortDesc="Delete"/>-->
+                                                        <af:selectBooleanCheckbox valueChangeListener="#{pageFlowScope.NMQSourceTermSearchBean.selectAllCheckboxValueChange}"
+                                                                                  id="sbc1" rendered="#{securityContext.userInRole['MQM'] or securityContext.userInRole['Admin']}"
+                                                                                  autoSubmit="true" simple="true">
+                                                            <!--<af:setPropertyListener from="#{'EmployeeVO'}"
+                                                                                    type="valueChange"
+                                                                                    to="#{pageFlowScope.voName}"/>-->
+                                                        </af:selectBooleanCheckbox>
                                                     </f:facet>
                                                 </af:column>
                                             </af:column>

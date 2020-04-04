@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 
@@ -53,6 +54,7 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
     //private RichTreeTable sourceTree;
     ImpactAnalysisBean impactAnalysisBean;
     protected GenericTreeNode rootCopy;
+    protected GenericTreeNode rootExcelExportCopy;
     
     public MedDRAImpactHierarchyBean() {
         CSMQBean.logger.info ("@ NEW MedDRAImpactHierarchyBean()");
@@ -65,6 +67,8 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
         List nodes = new ArrayList();
         nodes.add(root);
         rootCopy = root;
+        if(rootExcelExportCopy == null)
+        rootExcelExportCopy = root;
         treemodel = new ChildPropertyTreeModel(nodes, "children") {
                 public boolean isContainer() {
                     if (getRowData() == null) return false;
@@ -417,6 +421,238 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
         AdfFacesContext.getCurrentInstance().addPartialTarget(tree); 
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(tree);
     }
+    
+    public void addChildrenForExport() {       
+        for(int i = 0; i< rootExcelExportCopy.getChildren().size(); i++){
+      
+            //System.out.println("-----rootExcelExportCopy.getChildren()---"+((GenericTreeNode)rootExcelExportCopy.getChildren().get(i)).getDictContentId());
+        
+        //newRootNode = rootExcelExportCopy;
+
+       
+       // REQUERY AND GET THE CHILDREN
+       BindingContext bc = BindingContext.getCurrent();
+       DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+       DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("MedDRAImpactVO1Iterator1");
+       ViewObject vo = dciterb.getViewObject();
+       String parentTermScope = "0";
+       if (rootExcelExportCopy.getChildren().get(i) != null)
+           parentTermScope = ((GenericTreeNode)rootExcelExportCopy.getChildren().get(i)).getFormattedScope();
+           //parentTermScope = newRootNode.getParentNode().getFormattedScope();
+            //  18MAR change -- parentTermScope = newRootNode.getFormattedScope();  // TODO test fix for term scope error
+           
+       
+       //String bothGroups = this.defaultDraftGroupName + "," + this.defaultMedDRAGroupName;
+       CSMQBean.logger.info(userBean.getCaller() + " \nUPDATING: " +  impactAnalysisBean.getAllGroups());     
+        
+        vo.setNamedWhereClauseParam("activationGroup", impactAnalysisBean.getAllGroups());
+        vo.setNamedWhereClauseParam("dictContentID", ((GenericTreeNode)rootExcelExportCopy.getChildren().get(i)).getDictContentId());
+        vo.setNamedWhereClauseParam("sortKey", impactAnalysisBean.getParamMedDRASort());
+        vo.setNamedWhereClauseParam("showNonImpacted", impactAnalysisBean.getParamMedDRAShowNonImpacted());
+        vo.setNamedWhereClauseParam("returnPrimLinkPath", impactAnalysisBean.getParamMedDRAPrimaryOnly());
+        //vo.setNamedWhereClauseParam("termScopeFilter", impactAnalysisBean.getParamMedDRAScope());  ??  TODO: FIX?
+        vo.setNamedWhereClauseParam("maxLevels", CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
+        vo.setNamedWhereClauseParam("startLevel", ((GenericTreeNode)rootExcelExportCopy.getChildren().get(i)).getLevel());
+        vo.setNamedWhereClauseParam("scopeFilter", parentTermScope);
+        
+        vo.executeQuery();
+        
+        Enumeration pTTrows = dciterb.getRowSetIterator().enumerateRowsInRange();
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put(rootExcelExportCopy.getDictContentId(), rootExcelExportCopy);
+         //System.out.println("----pTTrows----"+pTTrows);    
+            List pttList = new ArrayList();
+            pTTrows.nextElement();
+            while (pTTrows.hasMoreElements()) {
+                Row row = (Row)pTTrows.nextElement();
+                GenericTreeNode termNode = new GenericTreeNode();
+                //System.out.println("-----Utils.getAsString(row,\"Term\")----"+Utils.getAsString(row,"Term"));
+                //System.out.println("----Utils.getAsString(row,\"DictContentId\")----"+Utils.getAsString(row,"DictContentId"));
+                termNode.setTerm(Utils.getAsString(row,"Term"));
+                termNode.setPrikey(Utils.getAsString(row,"Prikey"));
+                termNode.setParent(Utils.getAsString(row,"Parent"));
+                termNode.setLevelName(Utils.getAsString(row,"LevelName"));
+                termNode.setLevel(Utils.getAsNumber(row,"Level"));
+                termNode.setDictShortName(Utils.getAsString(row,"DictShortName"));
+                termNode.setDictContentId(Utils.getAsString(row,"DictContentId"));
+                termNode.setDictContentCode(Utils.getAsString(row,"DictContentCode"));
+                termNode.setApprovedFlag(Utils.getAsString(row,"ApprovedFlag"));
+                termNode.setDictContentAltCode(Utils.getAsString(row,"DictContentAltCode"));
+                termNode.setStatus(Utils.getAsString(row,"Status"));
+                termNode.setPredictGroupId(Utils.getAsNumber(row,"PredictGroupId"));
+                termNode.setPath(Utils.getAsString(row,"TermPath"));
+                termNode.setTermCategory(Utils.getAsString(row,"Termcat"));
+                termNode.setTermLevel(row.getAttribute("Termlvl").toString());
+                termNode.setTermScope(Utils.getAsNumber(row,"Termscp"));
+                termNode.setTermWeight(Utils.getAsString(row,"Termweig"));
+                
+                if (row.getAttribute("FormattedScope") != null)
+                    termNode.setFormattedScope(row.getAttribute("FormattedScope").toString());
+                ////
+                ////
+                /// FIX - ADD NEW CMQ NAME
+                
+                
+                if (termNode.getLevelName().contains (CSMQBean.customMQName)) {
+                    termNode.setMqType(CSMQBean.customMQName);
+                    termNode.setEditable(true);
+                    }
+                else {
+                    termNode.setMqType(CSMQBean.SMQ);
+                    termNode.setEditable(false);
+                    }
+                
+                termNode.setMqType(root.getMqType()); // set the query type the same as the parent
+                Object displayAttribute = row.getAttribute("DisplayAttribute");                 
+                
+                if (displayAttribute != null) {
+                    String code = Utils.getAsString(row,"DisplayAttribute");
+                    String description = CSMQBean.getProperty("Impact_" + termNode.getMqType() + "_" + code);
+                    termNode.setDescription(description);
+                    String cssClass = "Impact_" + termNode.getMqType() + "_" + code;
+                    termNode.setStyle(cssClass); // THIS IS USED TO CALL THE CORRECT STYLE
+                    termNode.setIcon(code); // SET THE MATCHING ICON - IF IT'S NULL IT WON'T SHOW
+                    //FILTER OUT THESE CODES
+                    if (  //code.equals(CSMQBean.NON_CURRENT_LLT)
+                        //|| code.equals(CSMQBean.MEDDRA_INSERTED_ADDED_TERM_RELATION)
+                         code.equals(CSMQBean.CHANGE_IN_TERMSCP)
+                        || code.equals(CSMQBean.MQM_INSERTED_ADDED_TERM_RELATION_NEW)
+                        || code.equals(CSMQBean.MQM_INSERTED_ADDED_TERM_RELATION_EXISTING)) {
+                        CSMQBean.logger.info(userBean.getCaller() + " CURRENT: IGNORING " + termNode);
+                        termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+                        }
+                    }
+                
+                pttList.add(termNode);
+            }
+            
+            ((GenericTreeNode)rootExcelExportCopy.getChildren().get(i)).setChildren(pttList);
+        
+        }
+        
+        //System.out.println("------rootExcelExportCopy-"+rootExcelExportCopy);
+    }
+    
+    public void addChildrenForExport(List children, String levelName) {     
+        
+        for(int i = 0; i< children.size(); i++){
+                boolean isNodeLLT = false;
+            //System.out.println("-----rootExcelExportCopy.getChildren()---"+((GenericTreeNode)children.get(i)).getDictContentId());
+        
+        //newRootNode = rootExcelExportCopy;
+
+       
+       // REQUERY AND GET THE CHILDREN
+       BindingContext bc = BindingContext.getCurrent();
+       DCBindingContainer binding = (DCBindingContainer)bc.getCurrentBindingsEntry();
+       DCIteratorBinding dciterb = (DCIteratorBinding)binding.get("MedDRAImpactVO1Iterator1");
+       ViewObject vo = dciterb.getViewObject();
+       String parentTermScope = "0";
+       if (children.get(i) != null)
+           parentTermScope = ((GenericTreeNode)children.get(i)).getFormattedScope();
+           //parentTermScope = newRootNode.getParentNode().getFormattedScope();
+            //  18MAR change -- parentTermScope = newRootNode.getFormattedScope();  // TODO test fix for term scope error
+           
+       
+       //String bothGroups = this.defaultDraftGroupName + "," + this.defaultMedDRAGroupName;
+       CSMQBean.logger.info(userBean.getCaller() + " \nUPDATING: " +  impactAnalysisBean.getAllGroups());     
+        
+        vo.setNamedWhereClauseParam("activationGroup", impactAnalysisBean.getAllGroups());
+        vo.setNamedWhereClauseParam("dictContentID", ((GenericTreeNode)children.get(i)).getDictContentId());
+//        vo.setNamedWhereClauseParam("sortKey", impactAnalysisBean.getParamMedDRASort());
+//        vo.setNamedWhereClauseParam("showNonImpacted", impactAnalysisBean.getParamMedDRAShowNonImpacted());
+//        vo.setNamedWhereClauseParam("returnPrimLinkPath", impactAnalysisBean.getParamMedDRAPrimaryOnly());
+        vo.setNamedWhereClauseParam("sortKey", "SCOPE");
+        vo.setNamedWhereClauseParam("showNonImpacted", "Y");
+        vo.setNamedWhereClauseParam("returnPrimLinkPath", "N");
+        //vo.setNamedWhereClauseParam("termScopeFilter", impactAnalysisBean.getParamMedDRAScope());  ??  TODO: FIX?
+        vo.setNamedWhereClauseParam("maxLevels", CSMQBean.getProperty("HIERARCHY_SUBSEQUENT_FETCH"));
+        vo.setNamedWhereClauseParam("startLevel", ((GenericTreeNode)children.get(i)).getLevel());
+        vo.setNamedWhereClauseParam("scopeFilter", parentTermScope);
+        
+        vo.executeQuery();
+        
+        Enumeration pTTrows = dciterb.getRowSetIterator().enumerateRowsInRange();
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put(rootExcelExportCopy.getDictContentId(), rootExcelExportCopy);
+         //System.out.println("----pTTrows----"+pTTrows);    
+            List pttList = new ArrayList();
+            pTTrows.nextElement();
+            while (pTTrows.hasMoreElements()) {
+                Row row = (Row)pTTrows.nextElement();
+                GenericTreeNode termNode = new GenericTreeNode();
+                //System.out.println("-----Utils.getAsString(row,\"Term\")----"+Utils.getAsString(row,"Term"));
+               // System.out.println("----Utils.getAsString(row,\"DictContentId\")----"+Utils.getAsString(row,"DictContentId"));
+                termNode.setTerm(Utils.getAsString(row,"Term"));
+                termNode.setPrikey(Utils.getAsString(row,"Prikey"));
+                termNode.setParent(Utils.getAsString(row,"Parent"));
+                termNode.setLevelName(Utils.getAsString(row,"LevelName"));
+                termNode.setLevel(Utils.getAsNumber(row,"Level"));
+                termNode.setDictShortName(Utils.getAsString(row,"DictShortName"));
+                termNode.setDictContentId(Utils.getAsString(row,"DictContentId"));
+                termNode.setDictContentCode(Utils.getAsString(row,"DictContentCode"));
+                termNode.setApprovedFlag(Utils.getAsString(row,"ApprovedFlag"));
+                termNode.setDictContentAltCode(Utils.getAsString(row,"DictContentAltCode"));
+                termNode.setStatus(Utils.getAsString(row,"Status"));
+                termNode.setPredictGroupId(Utils.getAsNumber(row,"PredictGroupId"));
+                termNode.setPath(Utils.getAsString(row,"TermPath"));
+                termNode.setTermCategory(Utils.getAsString(row,"Termcat"));
+                termNode.setTermLevel(row.getAttribute("Termlvl").toString());
+                termNode.setTermScope(Utils.getAsNumber(row,"Termscp"));
+                termNode.setTermWeight(Utils.getAsString(row,"Termweig"));
+                
+                if (row.getAttribute("FormattedScope") != null)
+                    termNode.setFormattedScope(row.getAttribute("FormattedScope").toString());
+                ////
+                ////
+                /// FIX - ADD NEW CMQ NAME
+                
+                
+                if (termNode.getLevelName().contains (CSMQBean.customMQName)) {
+                    termNode.setMqType(CSMQBean.customMQName);
+                    termNode.setEditable(true);
+                    }
+                else {
+                    termNode.setMqType(CSMQBean.SMQ);
+                    termNode.setEditable(false);
+                    }
+                
+                termNode.setMqType(root.getMqType()); // set the query type the same as the parent
+                Object displayAttribute = row.getAttribute("DisplayAttribute");                 
+                
+                if (displayAttribute != null) {
+                    String code = Utils.getAsString(row,"DisplayAttribute");
+                    String description = CSMQBean.getProperty("Impact_" + termNode.getMqType() + "_" + code);
+                    termNode.setDescription(description);
+                    String cssClass = "Impact_" + termNode.getMqType() + "_" + code;
+                    termNode.setStyle(cssClass); // THIS IS USED TO CALL THE CORRECT STYLE
+                    termNode.setIcon(code); // SET THE MATCHING ICON - IF IT'S NULL IT WON'T SHOW
+                    //FILTER OUT THESE CODES
+//                    if (  //code.equals(CSMQBean.NON_CURRENT_LLT)
+//                        //|| code.equals(CSMQBean.MEDDRA_INSERTED_ADDED_TERM_RELATION)
+//                         code.equals(CSMQBean.CHANGE_IN_TERMSCP)
+//                        || code.equals(CSMQBean.MQM_INSERTED_ADDED_TERM_RELATION_NEW)
+//                        || code.equals(CSMQBean.MQM_INSERTED_ADDED_TERM_RELATION_EXISTING)) {
+//                        CSMQBean.logger.info(userBean.getCaller() + " CURRENT: IGNORING " + termNode);
+//                        termNode.getParentNode().getChildren().remove(termNode); //remove it from it's parent
+//                        }
+                    }
+                
+                pttList.add(termNode);
+                //System.out.println("------termNode..getLevelName()-----"+termNode.getLevelName());
+                if(levelName.equalsIgnoreCase(termNode.getLevelName())){
+                    isNodeLLT = true;
+                }
+            }
+                if(!isNodeLLT){
+                    addChildrenForExport(pttList,levelName);
+                    }
+            ((GenericTreeNode)children.get(i)).setChildren(pttList);
+        
+        }
+        
+        //System.out.println("------rootExcelExportCopy-"+rootExcelExportCopy);
+    }
 
 
     public void setHasData(boolean hasData) {
@@ -436,8 +672,7 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
     }
     
     public void rebuildTree(boolean isShowImpactedOnly) {
-        System.out.println("START: PreviousVerFutureImpactHierarchyBean.rebuildTree() isShowImpactedOnly=" +
-                           isShowImpactedOnly);
+        //System.out.println("START: PreviousVerFutureImpactHierarchyBean.rebuildTree() isShowImpactedOnly=" + isShowImpactedOnly);
         if (isShowImpactedOnly) {
             /*
             root = copyNode(rootCopy);
@@ -471,7 +706,7 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
                     return ((GenericTreeNode)getRowData()).getChildCount() > 0;
                 }
             };
-        System.out.println("END: PreviousVerFutureImpactHierarchyBean.rebuildTree()");
+        //System.out.println("END: PreviousVerFutureImpactHierarchyBean.rebuildTree()");
     }
     
     public GenericTreeNode copyNBuildImpactTreeNode(GenericTreeNode node, GenericTreeNode uiDisplayNode) {
@@ -489,5 +724,13 @@ public class MedDRAImpactHierarchyBean extends Hierarchy {
             }
         }
         return uiDisplayNode;
+    }
+
+    public void setRootExcelExportCopy(GenericTreeNode rootExcelExportCopy) {
+        this.rootExcelExportCopy = rootExcelExportCopy;
+    }
+
+    public GenericTreeNode getRootExcelExportCopy() {
+        return rootExcelExportCopy;
     }
 }

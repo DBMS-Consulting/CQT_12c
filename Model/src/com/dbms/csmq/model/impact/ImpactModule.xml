@@ -213,6 +213,12 @@
     <ViewUsage
       Name="PreviousVerFutureImpactVO1"
       ViewObjectName="com.dbms.csmq.model.impact.PreviousVerFutureImpactVO"/>
+    <ViewUsage
+        Name="NewPTResults"
+        ViewObjectName="com.dbms.csmq.model.impact.NewPTResultsVVO"/>
+    <ViewUsage
+        Name="NewPTReport"
+        ViewObjectName="com.dbms.csmq.model.impact.NewPTReportVVO"/>
     <ClientInterface
       Name="__clientInterface">
         <Method
@@ -716,6 +722,38 @@
                 Type="java.lang.String"/>
             <Parameter
                 Name="searchProduct"
+                Type="java.lang.String"/>
+        </Method>
+        <Method
+            Name="executePTReport"
+            MethodName="executePTReport">
+            <Return
+                Name="_return_type_"
+                Type="void"/>
+            <Parameter
+                Name="product"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="term"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="termCode"
+                Type="java.lang.String"/>
+        </Method>
+        <Method
+            Name="executePTResults"
+            MethodName="executePTResults">
+            <Return
+                Name="_return_type_"
+                Type="void"/>
+            <Parameter
+                Name="product"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="term"
+                Type="java.lang.String"/>
+            <Parameter
+                Name="termCode"
                 Type="java.lang.String"/>
         </Method>
     </ClientInterface>

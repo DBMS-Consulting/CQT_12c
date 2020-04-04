@@ -6,11 +6,17 @@
         <af:document id="d1">
             <af:messages id="m1"/>
             <af:form id="f1">
-                <af:popup id="confirm">
+                <af:popup id="confirm" binding="#{backingBeanScope.cmqSmqPublishBean.publishConfirmPopup}">
                     <af:dialog title="Confirm Promotion" contentWidth="300"
                                dialogListener="#{pageFlowScope.WorkflowBean.promoteToPublished}" id="d2">
                         <af:activeOutputText value="Are you sure you want to promote the selected MQ(s)?"
                                              id="aot1"/>
+                    </af:dialog>
+                </af:popup>
+                <af:popup id="warning" binding="#{backingBeanScope.cmqSmqPublishBean.publishWarningPopup}">
+                    <af:dialog title="Warning Promotion" contentWidth="300" id="d3" type="ok" closeIconVisible="false">
+                        <af:activeOutputText value="Seleted MQs cannot be published because no MedDRA terms have been added to some of the selected MQs."
+                                             id="aot3"/>
                     </af:dialog>
                 </af:popup>
                 <af:pageTemplate viewId="/CSMQ.jspx" value="#{bindings.pageTemplateBinding}" id="pt1">
@@ -37,11 +43,12 @@
                                         </af:forEach>
                                     </af:selectManyShuttle>
                                     <af:spacer width="10" height="10" id="s2"/>
-                                    <af:commandButton text="Promote" binding="#{pageFlowScope.WorkflowBean.cb1}"
-                                                      id="cb1">
-                                        <af:showPopupBehavior popupId="::confirm" triggerType="action"
-                                                              align="afterEnd"/>
-                                    </af:commandButton>
+                                    <af:button text="Promote" binding="#{pageFlowScope.WorkflowBean.promoteButton}"
+                                                      id="cb1"
+                                                      actionListener="#{backingBeanScope.cmqSmqPublishBean.publishAction}">
+                                        <!--<af:showPopupBehavior popupId="::confirm" triggerType="action"
+                                                              align="afterEnd"/>-->
+                                    </af:button>
                                     <af:spacer width="10" height="10" id="s3"/>
                                      <af:commandButton text="Export" id="cb2" rendered="true">
                                      <af:fileDownloadActionListener contentType="application/vnd.ms-excel" filename="Promote-Approved-To-Published.xls"

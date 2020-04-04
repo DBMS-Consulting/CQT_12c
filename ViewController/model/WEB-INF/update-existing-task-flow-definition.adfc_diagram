@@ -156,7 +156,7 @@
       from="View6"
       to="View5">
       <property
-         name="sdm:polyPoints">R54,294.5,95.74306,353.5,137.42409,L50</property>
+         name="sdm:polyPoints">R54,294.5,95.74306,353.5,137.07349,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -164,7 +164,7 @@
       from="View5"
       to="View7">
       <property
-         name="sdm:polyPoints">R54,435.5,140.92409,519.3623,169.61136,L50</property>
+         name="sdm:polyPoints">R54,435.5,140.57349,519.3623,169.61136,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -172,7 +172,7 @@
       from="View7"
       to="View4">
       <property
-         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,193.717,L50</property>
+         name="sdm:polyPoints">R54,601.3623,173.11136,689.749,193.71698,L50</property>
    </TrainFlow>
    <TrainFlow
       islink="true"
@@ -180,7 +180,7 @@
       from="View4"
       to="View8">
       <property
-         name="sdm:polyPoints">R54,771.749,197.217,835.27344,226.14127,L50</property>
+         name="sdm:polyPoints">R54,771.749,197.21698,835.27344,226.14127,L50</property>
    </TrainFlow>
    <ControlFlowCase
       islink="true"
@@ -200,7 +200,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,435.5,133.92409,994.15625,83.79883,L42</property>
+         name="sdm:polyPoints">R46,435.5,133.57349,994.1718,83.79883,L42</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -220,7 +220,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,771.749,190.217,995.6758,97.79883,L58</property>
+         name="sdm:polyPoints">R46,771.749,190.21698,995.6758,97.79883,L58</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -240,7 +240,7 @@
       <property
          name="fromOutcome">*</property>
       <property
-         name="sdm:polyPoints">R50,132.5,99.89247,212.5,92.24306,L50</property>
+         name="sdm:polyPoints">R50,132.5,99.892456,212.5,92.24306,L50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"
@@ -250,7 +250,7 @@
       <property
          name="fromOutcome">CANCEL</property>
       <property
-         name="sdm:polyPoints">R46,601.3623,166.11136,994.642,90.79883,L50</property>
+         name="sdm:polyPoints">R46,601.3623,166.11136,994.6565,90.79883,L50</property>
    </ControlFlowCase>
    <ControlFlowCase
       islink="true"

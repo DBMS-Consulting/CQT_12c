@@ -83,6 +83,11 @@
         <value>#{viewScope.TrainHandlerBeanHelper}</value>
       </managed-property>
     </managed-bean>
+    <managed-bean id="__57">
+      <managed-bean-name>cmqSmqPublishBean</managed-bean-name>
+      <managed-bean-class>com.dbms.csmq.view.backing.CMQSMQPublishBean</managed-bean-class>
+      <managed-bean-scope>backingBean</managed-bean-scope>
+    </managed-bean>
     <view id="search">
       <page id="__30">/historic/historicSearch.jspx</page>
       <train-stop id="__16">
