@@ -20,8 +20,8 @@
           <display-name></display-name>
         </user>
         <user>
-          <name>tstruzik</name>
-          <credentials>{903}05BrXle7r8mFcli3cLLrH10s6Nqbdf1M</credentials>
+          <name>Test_Admin</name>
+          <credentials>{903}rIW6aAcquwcDIsDOz9mYUHo0DI0iHtzu</credentials>
           <display-name></display-name>
         </user>
         <user>
@@ -100,10 +100,6 @@
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
               </member>
               <member>
-                <name>tstruzik</name>
-                <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-              </member>
-              <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlEnterpriseRoleImpl</class>
                 <name>TMS_NMAT_MQM</name>
               </member>
@@ -127,7 +123,7 @@
             <members>
               <member>
                 <class>oracle.security.jps.internal.core.principals.JpsXmlUserImpl</class>
-                <name>TEST_MQM</name>
+                <name>Test_Admin</name>
               </member>
             </members>
           </app-role>
