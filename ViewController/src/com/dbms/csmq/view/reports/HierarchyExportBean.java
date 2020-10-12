@@ -198,6 +198,8 @@ public class HierarchyExportBean {
             currentWorksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
             POIExportUtil.writeImageTOExcel(currentWorksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(currentWorksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(currentWorksheet, rowCount++);
             POIExportUtil.addEmptyRow(currentWorksheet, rowCount++);
@@ -404,6 +406,8 @@ public class HierarchyExportBean {
             String logoPath = sourceDirectory + "/app_logo.png";
             //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -491,6 +495,8 @@ public class HierarchyExportBean {
             String logoPath = sourceDirectory + "/app_logo.png";
             //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -582,6 +588,8 @@ public class HierarchyExportBean {
             String logoPath = sourceDirectory + "/app_logo.png";
             //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -915,9 +923,11 @@ public class HierarchyExportBean {
             POIExportUtil.addImageRow(worksheet, rowCount++);
             worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
-            System.out.println("------------sourceDirectory-------------"+sourceDirectory);
+            //System.out.println("------------sourceDirectory-------------"+sourceDirectory);
             //String logoPath = "C:\\Users\\DileepKumar\\Desktop\\Donna\\NMAT\\trunk\\ViewController\\public_html\\image\\app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
@@ -1259,6 +1269,8 @@ public class HierarchyExportBean {
             worksheet.addMergedRegion(new CellRangeAddress(0, rowCount, 0, 5));
             String logoPath = sourceDirectory + "/app_logo.png";
             POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+            //POIExportUtil pOIExportUtil = new POIExportUtil();
+            //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
             POIExportUtil.addEmptyRow(worksheet, rowCount++);
             POIExportUtil.addEmptyRow(worksheet, rowCount++);

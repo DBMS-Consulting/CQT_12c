@@ -568,6 +568,8 @@ public class NMQWizardBean {
             } else {
                 currentState = CSMQBean.STATE_DRAFT;
             }
+        }else if(this.currentExtension.equals("SMQ")){
+            currentState = CSMQBean.STATE_DRAFT;
         }
         String action = (mode == CSMQBean.MODE_INSERT_NEW && !isSaved()) ?  "Inserted" : "Updated";
        
@@ -624,6 +626,7 @@ public class NMQWizardBean {
            this.copiedDictContentID = this.getCurrentDictContentID();
            this.currentDictContentID = (String)results.get("NEW_DICT_CONTENT_ID"); //newDictContentID;
            this.currentDateRequested = (oracle.jbo.domain.Date)results.get("CURRENT_DATE_REQUESTED");
+           this.currentReleaseGroup = currentPredictGroups;
            // if it's new, copy all the relations, too
            if (this.mode == CSMQBean.MODE_COPY_EXISTING && this.saved == false) {
                CSMQBean.logger.info(userBean.getCaller() + " currentContentCode:" + currentContentCode);

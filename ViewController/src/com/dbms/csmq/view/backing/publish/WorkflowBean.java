@@ -459,11 +459,14 @@ public class WorkflowBean {
     }
     
     public InputStream getImageInpStream() {
-        String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
-        InputStream inputStreamOfExcel = 
-            loadResourceAsStream(sourceDirectory + "/app_logo.png");
-//                 this.getClass().getClassLoader().getResourceAsStream("app_logo.png");
-//                loadResourceAsStream("E:\\CQT\\branches\\CQT_Enhancements\\ViewController\\public_html\\image\\app_logo.png");
+//        String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
+//        InputStream inputStreamOfExcel = 
+//            loadResourceAsStream(sourceDirectory + "/app_logo.png");
+////                 this.getClass().getClassLoader().getResourceAsStream("app_logo.png");
+////                loadResourceAsStream("E:\\CQT\\branches\\CQT_Enhancements\\ViewController\\public_html\\image\\app_logo.png");
+//        return inputStreamOfExcel;
+                InputStream inputStreamOfExcel = this.getClass().getClassLoader().getResourceAsStream("app_logo.png");
+            //POIExportUtil.loadResourceAsStream("C:\\Users\\DileepKumar\\Desktop\\Donna\\Donna12.2.1.4\\CQT\\branches\\CQT12214\\ViewController\\public_html\\image\\app_logo.png");
         return inputStreamOfExcel;
     }
 

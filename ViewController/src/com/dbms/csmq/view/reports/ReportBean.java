@@ -290,6 +290,8 @@ public class ReportBean {
                     worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 5));
                     String logoPath = sourceDirectory + "/app_logo.png";
                     POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                    //POIExportUtil pOIExportUtil = new POIExportUtil();
+                    //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
                     int colCount = 0;
                     excelrow = (HSSFRow) worksheet.createRow((short) i);
                     HSSFCell cellA1 = excelrow.createCell((short) 0);
@@ -443,6 +445,8 @@ public class ReportBean {
                 worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 5));
                 String logoPath = sourceDirectory + "/app_logo.png";
                 POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                //POIExportUtil pOIExportUtil = new POIExportUtil();
+                //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
                 int colCount = 0;
                 excelrow = (HSSFRow) worksheet.createRow((short) i);
                 HSSFCell cellA1 = excelrow.createCell((short) 0);
@@ -1058,10 +1062,14 @@ public class ReportBean {
     }
 
     public InputStream getImageInpStream() {
-        String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
-        InputStream inputStreamOfExcel = 
- loadResourceAsStream(sourceDirectory + "/app_logo.png");
-//                                loadResourceAsStream("E:\\CQT\\branches\\CQT_Enhancements\\ViewController\\public_html\\image\\app_logo.png");
+//        String sourceDirectory = CSMQBean.getProperty("REPORT_SOURCE");
+//        InputStream inputStreamOfExcel = 
+// loadResourceAsStream(sourceDirectory + "/app_logo.png");
+////                                loadResourceAsStream("E:\\CQT\\branches\\CQT_Enhancements\\ViewController\\public_html\\image\\app_logo.png");
+//        return inputStreamOfExcel;
+        
+        InputStream inputStreamOfExcel = this.getClass().getClassLoader().getResourceAsStream("crs.png");
+            //ExcelExportUtils.loadResourceAsStream("C:\\Users\\DileepKumar\\Desktop\\Donna\\ECRS\\trunk\\ECRSViewController\\public_html\\images\\crs.png");
         return inputStreamOfExcel;
     }
 

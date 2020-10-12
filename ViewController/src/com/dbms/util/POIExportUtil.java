@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -382,6 +385,15 @@ public class POIExportUtil {
         }
         return input;
     }
+    
+    public InputStream getImageInpStream() {
+       // System.out.println("---Inside getImageInpStream----");
+        InputStream inputStreamOfExcel = this.getClass().getClassLoader().getResourceAsStream("BMS.png");
+            //POIExportUtil.loadResourceAsStream("C:\\Users\\DileepKumar\\Desktop\\Donna\\Donna12.2.1.4\\CQT\\branches\\CQT12214\\ViewController\\public_html\\image\\app_logo.png");
+          //  System.out.println("---done with getImageInpStream1----"+inputStreamOfExcel);
+        return inputStreamOfExcel;
+    }
+    
 
     public static void writeImageTOExcel(Sheet sheet, InputStream imageInputStream) throws IOException {
         byte[] bytes = IOUtils.toByteArray(imageInputStream);

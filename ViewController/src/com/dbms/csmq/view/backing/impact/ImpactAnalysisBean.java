@@ -20,6 +20,8 @@ import com.dbms.util.Utils;
 
 import java.io.OutputStream;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -55,6 +57,8 @@ import oracle.adf.view.rich.event.DropEvent;
 import oracle.adf.view.rich.event.ItemEvent;
 import oracle.adf.view.rich.event.PopupFetchEvent;
 
+import oracle.binding.AttributeBinding;
+import oracle.binding.BindingContainer;
 import oracle.binding.OperationBinding;
 
 import oracle.jbo.Row;
@@ -1980,6 +1984,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 3));
                 String logoPath = sourceDirectory + "/app_logo.png";
                 POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                //POIExportUtil pOIExportUtil = new POIExportUtil();
+                //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
                 POIExportUtil.addEmptyRow(worksheet, i++);
                 i++;
@@ -2012,6 +2018,28 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 }else{
                 cellA3.setCellValue("Code    :  "+getNewSearchCodeStr());
                 }
+                i++;
+                BindingContainer bindings = BindingContext.getCurrent().getCurrentBindingsEntry();
+                AttributeBinding attr = (AttributeBinding)bindings.getControlBinding("Version");
+                String version = (String)attr.getInputValue();
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA41 = excelrow.createCell((short) 0);
+                if(version == null){
+                cellA41.setCellValue("MedDRA Dictionary Version    :");  
+                }else{
+                    Double doubleValue = new Double(version);
+                    if(doubleValue%1 == 0 || doubleValue%1 == 0.0){
+                        doubleValue = doubleValue + 0.1;
+                    }else{
+                    doubleValue = doubleValue + 0.9;
+                    }
+                cellA41.setCellValue("MedDRA Dictionary Version    :  "+doubleValue.toString());
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA42 = excelrow.createCell((short) 0);
+                cellA42.setCellValue("Date Report Run Time    :  "+new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new java.util.Date(System.currentTimeMillis())));
+                
                 i++;
                 POIExportUtil.addEmptyRow(worksheet, i++);
                 POIExportUtil.addHeaderTextRow(worksheet, i++, "New PT Report", 3);
@@ -2051,38 +2079,58 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 3);
-                        cellA1.setCellValue("PRIMARY HLT CODE"); 
+                        cellA1.setCellValue("HLT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 4);
-                        cellA1.setCellValue("PRIMARY HLT TERM"); 
+                        cellA1.setCellValue("HLT TERM"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 5);
-                        cellA1.setCellValue("NEW PT CODE");
+                        cellA1.setCellValue("PRIMARY (Y,N)"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 6);
-                        cellA1.setCellValue("NEW PT TERM"); 
+                        cellA1.setCellValue("NEW PT CODE");
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 7);
-                        cellA1.setCellValue("FORMER PT CODE"); 
+                        cellA1.setCellValue("NEW PT TERM"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 8);
-                        cellA1.setCellValue("FORMER PT TERM");
+                        cellA1.setCellValue("FORMER PT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 9);
-                        cellA1.setCellValue("RELATED LLT CODE"); 
+                        cellA1.setCellValue("FORMER PT TERM");
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 10);
-                        cellA1.setCellValue("RELATED LLT TERM"); 
+                        cellA1.setCellValue("RELATED LLT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 11);
+                        cellA1.setCellValue("RELATED LLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 12);
+                        cellA1.setCellValue("NEW HLGT/HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 13);
+                        cellA1.setCellValue("NEW HLGT/HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 14);
+                        cellA1.setCellValue("FORMER HLGT/HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 15);
+                        cellA1.setCellValue("FORMER HLGT/HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 16);
                         cellA1.setCellValue("REPORT TYPE"); 
                         cellA1.setCellStyle(cellStyle);
                         
@@ -2129,48 +2177,85 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                     }
                     
                     cell = excelrow.createCell(5);
+                    if(row.getAttribute("Primary") == null){
+                    cell.setCellValue("");    
+                    }else if("N".equalsIgnoreCase(row.getAttribute("Primary").toString())){
+                        cell.setCellValue("N");  
+                    }else{
+                    cell.setCellValue("Y");
+                    }
+                    
+                    cell = excelrow.createCell(6);
                     if(row.getAttribute("NewPtCode") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("NewPtCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(6);
+                    cell = excelrow.createCell(7);
                     if(row.getAttribute("NewPtTerm") == null){
                     cell.setCellValue("");     
                     }else{
                     cell.setCellValue(row.getAttribute("NewPtTerm")+ "");
                     }   
                     
-                    cell = excelrow.createCell(7);
+                    cell = excelrow.createCell(8);
                     if( row.getAttribute("FormerPtCode") == null){
                     cell.setCellValue("");   
                     }else{
                     cell.setCellValue(row.getAttribute("FormerPtCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(8);
+                    cell = excelrow.createCell(9);
                     if(row.getAttribute("FormerPtTerm") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("FormerPtTerm")+ "");
                     }
                     
-                    cell = excelrow.createCell(9);
+                    cell = excelrow.createCell(10);
                     if(row.getAttribute("RelatedLltCode") == null){
                     cell.setCellValue("");       
                     }else{
                     cell.setCellValue(row.getAttribute("RelatedLltCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(10);
+                    cell = excelrow.createCell(11);
                     if(row.getAttribute("RelatedLltTerm") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("RelatedLltTerm")+ "");
                     }
                     
-                    cell = excelrow.createCell(11);
+                    cell = excelrow.createCell(12);
+                    if(row.getAttribute("NewHlgtHltCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewHlgtHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(13);
+                    if(row.getAttribute("NewHlgtHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewHlgtHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(14);
+                    if(row.getAttribute("FormerHlgtHltCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerHlgtHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(15);
+                    if(row.getAttribute("FormerHlgtHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerHlgtHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(16);
                     if(row.getAttribute("ReportType") == null){
                     cell.setCellValue("");    
                     }else{
@@ -2245,6 +2330,8 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 worksheet.addMergedRegion(new CellRangeAddress(0, i, 0, 3));
                 String logoPath = sourceDirectory + "/app_logo.png";
                 POIExportUtil.writeImageTOExcel(worksheet, POIExportUtil.loadResourceAsStream(logoPath));
+                //POIExportUtil pOIExportUtil = new POIExportUtil();
+                //POIExportUtil.writeImageTOExcel(worksheet, pOIExportUtil.getImageInpStream());
 
                 POIExportUtil.addEmptyRow(worksheet, i++);
                 i++;
@@ -2277,6 +2364,28 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                 }else{
                 cellA3.setCellValue("Code    :  "+currentRow.getAttribute("MqCode"));   
                 }
+                i++;
+                BindingContainer bindings = BindingContext.getCurrent().getCurrentBindingsEntry();
+                AttributeBinding attr = (AttributeBinding)bindings.getControlBinding("Version");
+                String version = (String)attr.getInputValue();
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA41 = excelrow.createCell((short) 0);
+                if(version == null){
+                cellA41.setCellValue("MedDRA Dictionary Version    :");  
+                }else{
+                    Double doubleValue = new Double(version);
+                    if(doubleValue%1 == 0 || doubleValue%1 == 0.0){
+                        doubleValue = doubleValue + 0.1;
+                    }else{
+                    doubleValue = doubleValue + 0.9;
+                    }
+                cellA41.setCellValue("MedDRA Dictionary Version    :  "+doubleValue.toString());
+                }
+                i++;
+                excelrow = (HSSFRow) worksheet.createRow((short) i);
+                HSSFCell cellA42 = excelrow.createCell((short) 0);
+                cellA42.setCellValue("Date Report Run Time    :  "+new SimpleDateFormat("dd-MMM-yyyy h:mm a z").format(new java.util.Date(System.currentTimeMillis())));
+                
                 i++;
                 POIExportUtil.addEmptyRow(worksheet, i++);
                 POIExportUtil.addHeaderTextRow(worksheet, i++, "New PT Report", 3);
@@ -2312,41 +2421,60 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 3);
-                        cellA1.setCellValue("PRIMARY HLT CODE"); 
+                        cellA1.setCellValue("HLT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 4);
-                        cellA1.setCellValue("PRIMARY HLT TERM"); 
+                        cellA1.setCellValue("HLT TERM"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 5);
-                        cellA1.setCellValue("NEW PT CODE");
+                        cellA1.setCellValue("PRIMARY (Y,N)"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 6);
-                        cellA1.setCellValue("NEW PT TERM"); 
+                        cellA1.setCellValue("NEW PT CODE");
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 7);
-                        cellA1.setCellValue("FORMER PT CODE"); 
+                        cellA1.setCellValue("NEW PT TERM"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 8);
-                        cellA1.setCellValue("FORMER PT TERM");
+                        cellA1.setCellValue("FORMER PT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 9);
-                        cellA1.setCellValue("RELATED LLT CODE"); 
+                        cellA1.setCellValue("FORMER PT TERM");
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 10);
-                        cellA1.setCellValue("RELATED LLT TERM"); 
+                        cellA1.setCellValue("RELATED LLT CODE"); 
                         cellA1.setCellStyle(cellStyle);
                         
                         cellA1 = excelrow.createCell((short) 11);
-                        cellA1.setCellValue("REPORT TYPE"); 
+                        cellA1.setCellValue("RELATED LLT TERM"); 
                         cellA1.setCellStyle(cellStyle);
                         
+                        cellA1 = excelrow.createCell((short) 12);
+                        cellA1.setCellValue("NEW HLGT/HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 13);
+                        cellA1.setCellValue("NEW HLGT/HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 14);
+                        cellA1.setCellValue("FORMER HLGT/HLT CODE"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 15);
+                        cellA1.setCellValue("FORMER HLGT/HLT TERM"); 
+                        cellA1.setCellStyle(cellStyle);
+                        
+                        cellA1 = excelrow.createCell((short) 16);
+                        cellA1.setCellValue("REPORT TYPE"); 
+                        cellA1.setCellStyle(cellStyle);
                         colCount = 18;
                     }
 
@@ -2390,48 +2518,85 @@ new FacesMessage(FacesMessage.SEVERITY_INFO, "MedDRA Query State Changed Success
                     }
                     
                     cell = excelrow.createCell(5);
+                    if(row.getAttribute("Primary") == null){
+                    cell.setCellValue("");    
+                    }else if("N".equalsIgnoreCase(row.getAttribute("Primary").toString())){
+                        cell.setCellValue("N");  
+                    }else{
+                    cell.setCellValue("Y");
+                    }
+                    
+                    cell = excelrow.createCell(6);
                     if(row.getAttribute("NewPtCode") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("NewPtCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(6);
+                    cell = excelrow.createCell(7);
                     if(row.getAttribute("NewPtTerm") == null){
                     cell.setCellValue("");     
                     }else{
                     cell.setCellValue(row.getAttribute("NewPtTerm")+ "");
                     }
                     
-                    cell = excelrow.createCell(7);
+                    cell = excelrow.createCell(8);
                     if( row.getAttribute("FormerPtCode") == null){
                     cell.setCellValue("");   
                     }else{
                     cell.setCellValue(row.getAttribute("FormerPtCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(8);
+                    cell = excelrow.createCell(9);
                     if(row.getAttribute("FormerPtTerm") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("FormerPtTerm")+ "");
                     }
                     
-                    cell = excelrow.createCell(9);
+                    cell = excelrow.createCell(10);
                     if(row.getAttribute("RelatedLltCode") == null){
                     cell.setCellValue("");       
                     }else{
                     cell.setCellValue(row.getAttribute("RelatedLltCode")+ "");
                     }
                     
-                    cell = excelrow.createCell(10);
+                    cell = excelrow.createCell(11);
                     if(row.getAttribute("RelatedLltTerm") == null){
                     cell.setCellValue("");    
                     }else{
                     cell.setCellValue(row.getAttribute("RelatedLltTerm")+ "");
                     }
                     
-                    cell = excelrow.createCell(11);
+                    cell = excelrow.createCell(12);
+                    if(row.getAttribute("NewHlgtHltCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewHlgtHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(13);
+                    if(row.getAttribute("NewHlgtHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("NewHlgtHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(14);
+                    if(row.getAttribute("FormerHlgtHltCode") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerHlgtHltCode")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(15);
+                    if(row.getAttribute("FormerHlgtHltTerm") == null){
+                    cell.setCellValue("");    
+                    }else{
+                    cell.setCellValue(row.getAttribute("FormerHlgtHltTerm")+ "");
+                    }
+                    
+                    cell = excelrow.createCell(16);
                     if(row.getAttribute("ReportType") == null){
                     cell.setCellValue("");    
                     }else{

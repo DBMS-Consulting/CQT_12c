@@ -4,7 +4,7 @@
 <AppModule
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="SearchModule"
-  Version="12.2.1.12.24"
+  Version="12.2.1.22.48"
   ClearCacheOnRollback="true"
   ComponentClass="com.dbms.csmq.model.search.SearchModuleImpl"
   ComponentInterface="com.dbms.csmq.model.search.common.SearchModule"
@@ -63,6 +63,9 @@
   <ViewUsage
     Name="ExportSearchPT1"
     ViewObjectName="com.dbms.csmq.model.search.ExportSearchPT"/>
+  <ViewUsage
+    Name="MqDesigneeList"
+    ViewObjectName="com.dbms.csmq.model.designee.MqDesigneeList"/>
   <ClientInterface
     Name="__clientInterface">
     <Method
@@ -105,6 +108,42 @@
         Type="java.lang.String"/>
       <Parameter
         Name="activationGroup"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="executeMQDesignee"
+      MethodName="executeMQDesignee">
+      <Return
+        Name="_return_type_"
+        Type="void"/>
+      <Parameter
+        Name="contentIDs"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="addDesignee"
+      MethodName="addDesignee">
+      <Return
+        Name="_return_type_"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="contentId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="desgineeName"
+        Type="java.lang.String"/>
+    </Method>
+    <Method
+      Name="removeDesignee"
+      MethodName="removeDesignee">
+      <Return
+        Name="_return_type_"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="contentId"
+        Type="java.lang.String"/>
+      <Parameter
+        Name="desgineeName"
         Type="java.lang.String"/>
     </Method>
   </ClientInterface>

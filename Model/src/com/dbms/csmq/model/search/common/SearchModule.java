@@ -14,4 +14,10 @@ public interface SearchModule extends ApplicationModule {
 
     void loadMQDetailedDetailedTermHierarchyInformation(BigDecimal dictContentId, String tMSRecordStatus,
                                                         String activationGroup);
+
+    void executeMQDesignee(String contentIDs);
+
+    String addDesignee(String contentId, String desgineeName);
+
+    String removeDesignee(String contentId, String desgineeName);
 }

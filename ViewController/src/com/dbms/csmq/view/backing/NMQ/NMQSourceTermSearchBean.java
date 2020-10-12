@@ -996,5 +996,9 @@ public class NMQSourceTermSearchBean extends HierarchyAccessor {
 
             
     }
+
+    public void removeDesignee(ActionEvent actionEvent) {
+        // Add event code here...
+    }
 }
 

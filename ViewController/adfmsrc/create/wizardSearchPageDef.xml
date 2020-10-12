@@ -54,6 +54,7 @@
     <iterator Binds="SimplePTSearch" RangeSize="25" DataControl="SearchModuleDataControl1" id="SimplePTSearchIterator"/>
     <iterator id="ExportSearchPT1Iterator" Binds="ExportSearchPT1" DataControl="SearchModuleDataControl"
               RangeSize="25"/>
+    <iterator Binds="MqDesigneeList" RangeSize="25" DataControl="SearchModuleDataControl" id="MqDesigneeListIterator"/>
   </executables>
   <bindings>
     <action IterBinding="releaseGroupsSearch1Iterator"
@@ -184,7 +185,7 @@
       </AttrNames>
     </attributeValues>
     <list IterBinding="designeeListVO1Iterator" ListOperMode="multiSelect" ListIter="designeeListVO1Iterator"
-          id="designeeListVO1" SelectItemValueMode="ListObject">
+          id="designeeListVO1" SelectItemValueMode="ListObject" DTSupportsMRU="true">
       <AttrNames>
         <Item Value="OaAccountName"/>
       </AttrNames>
@@ -315,5 +316,32 @@
         <Item Value="false"/>
       </ValueList>
     </button>
+    <tree IterBinding="MqDesigneeListIterator" id="MqDesigneeList">
+      <nodeDefinition DefName="com.dbms.csmq.model.designee.MqDesigneeList" Name="MqDesigneeList0">
+        <AttrNames>
+          <Item Value="TermUpper"/>
+          <Item Value="Designee"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="executeMQDesignee" RequiresUpdateModel="true" Action="invokeMethod" MethodName="executeMQDesignee"
+                  IsViewObjectMethod="false" DataControl="SearchModuleDataControl"
+                  InstanceName="bindings.executeMQDesignee.dataControl.dataProvider">
+      <NamedData NDName="contentIDs" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="addDesignee" RequiresUpdateModel="true" Action="invokeMethod" MethodName="addDesignee"
+                  IsViewObjectMethod="false" DataControl="SearchModuleDataControl"
+                  InstanceName="bindings.addDesignee.dataControl.dataProvider"
+                  ReturnName="data.SearchModuleDataControl.methodResults.addDesignee_addDesignee_dataControl_dataProvider_addDesignee_result">
+      <NamedData NDName="contentId" NDType="java.lang.String"/>
+      <NamedData NDName="desgineeName" NDType="java.lang.String"/>
+    </methodAction>
+    <methodAction id="removeDesignee" RequiresUpdateModel="true" Action="invokeMethod" MethodName="removeDesignee"
+                  IsViewObjectMethod="false" DataControl="SearchModuleDataControl"
+                  InstanceName="bindings.removeDesignee.dataControl.dataProvider"
+                  ReturnName="data.SearchModuleDataControl.methodResults.removeDesignee_removeDesignee_dataControl_dataProvider_removeDesignee_result">
+      <NamedData NDName="contentId" NDType="java.lang.String"/>
+      <NamedData NDName="desgineeName" NDType="java.lang.String"/>
+    </methodAction>
   </bindings>
 </pageDefinition>

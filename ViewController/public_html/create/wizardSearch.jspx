@@ -203,16 +203,23 @@
                     <af:commandButton text="Maintain Designees" id="cb1" rendered="#{RenderingRulesBean.wizardSearchRenderMaintainDesingees}">
                       <af:showPopupBehavior popupId="p1" triggerType="action"/>
                     </af:commandButton>
+                    <af:spacer width="10" height="10" id="s26"/>
+                    <af:commandButton text="Maintain MQs/Designees" id="cb16" rendered="#{RenderingRulesBean.wizardSearchRenderMaintainDesingees}"
+                                      actionListener="#{pageFlowScope.NMQWizardSearchBean.showMQDesinees}"
+                                      partialTriggers="smc1 searchResultsTable:sbc1 cb16 searchResultsTable:sbc111"
+                                      disabled="#{(pageFlowScope.enableMqDesigneeButton eq 'N') or (pageFlowScope.enableMqDesigneeButton eq null)}"
+                                      partialSubmit="true">
+                    </af:commandButton>
                     <af:spacer width="10" height="10" id="s12"/>
                     <af:commandButton text="Product Search" id="cb3"
                                       actionListener="#{pageFlowScope.NMQWizardSearchBean.showProductSearchPopup}"
-                                      partialTriggers="it51"
-                                      visible="#{((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}">
+                                      partialTriggers="it51 soc2"
+                                      visible="#{(UserBean.currentMenu eq 'BROWSE_SEARCH') and (pageFlowScope.NMQWizardSearchBean.showPtSearch) and ((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch) )}">
                       <!--<af:showPopupBehavior popupId="p3" triggerType="action"/>-->
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s13"/>
-                    <af:commandButton text="Group Search" id="cb4" partialTriggers="it51"
-                                      visible="#{((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch))}">
+                    <af:commandButton text="Group Search" id="cb4" partialTriggers="it51 soc2"
+                                      visible="#{(UserBean.currentMenu eq 'BROWSE_SEARCH') and (pageFlowScope.NMQWizardSearchBean.showPtSearch) and ((pageFlowScope.NMQWizardSearchBean.ptSearch eq null) or ( empty pageFlowScope.NMQWizardSearchBean.ptSearch) )}">
                       <af:showPopupBehavior popupId="p4" triggerType="action"/>
                     </af:commandButton>
                     <af:spacer width="10" height="10" id="s22"/>
@@ -245,6 +252,79 @@
                           </af:selectManyChoice>
                         </af:panelFormLayout>
                       </af:panelGroupLayout>
+                    </af:dialog>
+                </af:popup>
+                 <af:popup childCreation="deferred" autoCancel="disabled" id="p6" contentDelivery="lazyUncached"
+                           binding="#{pageFlowScope.NMQWizardSearchBean.mqDesigneePopup}">
+                    <af:dialog id="d7" title="Maintain MQs/Designees" type="cancel" closeIconVisible="false" resize="on"
+                               contentWidth="1300">
+                      <af:panelGridLayout id="pgl19">
+                        <af:gridRow marginTop="5px" height="auto" marginBottom="5px" id="gr4">
+                          <af:gridCell marginStart="5px" width="75%" id="gc13" halign="stretch">
+                            <af:table value="#{bindings.MqDesigneeList.collectionModel}" var="row"
+                                      rows="#{bindings.MqDesigneeList.rangeSize}"
+                                      emptyText="#{bindings.MqDesigneeList.viewable ? 'No data to display.' : 'Access Denied.'}"
+                                      rowBandingInterval="0" fetchSize="#{bindings.MqDesigneeList.rangeSize}" id="t7"
+                                      styleClass="AFStretchWidth" columnStretching="last" partialTriggers="::b8 ::b9"
+                                      binding="#{pageFlowScope.NMQWizardSearchBean.mqDesigneeTable}">
+                              <af:column headerText="#{bindings.MqDesigneeList.hints.TermUpper.label}" id="c40"
+                                         styleClass="AFStretchWidth" width="500" minimumWidth="500">
+                                <af:outputText value="#{row.TermUpper}"
+                                               shortDesc="#{bindings.MqDesigneeList.hints.TermUpper.tooltip}"
+                                               id="ot32"/>
+                              </af:column>
+                              <af:column headerText="#{bindings.MqDesigneeList.hints.Designee.label}" id="c41"
+                                         styleClass="AFStretchWidth">
+                                <af:outputText value="#{row.Designee}"
+                                               shortDesc="#{bindings.MqDesigneeList.hints.Designee.tooltip}" id="ot39"/>
+                              </af:column>
+                            </af:table>
+                          </af:gridCell>
+                          <af:gridCell marginStart="5px" width="25%" marginEnd="5px" id="gc14">
+                            <af:panelGroupLayout id="pgl20" layout="vertical">
+                              <af:outputLabel value="Select Desginee to Add" id="ol1"/>
+                              <af:panelGroupLayout id="pgl7" layout="horizontal">
+                                <af:selectOneChoice value="#{pageFlowScope.addDesignee}"
+                                                    label="#{bindings.designeeListVO1.label}"
+                                                    required="#{bindings.designeeListVO1.hints.mandatory}"
+                                                    shortDesc="#{bindings.designeeListVO1.hints.tooltip}" id="soc7"
+                                                    simple="true" autoSubmit="true" partialTriggers="b10">
+                                  <f:selectItem id="si41" value=""/>
+                                  <f:selectItems value="#{bindings.designeeListVO1.items}" id="si4"/>
+                                  <f:validator binding="#{bindings.designeeListVO1.validator}"/>
+                                </af:selectOneChoice>
+                                <af:spacer id="s28" width="10"/>
+                                <af:button text="Add Designee" id="b8"
+                                           actionListener="#{pageFlowScope.NMQWizardSearchBean.addDesignee}"
+                                           partialTriggers="soc12" disabled="#{pageFlowScope.NMQWizardSearchBean.disableAddDesignee}"/>
+                                <af:spacer id="s30" width="10"/>
+                                <af:button text="Reset" id="b10"
+                                           actionListener="#{pageFlowScope.NMQWizardSearchBean.resetAddDesginee}"/>
+                              </af:panelGroupLayout>
+                              <af:spacer id="s27" height="50"/>
+                              <af:outputLabel value="Select Desginee to Remove" id="ol2"/>
+                              <af:panelGroupLayout id="pgl8" layout="horizontal">
+                                <af:selectOneChoice value="#{pageFlowScope.removeDesignee}"
+                                                    label="#{bindings.designeeListVO1.label}"
+                                                    required="#{bindings.designeeListVO1.hints.mandatory}"
+                                                    shortDesc="#{bindings.designeeListVO1.hints.tooltip}" id="soc12"
+                                                    simple="true" autoSubmit="true" partialTriggers="b11">
+                                  <f:selectItem id="si51" value=""/>
+                                  <f:selectItems value="#{bindings.designeeListVO1.items}" id="si5"/>
+                                  <f:validator binding="#{bindings.designeeListVO1.validator}"/>
+                                </af:selectOneChoice>
+                                <af:spacer id="s29" width="10"/>
+                                <af:button text="Remove Designee" id="b9"
+                                           actionListener="#{pageFlowScope.NMQWizardSearchBean.removeDesignee}"
+                                           disabled="#{pageFlowScope.NMQWizardSearchBean.disableRemoveDesignee}" partialTriggers="soc7"/>
+                              <af:spacer id="s31" width="10"/>
+                                <af:button text="Reset" id="b11"
+                                           actionListener="#{pageFlowScope.NMQWizardSearchBean.resetRemoveDesginee}"/>
+                              </af:panelGroupLayout>
+                            </af:panelGroupLayout>
+                          </af:gridCell>
+                        </af:gridRow>
+                      </af:panelGridLayout>
                     </af:dialog>
                 </af:popup>
                   <af:popup childCreation="deferred" autoCancel="disabled" id="p3"
@@ -408,8 +488,13 @@
                       <af:selectBooleanCheckbox value="#{row.bindings.SelectedRow.inputValue}"
                                                 label="#{row.bindings.SelectedRow.label}"
                                                 shortDesc="#{bindings.SimpleSearch1.hints.SelectedRow.tooltip}"
-                                                id="sbc1" autoSubmit="true"
+                                                id="sbc1" autoSubmit="true" visible="#{!(securityContext.userInRole['Requestor'] and ((pageFlowScope.enableSeachResultCheckBOx eq 'N') or (pageFlowScope.enableSeachResultCheckBOx eq null)))}"
                                                 valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.onRowSelection}"/>
+                      <f:facet name="header">
+                        <af:selectBooleanCheckbox valueChangeListener="#{pageFlowScope.NMQWizardSearchBean.selectAll}"
+                                  id="sbc111" autoSubmit="true" simple="true" visible="#{!(securityContext.userInRole['Requestor'] and ((pageFlowScope.enableSeachResultCheckBOx eq 'N') or (pageFlowScope.enableSeachResultCheckBOx eq null)))}">
+                        </af:selectBooleanCheckbox>
+                     </f:facet>
                     </af:column>
                     <af:column sortProperty="Mqterm" sortable="true" headerText="Term" id="c20" width="165" filterable="true">
                       <af:outputText value="#{row.Mqterm}" id="ot16" styleClass="#{pageFlowScope.NMQWizardSearchBean.historyFlow and row.ContentId eq pageFlowScope.NMQWizardBean.currentDictContentID ? 'HistoricView' : ''}"/>                    
@@ -613,7 +698,7 @@
                     <af:spacer width="10" height="10" id="s25"/>
                     <af:commandButton text="Export PT" id="cb15" icon="/image/EXCEL.png"
                                     visible="#{(pageFlowScope.NMQWizardSearchBean.showPtSearch)}"
-                                      partialTriggers="searchResultsTable:sbc1 smc1"
+                                      partialTriggers="smc1 searchResultsTable:sbc1 searchResultsTable:sbc111"
                                       disabled="#{(pageFlowScope.enablePTExportButton eq 'N') or (pageFlowScope.enablePTExportButton eq null)}">
                       <af:fileDownloadActionListener contentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                                      filename="PTSearchReport.xls"

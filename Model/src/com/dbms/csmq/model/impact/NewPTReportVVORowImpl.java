@@ -11,6 +11,8 @@ import oracle.jbo.server.ViewRowImpl;
 // ---    Warning: Do not modify method signatures of generated methods.
 // ---------------------------------------------------------------------
 public class NewPTReportVVORowImpl extends ViewRowImpl {
+
+
     /**
      * AttributesEnum: generated enum for identifying attributes and accessors. DO NOT MODIFY.
      */
@@ -194,13 +196,60 @@ public class NewPTReportVVORowImpl extends ViewRowImpl {
                 obj.setAttributeInternal(index(), value);
             }
         }
+        ,
+        Primary {
+            protected Object get(NewPTReportVVORowImpl obj) {
+                return obj.getPrimary();
+            }
+
+            protected void put(NewPTReportVVORowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        NewHlgtHltCode {
+            protected Object get(NewPTReportVVORowImpl obj) {
+                return obj.getNewHlgtHltCode();
+            }
+
+            protected void put(NewPTReportVVORowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        NewHlgtHltTerm {
+            protected Object get(NewPTReportVVORowImpl obj) {
+                return obj.getNewHlgtHltTerm();
+            }
+
+            protected void put(NewPTReportVVORowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        FormerHlgtHltCode {
+            protected Object get(NewPTReportVVORowImpl obj) {
+                return obj.getFormerHlgtHltCode();
+            }
+
+            protected void put(NewPTReportVVORowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
+        ,
+        FormerHlgtHltTerm {
+            protected Object get(NewPTReportVVORowImpl obj) {
+                return obj.getFormerHlgtHltTerm();
+            }
+
+            protected void put(NewPTReportVVORowImpl obj, Object value) {
+                obj.setAttributeInternal(index(), value);
+            }
+        }
         ;
         private static AttributesEnum[] vals = null;
         private static final int firstIndex = 0;
 
-        protected abstract Object get(NewPTReportVVORowImpl object);
-
-        protected abstract void put(NewPTReportVVORowImpl object, Object value);
 
         protected int index() {
             return AttributesEnum.firstIndex() + ordinal();
@@ -220,8 +269,11 @@ public class NewPTReportVVORowImpl extends ViewRowImpl {
             }
             return vals;
         }
-    }
 
+        protected abstract Object get(NewPTReportVVORowImpl object);
+
+        protected abstract void put(NewPTReportVVORowImpl object, Object value);
+    }
 
     public static final int PRODUCT = AttributesEnum.Product.index();
     public static final int MQCODE = AttributesEnum.MqCode.index();
@@ -241,6 +293,11 @@ public class NewPTReportVVORowImpl extends ViewRowImpl {
     public static final int RELATEDLLTCONTENTID = AttributesEnum.RelatedLltContentId.index();
     public static final int HLTPTLLTLOADTS = AttributesEnum.HltPtLltLoadTs.index();
     public static final int REPORTTYPE = AttributesEnum.ReportType.index();
+    public static final int PRIMARY = AttributesEnum.Primary.index();
+    public static final int NEWHLGTHLTCODE = AttributesEnum.NewHlgtHltCode.index();
+    public static final int NEWHLGTHLTTERM = AttributesEnum.NewHlgtHltTerm.index();
+    public static final int FORMERHLGTHLTCODE = AttributesEnum.FormerHlgtHltCode.index();
+    public static final int FORMERHLGTHLTTERM = AttributesEnum.FormerHlgtHltTerm.index();
 
     /**
      * This is the default constructor (do not remove).
@@ -393,6 +450,46 @@ public class NewPTReportVVORowImpl extends ViewRowImpl {
     }
 
     /**
+     * Gets the attribute value for the calculated attribute Primary.
+     * @return the Primary
+     */
+    public String getPrimary() {
+        return (String) getAttributeInternal(PRIMARY);
+    }
+
+    /**
+     * Gets the attribute value for the calculated attribute NewHlgtHltCode.
+     * @return the NewHlgtHltCode
+     */
+    public String getNewHlgtHltCode() {
+        return (String) getAttributeInternal(NEWHLGTHLTCODE);
+    }
+
+    /**
+     * Gets the attribute value for the calculated attribute NewHlgtHltTerm.
+     * @return the NewHlgtHltTerm
+     */
+    public String getNewHlgtHltTerm() {
+        return (String) getAttributeInternal(NEWHLGTHLTTERM);
+    }
+
+    /**
+     * Gets the attribute value for the calculated attribute FormerHlgtHltCode.
+     * @return the FormerHlgtHltCode
+     */
+    public String getFormerHlgtHltCode() {
+        return (String) getAttributeInternal(FORMERHLGTHLTCODE);
+    }
+
+    /**
+     * Gets the attribute value for the calculated attribute FormerHlgtHltTerm.
+     * @return the FormerHlgtHltTerm
+     */
+    public String getFormerHlgtHltTerm() {
+        return (String) getAttributeInternal(FORMERHLGTHLTTERM);
+    }
+
+    /**
      * getAttrInvokeAccessor: generated method. Do not modify.
      * @param index the index identifying the attribute
      * @param attrDef the attribute
@@ -422,5 +519,7 @@ public class NewPTReportVVORowImpl extends ViewRowImpl {
         }
         super.setAttrInvokeAccessor(index, value, attrDef);
     }
+
+
 }
 

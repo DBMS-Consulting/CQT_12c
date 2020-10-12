@@ -1,12 +1,19 @@
 package com.dbms.csmq.model.search;
 
 
+import com.dbms.csmq.model.designee.MqDesigneeListImpl;
 import com.dbms.csmq.model.search.common.SearchModule;
 
 import java.math.BigDecimal;
 
+import java.sql.Types;
+
+import oracle.jbo.JboException;
 import oracle.jbo.server.ApplicationModuleImpl;
+import oracle.jbo.server.DBTransaction;
 import oracle.jbo.server.ViewObjectImpl;
+
+import oracle.jdbc.OracleCallableStatement;
 
 
 // ---------------------------------------------------------------------
@@ -169,5 +176,84 @@ public class SearchModuleImpl extends ApplicationModuleImpl implements SearchMod
      */
     public ExportSearchPTImpl getExportSearchPT1() {
         return (ExportSearchPTImpl) findViewObject("ExportSearchPT1");
+    }
+
+    /**
+     * Container's getter for MqDesigneeList1.
+     * @return MqDesigneeList1
+     */
+    public MqDesigneeListImpl getMqDesigneeList() {
+        return (MqDesigneeListImpl) findViewObject("MqDesigneeList");
+    }
+    
+    public void executeMQDesignee(String contentIDs){
+        MqDesigneeListImpl mqDesigneeListImpl = this.getMqDesigneeList();
+        mqDesigneeListImpl.setbindContentID(contentIDs);
+        mqDesigneeListImpl.executeQuery();
+       // System.out.println("mqDesigneeListImpl - Query"+mqDesigneeListImpl.getQuery());
+        
+    }
+    
+    public String addDesignee(String contentId, String desgineeName){
+        DBTransaction txn = getDBTransaction();
+        OracleCallableStatement cstmt = null;
+        int returnValue = -1;
+        String cs = null;
+
+            cs = "{?=call nmat_ui_pkg.f_multi_update_designee(?,?)}";
+            cstmt = (OracleCallableStatement)txn.createCallableStatement(cs, DBTransaction.DEFAULT);
+            try {
+                cstmt.registerOutParameter(1, Types.INTEGER);
+                cstmt.setString(2, contentId);
+                cstmt.setString(3, desgineeName);
+                cstmt.execute();
+                returnValue = cstmt.getInt(1);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (cstmt != null && !cstmt.isClosed())
+                        cstmt.close();
+                } catch (Exception e) {
+                    throw new JboException(e);
+                }
+            }
+            if(returnValue == -1)
+                return "FAIL";
+            else
+                return "SUCCESS";
+    }
+    
+    public String removeDesignee(String contentId, String desgineeName){
+        
+        DBTransaction txn = getDBTransaction();
+        OracleCallableStatement cstmt = null;
+        int returnValue = -1;
+        String cs = null;
+
+            cs = "{?=call nmat_ui_pkg.f_multi_delete_designee(?,?)}";
+            cstmt = (OracleCallableStatement)txn.createCallableStatement(cs, DBTransaction.DEFAULT);
+            try {
+                cstmt.registerOutParameter(1, Types.INTEGER);
+                cstmt.setString(2, contentId);
+                cstmt.setString(3, desgineeName);
+                cstmt.execute();
+                returnValue = cstmt.getInt(1);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (cstmt != null && !cstmt.isClosed())
+                        cstmt.close();
+                } catch (Exception e) {
+                    throw new JboException(e);
+                }
+            }
+            if(returnValue == -1)
+                return "FAIL";
+            else
+                return "SUCCESS";
     }
 }

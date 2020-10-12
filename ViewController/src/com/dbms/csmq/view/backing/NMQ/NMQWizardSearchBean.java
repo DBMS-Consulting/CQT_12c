@@ -144,6 +144,8 @@ public class NMQWizardSearchBean  {
     private String ptSearch = null;
     private String ptSearchCode = null;
     private boolean showPtSearch = true;
+    private boolean disableAddDesignee = false;
+    private boolean disableRemoveDesignee = false;
     
 
     // CURRENT SELECTED DATA
@@ -240,6 +242,8 @@ public class NMQWizardSearchBean  {
     private RichPopup ptSearchPopup;
     private RichTable ctrlPTSearchResults;
     private RichButton doPTSearchButton;
+    private RichPopup mqDesigneePopup;
+    private RichTable mqDesigneeTable;
 
     public void setCtrlDictionaryTypeSearch(RichSelectOneChoice dictionaryTypeSearch) {
         this.ctrlDictionaryTypeSearch = dictionaryTypeSearch;
@@ -2605,7 +2609,16 @@ public class NMQWizardSearchBean  {
             paramLevel = CSMQBean.FILTER_LEVEL_ONE;
             controlMQLevel.setDisabled(false);
             }
-
+         
+        if(ADFContext.getCurrent().getSecurityContext().isUserInRole("Requestor")) { 
+            ADFContext adfCtx = ADFContext.getCurrent();
+            Map pageFlowScope = adfCtx.getPageFlowScope();
+        if("CMQ".equalsIgnoreCase(newExt)){
+            pageFlowScope.put("enableSeachResultCheckBOx", "Y");
+        }else{
+            pageFlowScope.put("enableSeachResultCheckBOx", "N");
+        }
+        }
         AdfFacesContext.getCurrentInstance().addPartialTarget(controlMQLevel);
         AdfFacesContext.getCurrentInstance().partialUpdateNotify(controlMQLevel);
     }
@@ -4542,16 +4555,189 @@ public class NMQWizardSearchBean  {
         DCIteratorBinding itrBinding = bindings.findIteratorBinding("SimpleSearch1Iterator");
         ViewObject vo = itrBinding.getViewObject();
         Row[] selectedRows = vo.getFilteredRows("SelectedRow", true);
-        
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
         if((selectedRows.length == 0) || (selectedRows.length > 10)){
-            ADFContext adfCtx = ADFContext.getCurrent();
-            Map pageFlowScope = adfCtx.getPageFlowScope();
-            Object val = pageFlowScope.put("enablePTExportButton", "N");
+            pageFlowScope.put("enablePTExportButton", "N");
         }else{
-            ADFContext adfCtx = ADFContext.getCurrent();
-            Map pageFlowScope = adfCtx.getPageFlowScope();
-            Object val = pageFlowScope.put("enablePTExportButton", "Y");
+            pageFlowScope.put("enablePTExportButton", "Y");
         }
         
+        if(selectedRows.length == 0 ){
+            pageFlowScope.put("enableMqDesigneeButton", "N");
+        }else{
+            pageFlowScope.put("enableMqDesigneeButton", "Y");
+        }
+        
+        } 
+
+    public void showMQDesinees(ActionEvent actionEvent) {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        DCBindingContainer bindings = this.getDCBindingContainer();
+        DCIteratorBinding itrBinding = bindings.findIteratorBinding("SimpleSearch1Iterator");
+        ViewObject vo = itrBinding.getViewObject();
+        Row[] selectedRows = vo.getFilteredRows("SelectedRow", true);       
+        StringBuilder whereClause = new StringBuilder("");
+        for(Row row : selectedRows){
+            String contentId = row.getAttribute("ContentId").toString();
+            whereClause = whereClause.append(contentId).append(",");
+        }
+        String contentIDs = whereClause.substring(0, whereClause.length() - 1);
+        pageFlowScope.put("contentIDs", contentIDs);
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("executeMQDesignee");
+        ob.getParamsMap().put("contentIDs", contentIDs);
+        ob.execute();
+        pageFlowScope.put("addDesignee", null);
+        pageFlowScope.put("removeDesignee", null);
+        ADFUtils.showPopup(getMqDesigneePopup());
+    }
+
+    public void setMqDesigneePopup(RichPopup mqDesigneePopup) {
+        this.mqDesigneePopup = mqDesigneePopup;
+    }
+
+    public RichPopup getMqDesigneePopup() {
+        return mqDesigneePopup;
+    }
+
+    public void addDesignee(ActionEvent actionEvent) {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        String addDesignee = (String)pageFlowScope.get("addDesignee");
+        String contentIDs = (String)pageFlowScope.get("contentIDs");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("addDesignee");
+        ob.getParamsMap().put("contentId", contentIDs);
+        ob.getParamsMap().put("desgineeName", addDesignee);
+        String output = (String)ob.execute();
+        if("SUCCESS".equalsIgnoreCase(output)){
+            ob = bc.getOperationBinding("executeMQDesignee");
+            ob.getParamsMap().put("contentIDs", contentIDs);
+            ob.execute();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getMqDesigneeTable());
+            //FacesContext ctx = FacesContext.getCurrentInstance();
+            //FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "The Designee added to the list of MedDRA Queries sucessfully", "");
+            //ctx.addMessage(null,fm);       
+        }else{
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Designee could not be added to the list of MedDRA Queries", "");
+            ctx.addMessage(null,fm);
+        }
+    }
+
+    public void removeDesignee(ActionEvent actionEvent) {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        String removeDesignee = (String)pageFlowScope.get("removeDesignee");
+        String contentIDs = (String)pageFlowScope.get("contentIDs");
+        DCBindingContainer bc = ADFUtils.getDCBindingContainer();
+        OperationBinding ob = bc.getOperationBinding("removeDesignee");
+        ob.getParamsMap().put("contentId", contentIDs);
+        ob.getParamsMap().put("desgineeName", removeDesignee);
+        String output = (String)ob.execute();
+        if("SUCCESS".equalsIgnoreCase(output)){
+            ob = bc.getOperationBinding("executeMQDesignee");
+            ob.getParamsMap().put("contentIDs", contentIDs);
+            ob.execute();
+            AdfFacesContext.getCurrentInstance().addPartialTarget(getMqDesigneeTable());
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "The Designee removed from the list of MedDRA Queries sucessfully", "");
+            ctx.addMessage(null,fm);
+        }else{
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "The Designee could not be removed from the list of MedDRA Queries", "");
+            ctx.addMessage(null,fm);
+        }
+    }
+
+    public void setMqDesigneeTable(RichTable mqDesigneeTable) {
+        this.mqDesigneeTable = mqDesigneeTable;
+    }
+
+    public RichTable getMqDesigneeTable() {
+        return mqDesigneeTable;
+    }
+
+
+    public void setDisableAddDesignee(boolean disableAddDesignee) {
+        this.disableAddDesignee = disableAddDesignee;
+    }
+
+    public boolean isDisableAddDesignee() {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        String removeDesignee = (String)pageFlowScope.get("removeDesignee");
+        if(removeDesignee == null || "".equalsIgnoreCase(removeDesignee)){
+            return false;
+        }else{
+            return true;
+        }
+       // return disableAddDesignee;
+    }
+
+    public void setDisableRemoveDesignee(boolean disableRemoveDesignee) {
+        this.disableRemoveDesignee = disableRemoveDesignee;
+    }
+
+    public boolean isDisableRemoveDesignee() {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        String addDesignee = (String)pageFlowScope.get("addDesignee");
+        if(addDesignee == null || "".equalsIgnoreCase(addDesignee)){
+            return false;
+        }else{
+            return true;
+        }
+        //return disableRemoveDesignee;
+    }
+
+    public void selectAll(ValueChangeEvent valueChangeEvent) {
+        boolean isSelected = ((Boolean)valueChangeEvent.getNewValue()).booleanValue();
+        DCBindingContainer bindingContainer = (DCBindingContainer)BindingContext.getCurrent().getCurrentBindingsEntry();
+               DCIteratorBinding dciter = bindingContainer.findIteratorBinding("SimpleSearch1Iterator");
+               ViewObject vo = dciter.getViewObject();
+        Row row = null;
+              vo.reset();
+              RowSetIterator rs = vo.createRowSetIterator(null);
+              rs.reset();
+              int i = 0;
+              while (rs.hasNext()) {
+                  i++;
+                  row = rs.next();
+                  if (isSelected)
+                      row.setAttribute("SelectedRow", isSelected);
+                  else
+                      row.setAttribute("SelectedRow", isSelected);
+              }
+              rs.closeRowSetIterator();
+              ADFContext adfCtx = ADFContext.getCurrent();
+              Map pageFlowScope = adfCtx.getPageFlowScope();
+              if(i > 0 && isSelected){
+                  pageFlowScope.put("enableMqDesigneeButton", "Y");
+              }else{
+                  pageFlowScope.put("enableMqDesigneeButton", "N");
+              }
+              
+              if((i > 0) && (i <= 10) && isSelected){
+                  pageFlowScope.put("enablePTExportButton", "Y");
+              }else{
+                  pageFlowScope.put("enablePTExportButton", "N");
+              } 
+        //Refresh the table
+              AdfFacesContext.getCurrentInstance().addPartialTarget(getCtrlSearchResults());
+          }
+
+    public void resetAddDesginee(ActionEvent actionEvent) {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        pageFlowScope.put("addDesignee", null);
+    }
+    
+    public void resetRemoveDesginee(ActionEvent actionEvent) {
+        ADFContext adfCtx = ADFContext.getCurrent();
+        Map pageFlowScope = adfCtx.getPageFlowScope();
+        pageFlowScope.put("removeDesignee", null);
     }
 }

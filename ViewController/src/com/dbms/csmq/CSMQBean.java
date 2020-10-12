@@ -340,6 +340,7 @@ public class CSMQBean {
         for (String dictionary : dictionaries) {
             ArrayList<SelectItem> actGroupList = new ArrayList<SelectItem>();
             String actGroups = getProperty(dictionary);
+            if(actGroups != null){
             String[] activationGroups = actGroups.split(",");
             actGroupList.add(new SelectItem(WILDCARD, "ALL", null, false, false, true)); // ADD THE ALL TO EACH
             for (String activationGroup : activationGroups) {
@@ -349,6 +350,7 @@ public class CSMQBean {
                 actGroupList.add(se);
             }
             activationGroupSelectItems.put(dictionary, actGroupList);
+            }
         }
     }
 

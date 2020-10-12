@@ -25,22 +25,50 @@ public class SearchModuleClient extends ApplicationModuleImpl implements SearchM
         return;
     }
 
+
+    public String addDesignee(String contentId, String desgineeName) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "addDesignee", new String[] { "java.lang.String", "java.lang.String" },
+                                        new Object[] { contentId, desgineeName });
+        return (String) _ret;
+    }
+
+    public void executeMQDesignee(String contentIDs) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "executeMQDesignee", new String[] { "java.lang.String" },
+                                        new Object[] { contentIDs });
+        return;
+    }
+
     public void loadHistoricTermHierarchyInformation(BigDecimal dictContentId, String effectiveDTStr) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadHistoricTermHierarchyInformation",new String [] {"java.math.BigDecimal","java.lang.String"},new Object[] {dictContentId, effectiveDTStr});
+            this.riInvokeExportedMethod(this, "loadHistoricTermHierarchyInformation",
+                                        new String[] { "java.math.BigDecimal", "java.lang.String" },
+                                        new Object[] { dictContentId, effectiveDTStr });
         return;
     }
 
     public void loadHistoricTermInformation(BigDecimal dictContentId, String effectiveDTStr) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadHistoricTermInformation",new String [] {"java.math.BigDecimal","java.lang.String"},new Object[] {dictContentId, effectiveDTStr});
+            this.riInvokeExportedMethod(this, "loadHistoricTermInformation",
+                                        new String[] { "java.math.BigDecimal", "java.lang.String" },
+                                        new Object[] { dictContentId, effectiveDTStr });
         return;
     }
 
     public void loadMQDetailedDetailedTermHierarchyInformation(BigDecimal dictContentId, String tMSRecordStatus,
                                                                String activationGroup) {
         Object _ret =
-            this.riInvokeExportedMethod(this,"loadMQDetailedDetailedTermHierarchyInformation",new String [] {"java.math.BigDecimal","java.lang.String","java.lang.String"},new Object[] {dictContentId, tMSRecordStatus, activationGroup});
+            this.riInvokeExportedMethod(this, "loadMQDetailedDetailedTermHierarchyInformation",
+                                        new String[] { "java.math.BigDecimal", "java.lang.String", "java.lang.String" },
+                                        new Object[] { dictContentId, tMSRecordStatus, activationGroup });
         return;
+    }
+
+    public String removeDesignee(String contentId, String desgineeName) {
+        Object _ret =
+            this.riInvokeExportedMethod(this, "removeDesignee", new String[] { "java.lang.String", "java.lang.String" },
+                                        new Object[] { contentId, desgineeName });
+        return (String) _ret;
     }
 }

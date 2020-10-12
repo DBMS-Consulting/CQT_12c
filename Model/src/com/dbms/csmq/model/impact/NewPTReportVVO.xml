@@ -4,13 +4,14 @@
 <ViewObject
   xmlns="http://xmlns.oracle.com/bc4j"
   Name="NewPTReportVVO"
-  Version="12.2.1.12.24"
+  Version="12.2.1.22.48"
   InheritPersonalization="merge"
   BindingStyle="OracleName"
   CustomQuery="true"
   RowClass="com.dbms.csmq.model.impact.NewPTReportVVORowImpl"
   ComponentClass="com.dbms.csmq.model.impact.NewPTReportVVOImpl"
-  PageIterMode="Full">
+  PageIterMode="Full"
+  AccessMode="DEFAULT">
   <DesignTime>
     <Attr Name="_codeGenFlag2" Value="Access|Coll|VarAccess"/>
     <Attr Name="_isExpertMode" Value="true"/>
@@ -28,16 +29,16 @@
     Name="bindProduct"
     Kind="where"
     Type="java.lang.String"/>
-  <SQLQuery><![CDATA[SELECT * FROM TABLE(nmat_ui_ia_new_pt_pkg.f_output_new_pts    
-            (psProduct => :bindProduct,    
-             psMTerm => :bindTerm ,    
+  <SQLQuery><![CDATA[SELECT * FROM TABLE(nmat_ui_ia_new_pt_pkg.f_output_new_pts         
+            (psProduct => :bindProduct,          
+             psMTerm => :bindTerm,          
              psMQCode => :bindTermCode))]]></SQLQuery>
   <ViewAttribute
     Name="Product"
     IsUpdateable="false"
     IsPersistent="false"
     PrecisionRule="true"
-    Precision="255"
+    Precision="300"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
     AliasName="PRODUCT"
@@ -280,6 +281,81 @@
     SQLType="VARCHAR">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="200"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="Primary"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="2"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="PRIMARY"
+    Expression="PRIMARY"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="2"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="NewHlgtHltCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="NEW_HLGT_HLT_CODE"
+    Expression="NEW_HLGT_HLT_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="NewHlgtHltTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="NEW_HLGT_HLT_TERM"
+    Expression="NEW_HLGT_HLT_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="FormerHlgtHltCode"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="30"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="FORMER_HLGT_HLT_CODE"
+    Expression="FORMER_HLGT_HLT_CODE"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="30"/>
+    </DesignTime>
+  </ViewAttribute>
+  <ViewAttribute
+    Name="FormerHlgtHltTerm"
+    IsUpdateable="false"
+    IsPersistent="false"
+    PrecisionRule="true"
+    Precision="300"
+    Type="java.lang.String"
+    ColumnType="VARCHAR2"
+    AliasName="FORMER_HLGT_HLT_TERM"
+    Expression="FORMER_HLGT_HLT_TERM"
+    SQLType="VARCHAR">
+    <DesignTime>
+      <Attr Name="_DisplaySize" Value="300"/>
     </DesignTime>
   </ViewAttribute>
 </ViewObject>
